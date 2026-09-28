@@ -103,8 +103,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   private String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(String paramString) {
     try {
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramString).getType() != Material.NETHER_STAR)
-        return You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramString).getItemMeta().getDisplayName(); 
+      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v1(paramString).getType() != Material.NETHER_STAR)
+        return You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v1(paramString).getItemMeta().getDisplayName(); 
     } catch (IllegalArgumentException illegalArgumentException) {
       throw a(null);
     } 
@@ -116,10 +116,10 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   }
   
   public You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bs You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(String paramString, ConfigurationSection paramConfigurationSection) {
-    String str = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bm.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramString).getItemMeta().getDisplayName();
+    String str = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bm.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v2(paramString).getItemMeta().getDisplayName();
     double d = paramConfigurationSection.getDouble(a(-3528, -519), 3.0D);
     ArrayList<String> arrayList = new ArrayList();
-    List list = paramConfigurationSection.getMapList(a(-3522, 24287) + a(-3522, 24287) + paramString);
+    List<Map> list = paramConfigurationSection.getMapList(a(-3522, 24287) + a(-3522, 24287) + paramString);
     for (Map map : list) {
       String str1 = map.get(a(-3548, -13368)).toString();
       int i = ((Integer)map.get(a(-3532, -4084))).intValue();
@@ -151,7 +151,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b3.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Material.STONE);
     List list = paramConfigurationSection.getList(a(-3533, 28610));
     if (list != null)
-      for (Map map : list) {
+      for (Map map : (Iterable<Map>)(Iterable<?>)list) {
         if (map instanceof Map) {
           Map map1 = map;
           String str = (String)map1.get(a(-3525, -9430));
@@ -163,13 +163,13 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
           } 
           Material material = Material.getMaterial(str.toUpperCase());
           if (material == null)
-            material = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(str).getType(); 
+            material = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v1(str).getType(); 
+          int bool;
           try {
-          
+            bool = map1.containsKey(a(-3526, 27404)) ? ((Integer)map1.get(a(-3532, -4084))).intValue() : 1;
           } catch (IllegalArgumentException illegalArgumentException) {
             throw a(null);
           } 
-          boolean bool = map1.containsKey(a(-3526, 27404)) ? ((Integer)map1.get(a(-3532, -4084))).intValue() : true;
           int i = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(str.toUpperCase());
           you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b3.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(material, bool, i);
         } 
@@ -179,8 +179,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   public static int You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(String paramString) {
     try {
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramString).getItemMeta().hasCustomModelData())
-        return You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramString).getItemMeta().getCustomModelData(); 
+      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v1(paramString).getItemMeta().hasCustomModelData())
+        return You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v1(paramString).getItemMeta().getCustomModelData(); 
     } catch (IllegalArgumentException illegalArgumentException) {
       throw a(null);
     } 
@@ -189,7 +189,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   public static ItemStack You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v1(String paramString) {
     try {
-      return You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.valueOf(paramString.toUpperCase()).You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a();
+      return pl.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.valueOf(paramString.toUpperCase()).You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a();
     } catch (IllegalArgumentException illegalArgumentException) {
       try {
         return You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764l.valueOf(paramString.toUpperCase()).You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0();
