@@ -86,7 +86,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     return paramItemStack.getType().name().startsWith(a(2144, 25810));
   }
   
-  private static int You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Player paramPlayer) {
+  static int You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Player paramPlayer) {
     int i = 0;
     for (ItemStack itemStack : paramPlayer.getInventory().getContents()) {
       if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(itemStack))
@@ -328,7 +328,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
       Objective objective = scoreboard.registerNewObjective(a(2175, -16172), a(2166, 14053), String.valueOf(ChatColor.of(a(2147, 26467))) + String.valueOf(ChatColor.of(a(2147, 26467))));
       objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-      List list = (List)Bukkit.getOnlinePlayers().stream().sorted(Comparator.comparingInt(this::You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b).reversed().thenComparing(Player::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
+      List list = (List)Bukkit.getOnlinePlayers().stream().sorted(Comparator.comparingInt((Player paramPlayer1) -> this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayer1)).reversed().thenComparing(Player::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
       byte b1 = 15;
       byte b2 = 1;
       for (Player player1 : (Iterable<Player>)(Iterable<?>)list) {
@@ -508,7 +508,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       throw a(null);
     } 
     paramPlayerQuitEvent.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-    Bukkit.getScheduler().runTaskLater((Plugin)this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a, this::You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c, 1L);
+    Bukkit.getScheduler().runTaskLater((Plugin)this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a, (Runnable)this::You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c, 1L);
   }
   
   private static Set lambda$death$2(UUID paramUUID) {
