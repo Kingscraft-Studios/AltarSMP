@@ -98,7 +98,7 @@ public final class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha865439579999291999999
     (new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764gi()).runTaskTimer((Plugin)Main.getInstance(), 0L, 20L);
   }
   
-  public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Player paramPlayer) {
+  public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v1(Player paramPlayer) {
     try {
       if (paramPlayer.getWorld().getEnvironment() != World.Environment.NORMAL)
         return false; 
@@ -251,7 +251,7 @@ public final class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha865439579999291999999
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player);
   }
   
-  public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Player paramPlayer) {
+  public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(Player paramPlayer) {
     Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
     String str1 = a(8238, 26774) + a(8238, 26774);
     Team team = scoreboard.getTeam(str1);
@@ -320,15 +320,15 @@ public final class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha865439579999291999999
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b();
   }
   
-  public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(Player paramPlayer) {
+  public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b__v0(Player paramPlayer) {
     return a(8246, -5884).equals(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764i.get(paramPlayer.getUniqueId()));
   }
   
-  public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c(Player paramPlayer) {
+  public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c__v0(Player paramPlayer) {
     return a(8230, -25733).equals(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764i.get(paramPlayer.getUniqueId()));
   }
   
-  public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d(Player paramPlayer) {
+  public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d__v0(Player paramPlayer) {
     try {
       if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayer))
         try {

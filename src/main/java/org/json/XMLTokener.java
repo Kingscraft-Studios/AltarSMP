@@ -287,7 +287,7 @@
 /*     */       case '"':
 /*     */       case '\'':
 /* 289 */         q = c;
-/* 290 */         sb = new StringBuilder();
+/* 290 */         StringBuilder sb = new StringBuilder();
 /*     */         while (true) {
 /* 292 */           c = next();
 /* 293 */           if (c == '\000') {

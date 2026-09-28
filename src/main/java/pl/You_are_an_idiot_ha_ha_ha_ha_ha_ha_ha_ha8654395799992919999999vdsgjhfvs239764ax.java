@@ -216,7 +216,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     paramPlayer.addPotionEffect(new PotionEffect(paramPotionEffectType, paramInt1, paramInt2, false, false, false));
   }
   
-  public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Player paramPlayer) {
+  public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getBoots();
     try {
       if (itemStack == null)

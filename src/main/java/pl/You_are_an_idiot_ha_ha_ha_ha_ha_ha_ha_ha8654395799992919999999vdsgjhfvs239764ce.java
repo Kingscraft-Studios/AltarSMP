@@ -554,11 +554,11 @@ public final class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha865439579999291999999
     } 
   }
   
-  public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Particle paramParticle, Location paramLocation, double paramDouble, int paramInt) {
+  public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(Particle paramParticle, Location paramLocation, double paramDouble, int paramInt) {
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramParticle, paramLocation, paramDouble, paramInt, 1, 0.0D, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, 0.0F);
   }
   
-  public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Particle.DustOptions paramDustOptions, Location paramLocation, double paramDouble, int paramInt) {
+  public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(Particle.DustOptions paramDustOptions, Location paramLocation, double paramDouble, int paramInt) {
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramDustOptions, paramLocation, paramDouble, paramInt, 1, 0.0D, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, 0.0F);
   }
   
@@ -735,7 +735,7 @@ public final class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha865439579999291999999
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramWorld, location, paramInt, paramDouble5, paramDouble6, paramDouble7, paramDouble8, paramDustOptions);
   }
   
-  public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Particle paramParticle, Location paramLocation, double paramDouble1, int paramInt1, int paramInt2, int paramInt3, double paramDouble2, double paramDouble3, double paramDouble4, double paramDouble5, float paramFloat1, float paramFloat2, float paramFloat3) {
+  public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(Particle paramParticle, Location paramLocation, double paramDouble1, int paramInt1, int paramInt2, int paramInt3, double paramDouble2, double paramDouble3, double paramDouble4, double paramDouble5, float paramFloat1, float paramFloat2, float paramFloat3) {
     World world = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramLocation);
     try {
       if (world != null)
@@ -766,7 +766,7 @@ public final class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha865439579999291999999
     } 
   }
   
-  public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Particle.DustOptions paramDustOptions, Location paramLocation, double paramDouble1, int paramInt1, int paramInt2, int paramInt3, double paramDouble2, double paramDouble3, double paramDouble4, double paramDouble5, float paramFloat1, float paramFloat2, float paramFloat3) {
+  public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(Particle.DustOptions paramDustOptions, Location paramLocation, double paramDouble1, int paramInt1, int paramInt2, int paramInt3, double paramDouble2, double paramDouble3, double paramDouble4, double paramDouble5, float paramFloat1, float paramFloat2, float paramFloat3) {
     World world = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramLocation);
     try {
       if (world != null)

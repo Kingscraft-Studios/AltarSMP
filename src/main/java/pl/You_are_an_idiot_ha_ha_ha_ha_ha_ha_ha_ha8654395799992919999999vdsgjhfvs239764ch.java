@@ -19,7 +19,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     return You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramLong) / 3600L;
   }
   
-  public static String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(long paramLong) {
+  public static String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v1(long paramLong) {
     long l1 = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramLong);
     long l2 = l1 / 3600L;
     long l3 = l1 % 3600L / 60L;
@@ -27,14 +27,14 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     return String.format(a(3669, 18376), new Object[] { Long.valueOf(l3), Long.valueOf(l4) });
   }
   
-  public static String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(long paramLong) {
+  public static String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b__v0(long paramLong) {
     long l1 = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramLong);
     long l2 = l1 / 3600L;
     long l3 = l1 % 3600L / 60L;
     return String.format(a(3668, 18949), new Object[] { Long.valueOf(l2), Long.valueOf(l3) });
   }
   
-  public static double You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(long paramLong) {
+  public static double You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(long paramLong) {
     return paramLong / 72000.0D;
   }
   

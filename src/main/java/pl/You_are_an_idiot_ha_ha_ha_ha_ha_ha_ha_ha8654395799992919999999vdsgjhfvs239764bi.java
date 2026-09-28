@@ -50,7 +50,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   private static final String[] b;
   
-  private void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a() {
+  private void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0() {
     int i = Main.getInstance().getConfig().getInt(a(10256, 15926), 60);
     int j = Main.getInstance().getConfig().getInt(a(10255, 32471), 30) * 60 * 20;
     (new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764gh(this, j, i)).runTaskTimer((Plugin)Main.getInstance(), 0L, 1L);

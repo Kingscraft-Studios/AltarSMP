@@ -181,7 +181,7 @@
 /* 181 */         String string = object.toString();
 /* 182 */         if (string.length() > 0 && (string.indexOf(delimiter) >= 0 || string
 /* 183 */           .indexOf('\n') >= 0 || string.indexOf('\r') >= 0 || string
-/* 184 */           .indexOf(false) >= 0 || string.charAt(0) == '"')) {
+/* 184 */           .indexOf('\0') >= 0 || string.charAt(0) == '"')) {
 /* 185 */           sb.append('"');
 /* 186 */           int length = string.length();
 /* 187 */           for (int j = 0; j < length; j++) {

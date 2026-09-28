@@ -66,7 +66,7 @@
 /*     */       
 /*  67 */       jo.put("HTTP-Version", token);
 /*  68 */       jo.put("Status-Code", x.nextToken());
-/*  69 */       jo.put("Reason-Phrase", x.nextTo(false));
+/*  69 */       jo.put("Reason-Phrase", x.nextTo('\0'));
 /*  70 */       x.next();
 /*     */     
 /*     */     }
@@ -83,7 +83,7 @@
 /*  83 */     while (x.more()) {
 /*  84 */       String name = x.nextTo(':');
 /*  85 */       x.next(':');
-/*  86 */       jo.put(name, x.nextTo(false));
+/*  86 */       jo.put(name, x.nextTo('\0'));
 /*  87 */       x.next();
 /*     */     } 
 /*  89 */     return jo;
