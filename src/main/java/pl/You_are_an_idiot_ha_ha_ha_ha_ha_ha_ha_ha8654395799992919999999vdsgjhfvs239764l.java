@@ -262,7 +262,7 @@ a\u00e6\u00f3\\N¶§\u00c4\u008c\u009a\u0082w\u00db\u00ee\u00d9&\u008b\u0011»\u
         }
         a = a2;
         b = new String[335];
-        You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a();
+        You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c = values();
     }
     
     private static MatchException a(final MatchException ex) {

@@ -27,7 +27,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   private static String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(String paramString) {
     StringBuilder stringBuilder = new StringBuilder();
-    for (int i = 0; i < paramString.length(); i = j + 2) {
+    int i = 0;
+    while (i < paramString.length()) {
       int j = paramString.indexOf(a(-25316, 2726), i);
       try {
         if (j == -1) {
@@ -55,6 +56,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
         } 
       } 
       stringBuilder.append(a(-25314, 19596));
+      i = j + 2;
     } 
     return stringBuilder.toString();
   }

@@ -123,7 +123,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       if (map1 != null)
         try {
           if (map2 != null) {
-            for (String str : map1.keySet()) {
+            for (String str : (Iterable<String>)(Iterable<?>)map1.keySet()) {
               Double double_ = (Double)map2.get(str);
               try {
                 if (double_ != null)

@@ -411,21 +411,9 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   private static void lambda$new$0() {
     for (Player player : Bukkit.getOnlinePlayers()) {
-      try {
-        if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(player)) {
-          try {
-            if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b__v0(player))
-              continue; 
-          } catch (MatchException matchException) {
-            throw a(null);
-          } 
-          continue;
-        } 
-      } catch (MatchException matchException) {
-        throw a(null);
+      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(player) || You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b__v0(player)) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 200, 0, false, false, false));
       } 
-      continue;
-      SYNTHETIC_LOCAL_VARIABLE_1.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 200, 0, false, false, false));
     } 
   }
   
