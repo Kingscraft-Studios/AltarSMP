@@ -141,15 +141,15 @@ public final class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha865439579999291999999
     try {
       if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e) {
         try {
-          if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(player2)) {
+          if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b__v0(player2)) {
             You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(player1);
           } else {
             try {
-              if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c(player2)) {
+              if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c__v0(player2)) {
                 You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c(player1);
               } else {
                 try {
-                  if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d(player2))
+                  if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d__v0(player2))
                     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e(player1); 
                 } catch (MatchException matchException) {
                   throw a(null);
@@ -219,7 +219,7 @@ public final class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha865439579999291999999
       return;
     } 
     try {
-      if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(player))
+      if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b__v0(player))
         return; 
     } catch (MatchException matchException) {
       throw a(null);
@@ -261,14 +261,14 @@ public final class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha865439579999291999999
     } 
     String str2 = ChatColor.stripColor(paramPlayer.getName());
     try {
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayer)) {
+      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b__v0(paramPlayer)) {
         team.setColor(ChatColor.YELLOW);
         team.setPrefix(a(8207, 23294));
         paramPlayer.setDisplayName(a(8236, 4286) + a(8236, 4286));
         paramPlayer.setPlayerListName(a(8236, 4286) + a(8236, 4286));
       } else {
         try {
-          if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c(paramPlayer)) {
+          if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c__v0(paramPlayer)) {
             team.setColor(ChatColor.RED);
             team.setPrefix(a(8240, -4502));
             paramPlayer.setDisplayName(a(8250, 3217) + a(8250, 3217));
@@ -330,9 +330,9 @@ public final class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha865439579999291999999
   
   public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d__v0(Player paramPlayer) {
     try {
-      if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayer))
+      if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b__v0(paramPlayer))
         try {
-          if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c(paramPlayer));
+          if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c__v0(paramPlayer));
         } catch (MatchException matchException) {
           throw a(null);
         }  

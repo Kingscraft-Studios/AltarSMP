@@ -296,7 +296,7 @@ public final class Main extends JavaPlugin implements Listener {
   public static boolean isTrusted(Player paramPlayer, Entity paramEntity) {
     if (paramEntity instanceof Player) {
       Player player = (Player)paramEntity;
-      return You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b9.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, player);
+      return You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b9.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(paramPlayer, player);
     } 
     return false;
   }
