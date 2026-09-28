@@ -433,7 +433,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     //   5: astore #5
     //   7: iconst_0
     //   8: istore_3
-    //   9: ldc 'Æ¢°=ö\\r|üÜÉK\\b9CÆìGÿÊ­ÜA|\\nE0UO>¨sÓ|±úN°¿Fù¼FïxpÎ\\t¬kÏÇk¸ìNgeÎ6!¯QDv.áfh\\fý »d¿HÂ,³³¶./IèÕ\\t\\fMË;9êfÚ\\n¾âBÑîb*ÙØÔp÷\\n>QË~©]ôE8%øwû¶ý%GA¦iw¿ÖÔTC|¶M\\f" qÑ½S\\nÑ°½ÐqÝx0÷yæékÛR=õ_T².¹Õ_ÓÐÃG+¾µææ=Wü0$F\\ríÛæÙÌË\þMnuuIzàÅSö9¼\\tÀuh5Öíó>ÎU=$N(c,õÚßqrÛd>FßnöTÒÏox(Äü²ì<¶âÔÔ(ï\\r¸Ü¾L¥6¯")ÞÜ>®ÓØ²H Ù1kd\\bÊÛÖY¢ö.ùXsAß±|ðIÙÐU\ÿ©Ñ½!âDïø¬Ê0M C/·þ4I£«<\\tÛÑ#zdÑÆ'Î{Í¹0wdA±C\\ndlK§®¢mkJ'
+    //   9: ldc 'Æ¢°=ö\\r|üÜÉK\\b9CÆìGÿÊ­ÜA|\\nE0UO>¨sÓ|±úN°¿Fù¼FïxpÎ\\t¬kÏÇk¸ìNgeÎ6!¯QDv.áfh\\fý»d¿HÂ,³³¶./IèÕ\\t\\fMË;9êfÚ\\n¾âBÑîb*ÙØÔp÷\\n>QË~©]ôE8%øwû¶ý%GA¦iw¿ÖÔTC|¶M\\f" qÑ½S\\nÑ°½ÐqÝx0÷yæékÛR=õ_T².¹Õ_ÓÐÃG+¾µææ=Wü0$F\\ríÛæÙÌË\þMnuuIzàÅSö9¼\\tÀuh5Öíó>ÎU=$N(c,õÚßqrÛd>FßnöTÒÏox(Äü²ì<¶âÔÔ(ï\\r¸Ü¾L¥6¯")ÞÜ>®ÓØ²HÙ1kd\\bÊÛÖY¢ö.ùXsAß±|ðIÙÐU\ÿ©Ñ½!âDïø¬Ê0MC/·þ4I£«<\\tÛÑ#zdÑÆ'Î{Í¹0wdA±C\\ndlK§®¢mkJ'
     //   11: dup
     //   12: astore_2
     //   13: invokevirtual length : ()I
@@ -470,7 +470,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     //   61: invokevirtual charAt : (I)C
     //   64: istore_1
     //   65: goto -> 23
-    //   68: ldc 'ÔÃ8Û-Íô »Yÿ ±&w,yÊå}\\n_^Ç\-¶+3'
+    //   68: ldc 'ÔÃ8Û-Íô »Yÿ±&w,yÊå}\\n_^Ç\-¶+3'
     //   70: dup
     //   71: astore_2
     //   72: invokevirtual length : ()I

@@ -138,7 +138,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
   static {
     // Byte code:
     //   0: bipush #63
-    //   2: ldc 'BJ&B\EC?@PU]CJ '
+    //   2: ldc 'BJ&B\EC?@PU]CJ'
     //   4: iconst_m1
     //   5: goto -> 14
     //   8: putstatic pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ea.a : Ljava/lang/String;

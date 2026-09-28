@@ -310,7 +310,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     //   61: invokevirtual charAt : (I)C
     //   64: istore_1
     //   65: goto -> 23
-    //   68: ldc 'iN£>§bÏÞ ÜsæÛ/ÍÂúëïÉÝµ¶ÅA~¡Ê'
+    //   68: ldc 'iN£>§bÏÞÜsæÛ/ÍÂúëïÉÝµ¶ÅA~¡Ê'
     //   70: dup
     //   71: astore_2
     //   72: invokevirtual length : ()I
