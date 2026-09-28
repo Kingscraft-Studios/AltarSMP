@@ -1,0 +1,937 @@
+# ░██████╗███████╗████████╗████████╗██╗███╗░░██╗░██████╗░░██████╗
+# ██╔════╝██╔════╝╚══██╔══╝╚══██╔══╝██║████╗░██║██╔════╝░██╔════╝
+# ╚█████╗░█████╗░░░░░██║░░░░░░██║░░░██║██╔██╗██║██║░░██╗░╚█████╗░
+# ░╚═══██╗██╔══╝░░░░░██║░░░░░░██║░░░██║██║╚████║██║░░╚██╗░╚═══██╗
+# ██████╔╝███████╗░░░██║░░░░░░██║░░░██║██║░╚███║╚██████╔╝██████╔╝
+# ╚═════╝░╚══════╝░░░╚═╝░░░░░░╚═╝░░░╚═╝╚═╝░░╚══╝░╚═════╝░╚═════╝░
+
+# VAMPIRE EVENTS
+all_vampires_and_palerots_infect_humans: true # if set to false only the weapon holder can
+vampire_event_enabled: false
+backstab_damage: 2.0 # extra dmg
+contagion_ritual_duration: 10 # in minutes
+contagion_signal_health: 50
+vampire_winner: null
+
+
+drop_heads: true # if you have AltarS2 this will be automatically disabled to avoid dropping 2 heads at once
+give_dropped_head_to_killer: false # false means drop
+worldguard_support: false
+nimlot: false # dont touch this
+
+bingoTime: 60 # in minutes
+leggingsTime: 30 # in minutes
+leggingsEventAnnounceTime: 60 # in seconds
+helmetEventAnnouncePeriod: 60
+helmetEventFragmentGivePeriod: 30
+
+# for copper chestplate event
+lightningInterval: 5 # in ticks
+lightningRadius: 50
+chestplateEventAnnouncePeriod: 60 # in seconds
+
+copperLeggingsMaxDamage: 30
+copperChestplateDamage: 5
+copperHelmetStrengthAmplifier: 1
+
+WardenHeartDropChance: 25 # if you have AltarS2 this will be automatically disabled to avoid dropping 2 hearts at once
+reset_hearts_on_relog: true
+tnt: true
+announce_destroying_legendaries: true
+trueDamage: true # turn this off to turn off true damage
+bossbar_update_interval: 1
+legendaryLimit: -1 # -1 to disable the limit
+
+weapons_that_can_be_obtained_from_rolling: # crazy slots and reroller and selectors
+  - BLOODLUST
+  - PURE_BLADE
+  - EARTH_GAUNTLET
+  - WITHERED_BONE_BLADE
+  - SHADOW_BLADE
+  - CUTLASS
+  - PALADIN_AXE
+  - WINDWEAVER
+  - BONE_BLADE
+  - VULCAN_CROSSBOW
+  - FROST_SCYTHE
+  - HYPERION
+  - NIGHTPIERCER
+  - STRIKER
+  - ECLIPSE
+  - PALE_CANNON
+  - ECHO
+  - KNIGHTFALL
+
+# ██████╗░███████╗░█████╗░██╗██████╗░███████╗░██████╗
+# ██╔══██╗██╔════╝██╔══██╗██║██╔══██╗██╔════╝██╔════╝
+# ██████╔╝█████╗░░██║░░╚═╝██║██████╔╝█████╗░░╚█████╗░
+# ██╔══██╗██╔══╝░░██║░░██╗██║██╔═══╝░██╔══╝░░░╚═══██╗
+# ██║░░██║███████╗╚█████╔╝██║██║░░░░░███████╗██████╔╝
+# ╚═╝░░╚═╝╚══════╝░╚════╝░╚═╝╚═╝░░░░░╚══════╝╚═════╝░
+# RECIPES
+WeaponHandle:
+  enabled: true
+  shape:
+    - " B "
+    - " S "
+    - " B "
+  ingredients:
+    B: NETHERITE_INGOT
+    S: NETHER_STAR
+
+VulcansSkull:
+  enabled: true
+  shape:
+    - "ABA"
+    - "BSB"
+    - "ABA"
+  ingredients:
+    B: MAGMA_BLOCK
+    S: WITHER_SKELETON_SKULL
+    A: ANCIENT_DEBRIS
+
+IllusionCore:
+  enabled: true
+  shape:
+    - "ABA"
+    - "BSB"
+    - "ABA"
+  ingredients:
+    B: SKELETON_SKULL
+    S: HEAVY_CORE
+    A: ANCIENT_DEBRIS
+
+
+
+#██████╗░░█████╗░██╗░░░░░███████╗  ░██████╗░██╗░░░██╗███╗░░██╗
+#██╔══██╗██╔══██╗██║░░░░░██╔════╝  ██╔════╝░██║░░░██║████╗░██║
+#██████╔╝███████║██║░░░░░█████╗░░  ██║░░██╗░██║░░░██║██╔██╗██║
+#██╔═══╝░██╔══██║██║░░░░░██╔══╝░░  ██║░░╚██╗██║░░░██║██║╚████║
+#██║░░░░░██║░░██║███████╗███████╗  ╚██████╔╝╚██████╔╝██║░╚███║
+#╚═╝░░░░░╚═╝░░╚═╝╚══════╝╚══════╝  ░╚═════╝░░╚═════╝░╚═╝░░╚══╝
+palecannonCooldown: 30
+paleMaxDistance: 50
+paleGravity: 0.0025
+palePower: 2
+paleDamage: 8
+paleParticleEffects: true
+
+paleRootsCooldown: 45
+paleRootsCount: 12
+paleRootsDuration: 10
+paleRootsDamage: 3
+
+#███████╗░█████╗░██╗░░██╗░█████╗░
+#██╔════╝██╔══██╗██║░░██║██╔══██╗
+#█████╗░░██║░░╚═╝███████║██║░░██║
+#██╔══╝░░██║░░██╗██╔══██║██║░░██║
+#███████╗╚█████╔╝██║░░██║╚█████╔╝
+#╚══════╝░╚════╝░╚═╝░░╚═╝░╚════╝░
+echoShriekDuration: 10
+echoSonicBlastCooldown: 40
+echoSonicDamage: 10
+echoSonicThrowMax: 30
+echoSonicThrowStrength: 2
+echoSonicGravity: 0
+
+
+# ██████╗░░█████╗░███╗░░██╗███████╗       ██████╗░██╗░░░░░░█████╗░██████╗░███████╗
+# ██╔══██╗██╔══██╗████╗░██║██╔════╝       ██╔══██╗██║░░░░░██╔══██╗██╔══██╗██╔════╝
+# ██████╦╝██║░░██║██╔██╗██║█████╗░░       ██████╦╝██║░░░░░███████║██║░░██║█████╗░░
+# ██╔══██╗██║░░██║██║╚████║██╔══╝░░       ██╔══██╗██║░░░░░██╔══██║██║░░██║██╔══╝░░
+# ██████╦╝╚█████╔╝██║░╚███║███████╗       ██████╦╝███████╗██║░░██║██████╔╝███████╗
+# ╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝       ╚═════╝░╚══════╝╚═╝░░╚═╝╚═════╝░╚══════╝
+# bone blade
+skeletalLeapCooldown: 30
+skeletalLeapDistance: 1.5
+skeletalLeapDamage: 14  # normal damage not true damage
+
+boneCageLength: 30 # how far the bone projectiles fly
+boneCageStunDuration: 4
+boneCageStopInteractions: false # if true it will stop players from interacting
+boneCageStopAttacking: true
+boneCageCooldown: 60
+
+# ██╗░░░██╗██╗░░░██╗██╗░░░░░░█████╗░░█████╗░███╗░░██╗░██████╗      ░█████╗░██████╗░░█████╗░░██████╗░██████╗██████╗░░█████╗░░██╗░░░░░░░██╗
+# ██║░░░██║██║░░░██║██║░░░░░██╔══██╗██╔══██╗████╗░██║██╔════╝      ██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝██╔══██╗██╔══██╗░██║░░██╗░░██║
+# ╚██╗░██╔╝██║░░░██║██║░░░░░██║░░╚═╝███████║██╔██╗██║╚█████╗░      ██║░░╚═╝██████╔╝██║░░██║╚█████╗░╚█████╗░██████╦╝██║░░██║░╚██╗████╗██╔╝
+# ░╚████╔╝░██║░░░██║██║░░░░░██║░░██╗██╔══██║██║╚████║░╚═══██╗      ██║░░██╗██╔══██╗██║░░██║░╚═══██╗░╚═══██╗██╔══██╗██║░░██║░░████╔═████║░
+# ░░╚██╔╝░░╚██████╔╝███████╗╚█████╔╝██║░░██║██║░╚███║██████╔╝      ╚█████╔╝██║░░██║╚█████╔╝██████╔╝██████╔╝██████╦╝╚█████╔╝░░╚██╔╝░╚██╔╝░
+# ░░░╚═╝░░░░╚═════╝░╚══════╝░╚════╝░╚═╝░░╚═╝╚═╝░░╚══╝╚═════╝░      ░╚════╝░╚═╝░░╚═╝░╚════╝░╚═════╝░╚═════╝░╚═════╝░░╚════╝░░░░╚═╝░░░╚═╝░░
+
+# Vulcan's Wrath (Ability)
+vulcansWrathCooldown: 45
+vulcansWrathDamage: 8.0
+vulcanMaxDistance: 500
+vulcanPower: 2
+vulcanExplosionRadius: 4
+vulcanWrathVisual: false # if you make it true then the magma that spawns will be visual instead of actual blocks and will disapear after 5s
+
+# Passive
+vulcansScattershotDamage: 16.0 # normal damage not true damage
+preEnchantedVulcanQuickchargeLevel: 2 # 0 to disable, max is 3
+
+# ██████╗░██╗░░░░░░█████╗░░█████╗░██████╗░██╗░░░░░██╗░░░██╗░██████╗████████╗
+# ██╔══██╗██║░░░░░██╔══██╗██╔══██╗██╔══██╗██║░░░░░██║░░░██║██╔════╝╚══██╔══╝
+# ██████╦╝██║░░░░░██║░░██║██║░░██║██║░░██║██║░░░░░██║░░░██║╚█████╗░░░░██║░░░
+# ██╔══██╗██║░░░░░██║░░██║██║░░██║██║░░██║██║░░░░░██║░░░██║░╚═══██╗░░░██║░░░
+# ██████╦╝███████╗╚█████╔╝╚█████╔╝██████╔╝███████╗╚██████╔╝██████╔╝░░░██║░░░
+# ╚═════╝░╚══════╝░╚════╝░░╚════╝░╚═════╝░╚══════╝░╚═════╝░╚═════╝░░░░╚═╝░░░
+
+speedLevel: 1 # What speed should bloodlust give after reaching 1+ kills | 0 = 1 potion level
+strengthLevel: 0 # What strength should bloodlust give after reaching 4+ kills | 0 = 1 potion level
+
+bloodlustBorderLogic: true
+bloodlustTrackRange: 80
+bloodTrailCooldown: 60
+bloodTrailDuration: 15 # Set to 0 to make it infinite
+
+infectionDuration: 5
+infectionDamage: 2
+
+hookCooldown: 30
+hookMaxDistance: 100
+hookDamage: 4.0
+hookPullStrength: 2.0
+hookGravity: 0.0025
+
+# ███████╗██████╗░░█████╗░░██████╗████████╗       ░██████╗░█████╗░██╗░░░██╗████████╗██╗░░██╗███████╗
+# ██╔════╝██╔══██╗██╔══██╗██╔════╝╚══██╔══╝       ██╔════╝██╔══██╗╚██╗░██╔╝╚══██╔══╝██║░░██║██╔════╝
+# █████╗░░██████╔╝██║░░██║╚█████╗░░░░██║░░░       ╚█████╗░██║░░╚═╝░╚████╔╝░░░░██║░░░███████║█████╗░░
+# ██╔══╝░░██╔══██╗██║░░██║░╚═══██╗░░░██║░░░       ░╚═══██╗██║░░██╗░░╚██╔╝░░░░░██║░░░██╔══██║██╔══╝░░
+# ██║░░░░░██║░░██║╚█████╔╝██████╔╝░░░██║░░░       ██████╔╝╚█████╔╝░░░██║░░░░░░██║░░░██║░░██║███████╗
+# ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░░░╚═╝░░░       ╚═════╝░░╚════╝░░░░╚═╝░░░░░░╚═╝░░░╚═╝░░╚═╝╚══════╝
+
+scytheThrowCooldown: 30
+scytheThrowDamage: 10
+frostDuration: 5
+scytheThrowMaxThrow: 100
+scytheThrowPower: 2
+scytheReturnPower: 2
+frostScytheChargeDuration: 1
+holdForThrowFrostScythe: false # if false it will be offhand instead of hold
+scytheThrowReturnScythe: true
+
+commandOfIceCooldown: 45
+commandOfIceDamage: 4.0 # This is damage what every 1 ice deals so this will deal 6 hearts
+
+#██████╗░██╗░░░██╗██████╗░███████╗        ██████╗░██╗░░░░░░█████╗░██████╗░███████╗
+#██╔══██╗██║░░░██║██╔══██╗██╔════╝        ██╔══██╗██║░░░░░██╔══██╗██╔══██╗██╔════╝
+#██████╔╝██║░░░██║██████╔╝█████╗░░        ██████╦╝██║░░░░░███████║██║░░██║█████╗░░
+#██╔═══╝░██║░░░██║██╔══██╗██╔══╝░░        ██╔══██╗██║░░░░░██╔══██║██║░░██║██╔══╝░░
+#██║░░░░░╚██████╔╝██║░░██║███████╗        ██████╦╝███████╗██║░░██║██████╔╝███████╗
+#╚═╝░░░░░░╚═════╝░╚═╝░░╚═╝╚══════╝        ╚═════╝░╚══════╝╚═╝░░╚═╝╚═════╝░╚══════╝
+
+shadeSoulCooldown: 45
+shadeSoulDamage: 7
+shadeSoulRange: 40
+
+cycloneSlashCooldown: 30
+cycloneSlashDamage: 6
+
+#░█████╗░██╗░░░██╗████████╗██╗░░░░░░█████╗░░██████╗░██████╗
+#██╔══██╗██║░░░██║╚══██╔══╝██║░░░░░██╔══██╗██╔════╝██╔════╝
+#██║░░╚═╝██║░░░██║░░░██║░░░██║░░░░░███████║╚█████╗░╚█████╗░
+#██║░░██╗██║░░░██║░░░██║░░░██║░░░░░██╔══██║░╚═══██╗░╚═══██╗
+#╚█████╔╝╚██████╔╝░░░██║░░░███████╗██║░░██║██████╔╝██████╔╝
+#░╚════╝░░╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝╚═════╝░╚═════╝░
+CutlassParryCooldown: 30
+CutlassCutsCooldown: 15
+cutlassCutDamage: 12
+CutlassParryDuration: 7
+
+#░██╗░░░░░░░██╗██╗████████╗██╗░░██╗███████╗██████╗░        ██████╗░░█████╗░███╗░░██╗███████╗
+#░██║░░██╗░░██║██║╚══██╔══╝██║░░██║██╔════╝██╔══██╗        ██╔══██╗██╔══██╗████╗░██║██╔════╝
+#░╚██╗████╗██╔╝██║░░░██║░░░███████║█████╗░░██████╔╝        ██████╦╝██║░░██║██╔██╗██║█████╗░░
+#░░████╔═████║░██║░░░██║░░░██╔══██║██╔══╝░░██╔══██╗        ██╔══██╗██║░░██║██║╚████║██╔══╝░░
+#░░╚██╔╝░╚██╔╝░██║░░░██║░░░██║░░██║███████╗██║░░██║        ██████╦╝╚█████╔╝██║░╚███║███████╗
+#░░░╚═╝░░░╚═╝░░╚═╝░░░╚═╝░░░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝        ╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝
+
+WitherBoneleapCooldown: 10
+WitherBoneCleansingCooldown: 30
+WitherBoneLeapHorizontalStrength: 1.5
+WitherBoneLeapVerticalStrength: 0.6
+WitherBoneCleansingDuration: 5
+
+#███████╗░█████╗░██████╗░████████╗██╗░░██╗       ░██████╗░░█████╗░██╗░░░██╗███╗░░██╗████████╗██╗░░░░░███████╗████████╗
+#██╔════╝██╔══██╗██╔══██╗╚══██╔══╝██║░░██║        ██╔════╝░██╔══██╗██║░░░██║████╗░██║╚══██╔══╝██║░░░░░██╔════╝╚══██╔══╝
+#█████╗░░███████║██████╔╝░░░██║░░░███████║        ██║░░██╗░███████║██║░░░██║██╔██╗██║░░░██║░░░██║░░░░░█████╗░░░░░██║░░░
+#██╔══╝░░██╔══██║██╔══██╗░░░██║░░░██╔══██║        ██║░░╚██╗██╔══██║██║░░░██║██║╚████║░░░██║░░░██║░░░░░██╔══╝░░░░░██║░░░
+#███████╗██║░░██║██║░░██║░░░██║░░░██║░░██║        ╚██████╔╝██║░░██║╚██████╔╝██║░╚███║░░░██║░░░███████╗███████╗░░░██║░░░
+#╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░╚═╝░░╚═╝        ░╚═════╝░╚═╝░░╚═╝░╚═════╝░╚═╝░░╚══╝░░░╚═╝░░░╚══════╝╚══════╝░░░╚═╝░░░
+mudGravity: 0.0025 # set it to 0 to disable gravity
+
+EarthGauntletMudslide: 18
+mudMaxDistance: 100
+mudDamage: 4
+muddiedDuration: 4
+
+EarthGauntletMeteorStrike: 30
+meteorUseDuration: 5 # how long before going on cooldown if didn't hit a target
+meteorDamage: 14.0
+meteorStrikeKnockback: 8.0
+
+#░██████╗██╗░░██╗░█████╗░██████╗░░█████╗░░██╗░░░░░░░██╗  ██████╗░██╗░░░░░░█████╗░██████╗░███████╗
+#██╔════╝██║░░██║██╔══██╗██╔══██╗██╔══██╗░██║░░██╗░░██║  ██╔══██╗██║░░░░░██╔══██╗██╔══██╗██╔════╝
+#╚█████╗░███████║███████║██║░░██║██║░░██║░╚██╗████╗██╔╝  ██████╦╝██║░░░░░███████║██║░░██║█████╗░░
+#░╚═══██╗██╔══██║██╔══██║██║░░██║██║░░██║░░████╔═████║░  ██╔══██╗██║░░░░░██╔══██║██║░░██║██╔══╝░░
+#██████╔╝██║░░██║██║░░██║██████╔╝╚█████╔╝░░╚██╔╝░╚██╔╝░  ██████╦╝███████╗██║░░██║██████╔╝███████╗
+#╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░░╚════╝░░░░╚═╝░░░╚═╝░░  ╚═════╝░╚══════╝╚═╝░░╚═╝╚═════╝░╚══════╝
+# SHADOW BLADE
+ShadowBladeLeapCooldown: 30
+ShadowBladeDaggerCooldown: 15
+shadowDaggerDistance: 10.0
+ShadowBladeLeapDistance: 30.0
+shadowDaggerDamage: 10.0
+shadowBladeLeapSpeed: 2.0
+shadowLeapStopWhenTouchingBlocks: false
+shadowBladeBorderLogic: true
+
+#██████╗░░█████╗░██╗░░░░░░█████╗░██████╗░██╗███╗░░██╗██╗░██████╗  ░█████╗░██╗░░██╗███████╗
+#██╔══██╗██╔══██╗██║░░░░░██╔══██╗██╔══██╗██║████╗░██║╚█║██╔════╝  ██╔══██╗╚██╗██╔╝██╔════╝
+#██████╔╝███████║██║░░░░░███████║██║░░██║██║██╔██╗██║░╚╝╚█████╗░  ███████║░╚███╔╝░█████╗░░
+#██╔═══╝░██╔══██║██║░░░░░██╔══██║██║░░██║██║██║╚████║░░░░╚═══██╗  ██╔══██║░██╔██╗░██╔══╝░░
+#██║░░░░░██║░░██║███████╗██║░░██║██████╔╝██║██║░╚███║░░░██████╔╝  ██║░░██║██╔╝╚██╗███████╗
+#╚═╝░░░░░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚═════╝░╚═╝╚═╝░░╚══╝░░░╚═════╝░  ╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝
+paladinEarthShatterCooldown: 45
+earthShatterRadius: 10
+earthShatterDamage: 5
+
+stalwartAbsorptionNerf: 1 # the higher the number the weaker the absorption becomes
+paladinStalwartAbsorptionDuration: 5
+paladinStalwartAbsorptionCooldown: 45
+absorptionDamageLimit: 35
+
+
+# ██╗██╗░░░░░██╗░░░░░██╗░░░██╗░██████╗██╗░█████╗░███╗░░██╗      ░██╗░░░░░░░██╗░█████╗░███╗░░██╗██████╗░
+# ██║██║░░░░░██║░░░░░██║░░░██║██╔════╝██║██╔══██╗████╗░██║      ░██║░░██╗░░██║██╔══██╗████╗░██║██╔══██╗
+# ██║██║░░░░░██║░░░░░██║░░░██║╚█████╗░██║██║░░██║██╔██╗██║      ░╚██╗████╗██╔╝███████║██╔██╗██║██║░░██║
+# ██║██║░░░░░██║░░░░░██║░░░██║░╚═══██╗██║██║░░██║██║╚████║      ░░████╔═████║░██╔══██║██║╚████║██║░░██║
+# ██║███████╗███████╗╚██████╔╝██████╔╝██║╚█████╔╝██║░╚███║      ░░╚██╔╝░╚██╔╝░██║░░██║██║░╚███║██████╔╝
+# ╚═╝╚══════╝╚══════╝░╚═════╝░╚═════╝░╚═╝░╚════╝░╚═╝░░╚══╝      ░░░╚═╝░░░╚═╝░░╚═╝░░╚═╝╚═╝░░╚══╝╚═════╝░
+
+mobAbilityCooldown: 30
+
+illusionCreeperExplosionStrength: 3.0
+IllusionWandChargeDuration: 2
+IllusionBlazeFireballStrength: 2
+IllusionWandRandomMob: false # if set to true instead of having to capture a mob to turn into them the mob you turn into is random
+randomMobs: # you can add any mob from here: hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html
+  - ENDERMAN
+  - CREEPER
+  - WARDEN
+  - BAT
+  - BLAZE
+  - IRON_GOLEM
+
+# ██╗░░██╗██╗░░░██╗██████╗░███████╗██████╗░██╗░█████╗░███╗░░██╗
+# ██║░░██║╚██╗░██╔╝██╔══██╗██╔════╝██╔══██╗██║██╔══██╗████╗░██║
+# ███████║░╚████╔╝░██████╔╝█████╗░░██████╔╝██║██║░░██║██╔██╗██║
+# ██╔══██║░░╚██╔╝░░██╔═══╝░██╔══╝░░██╔══██╗██║██║░░██║██║╚████║
+# ██║░░██║░░░██║░░░██║░░░░░███████╗██║░░██║██║╚█████╔╝██║░╚███║
+# ╚═╝░░╚═╝░░░╚═╝░░░╚═╝░░░░░╚══════╝╚═╝░░╚═╝╚═╝░╚════╝░╚═╝░░╚══╝
+hollowedFlamesDamage: 1
+hollowedFlamesDuration: 4
+
+scorchingCooldown: 30
+scorchingDamage: 6
+
+holyLanceCooldown: 60
+holyLanceDamage: 6.0
+holyLanceRadius: 3
+
+# ███╗░░██╗██╗░██████╗░██╗░░██╗████████╗        ██████╗░██╗███████╗██████╗░░█████╗░███████╗██████╗░
+# ████╗░██║██║██╔════╝░██║░░██║╚══██╔══╝        ██╔══██╗██║██╔════╝██╔══██╗██╔══██╗██╔════╝██╔══██╗
+# ██╔██╗██║██║██║░░██╗░███████║░░░██║░░░        ██████╔╝██║█████╗░░██████╔╝██║░░╚═╝█████╗░░██████╔╝
+# ██║╚████║██║██║░░╚██╗██╔══██║░░░██║░░░        ██╔═══╝░██║██╔══╝░░██╔══██╗██║░░██╗██╔══╝░░██╔══██╗
+# ██║░╚███║██║╚██████╔╝██║░░██║░░░██║░░░        ██║░░░░░██║███████╗██║░░██║╚█████╔╝███████╗██║░░██║
+# ╚═╝░░╚══╝╚═╝░╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░        ╚═╝░░░░░╚═╝╚══════╝╚═╝░░╚═╝░╚════╝░╚══════╝╚═╝░░╚═╝
+
+transformationDuration: 1
+transformationCooldown: 30
+transformationSpeed: 0.4
+transformationDamage: 6
+
+crimsonUseDuration: 5 # how long before going on cooldown if didn't hit a target
+crimsonBiteDuration: 10 # how long the health steal lasts
+crimsonBiteCooldown: 60
+crimsonBiteHealthSteal: 4.0
+
+
+#██╗░░██╗███╗░░██╗██╗░██████╗░██╗░░██╗████████╗███████╗░█████╗░██╗░░░░░██╗░░░░░
+#██║░██╔╝████╗░██║██║██╔════╝░██║░░██║╚══██╔══╝██╔════╝██╔══██╗██║░░░░░██║░░░░░
+#█████═╝░██╔██╗██║██║██║░░██╗░███████║░░░██║░░░█████╗░░███████║██║░░░░░██║░░░░░
+#██╔═██╗░██║╚████║██║██║░░╚██╗██╔══██║░░░██║░░░██╔══╝░░██╔══██║██║░░░░░██║░░░░░
+#██║░╚██╗██║░╚███║██║╚██████╔╝██║░░██║░░░██║░░░██║░░░░░██║░░██║███████╗███████╗
+#╚═╝░░╚═╝╚═╝░░╚══╝╚═╝░╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═╝░░░░░╚═╝░░╚═╝╚══════╝╚══════╝
+KnightfallSpeedAmplifier: 1
+knightfallDamageLimit: 12 # the max damage landing a hit with the mace does, set it to 0 to disable the limit
+knightfallCooldown: 0 # the cooldown of macing
+
+cloakChances: 10
+cloakDuration: 3
+
+grapplingHookCooldown: 10
+grapplingHookStrength: 1.5
+grapplingHookLeapStrength: 1.5
+grapplingHookMaxDistance: 50
+
+hammerThrowCooldown: 30
+hammerThrowDamage: 6 # True Damage
+hammerThrowSpeed: 2
+hammerThrowStunShield: true
+hammerThrowMaxDistance: 100
+hammerThrowStunShieldDuration: 5
+
+#
+#███████╗░█████╗░██╗░░░░░██╗██████╗░░██████╗███████╗
+#██╔════╝██╔══██╗██║░░░░░██║██╔══██╗██╔════╝██╔════╝
+#█████╗░░██║░░╚═╝██║░░░░░██║██████╔╝╚█████╗░█████╗░░
+#██╔══╝░░██║░░██╗██║░░░░░██║██╔═══╝░░╚═══██╗██╔══╝░░
+#███████╗╚█████╔╝███████╗██║██║░░░░░██████╔╝███████╗
+#╚══════╝░╚════╝░╚══════╝╚═╝╚═╝░░░░░╚═════╝░╚══════╝
+EclipseTrueInvisDuration: 4
+EclipseTrueInvisCooldown: 30
+EclipseLeapCooldown: 30
+EclipseLeapStrength: 2
+EclipseStarsRange: 50
+EclipseStarsCooldown: 30
+eclipseMoonlitStarsDamage: 6
+EclipseExplosionCooldown: 30
+EclipseExplosionStrength: 2
+
+#███╗░░██╗██╗░░░██╗██╗░░██╗███████╗
+#████╗░██║██║░░░██║██║░██╔╝██╔════╝
+#██╔██╗██║██║░░░██║█████═╝░█████╗░░
+#██║╚████║██║░░░██║██╔═██╗░██╔══╝░░
+#██║░╚███║╚██████╔╝██║░╚██╗███████╗
+#╚═╝░░╚══╝░╚═════╝░╚═╝░░╚═╝╚══════╝
+nukeRemoteCooldownMinutes: 10
+nukeDamage: 100
+nukeRadius: 100
+nukeDuration: 30
+nukeAnnounceEvery: 10
+
+#░██████╗████████╗██████╗░██╗██╗░░██╗███████╗██████╗░
+#██╔════╝╚══██╔══╝██╔══██╗██║██║░██╔╝██╔════╝██╔══██╗
+#╚█████╗░░░░██║░░░██████╔╝██║█████═╝░█████╗░░██████╔╝
+#░╚═══██╗░░░██║░░░██╔══██╗██║██╔═██╗░██╔══╝░░██╔══██╗
+#██████╔╝░░░██║░░░██║░░██║██║██║░╚██╗███████╗██║░░██║
+#╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝╚═╝╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝
+stabShotRadius: 5
+stabShotRadiusY: 100
+stabShotDamage: 8
+stabShotCooldown: 60
+stabShotExplosionPower: 3
+
+orbitalShotCooldown: 120
+orbitalShotRadius: 20
+orbitalShotStrikes: 40
+orbitalShotExplosionPower: 2
+
+
+# ░█████╗░██████╗░░█████╗░███████╗██╗░░░██╗       ░██████╗██╗░░░░░░█████╗░████████╗░██████╗
+# ██╔══██╗██╔══██╗██╔══██╗╚════██║╚██╗░██╔╝       ██╔════╝██║░░░░░██╔══██╗╚══██╔══╝██╔════╝
+# ██║░░╚═╝██████╔╝███████║░░███╔═╝░╚████╔╝░       ╚█████╗░██║░░░░░██║░░██║░░░██║░░░╚█████╗░
+# ██║░░██╗██╔══██╗██╔══██║██╔══╝░░░░╚██╔╝░░       ░╚═══██╗██║░░░░░██║░░██║░░░██║░░░░╚═══██╗
+# ╚█████╔╝██║░░██║██║░░██║███████╗░░░██║░░░       ██████╔╝███████╗╚█████╔╝░░░██║░░░██████╔╝
+# ░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝░░░╚═╝░░░       ╚═════╝░╚══════╝░╚════╝░░░░╚═╝░░░╚═════╝░
+
+crazySlotsCooldown: 60
+crazySlotsDuration: 30
+
+#░██╗░░░░░░░██╗██╗███╗░░██╗██████╗░░██╗░░░░░░░██╗███████╗░█████╗░██╗░░░██╗███████╗██████╗░
+#░██║░░██╗░░██║██║████╗░██║██╔══██╗░██║░░██╗░░██║██╔════╝██╔══██╗██║░░░██║██╔════╝██╔══██╗
+#░╚██╗████╗██╔╝██║██╔██╗██║██║░░██║░╚██╗████╗██╔╝█████╗░░███████║╚██╗░██╔╝█████╗░░██████╔╝
+#░░████╔═████║░██║██║╚████║██║░░██║░░████╔═████║░██╔══╝░░██╔══██║░╚████╔╝░██╔══╝░░██╔══██╗
+#░░╚██╔╝░╚██╔╝░██║██║░╚███║██████╔╝░░╚██╔╝░╚██╔╝░███████╗██║░░██║░░╚██╔╝░░███████╗██║░░██║
+#░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░╚══╝╚═════╝░░░░╚═╝░░░╚═╝░░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░╚══════╝╚═╝░░╚═╝
+windweaver:
+  dashCooldown: 15
+  dashStrength: 2
+  speedAfterDashDuration: 4
+  gustCooldown: 30
+  gustStrength: 1
+
+
+# ░█████╗░██╗░░░░░████████╗░█████╗░██████╗░░██████╗
+# ██╔══██╗██║░░░░░╚══██╔══╝██╔══██╗██╔══██╗██╔════╝
+# ███████║██║░░░░░░░░██║░░░███████║██████╔╝╚█████╗░
+# ██╔══██║██║░░░░░░░░██║░░░██╔══██║██╔══██╗░╚═══██╗
+# ██║░░██║███████╗░░░██║░░░██║░░██║██║░░██║██████╔╝
+# ╚═╝░░╚═╝╚══════╝░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░
+settings:
+  rotation_speed: 2.0 # How fast should the item above the altar rotate
+altars:
+  COPPER_HELMET:
+    hologram-height: 2.0
+    recipes:
+      COPPER_HELMET:
+        ingredients:
+          - material: BLAZE_POWDER
+            amount: 2
+          - material: COPPER_BLOCK
+            amount: 5
+          - material: HELMET_SHARD
+            amount: 5
+
+  COPPER_CHESTPLATE:
+    hologram-height: 2.0
+    recipes:
+      COPPER_CHESTPLATE:
+        ingredients:
+          - material: LIGHTNING_ROD
+            amount: 64
+          - material: COPPER_BLOCK
+            amount: 64
+          - material: CHESTPLATE_SHARD
+            amount: 1
+
+  COPPER_LEGGINGS:
+    hologram-height: 2.0
+    recipes:
+      COPPER_LEGGINGS:
+        ingredients:
+          - material: HEAVY_CORE
+            amount: 1
+          - material: COPPER_BLOCK
+            amount: 64
+          - material: PLAYER_HEAD
+            amount: 3
+
+  COPPER_BOOTS:
+    hologram-height: 2.0
+    recipes:
+      COPPER_BOOTS:
+        ingredients:
+          - material: FIRE_CHARGE
+            amount: 64
+          - material: COPPER_BLOCK
+            amount: 64
+          - material: NETHERITE_INGOT
+            amount: 1
+
+  COPPER_PICKAXE:
+    hologram-height: 2.0
+    recipes:
+      COPPER_PICKAXE:
+        ingredients:
+          - material: ANCIENT_DEBRIS
+            amount: 64
+          - material: COPPER_BLOCK
+            amount: 64
+          - material: PLAYER_HEAD
+            amount: 3
+
+  BONE_BLADE:
+    hologram-height: 3.25
+    recipes:
+      BONE_BLADE:
+        ingredients:
+          - material: BONE_BLOCK
+            amount: 64
+          - material: WEAPON_HANDLE
+            amount: 1
+          - material: WARDEN_HEART
+            amount: 1
+          - material: IRON_BLOCK
+            amount: 64
+          - material: COPPER_BLOCK
+            amount: 64
+          - material: SKELETON_SKULL
+            amount: 6
+          - material: WITHER_SKELETON_SKULL
+            amount: 6
+          - material: PLAYER_HEAD
+            amount: 3
+
+  BLOODLUST:
+    hologram-height: 3.25
+    recipes:
+      BLOODLUST:
+        ingredients:
+          - material: WEAPON_HANDLE
+            amount: 1
+          - material: WARDEN_HEART
+            amount: 1
+          - material: GOLD_BLOCK
+            amount: 48
+          - material: REDSTONE_BLOCK
+            amount: 64
+          - material: NETHER_STAR
+            amount: 3
+          - material: PLAYER_HEAD
+            amount: 6
+
+  VULCAN_CROSSBOW:
+    hologram-height: 2.25
+    recipes:
+      VULCAN_CROSSBOW:
+        ingredients:
+          - material: TNT
+            amount: 64
+          - material: WARDEN_HEART
+            amount: 1
+          - material: VULCAN_SKULL
+            amount: 1
+          - material: MAGMA_CREAM
+            amount: 64
+          - material: BLAZE_ROD
+            amount: 64
+          - material: ANCIENT_DEBRIS
+            amount: 64
+          - material: PLAYER_HEAD
+            amount: 3
+
+  FROST_SCYTHE:
+    hologram-height: 3.5
+    recipes:
+      FROST_SCYTHE:
+        ingredients:
+          - material: WEAPON_HANDLE
+            amount: 1
+          - material: WARDEN_HEART
+            amount: 1
+          - material: PACKED_ICE
+            amount: 64
+          - material: PRISMARINE_SHARD
+            amount: 64
+          - material: DIAMOND_BLOCK
+            amount: 64
+          - material: BLUE_ICE
+            amount: 64
+          - material: ICE
+            amount: 64
+          - material: TRIDENT
+            amount: 1
+
+  ILLUSION_WAND:
+    hologram-height: 3.0
+    recipes:
+      ILLUSION_WAND:
+        ingredients:
+          - material: GOLD_BLOCK
+            amount: 32
+          - material: WARDEN_HEART
+            amount: 1
+          - material: TOTEM_OF_UNDYING
+            amount: 6
+          - material: ILLUSION_CORE
+            amount: 1
+          - material: AMETHYST_BLOCK
+            amount: 64
+          - material: ENCHANTED_GOLDEN_APPLE
+            amount: 1
+          - material: PLAYER_HEAD
+            amount: 2
+
+  CRAZY_SLOTS:
+    hologram-height: 2.5
+    recipes:
+      CRAZY_SLOTS:
+        ingredients:
+          - material: DRAGON_EGG
+            amount: 1
+
+  HYPERION:
+    hologram-height: 3.0
+    recipes:
+      HYPERION:
+        ingredients:
+          - material: HYPERION_SHARD
+            amount: 5
+
+  NIGHTPIERCER:
+    hologram-height: 3.35
+    recipes:
+      NIGHTPIERCER:
+        ingredients:
+          - material: VAMPIRE_SHARD
+            amount: 5
+
+  PURE_BLADE:
+    hologram-height: 2.65
+    recipes:
+      PURE_BLADE:
+        ingredients:
+          - material: WARDEN_HEART
+            amount: 2
+          - material: SCULK_SHRIEKER
+            amount: 64
+          - material: SOUL_LANTERN
+            amount: 64
+          - material: SOUL_SOIL
+            amount: 64
+          - material: NETHERITE_BLOCK
+            amount: 1
+          - material: IRON_BLOCK
+            amount: 64
+          - material: PLAYER_HEAD
+            amount: 3
+
+  EARTH_GAUNTLET:
+    hologram-height: 2.25
+    recipes:
+      EARTH_GAUNTLET:
+        ingredients:
+          - material: FIRE_CHARGE
+            amount: 48
+          - material: COPPER_BLOCK
+            amount: 64
+          - material: RESIN_BLOCK
+            amount: 16
+          - material: MUD_BRICK_SLAB
+            amount: 64
+          - material: MUD_BRICK_STAIRS
+            amount: 64
+          - material: MUD
+            amount: 64
+          - material: MUD_BRICKS
+            amount: 64
+          - material: MUD_BRICK_WALL
+            amount: 64
+          - material: PLAYER_HEAD
+            amount: 2
+
+  WITHERED_BONE_BLADE:
+    hologram-height: 3.25
+    recipes:
+      WITHERED_BONE_BLADE:
+        ingredients:
+          - material: GOLD_BLOCK
+            amount: 64
+          - material: NETHER_STAR
+            amount: 2
+          - material: WITHER_SKELETON_SKULL
+            amount: 12
+          - material: PLAYER_HEAD
+            amount: 6
+
+  SHADOW_BLADE:
+    hologram-height: 2.75
+    recipes:
+      SHADOW_BLADE:
+        ingredients:
+          - material: DRAGON_BREATH
+            amount: 4
+          - material: DISC_FRAGMENT_5
+            amount: 12
+          - material: DRAGON_EGG
+            amount: 1
+          - material: ECHO_SHARD
+            amount: 16
+          - material: BLACK_CANDLE
+            amount: 24
+          - material: PLAYER_HEAD
+            amount: 2
+
+  CUTLASS:
+    hologram-height: 3.5
+    recipes:
+      CUTLASS:
+        ingredients:
+          - material: GOLD_BLOCK
+            amount: 32
+          - material: WARDEN_HEART
+            amount: 1
+          - material: TOTEM_OF_UNDYING
+            amount: 6
+          - material: AMETHYST_BLOCK
+            amount: 64
+          - material: ENCHANTED_GOLDEN_APPLE
+            amount: 1
+          - material: PLAYER_HEAD
+            amount: 2
+
+  PALADIN_AXE:
+    hologram-height: 3.5
+    recipes:
+      PALADIN_AXE:
+        ingredients:
+          - material: PUFFERFISH
+            amount: 2
+          - material: NETHERITE_INGOT
+            amount: 6
+          - material: ENCHANTED_GOLDEN_APPLE
+            amount: 5
+          - material: HEAVY_CORE
+            amount: 1
+          - material: DRAGON_HEAD
+            amount: 4
+          - material: RAW_GOLD_BLOCK
+            amount: 64
+          - material: END_CRYSTAL
+            amount: 8
+          - material: TOTEM_OF_UNDYING
+            amount: 1
+          - material: NETHER_STAR
+            amount: 1
+
+  WINDWEAVER:
+    hologram-height: 3.4
+    recipes:
+      WINDWEAVER:
+        ingredients:
+          - material: IRON_BLOCK
+            amount: 32
+          - material: ENCHANTED_GOLDEN_APPLE
+            amount: 2
+          - material: BREEZE_ROD
+            amount: 64
+          - material: HEAVY_CORE
+            amount: 1
+          - material: OMINOUS_TRIAL_KEY
+            amount: 2
+          - material: PLAYER_HEAD
+            amount: 2
+
+  PALE_CANNON:
+    hologram-height: 2.25
+    recipes:
+      PALE_CANNON:
+        ingredients:
+          - material: PALE_SHARD
+            amount: 5
+
+  ECHO:
+    hologram-height: 3.5
+    recipes:
+      ECHO:
+        ingredients:
+          - material: ECHO_SHARD
+            amount: 16
+          - material: DIAMOND_BLOCK
+            amount: 32
+          - material: TNT
+            amount: 32
+          - material: WARDEN_HEART
+            amount: 3
+          - material: SCULK_SENSOR
+            amount: 32
+          - material: SCULK_CATALYST
+            amount: 32
+          - material: SCULK_SHRIEKER
+            amount: 32
+          - material: TRIDENT
+            amount: 1
+
+  ECLIPSE:
+    hologram-height: 3
+    recipes:
+      ECLIPSE:
+        ingredients:
+          - material: NETHERITE_INGOT
+            amount: 3
+          - material: CLOCK
+            amount: 1
+          - material: FIRE_CHARGE
+            amount: 64
+          - material: NETHER_STAR
+            amount: 2
+          - material: ENCHANTED_GOLDEN_APPLE
+            amount: 4
+          - material: CLOSED_EYEBLOSSOM
+            amount: 16
+          - material: OPEN_EYEBLOSSOM
+            amount: 16
+
+  KNIGHTFALL:
+    hologram-height: 3.5
+    recipes:
+      KNIGHTFALL:
+        ingredients:
+          - material: HEAVY_CORE
+            amount: 3
+          - material: PLAYER_HEAD
+            amount: 1
+
+  NUKE_REMOTE:
+    hologram-height: 2.25
+    recipes:
+      NUKE_REMOTE:
+        ingredients:
+          - material: FIRE_CHARGE
+            amount: 32
+          - material: REDSTONE_TORCH
+            amount: 64
+          - material: GUNPOWDER
+            amount: 64
+          - material: TARGET
+            amount: 16
+          - material: RAW_IRON_BLOCK
+            amount: 16
+          - material: HEAVY_CORE
+            amount: 1
+          - material: REDSTONE_BLOCK
+            amount: 64
+          - material: TNT
+            amount: 64
+
+  STRIKER:
+    hologram-height: 3.0
+    recipes:
+      STRIKER:
+        ingredients:
+          - material: GHAST_TEAR
+            amount: 12
+          - material: FISHING_ROD
+            amount: 2
+          - material: BOW
+            amount: 12
+          - material: REDSTONE_BLOCK
+            amount: 64
+          - material: TNT
+            amount: 128
+
+  CONTAGION:
+    hologram-height: 3.0
+    recipes:
+      CONTAGION:
+        ingredients:
+          - material: HYPERION
+            amount: 1
+          - material: NIGHTPIERCER
+            amount: 1
+          - material: PALE_CANNON
+            amount: 1
+
+  VAMPIRE_SHARD:
+    hologram-height: 3.0
+    recipes:
+      VAMPIRE_SHARD:
+        ingredients:
+          - material: STICK
+            amount: 1
+          - material: REDSTONE_BLOCK
+            amount: 4
+          - material: MAGMA_CREAM
+            amount: 1
+
+  HYPERION_SHARD:
+    hologram-height: 3.0
+    recipes:
+      HYPERION_SHARD:
+        ingredients:
+          - material: STICK
+            amount: 1
+          - material: IRON_BLOCK
+            amount: 4
+          - material: BLAZE_POWDER
+            amount: 1
+
+  PALE_SHARD:
+    hologram-height: 3.0
+    recipes:
+      PALE_SHARD:
+        ingredients:
+          - material: STICK
+            amount: 1
+          - material: IRON_BLOCK
+            amount: 4
+          - material: PALE_OAK_LOG
+            amount: 16
+
+
+bingoActive: false
+leggingsActive: false
+lightningFine: false

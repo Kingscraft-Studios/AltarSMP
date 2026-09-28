@@ -1,0 +1,43 @@
+name: AltarSMP
+version: 3.3 #pom.xml
+main: pl.Main
+api-version: '1.21'
+authors: [Doomwen, Solstate]
+softdepend: [WorldGuard]
+permissions:
+  altar.admin:
+    default: op
+commands:
+  bingo:
+  startbingo:
+    permission: altar.admin
+  startleggingsevent:
+    permission: altar.admin
+  starthelmetevent:
+    permission: altar.admin
+  startchestplateevent:
+    permission: altar.admin
+  checklegendary:
+    permission: altar.admin
+  altar:
+    permission: altar.admin
+  legendaries:
+    permission: altar.admin
+  controls:
+  cooldown:
+    permission: altar.admin
+  ability1:
+  ability2:
+  trust:
+  untrust:
+  giveselector:
+    permission: op
+  setkills:
+    permission: op
+  giverandomizer:
+    permission: op
+  dtest:
+    permission: op
+  credits:
+  vampire:
+    permission: op
