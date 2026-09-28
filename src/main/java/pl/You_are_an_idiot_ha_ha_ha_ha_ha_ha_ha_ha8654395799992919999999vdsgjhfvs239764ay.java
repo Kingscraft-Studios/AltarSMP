@@ -113,7 +113,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     Player player = (Player)paramEntityDamageByEntityEvent.getDamager();
     LivingEntity livingEntity = (LivingEntity)paramEntityDamageByEntityEvent.getEntity();
     try {
-      if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player))
+      if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(player))
         return; 
     } catch (MatchException matchException) {
       throw a(null);
