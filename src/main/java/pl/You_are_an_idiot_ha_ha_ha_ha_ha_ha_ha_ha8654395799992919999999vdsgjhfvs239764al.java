@@ -278,7 +278,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   }
   
   private static void lambda$risingBlocks$1(List paramList, World paramWorld) {
-    for (Block block : paramList) {
+    for (Block block : (Iterable<Block>)(Iterable<?>)paramList) {
       Location location = block.getLocation().clone().add(0.5D, 0.5D, 0.5D);
       ItemDisplay itemDisplay = (ItemDisplay)paramWorld.spawnEntity(location, EntityType.ITEM_DISPLAY);
       itemDisplay.setItemStack(new ItemStack(block.getType()));

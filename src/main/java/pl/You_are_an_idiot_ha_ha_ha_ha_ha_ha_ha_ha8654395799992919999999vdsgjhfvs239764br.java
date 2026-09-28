@@ -119,7 +119,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     String str = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bm.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v2(paramString).getItemMeta().getDisplayName();
     double d = paramConfigurationSection.getDouble(a(-3528, -519), 3.0D);
     ArrayList<String> arrayList = new ArrayList();
-    List<Map> list = paramConfigurationSection.getMapList(a(-3522, 24287) + a(-3522, 24287) + paramString);
+    List<Map<?, ?>> list = paramConfigurationSection.getMapList(a(-3522, 24287) + a(-3522, 24287) + paramString);
     for (Map map : list) {
       String str1 = map.get(a(-3548, -13368)).toString();
       int i = ((Integer)map.get(a(-3532, -4084))).intValue();

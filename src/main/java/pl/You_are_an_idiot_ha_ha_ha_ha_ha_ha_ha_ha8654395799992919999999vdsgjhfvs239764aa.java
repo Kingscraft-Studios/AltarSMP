@@ -275,7 +275,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(Player paramPlayer, ItemDisplay paramItemDisplay) {
     try {
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer).booleanValue()) {
+      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(paramPlayer).booleanValue()) {
         paramItemDisplay.remove();
         paramPlayer.getInventory().addItem(new ItemStack[] { paramItemDisplay.getItemStack() });
       } else {

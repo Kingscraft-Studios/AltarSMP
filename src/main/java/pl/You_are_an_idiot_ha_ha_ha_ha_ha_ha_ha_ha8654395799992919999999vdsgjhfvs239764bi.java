@@ -76,7 +76,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       } 
       String str1 = (player != null) ? player.getName() : Bukkit.getOfflinePlayer(uUID).getName();
       Bukkit.broadcastMessage(String.valueOf(ChatColor.of(a(10268, 10996))) + String.valueOf(ChatColor.of(a(10268, 10996))) + ChatColor.BOLD.toString() + str1);
-      String str2 = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ch.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(i);
+      String str2 = String.valueOf(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ch.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(i));
       String str3 = String.valueOf(ChatColor.of(a(10268, 10996)));
       try {
         Bukkit.broadcastMessage(a(10253, 22607) + a(10253, 22607) + str3);

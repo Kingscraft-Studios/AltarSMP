@@ -331,7 +331,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       List list = (List)Bukkit.getOnlinePlayers().stream().sorted(Comparator.comparingInt(this::You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b).reversed().thenComparing(Player::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
       byte b1 = 15;
       byte b2 = 1;
-      for (Player player1 : list) {
+      for (Player player1 : (Iterable<Player>)(Iterable<?>)list) {
         try {
           if (b2 > 10)
             break; 

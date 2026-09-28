@@ -40,7 +40,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       stringBuilder.append(paramString.substring(i, j));
       if (j + 8 <= paramString.length()) {
         String str = paramString.substring(j, j + 8);
-        if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(str)) {
+        if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(str)) {
           stringBuilder.append(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c(str.substring(2)));
           i = j + 8;
           continue;
@@ -48,7 +48,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       } 
       if (j + 5 <= paramString.length()) {
         String str = paramString.substring(j, j + 5);
-        if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(str)) {
+        if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(str)) {
           stringBuilder.append(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d(str.substring(2)));
           i = j + 5;
           continue;

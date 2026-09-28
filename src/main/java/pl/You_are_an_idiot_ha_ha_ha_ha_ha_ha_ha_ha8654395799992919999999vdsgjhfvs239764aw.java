@@ -196,7 +196,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
         throw a(null);
       } 
       continue;
-      location.setVelocity(new Vector(0, 0, 0));
+      ((org.bukkit.entity.Player)location).setVelocity(new Vector(0, 0, 0));
     } 
     hashSet.clear();
   }

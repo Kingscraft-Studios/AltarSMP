@@ -393,7 +393,7 @@ public final class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha865439579999291999999
       You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player, str1);
       You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player);
     } 
-    for (UUID uUID : new ArrayList(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764i.keySet())) {
+    for (UUID uUID : (Iterable<UUID>)(Iterable<?>)new ArrayList(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764i.keySet())) {
       try {
         if (Bukkit.getPlayer(uUID) == null) {
           try {

@@ -308,7 +308,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       throw a(null);
     } 
     try {
-      if (((Integer)You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e.getOrDefault(paramPlayer.getUniqueId(), (V)Integer.valueOf(0))).intValue() >= 3)
+      if (((Integer)You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(0))).intValue() >= 3)
         return false; 
     } catch (MatchException matchException) {
       throw a(null);

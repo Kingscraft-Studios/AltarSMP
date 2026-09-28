@@ -149,7 +149,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(String paramString) {
     String str = ChatColor.stripColor(paramString).toLowerCase();
-    Iterator<Map.Entry> iterator = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.entrySet().iterator();
+    Iterator<Map.Entry<?, ?>> iterator = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.entrySet().iterator();
     while (iterator.hasNext()) {
       Map.Entry entry = iterator.next();
       List list = (List)entry.getValue();
