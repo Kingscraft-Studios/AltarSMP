@@ -51,7 +51,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
   
   public void run() {
     if (this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c >= this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b * 20) {
-      for (ItemDisplay itemDisplay : this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f) {
+      for (ItemDisplay itemDisplay : (Iterable<ItemDisplay>)(Iterable<?>) this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f) {
         this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e.getWorld().playSound(itemDisplay.getLocation(), Sound.BLOCK_CREAKING_HEART_BREAK, 1.0F, 1.0F);
         itemDisplay.getWorld().spawnParticle(Particle.ITEM, itemDisplay.getLocation(), 20, 0.0D, 0.0D, 0.0D, 0.1D, new ItemStack(Material.PALE_OAK_LOG));
         itemDisplay.remove();
@@ -82,7 +82,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
     } catch (MatchException matchException) {
       throw a(null);
     } 
-    for (ItemDisplay itemDisplay : this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f) {
+    for (ItemDisplay itemDisplay : (Iterable<ItemDisplay>)(Iterable<?>) this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f) {
       for (Entity entity : itemDisplay.getNearbyEntities(2.0D, 2.0D, 2.0D)) {
         if (entity instanceof LivingEntity) {
           LivingEntity livingEntity = (LivingEntity)entity;

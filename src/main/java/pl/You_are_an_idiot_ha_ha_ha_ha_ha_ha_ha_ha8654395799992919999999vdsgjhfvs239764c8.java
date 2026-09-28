@@ -50,7 +50,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
       double d3 = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c + 6.283185307179586D * b / this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e.size();
       double d4 = Math.cos(d3) * d2;
       double d5 = Math.sin(d3) * d2;
-      ItemDisplay itemDisplay = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e.get(b);
+      ItemDisplay itemDisplay = (ItemDisplay)this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e.get(b);
       Location location1 = location.clone().add(d4, 0.0D, d5);
       itemDisplay.setTeleportDuration(3);
       itemDisplay.setInterpolationDelay(0);
