@@ -61,7 +61,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     } catch (MatchException matchException) {
       throw a(null);
     } 
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.removeIf(paramPlayer::lambda$removeAllCooldowns$0);
+    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.removeIf(paramBar3 -> lambda$removeAllCooldowns$0(paramPlayer, paramBar3));
   }
   
   private static boolean lambda$removeAllCooldowns$0(Player paramPlayer, BossBar paramBossBar) {

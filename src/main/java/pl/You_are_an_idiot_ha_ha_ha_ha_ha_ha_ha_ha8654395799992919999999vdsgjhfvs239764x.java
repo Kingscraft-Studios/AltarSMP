@@ -654,7 +654,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     } 
     itemMeta.setDisplayName(a(6863, 19416));
     ArrayList<String> arrayList = new ArrayList<>(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(a(6899, 26378)));
-    arrayList.replaceAll(str::lambda$createKnightfall$2);
+    arrayList.replaceAll(paramS -> lambda$createKnightfall$2(str, paramS));
     itemMeta.setLore(arrayList);
     itemMeta.setUnbreakable(true);
     itemMeta.setTooltipStyle(new NamespacedKey(a(6905, -13975), a(6668, 5126)));

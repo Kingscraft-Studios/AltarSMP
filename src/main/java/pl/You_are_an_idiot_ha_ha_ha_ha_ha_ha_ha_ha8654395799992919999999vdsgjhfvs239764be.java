@@ -369,7 +369,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   private void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d(Player paramPlayer) {
     ItemStack itemStack = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a();
-    boolean bool = Arrays.<ItemStack>stream(paramPlayer.getInventory().getContents()).filter(Objects::nonNull).anyMatch(paramItem -> lambda$giveCard$1(paramItem, itemStack));
+    boolean bool = Arrays.<ItemStack>stream(paramPlayer.getInventory().getContents()).filter(Objects::nonNull).anyMatch(paramItem -> lambda$giveCard$1(itemStack, paramItem));
     try {
       if (!bool)
         paramPlayer.getInventory().addItem(new ItemStack[] { itemStack }); 

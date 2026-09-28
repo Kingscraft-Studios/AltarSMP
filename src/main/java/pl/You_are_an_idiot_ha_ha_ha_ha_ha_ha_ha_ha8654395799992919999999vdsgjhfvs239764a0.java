@@ -141,7 +141,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
         try {
           if (System.currentTimeMillis() - long_.longValue() <= 10000L) {
             try {
-              this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.compute(uUID, d::lambda$onMove$0);
+              this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.compute(uUID, (paramK, paramV) -> lambda$onMove$0(d, paramK, paramV));
               if (!player.isOnGround())
                 return; 
             } catch (MatchException matchException) {
