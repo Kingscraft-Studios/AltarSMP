@@ -137,7 +137,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       } else if (paramArrayOfString.length == 2) {
         String str = paramArrayOfString[1].toUpperCase();
         Objects.requireNonNull(arrayList);
-        this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a().stream().filter(str::lambda$onTabComplete$0).forEach(arrayList::add);
+        this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a().stream().filter(paramTab -> lambda$onTabComplete$0(paramTab, str)).forEach(arrayList::add);
       } 
     } catch (MatchException matchException) {
       throw a(null);

@@ -44,7 +44,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   }
   
   public void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Player paramPlayer) {
-    Bukkit.getAsyncScheduler().runNow((Plugin)Main.getInstance(), paramPlayer::lambda$checkForUpdate$1);
+    Bukkit.getAsyncScheduler().runNow((Plugin)Main.getInstance(), paramTask -> lambda$checkForUpdate$1(paramPlayer, paramTask));
   }
   
   private static void lambda$checkForUpdate$1(Player paramPlayer, ScheduledTask paramScheduledTask) {

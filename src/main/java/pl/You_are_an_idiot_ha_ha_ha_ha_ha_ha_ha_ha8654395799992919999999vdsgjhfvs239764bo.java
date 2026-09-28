@@ -144,7 +144,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     } catch (MatchException matchException) {
       throw a(null);
     } 
-    list.forEach(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo::lambda$removeAllBossBars$2);
+    ((List<You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bp>)list).forEach(paramBar1 -> lambda$removeAllBossBars$2(paramBar1));
   }
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(String paramString) {
@@ -154,7 +154,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       Map.Entry entry = iterator.next();
       List list = (List)entry.getValue();
       try {
-        list.removeIf(str::lambda$removeBossBar$3);
+        ((List<You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bp>)list).removeIf(paramBar2 -> lambda$removeBossBar$3(str, paramBar2));
         if (list.isEmpty())
           iterator.remove(); 
       } catch (MatchException matchException) {

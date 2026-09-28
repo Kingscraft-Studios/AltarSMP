@@ -37,7 +37,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
       fallingBlock = iterator.next();
       Location location = fallingBlock.getLocation();
       location.getWorld().spawnParticle(Particle.CRIT, location, 5, 0.0D, 0.0D, 0.0D, 0.2D);
-      boolean bool1 = location.getNearbyEntities(2.0D, 2.0D, 2.0D).stream().anyMatch(this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d::lambda$run$0);
+      boolean bool1 = location.getNearbyEntities(2.0D, 2.0D, 2.0D).stream().anyMatch(paramEnt2 -> lambda$run$0(paramEnt2, this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d));
       boolean bool2 = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764p.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(location, 2, 1).stream().anyMatch(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764dv::lambda$run$1);
       try {
         if (!bool2)

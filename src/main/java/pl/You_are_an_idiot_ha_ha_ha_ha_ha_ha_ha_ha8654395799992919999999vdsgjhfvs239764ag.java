@@ -163,7 +163,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c(Player paramPlayer) {
     Location location1 = null;
-    RayTraceResult rayTraceResult = paramPlayer.getWorld().rayTraceEntities(paramPlayer.getEyeLocation(), paramPlayer.getEyeLocation().getDirection(), 100.0D, 0.25D, paramPlayer::lambda$activateThunderstrike$1);
+    RayTraceResult rayTraceResult = paramPlayer.getWorld().rayTraceEntities(paramPlayer.getEyeLocation(), paramPlayer.getEyeLocation().getDirection(), 100.0D, 0.25D, paramEnt -> lambda$activateThunderstrike$1(paramEnt, paramPlayer));
     try {
       if (rayTraceResult != null && rayTraceResult.getHitEntity() != null) {
         location1 = rayTraceResult.getHitEntity().getLocation().clone().subtract(0.0D, 0.5D, 0.0D);
