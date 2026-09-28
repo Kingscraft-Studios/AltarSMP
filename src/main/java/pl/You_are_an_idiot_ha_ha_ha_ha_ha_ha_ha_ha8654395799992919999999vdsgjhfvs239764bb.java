@@ -299,7 +299,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     return ActionButton.create((Component)Component.text(a(-23818, 18102)), null, 100, (DialogAction)DialogAction.customClick((paramResp1, paramAud1) -> lambda$confirmButton$12(paramBiConsumer, paramResp1, paramAud1), (ClickCallback.Options)ClickCallback.Options.builder().uses(1).build()));
   }
   
-  private ActionButton You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Component paramComponent, Consumer<Player> paramConsumer) {
+  private ActionButton You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v1(Component paramComponent, Consumer<Player> paramConsumer) {
     return ActionButton.create(paramComponent, null, 200, (DialogAction)DialogAction.customClick((paramResp2, paramAud2) -> lambda$actionButton$13(paramConsumer, paramResp2, paramAud2), (ClickCallback.Options)ClickCallback.Options.builder().uses(1).build()));
   }
   

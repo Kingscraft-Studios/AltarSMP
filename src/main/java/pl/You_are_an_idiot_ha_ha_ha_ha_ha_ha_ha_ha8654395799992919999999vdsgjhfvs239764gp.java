@@ -15,7 +15,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
     long l = System.currentTimeMillis();
     Iterator<Map.Entry> iterator = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.entrySet().iterator();
     while (true) {
-      List list;
+      List<You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bp> list;
       if (iterator.hasNext()) {
         Map.Entry entry = iterator.next();
         Player player = Bukkit.getPlayer((UUID)entry.getKey());
