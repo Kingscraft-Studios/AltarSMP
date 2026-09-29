@@ -1,18 +1,23 @@
 package org.json;
 
+/*
+Public Domain.
+*/
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
-public @interface JSONPropertyIgnore {}
-
-
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/org/json/JSONPropertyIgnore.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       1.1.3
+/**
+ * Use this annotation on a getter method to override the Bean name
+ * parser for Bean -&gt; JSONObject mapping. If this annotation is
+ * present at any level in the class hierarchy, then the method will
+ * not be serialized from the bean into the JSONObject.
  */
+@Documented
+@Retention(RUNTIME)
+@Target({METHOD})
+public @interface JSONPropertyIgnore { }

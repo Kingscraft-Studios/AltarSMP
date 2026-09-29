@@ -1,1981 +1,1977 @@
-/*      */ package org.json;
-/*      */ 
-/*      */ import java.io.IOException;
-/*      */ import java.io.StringWriter;
-/*      */ import java.io.Writer;
-/*      */ import java.lang.reflect.Array;
-/*      */ import java.math.BigDecimal;
-/*      */ import java.math.BigInteger;
-/*      */ import java.util.ArrayList;
-/*      */ import java.util.Collection;
-/*      */ import java.util.Iterator;
-/*      */ import java.util.List;
-/*      */ import java.util.Map;
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ public class JSONArray
-/*      */   implements Iterable<Object>
-/*      */ {
-/*      */   private final ArrayList<Object> myArrayList;
-/*      */   
-/*      */   public JSONArray() {
-/*   75 */     this.myArrayList = new ArrayList();
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray(JSONTokener x) throws JSONException {
-/*   87 */     this();
-/*   88 */     if (x.nextClean() != '[') {
-/*   89 */       throw x.syntaxError("A JSONArray text must start with '['");
-/*      */     }
-/*      */     
-/*   92 */     char nextChar = x.nextClean();
-/*   93 */     if (nextChar == '\000')
-/*      */     {
-/*   95 */       throw x.syntaxError("Expected a ',' or ']'");
-/*      */     }
-/*   97 */     if (nextChar != ']') {
-/*   98 */       x.back();
-/*      */       while (true) {
-/*  100 */         if (x.nextClean() == ',') {
-/*  101 */           x.back();
-/*  102 */           this.myArrayList.add(JSONObject.NULL);
-/*      */         } else {
-/*  104 */           x.back();
-/*  105 */           this.myArrayList.add(x.nextValue());
-/*      */         } 
-/*  107 */         switch (x.nextClean()) {
-/*      */           
-/*      */           case '\000':
-/*  110 */             throw x.syntaxError("Expected a ',' or ']'");
-/*      */           case ',':
-/*  112 */             nextChar = x.nextClean();
-/*  113 */             if (nextChar == '\000')
-/*      */             {
-/*  115 */               throw x.syntaxError("Expected a ',' or ']'");
-/*      */             }
-/*  117 */             if (nextChar == ']') {
-/*      */               return;
-/*      */             }
-/*  120 */             x.back(); continue;
-/*      */           case ']':
-/*      */             return;
-/*      */         }  break;
-/*      */       } 
-/*  125 */       throw x.syntaxError("Expected a ',' or ']'");
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray(String source) throws JSONException {
-/*  142 */     this(new JSONTokener(source));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray(Collection<?> collection) {
-/*  152 */     this(collection, 0, new JSONParserConfiguration());
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray(Collection<?> collection, JSONParserConfiguration jsonParserConfiguration) {
-/*  164 */     this(collection, 0, jsonParserConfiguration);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   JSONArray(Collection<?> collection, int recursionDepth, JSONParserConfiguration jsonParserConfiguration) {
-/*  178 */     if (recursionDepth > jsonParserConfiguration.getMaxNestingDepth()) {
-/*  179 */       throw new JSONException("JSONArray has reached recursion depth limit of " + jsonParserConfiguration.getMaxNestingDepth());
-/*      */     }
-/*  181 */     if (collection == null) {
-/*  182 */       this.myArrayList = new ArrayList();
-/*      */     } else {
-/*  184 */       this.myArrayList = new ArrayList(collection.size());
-/*  185 */       addAll(collection, true, recursionDepth, jsonParserConfiguration);
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray(Iterable<?> iter) {
-/*  196 */     this();
-/*  197 */     if (iter == null) {
-/*      */       return;
-/*      */     }
-/*  200 */     addAll(iter, true);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray(JSONArray array) {
-/*  210 */     if (array == null) {
-/*  211 */       this.myArrayList = new ArrayList();
-/*      */     }
-/*      */     else {
-/*      */       
-/*  215 */       this.myArrayList = new ArrayList(array.myArrayList);
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray(Object array) throws JSONException {
-/*  232 */     this();
-/*  233 */     if (!array.getClass().isArray()) {
-/*  234 */       throw new JSONException("JSONArray initial value should be a string or collection or array.");
-/*      */     }
-/*      */     
-/*  237 */     addAll(array, true, 0);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray(int initialCapacity) throws JSONException {
-/*  249 */     if (initialCapacity < 0) {
-/*  250 */       throw new JSONException("JSONArray initial capacity cannot be negative.");
-/*      */     }
-/*      */     
-/*  253 */     this.myArrayList = new ArrayList(initialCapacity);
-/*      */   }
-/*      */ 
-/*      */   
-/*      */   public Iterator<Object> iterator() {
-/*  258 */     return this.myArrayList.iterator();
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Object get(int index) throws JSONException {
-/*  271 */     Object object = opt(index);
-/*  272 */     if (object == null) {
-/*  273 */       throw new JSONException("JSONArray[" + index + "] not found.");
-/*      */     }
-/*  275 */     return object;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public boolean getBoolean(int index) throws JSONException {
-/*  290 */     Object object = get(index);
-/*  291 */     if (object.equals(Boolean.FALSE) || (object instanceof String && ((String)object)
-/*      */       
-/*  293 */       .equalsIgnoreCase("false")))
-/*  294 */       return false; 
-/*  295 */     if (object.equals(Boolean.TRUE) || (object instanceof String && ((String)object)
-/*      */       
-/*  297 */       .equalsIgnoreCase("true"))) {
-/*  298 */       return true;
-/*      */     }
-/*  300 */     throw wrongValueFormatException(index, "boolean", object, null);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public double getDouble(int index) throws JSONException {
-/*  314 */     Object object = get(index);
-/*  315 */     if (object instanceof Number) {
-/*  316 */       return ((Number)object).doubleValue();
-/*      */     }
-/*      */     try {
-/*  319 */       return Double.parseDouble(object.toString());
-/*  320 */     } catch (Exception e) {
-/*  321 */       throw wrongValueFormatException(index, "double", object, e);
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public float getFloat(int index) throws JSONException {
-/*  336 */     Object object = get(index);
-/*  337 */     if (object instanceof Number) {
-/*  338 */       return ((Number)object).floatValue();
-/*      */     }
-/*      */     try {
-/*  341 */       return Float.parseFloat(object.toString());
-/*  342 */     } catch (Exception e) {
-/*  343 */       throw wrongValueFormatException(index, "float", object, e);
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Number getNumber(int index) throws JSONException {
-/*  358 */     Object object = get(index);
-/*      */     try {
-/*  360 */       if (object instanceof Number) {
-/*  361 */         return (Number)object;
-/*      */       }
-/*  363 */       return JSONObject.stringToNumber(object.toString());
-/*  364 */     } catch (Exception e) {
-/*  365 */       throw wrongValueFormatException(index, "number", object, e);
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public <E extends Enum<E>> E getEnum(Class<E> clazz, int index) throws JSONException {
-/*  384 */     E val = optEnum(clazz, index);
-/*  385 */     if (val == null)
-/*      */     {
-/*      */ 
-/*      */       
-/*  389 */       throw wrongValueFormatException(index, "enum of type " + 
-/*  390 */           JSONObject.quote(clazz.getSimpleName()), opt(index), null);
-/*      */     }
-/*  392 */     return val;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public BigDecimal getBigDecimal(int index) throws JSONException {
-/*  409 */     Object object = get(index);
-/*  410 */     BigDecimal val = JSONObject.objectToBigDecimal(object, null);
-/*  411 */     if (val == null) {
-/*  412 */       throw wrongValueFormatException(index, "BigDecimal", object, null);
-/*      */     }
-/*  414 */     return val;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public BigInteger getBigInteger(int index) throws JSONException {
-/*  428 */     Object object = get(index);
-/*  429 */     BigInteger val = JSONObject.objectToBigInteger(object, null);
-/*  430 */     if (val == null) {
-/*  431 */       throw wrongValueFormatException(index, "BigInteger", object, null);
-/*      */     }
-/*  433 */     return val;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public int getInt(int index) throws JSONException {
-/*  446 */     Object object = get(index);
-/*  447 */     if (object instanceof Number) {
-/*  448 */       return ((Number)object).intValue();
-/*      */     }
-/*      */     try {
-/*  451 */       return Integer.parseInt(object.toString());
-/*  452 */     } catch (Exception e) {
-/*  453 */       throw wrongValueFormatException(index, "int", object, e);
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray getJSONArray(int index) throws JSONException {
-/*  468 */     Object object = get(index);
-/*  469 */     if (object instanceof JSONArray) {
-/*  470 */       return (JSONArray)object;
-/*      */     }
-/*  472 */     throw wrongValueFormatException(index, "JSONArray", object, null);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONObject getJSONObject(int index) throws JSONException {
-/*  486 */     Object object = get(index);
-/*  487 */     if (object instanceof JSONObject) {
-/*  488 */       return (JSONObject)object;
-/*      */     }
-/*  490 */     throw wrongValueFormatException(index, "JSONObject", object, null);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public long getLong(int index) throws JSONException {
-/*  504 */     Object object = get(index);
-/*  505 */     if (object instanceof Number) {
-/*  506 */       return ((Number)object).longValue();
-/*      */     }
-/*      */     try {
-/*  509 */       return Long.parseLong(object.toString());
-/*  510 */     } catch (Exception e) {
-/*  511 */       throw wrongValueFormatException(index, "long", object, e);
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public String getString(int index) throws JSONException {
-/*  525 */     Object object = get(index);
-/*  526 */     if (object instanceof String) {
-/*  527 */       return (String)object;
-/*      */     }
-/*  529 */     throw wrongValueFormatException(index, "String", object, null);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public boolean isNull(int index) {
-/*  540 */     return JSONObject.NULL.equals(opt(index));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public String join(String separator) throws JSONException {
-/*  555 */     int len = length();
-/*  556 */     if (len == 0) {
-/*  557 */       return "";
-/*      */     }
-/*      */ 
-/*      */     
-/*  561 */     StringBuilder sb = new StringBuilder(JSONObject.valueToString(this.myArrayList.get(0)));
-/*      */     
-/*  563 */     for (int i = 1; i < len; i++) {
-/*  564 */       sb.append(separator)
-/*  565 */         .append(JSONObject.valueToString(this.myArrayList.get(i)));
-/*      */     }
-/*  567 */     return sb.toString();
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public int length() {
-/*  576 */     return this.myArrayList.size();
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public void clear() {
-/*  584 */     this.myArrayList.clear();
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Object opt(int index) {
-/*  595 */     return (index < 0 || index >= length()) ? null : this.myArrayList
-/*  596 */       .get(index);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public boolean optBoolean(int index) {
-/*  609 */     return optBoolean(index, false);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public boolean optBoolean(int index, boolean defaultValue) {
-/*      */     try {
-/*  625 */       return getBoolean(index);
-/*  626 */     } catch (Exception e) {
-/*  627 */       return defaultValue;
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Boolean optBooleanObject(int index) {
-/*  641 */     return optBooleanObject(index, Boolean.valueOf(false));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Boolean optBooleanObject(int index, Boolean defaultValue) {
-/*      */     try {
-/*  657 */       return Boolean.valueOf(getBoolean(index));
-/*  658 */     } catch (Exception e) {
-/*  659 */       return defaultValue;
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public double optDouble(int index) {
-/*  673 */     return optDouble(index, Double.NaN);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public double optDouble(int index, double defaultValue) {
-/*  688 */     Number val = optNumber(index, null);
-/*  689 */     if (val == null) {
-/*  690 */       return defaultValue;
-/*      */     }
-/*  692 */     double doubleValue = val.doubleValue();
-/*      */ 
-/*      */ 
-/*      */     
-/*  696 */     return doubleValue;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Double optDoubleObject(int index) {
-/*  709 */     return optDoubleObject(index, Double.valueOf(Double.NaN));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Double optDoubleObject(int index, Double defaultValue) {
-/*  724 */     Number val = optNumber(index, null);
-/*  725 */     if (val == null) {
-/*  726 */       return defaultValue;
-/*      */     }
-/*  728 */     Double doubleValue = Double.valueOf(val.doubleValue());
-/*      */ 
-/*      */ 
-/*      */     
-/*  732 */     return doubleValue;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public float optFloat(int index) {
-/*  745 */     return optFloat(index, Float.NaN);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public float optFloat(int index, float defaultValue) {
-/*  760 */     Number val = optNumber(index, null);
-/*  761 */     if (val == null) {
-/*  762 */       return defaultValue;
-/*      */     }
-/*  764 */     float floatValue = val.floatValue();
-/*      */ 
-/*      */ 
-/*      */     
-/*  768 */     return floatValue;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Float optFloatObject(int index) {
-/*  781 */     return optFloatObject(index, Float.valueOf(Float.NaN));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Float optFloatObject(int index, Float defaultValue) {
-/*  796 */     Number val = optNumber(index, null);
-/*  797 */     if (val == null) {
-/*  798 */       return defaultValue;
-/*      */     }
-/*  800 */     Float floatValue = Float.valueOf(val.floatValue());
-/*      */ 
-/*      */ 
-/*      */     
-/*  804 */     return floatValue;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public int optInt(int index) {
-/*  817 */     return optInt(index, 0);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public int optInt(int index, int defaultValue) {
-/*  832 */     Number val = optNumber(index, null);
-/*  833 */     if (val == null) {
-/*  834 */       return defaultValue;
-/*      */     }
-/*  836 */     return val.intValue();
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Integer optIntegerObject(int index) {
-/*  849 */     return optIntegerObject(index, Integer.valueOf(0));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Integer optIntegerObject(int index, Integer defaultValue) {
-/*  864 */     Number val = optNumber(index, null);
-/*  865 */     if (val == null) {
-/*  866 */       return defaultValue;
-/*      */     }
-/*  868 */     return Integer.valueOf(val.intValue());
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public <E extends Enum<E>> E optEnum(Class<E> clazz, int index) {
-/*  883 */     return optEnum(clazz, index, null);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public <E extends Enum<E>> E optEnum(Class<E> clazz, int index, E defaultValue) {
-/*      */     try {
-/*  902 */       Object val = opt(index);
-/*  903 */       if (JSONObject.NULL.equals(val)) {
-/*  904 */         return defaultValue;
-/*      */       }
-/*  906 */       if (clazz.isAssignableFrom(val.getClass()))
-/*      */       {
-/*      */         
-/*  909 */         return (E)val;
-/*      */       }
-/*      */       
-/*  912 */       return Enum.valueOf(clazz, val.toString());
-/*  913 */     } catch (IllegalArgumentException e) {
-/*  914 */       return defaultValue;
-/*  915 */     } catch (NullPointerException e) {
-/*  916 */       return defaultValue;
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public BigInteger optBigInteger(int index, BigInteger defaultValue) {
-/*  932 */     Object val = opt(index);
-/*  933 */     return JSONObject.objectToBigInteger(val, defaultValue);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public BigDecimal optBigDecimal(int index, BigDecimal defaultValue) {
-/*  951 */     Object val = opt(index);
-/*  952 */     return JSONObject.objectToBigDecimal(val, defaultValue);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray optJSONArray(int index) {
-/*  964 */     return optJSONArray(index, null);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray optJSONArray(int index, JSONArray defaultValue) {
-/*  978 */     Object object = opt(index);
-/*  979 */     return (object instanceof JSONArray) ? (JSONArray)object : defaultValue;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONObject optJSONObject(int index) {
-/*  991 */     return optJSONObject(index, null);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONObject optJSONObject(int index, JSONObject defaultValue) {
-/* 1005 */     Object object = opt(index);
-/* 1006 */     return (object instanceof JSONObject) ? (JSONObject)object : defaultValue;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public long optLong(int index) {
-/* 1019 */     return optLong(index, 0L);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public long optLong(int index, long defaultValue) {
-/* 1034 */     Number val = optNumber(index, null);
-/* 1035 */     if (val == null) {
-/* 1036 */       return defaultValue;
-/*      */     }
-/* 1038 */     return val.longValue();
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Long optLongObject(int index) {
-/* 1051 */     return optLongObject(index, Long.valueOf(0L));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Long optLongObject(int index, Long defaultValue) {
-/* 1066 */     Number val = optNumber(index, null);
-/* 1067 */     if (val == null) {
-/* 1068 */       return defaultValue;
-/*      */     }
-/* 1070 */     return Long.valueOf(val.longValue());
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Number optNumber(int index) {
-/* 1084 */     return optNumber(index, null);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Number optNumber(int index, Number defaultValue) {
-/* 1100 */     Object val = opt(index);
-/* 1101 */     if (JSONObject.NULL.equals(val)) {
-/* 1102 */       return defaultValue;
-/*      */     }
-/* 1104 */     if (val instanceof Number) {
-/* 1105 */       return (Number)val;
-/*      */     }
-/*      */     
-/* 1108 */     if (val instanceof String) {
-/*      */       try {
-/* 1110 */         return JSONObject.stringToNumber((String)val);
-/* 1111 */       } catch (Exception e) {
-/* 1112 */         return defaultValue;
-/*      */       } 
-/*      */     }
-/* 1115 */     return defaultValue;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public String optString(int index) {
-/* 1128 */     return optString(index, "");
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public String optString(int index, String defaultValue) {
-/* 1142 */     Object object = opt(index);
-/* 1143 */     return JSONObject.NULL.equals(object) ? defaultValue : object
-/* 1144 */       .toString();
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(boolean value) {
-/* 1155 */     return put(value ? Boolean.TRUE : Boolean.FALSE);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(Collection<?> value) {
-/* 1169 */     return put(new JSONArray(value));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(double value) throws JSONException {
-/* 1182 */     return put(Double.valueOf(value));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(float value) throws JSONException {
-/* 1195 */     return put(Float.valueOf(value));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(int value) {
-/* 1206 */     return put(Integer.valueOf(value));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(long value) {
-/* 1217 */     return put(Long.valueOf(value));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(Map<?, ?> value) {
-/* 1233 */     return put(new JSONObject(value));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(Object value) {
-/* 1248 */     JSONObject.testValidity(value);
-/* 1249 */     this.myArrayList.add(value);
-/* 1250 */     return this;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(int index, boolean value) throws JSONException {
-/* 1267 */     return put(index, value ? Boolean.TRUE : Boolean.FALSE);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(int index, Collection<?> value) throws JSONException {
-/* 1283 */     return put(index, new JSONArray(value));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(int index, double value) throws JSONException {
-/* 1300 */     return put(index, Double.valueOf(value));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(int index, float value) throws JSONException {
-/* 1317 */     return put(index, Float.valueOf(value));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(int index, int value) throws JSONException {
-/* 1334 */     return put(index, Integer.valueOf(value));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(int index, long value) throws JSONException {
-/* 1351 */     return put(index, Long.valueOf(value));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(int index, Map<?, ?> value) throws JSONException {
-/* 1371 */     put(index, new JSONObject(value, new JSONParserConfiguration()));
-/* 1372 */     return this;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(int index, Map<?, ?> value, JSONParserConfiguration jsonParserConfiguration) throws JSONException {
-/* 1391 */     put(index, new JSONObject(value, jsonParserConfiguration));
-/* 1392 */     return this;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray put(int index, Object value) throws JSONException {
-/* 1412 */     if (index < 0) {
-/* 1413 */       throw new JSONException("JSONArray[" + index + "] not found.");
-/*      */     }
-/* 1415 */     if (index < length()) {
-/* 1416 */       JSONObject.testValidity(value);
-/* 1417 */       this.myArrayList.set(index, value);
-/* 1418 */       return this;
-/*      */     } 
-/* 1420 */     if (index == length())
-/*      */     {
-/* 1422 */       return put(value);
-/*      */     }
-/*      */ 
-/*      */     
-/* 1426 */     this.myArrayList.ensureCapacity(index + 1);
-/* 1427 */     while (index != length())
-/*      */     {
-/* 1429 */       this.myArrayList.add(JSONObject.NULL);
-/*      */     }
-/* 1431 */     return put(value);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray putAll(Collection<?> collection) {
-/* 1442 */     addAll(collection, false);
-/* 1443 */     return this;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray putAll(Iterable<?> iter) {
-/* 1454 */     addAll(iter, false);
-/* 1455 */     return this;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray putAll(JSONArray array) {
-/* 1468 */     this.myArrayList.addAll(array.myArrayList);
-/* 1469 */     return this;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONArray putAll(Object array) throws JSONException {
-/* 1486 */     addAll(array, false);
-/* 1487 */     return this;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Object query(String jsonPointer) {
-/* 1510 */     return query(new JSONPointer(jsonPointer));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Object query(JSONPointer jsonPointer) {
-/* 1533 */     return jsonPointer.queryFrom(this);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Object optQuery(String jsonPointer) {
-/* 1545 */     return optQuery(new JSONPointer(jsonPointer));
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Object optQuery(JSONPointer jsonPointer) {
-/*      */     try {
-/* 1558 */       return jsonPointer.queryFrom(this);
-/* 1559 */     } catch (JSONPointerException e) {
-/* 1560 */       return null;
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Object remove(int index) {
-/* 1573 */     return (index >= 0 && index < length()) ? this.myArrayList
-/* 1574 */       .remove(index) : null;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public boolean similar(Object other) {
-/* 1586 */     if (!(other instanceof JSONArray)) {
-/* 1587 */       return false;
-/*      */     }
-/* 1589 */     int len = length();
-/* 1590 */     if (len != ((JSONArray)other).length()) {
-/* 1591 */       return false;
-/*      */     }
-/* 1593 */     for (int i = 0; i < len; i++) {
-/* 1594 */       Object valueThis = this.myArrayList.get(i);
-/* 1595 */       Object valueOther = ((JSONArray)other).myArrayList.get(i);
-/* 1596 */       if (valueThis != valueOther) {
-/*      */ 
-/*      */         
-/* 1599 */         if (valueThis == null) {
-/* 1600 */           return false;
-/*      */         }
-/* 1602 */         if (valueThis instanceof JSONObject) {
-/* 1603 */           if (!((JSONObject)valueThis).similar(valueOther)) {
-/* 1604 */             return false;
-/*      */           }
-/* 1606 */         } else if (valueThis instanceof JSONArray) {
-/* 1607 */           if (!((JSONArray)valueThis).similar(valueOther)) {
-/* 1608 */             return false;
-/*      */           }
-/* 1610 */         } else if (valueThis instanceof Number && valueOther instanceof Number) {
-/* 1611 */           if (!JSONObject.isNumberSimilar((Number)valueThis, (Number)valueOther)) {
-/* 1612 */             return false;
-/*      */           }
-/* 1614 */         } else if (valueThis instanceof JSONString && valueOther instanceof JSONString) {
-/* 1615 */           if (!((JSONString)valueThis).toJSONString().equals(((JSONString)valueOther).toJSONString())) {
-/* 1616 */             return false;
-/*      */           }
-/* 1618 */         } else if (!valueThis.equals(valueOther)) {
-/* 1619 */           return false;
-/*      */         } 
-/*      */       } 
-/* 1622 */     }  return true;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public JSONObject toJSONObject(JSONArray names) throws JSONException {
-/* 1638 */     if (names == null || names.isEmpty() || isEmpty()) {
-/* 1639 */       return null;
-/*      */     }
-/* 1641 */     JSONObject jo = new JSONObject(names.length());
-/* 1642 */     for (int i = 0; i < names.length(); i++) {
-/* 1643 */       jo.put(names.getString(i), opt(i));
-/*      */     }
-/* 1645 */     return jo;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public String toString() {
-/*      */     try {
-/* 1663 */       return toString(0);
-/* 1664 */     } catch (Exception e) {
-/* 1665 */       return null;
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public String toString(int indentFactor) throws JSONException {
-/* 1698 */     StringWriter sw = new StringWriter();
-/* 1699 */     return write(sw, indentFactor, 0).toString();
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Writer write(Writer writer) throws JSONException {
-/* 1713 */     return write(writer, 0, 0);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public Writer write(Writer writer, int indentFactor, int indent) throws JSONException {
-/*      */     try {
-/* 1748 */       boolean needsComma = false;
-/* 1749 */       int length = length();
-/* 1750 */       writer.write(91);
-/*      */       
-/* 1752 */       if (length == 1) {
-/*      */         try {
-/* 1754 */           JSONObject.writeValue(writer, this.myArrayList.get(0), indentFactor, indent);
-/*      */         }
-/* 1756 */         catch (Exception e) {
-/* 1757 */           throw new JSONException("Unable to write JSONArray value at index: 0", e);
-/*      */         } 
-/* 1759 */       } else if (length != 0) {
-/* 1760 */         int newIndent = indent + indentFactor;
-/*      */         
-/* 1762 */         for (int i = 0; i < length; i++) {
-/* 1763 */           if (needsComma) {
-/* 1764 */             writer.write(44);
-/*      */           }
-/* 1766 */           if (indentFactor > 0) {
-/* 1767 */             writer.write(10);
-/*      */           }
-/* 1769 */           JSONObject.indent(writer, newIndent);
-/*      */           try {
-/* 1771 */             JSONObject.writeValue(writer, this.myArrayList.get(i), indentFactor, newIndent);
-/*      */           }
-/* 1773 */           catch (Exception e) {
-/* 1774 */             throw new JSONException("Unable to write JSONArray value at index: " + i, e);
-/*      */           } 
-/* 1776 */           needsComma = true;
-/*      */         } 
-/* 1778 */         if (indentFactor > 0) {
-/* 1779 */           writer.write(10);
-/*      */         }
-/* 1781 */         JSONObject.indent(writer, indent);
-/*      */       } 
-/* 1783 */       writer.write(93);
-/* 1784 */       return writer;
-/* 1785 */     } catch (IOException e) {
-/* 1786 */       throw new JSONException(e);
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public List<Object> toList() {
-/* 1800 */     List<Object> results = new ArrayList(this.myArrayList.size());
-/* 1801 */     for (Object element : this.myArrayList) {
-/* 1802 */       if (element == null || JSONObject.NULL.equals(element)) {
-/* 1803 */         results.add(null); continue;
-/* 1804 */       }  if (element instanceof JSONArray) {
-/* 1805 */         results.add(((JSONArray)element).toList()); continue;
-/* 1806 */       }  if (element instanceof JSONObject) {
-/* 1807 */         results.add(((JSONObject)element).toMap()); continue;
-/*      */       } 
-/* 1809 */       results.add(element);
-/*      */     } 
-/*      */     
-/* 1812 */     return results;
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   public boolean isEmpty() {
-/* 1821 */     return this.myArrayList.isEmpty();
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   private void addAll(Collection<?> collection, boolean wrap, int recursionDepth, JSONParserConfiguration jsonParserConfiguration) {
-/* 1836 */     this.myArrayList.ensureCapacity(this.myArrayList.size() + collection.size());
-/* 1837 */     if (wrap) {
-/* 1838 */       for (Object o : collection) {
-/* 1839 */         put(JSONObject.wrap(o, recursionDepth + 1, jsonParserConfiguration));
-/*      */       }
-/*      */     } else {
-/* 1842 */       for (Object o : collection) {
-/* 1843 */         put(o);
-/*      */       }
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   private void addAll(Iterable<?> iter, boolean wrap) {
-/* 1858 */     if (wrap) {
-/* 1859 */       for (Object o : iter) {
-/* 1860 */         put(JSONObject.wrap(o));
-/*      */       }
-/*      */     } else {
-/* 1863 */       for (Object o : iter) {
-/* 1864 */         put(o);
-/*      */       }
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   private void addAll(Object array, boolean wrap) throws JSONException {
-/* 1883 */     addAll(array, wrap, 0);
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   private void addAll(Object array, boolean wrap, int recursionDepth) {
-/* 1900 */     addAll(array, wrap, recursionDepth, new JSONParserConfiguration());
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   private void addAll(Object array, boolean wrap, int recursionDepth, JSONParserConfiguration jsonParserConfiguration) throws JSONException {
-/* 1922 */     if (array.getClass().isArray()) {
-/* 1923 */       int length = Array.getLength(array);
-/* 1924 */       this.myArrayList.ensureCapacity(this.myArrayList.size() + length);
-/* 1925 */       if (wrap) {
-/* 1926 */         for (int i = 0; i < length; i++) {
-/* 1927 */           put(JSONObject.wrap(Array.get(array, i), recursionDepth + 1, jsonParserConfiguration));
-/*      */         }
-/*      */       } else {
-/* 1930 */         for (int i = 0; i < length; i++) {
-/* 1931 */           put(Array.get(array, i));
-/*      */         }
-/*      */       } 
-/* 1934 */     } else if (array instanceof JSONArray) {
-/*      */ 
-/*      */ 
-/*      */       
-/* 1938 */       this.myArrayList.addAll(((JSONArray)array).myArrayList);
-/* 1939 */     } else if (array instanceof Collection) {
-/* 1940 */       addAll(array, wrap, recursionDepth);
-/* 1941 */     } else if (array instanceof Iterable) {
-/* 1942 */       addAll((Iterable)array, wrap);
-/*      */     } else {
-/* 1944 */       throw new JSONException("JSONArray initial value should be a string or collection or array.");
-/*      */     } 
-/*      */   }
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */ 
-/*      */   
-/*      */   private static JSONException wrongValueFormatException(int idx, String valueType, Object value, Throwable cause) {
-/* 1961 */     if (value == null) {
-/* 1962 */       return new JSONException("JSONArray[" + idx + "] is not a " + valueType + " (null).", cause);
-/*      */     }
-/*      */ 
-/*      */ 
-/*      */     
-/* 1967 */     if (value instanceof Map || value instanceof Iterable || value instanceof JSONObject) {
-/* 1968 */       return new JSONException("JSONArray[" + idx + "] is not a " + valueType + " (" + value
-/* 1969 */           .getClass() + ").", cause);
-/*      */     }
-/*      */     
-/* 1972 */     return new JSONException("JSONArray[" + idx + "] is not a " + valueType + " (" + value
-/* 1973 */         .getClass() + " : " + value + ").", cause);
-/*      */   }
-/*      */ }
+package org.json;
 
-
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/org/json/JSONArray.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       1.1.3
+/*
+Public Domain.
  */
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.reflect.Array;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * A JSONArray is an ordered sequence of values. Its external text form is a
+ * string wrapped in square brackets with commas separating the values. The
+ * internal form is an object having <code>get</code> and <code>opt</code>
+ * methods for accessing the values by index, and <code>put</code> methods for
+ * adding or replacing values. The values can be any of these types:
+ * <code>Boolean</code>, <code>JSONArray</code>, <code>JSONObject</code>,
+ * <code>Number</code>, <code>String</code>, or the
+ * <code>JSONObject.NULL object</code>.
+ * <p>
+ * The constructor can convert a JSON text into a Java object. The
+ * <code>toString</code> method converts to JSON text.
+ * <p>
+ * A <code>get</code> method returns a value if one can be found, and throws an
+ * exception if one cannot be found. An <code>opt</code> method returns a
+ * default value instead of throwing an exception, and so is useful for
+ * obtaining optional values.
+ * <p>
+ * The generic <code>get()</code> and <code>opt()</code> methods return an
+ * object which you can cast or query for type. There are also typed
+ * <code>get</code> and <code>opt</code> methods that do type checking and type
+ * coercion for you.
+ * <p>
+ * The texts produced by the <code>toString</code> methods strictly conform to
+ * JSON syntax rules. The constructors are more forgiving in the texts they will
+ * accept:
+ * <ul>
+ * <li>An extra <code>,</code>&nbsp;<small>(comma)</small> may appear just
+ * before the closing bracket.</li>
+ * <li>The <code>null</code> value will be inserted when there is <code>,</code>
+ * &nbsp;<small>(comma)</small> elision.</li>
+ * <li>Strings may be quoted with <code>'</code>&nbsp;<small>(single
+ * quote)</small>.</li>
+ * <li>Strings do not need to be quoted at all if they do not begin with a quote
+ * or single quote, and if they do not contain leading or trailing spaces, and
+ * if they do not contain any of these characters:
+ * <code>{ } [ ] / \ : , #</code> and if they do not look like numbers and
+ * if they are not the reserved words <code>true</code>, <code>false</code>, or
+ * <code>null</code>.</li>
+ * </ul>
+ *
+ * @author JSON.org
+ * @version 2016-08/15
+ */
+public class JSONArray implements Iterable<Object> {
+
+    /**
+     * The arrayList where the JSONArray's properties are kept.
+     */
+    private final ArrayList<Object> myArrayList;
+
+    /**
+     * Construct an empty JSONArray.
+     */
+    public JSONArray() {
+        this.myArrayList = new ArrayList<Object>();
+    }
+
+    /**
+     * Construct a JSONArray from a JSONTokener.
+     *
+     * @param x
+     *            A JSONTokener
+     * @throws JSONException
+     *             If there is a syntax error.
+     */
+    public JSONArray(JSONTokener x) throws JSONException {
+        this();
+        if (x.nextClean() != '[') {
+            throw x.syntaxError("A JSONArray text must start with '['");
+        }
+        
+        char nextChar = x.nextClean();
+        if (nextChar == 0) {
+            // array is unclosed. No ']' found, instead EOF
+            throw x.syntaxError("Expected a ',' or ']'");
+        }
+        if (nextChar != ']') {
+            x.back();
+            for (;;) {
+                if (x.nextClean() == ',') {
+                    x.back();
+                    this.myArrayList.add(JSONObject.NULL);
+                } else {
+                    x.back();
+                    this.myArrayList.add(x.nextValue());
+                }
+                switch (x.nextClean()) {
+                case 0:
+                    // array is unclosed. No ']' found, instead EOF
+                    throw x.syntaxError("Expected a ',' or ']'");
+                case ',':
+                    nextChar = x.nextClean();
+                    if (nextChar == 0) {
+                        // array is unclosed. No ']' found, instead EOF
+                        throw x.syntaxError("Expected a ',' or ']'");
+                    }
+                    if (nextChar == ']') {
+                        return;
+                    }
+                    x.back();
+                    break;
+                case ']':
+                    return;
+                default:
+                    throw x.syntaxError("Expected a ',' or ']'");
+                }
+            }
+        }
+    }
+
+    /**
+     * Construct a JSONArray from a source JSON text.
+     *
+     * @param source
+     *            A string that begins with <code>[</code>&nbsp;<small>(left
+     *            bracket)</small> and ends with <code>]</code>
+     *            &nbsp;<small>(right bracket)</small>.
+     * @throws JSONException
+     *             If there is a syntax error.
+     */
+    public JSONArray(String source) throws JSONException {
+        this(new JSONTokener(source));
+    }
+
+    /**
+     * Construct a JSONArray from a Collection.
+     *
+     * @param collection
+     *            A Collection.
+     */
+    public JSONArray(Collection<?> collection) {
+      this(collection, 0, new JSONParserConfiguration());
+    }
+
+    /**
+     * Construct a JSONArray from a Collection.
+     *
+     * @param collection
+     *            A Collection.
+     * @param jsonParserConfiguration
+     *            Configuration object for the JSON parser
+     */
+    public JSONArray(Collection<?> collection, JSONParserConfiguration jsonParserConfiguration) {
+        this(collection, 0, jsonParserConfiguration);
+    }
+
+    /**
+     * Construct a JSONArray from a collection with recursion depth.
+     *
+     * @param collection
+     *             A Collection.
+     * @param recursionDepth
+     *             Variable for tracking the count of nested object creations.
+     * @param jsonParserConfiguration
+     *             Configuration object for the JSON parser
+     */
+    JSONArray(Collection<?> collection, int recursionDepth, JSONParserConfiguration jsonParserConfiguration) {
+        if (recursionDepth > jsonParserConfiguration.getMaxNestingDepth()) {
+          throw new JSONException("JSONArray has reached recursion depth limit of " + jsonParserConfiguration.getMaxNestingDepth());
+        }
+        if (collection == null) {
+            this.myArrayList = new ArrayList<Object>();
+        } else {
+            this.myArrayList = new ArrayList<Object>(collection.size());
+            this.addAll(collection, true, recursionDepth, jsonParserConfiguration);
+        }
+    }
+
+    /**
+     * Construct a JSONArray from an Iterable. This is a shallow copy.
+     *
+     * @param iter
+     *            A Iterable collection.
+     */
+    public JSONArray(Iterable<?> iter) {
+        this();
+        if (iter == null) {
+            return;
+        }
+        this.addAll(iter, true);
+    }
+
+    /**
+     * Construct a JSONArray from another JSONArray. This is a shallow copy.
+     *
+     * @param array
+     *            A array.
+     */
+    public JSONArray(JSONArray array) {
+        if (array == null) {
+            this.myArrayList = new ArrayList<Object>();
+        } else {
+            // shallow copy directly the internal array lists as any wrapping
+            // should have been done already in the original JSONArray
+            this.myArrayList = new ArrayList<Object>(array.myArrayList);
+        }
+    }
+
+    /**
+     * Construct a JSONArray from an array.
+     *
+     * @param array
+     *            Array. If the parameter passed is null, or not an array, an
+     *            exception will be thrown.
+     *
+     * @throws JSONException
+     *            If not an array or if an array value is non-finite number.
+     * @throws NullPointerException
+     *            Thrown if the array parameter is null.
+     */
+    public JSONArray(Object array) throws JSONException {
+        this();
+        if (!array.getClass().isArray()) {
+            throw new JSONException(
+                    "JSONArray initial value should be a string or collection or array.");
+        }
+        this.addAll(array, true, 0);
+    }
+
+    /**
+     * Construct a JSONArray with the specified initial capacity.
+     *
+     * @param initialCapacity
+     *            the initial capacity of the JSONArray.
+     * @throws JSONException
+     *             If the initial capacity is negative.
+     */
+    public JSONArray(int initialCapacity) throws JSONException {
+    	if (initialCapacity < 0) {
+            throw new JSONException(
+                    "JSONArray initial capacity cannot be negative.");
+    	}
+    	this.myArrayList = new ArrayList<Object>(initialCapacity);
+    }
+
+    @Override
+    public Iterator<Object> iterator() {
+        return this.myArrayList.iterator();
+    }
+
+    /**
+     * Get the object value associated with an index.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return An object value.
+     * @throws JSONException
+     *             If there is no value for the index.
+     */
+    public Object get(int index) throws JSONException {
+        Object object = this.opt(index);
+        if (object == null) {
+            throw new JSONException("JSONArray[" + index + "] not found.");
+        }
+        return object;
+    }
+
+    /**
+     * Get the boolean value associated with an index. The string values "true"
+     * and "false" are converted to boolean.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The truth.
+     * @throws JSONException
+     *             If there is no value for the index or if the value is not
+     *             convertible to boolean.
+     */
+    public boolean getBoolean(int index) throws JSONException {
+        Object object = this.get(index);
+        if (object.equals(Boolean.FALSE)
+                || (object instanceof String && ((String) object)
+                        .equalsIgnoreCase("false"))) {
+            return false;
+        } else if (object.equals(Boolean.TRUE)
+                || (object instanceof String && ((String) object)
+                        .equalsIgnoreCase("true"))) {
+            return true;
+        }
+        throw wrongValueFormatException(index, "boolean", object, null);
+    }
+
+    /**
+     * Get the double value associated with an index.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The value.
+     * @throws JSONException
+     *             If the key is not found or if the value cannot be converted
+     *             to a number.
+     */
+    public double getDouble(int index) throws JSONException {
+        final Object object = this.get(index);
+        if(object instanceof Number) {
+            return ((Number)object).doubleValue();
+        }
+        try {
+            return Double.parseDouble(object.toString());
+        } catch (Exception e) {
+            throw wrongValueFormatException(index, "double", object, e);
+        }
+    }
+
+    /**
+     * Get the float value associated with a key.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The numeric value.
+     * @throws JSONException
+     *             if the key is not found or if the value is not a Number
+     *             object and cannot be converted to a number.
+     */
+    public float getFloat(int index) throws JSONException {
+        final Object object = this.get(index);
+        if(object instanceof Number) {
+            return ((Number)object).floatValue();
+        }
+        try {
+            return Float.parseFloat(object.toString());
+        } catch (Exception e) {
+            throw wrongValueFormatException(index, "float", object, e);
+        }
+    }
+
+    /**
+     * Get the Number value associated with a key.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The numeric value.
+     * @throws JSONException
+     *             if the key is not found or if the value is not a Number
+     *             object and cannot be converted to a number.
+     */
+    public Number getNumber(int index) throws JSONException {
+        Object object = this.get(index);
+        try {
+            if (object instanceof Number) {
+                return (Number)object;
+            }
+            return JSONObject.stringToNumber(object.toString());
+        } catch (Exception e) {
+            throw wrongValueFormatException(index, "number", object, e);
+        }
+    }
+
+    /**
+     * Get the enum value associated with an index.
+     * 
+     * @param <E>
+     *            Enum Type
+     * @param clazz
+     *            The type of enum to retrieve.
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The enum value at the index location
+     * @throws JSONException
+     *            if the key is not found or if the value cannot be converted
+     *            to an enum.
+     */
+    public <E extends Enum<E>> E getEnum(Class<E> clazz, int index) throws JSONException {
+        E val = optEnum(clazz, index);
+        if(val==null) {
+            // JSONException should really take a throwable argument.
+            // If it did, I would re-implement this with the Enum.valueOf
+            // method and place any thrown exception in the JSONException
+            throw wrongValueFormatException(index, "enum of type "
+                    + JSONObject.quote(clazz.getSimpleName()), opt(index), null);
+        }
+        return val;
+    }
+
+    /**
+     * Get the BigDecimal value associated with an index. If the value is float
+     * or double, the {@link BigDecimal#BigDecimal(double)} constructor
+     * will be used. See notes on the constructor for conversion issues that
+     * may arise.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The value.
+     * @throws JSONException
+     *             If the key is not found or if the value cannot be converted
+     *             to a BigDecimal.
+     */
+    public BigDecimal getBigDecimal (int index) throws JSONException {
+        Object object = this.get(index);
+        BigDecimal val = JSONObject.objectToBigDecimal(object, null);
+        if(val == null) {
+            throw wrongValueFormatException(index, "BigDecimal", object, null);
+        }
+        return val;
+    }
+
+    /**
+     * Get the BigInteger value associated with an index.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The value.
+     * @throws JSONException
+     *             If the key is not found or if the value cannot be converted
+     *             to a BigInteger.
+     */
+    public BigInteger getBigInteger (int index) throws JSONException {
+        Object object = this.get(index);
+        BigInteger val = JSONObject.objectToBigInteger(object, null);
+        if(val == null) {
+            throw wrongValueFormatException(index, "BigInteger", object, null);
+        }
+        return val;
+    }
+
+    /**
+     * Get the int value associated with an index.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The value.
+     * @throws JSONException
+     *             If the key is not found or if the value is not a number.
+     */
+    public int getInt(int index) throws JSONException {
+        final Object object = this.get(index);
+        if(object instanceof Number) {
+            return ((Number)object).intValue();
+        }
+        try {
+            return Integer.parseInt(object.toString());
+        } catch (Exception e) {
+            throw wrongValueFormatException(index, "int", object, e);
+        }
+    }
+
+    /**
+     * Get the JSONArray associated with an index.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return A JSONArray value.
+     * @throws JSONException
+     *             If there is no value for the index. or if the value is not a
+     *             JSONArray
+     */
+    public JSONArray getJSONArray(int index) throws JSONException {
+        Object object = this.get(index);
+        if (object instanceof JSONArray) {
+            return (JSONArray) object;
+        }
+        throw wrongValueFormatException(index, "JSONArray", object, null);
+    }
+
+    /**
+     * Get the JSONObject associated with an index.
+     *
+     * @param index
+     *            subscript
+     * @return A JSONObject value.
+     * @throws JSONException
+     *             If there is no value for the index or if the value is not a
+     *             JSONObject
+     */
+    public JSONObject getJSONObject(int index) throws JSONException {
+        Object object = this.get(index);
+        if (object instanceof JSONObject) {
+            return (JSONObject) object;
+        }
+        throw wrongValueFormatException(index, "JSONObject", object, null);
+    }
+
+    /**
+     * Get the long value associated with an index.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The value.
+     * @throws JSONException
+     *             If the key is not found or if the value cannot be converted
+     *             to a number.
+     */
+    public long getLong(int index) throws JSONException {
+        final Object object = this.get(index);
+        if(object instanceof Number) {
+            return ((Number)object).longValue();
+        }
+        try {
+            return Long.parseLong(object.toString());
+        } catch (Exception e) {
+            throw wrongValueFormatException(index, "long", object, e);
+        }
+    }
+
+    /**
+     * Get the string associated with an index.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return A string value.
+     * @throws JSONException
+     *             If there is no string value for the index.
+     */
+    public String getString(int index) throws JSONException {
+        Object object = this.get(index);
+        if (object instanceof String) {
+            return (String) object;
+        }
+        throw wrongValueFormatException(index, "String", object, null);
+    }
+
+    /**
+     * Determine if the value is <code>null</code>.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return true if the value at the index is <code>null</code>, or if there is no value.
+     */
+    public boolean isNull(int index) {
+        return JSONObject.NULL.equals(this.opt(index));
+    }
+
+    /**
+     * Make a string from the contents of this JSONArray. The
+     * <code>separator</code> string is inserted between each element. Warning:
+     * This method assumes that the data structure is acyclical.
+     *
+     * @param separator
+     *            A string that will be inserted between the elements.
+     * @return a string.
+     * @throws JSONException
+     *             If the array contains an invalid number.
+     */
+    public String join(String separator) throws JSONException {
+        int len = this.length();
+        if (len == 0) {
+            return "";
+        }
+        
+        StringBuilder sb = new StringBuilder(
+                   JSONObject.valueToString(this.myArrayList.get(0)));
+
+        for (int i = 1; i < len; i++) {
+            sb.append(separator)
+              .append(JSONObject.valueToString(this.myArrayList.get(i)));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Get the number of elements in the JSONArray, included nulls.
+     *
+     * @return The length (or size).
+     */
+    public int length() {
+        return this.myArrayList.size();
+    }
+
+    /**
+     * Removes all of the elements from this JSONArray.
+     * The JSONArray will be empty after this call returns.
+     */
+    public void clear() {
+        this.myArrayList.clear();
+    }
+
+    /**
+     * Get the optional object value associated with an index.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1. If not, null is returned.
+     * @return An object value, or null if there is no object at that index.
+     */
+    public Object opt(int index) {
+        return (index < 0 || index >= this.length()) ? null : this.myArrayList
+                .get(index);
+    }
+
+    /**
+     * Get the optional boolean value associated with an index. It returns false
+     * if there is no value at that index, or if the value is not Boolean.TRUE
+     * or the String "true".
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The truth.
+     */
+    public boolean optBoolean(int index) {
+        return this.optBoolean(index, false);
+    }
+
+    /**
+     * Get the optional boolean value associated with an index. It returns the
+     * defaultValue if there is no value at that index or if it is not a Boolean
+     * or the String "true" or "false" (case insensitive).
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @param defaultValue
+     *            A boolean default.
+     * @return The truth.
+     */
+    public boolean optBoolean(int index, boolean defaultValue) {
+        try {
+            return this.getBoolean(index);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Get the optional Boolean object associated with an index. It returns false
+     * if there is no value at that index, or if the value is not Boolean.TRUE
+     * or the String "true".
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The truth.
+     */
+    public Boolean optBooleanObject(int index) {
+        return this.optBooleanObject(index, false);
+    }
+
+    /**
+     * Get the optional Boolean object associated with an index. It returns the
+     * defaultValue if there is no value at that index or if it is not a Boolean
+     * or the String "true" or "false" (case insensitive).
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @param defaultValue
+     *            A boolean default.
+     * @return The truth.
+     */
+    public Boolean optBooleanObject(int index, Boolean defaultValue) {
+        try {
+            return this.getBoolean(index);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Get the optional double value associated with an index. NaN is returned
+     * if there is no value for the index, or if the value is not a number and
+     * cannot be converted to a number.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The value.
+     */
+    public double optDouble(int index) {
+        return this.optDouble(index, Double.NaN);
+    }
+
+    /**
+     * Get the optional double value associated with an index. The defaultValue
+     * is returned if there is no value for the index, or if the value is not a
+     * number and cannot be converted to a number.
+     *
+     * @param index
+     *            subscript
+     * @param defaultValue
+     *            The default value.
+     * @return The value.
+     */
+    public double optDouble(int index, double defaultValue) {
+        final Number val = this.optNumber(index, null);
+        if (val == null) {
+            return defaultValue;
+        }
+        final double doubleValue = val.doubleValue();
+        // if (Double.isNaN(doubleValue) || Double.isInfinite(doubleValue)) {
+        // return defaultValue;
+        // }
+        return doubleValue;
+    }
+
+    /**
+     * Get the optional Double object associated with an index. NaN is returned
+     * if there is no value for the index, or if the value is not a number and
+     * cannot be converted to a number.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The object.
+     */
+    public Double optDoubleObject(int index) {
+        return this.optDoubleObject(index, Double.NaN);
+    }
+
+    /**
+     * Get the optional double value associated with an index. The defaultValue
+     * is returned if there is no value for the index, or if the value is not a
+     * number and cannot be converted to a number.
+     *
+     * @param index
+     *            subscript
+     * @param defaultValue
+     *            The default object.
+     * @return The object.
+     */
+    public Double optDoubleObject(int index, Double defaultValue) {
+        final Number val = this.optNumber(index, null);
+        if (val == null) {
+            return defaultValue;
+        }
+        final Double doubleValue = val.doubleValue();
+        // if (Double.isNaN(doubleValue) || Double.isInfinite(doubleValue)) {
+        // return defaultValue;
+        // }
+        return doubleValue;
+    }
+
+    /**
+     * Get the optional float value associated with an index. NaN is returned
+     * if there is no value for the index, or if the value is not a number and
+     * cannot be converted to a number.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The value.
+     */
+    public float optFloat(int index) {
+        return this.optFloat(index, Float.NaN);
+    }
+
+    /**
+     * Get the optional float value associated with an index. The defaultValue
+     * is returned if there is no value for the index, or if the value is not a
+     * number and cannot be converted to a number.
+     *
+     * @param index
+     *            subscript
+     * @param defaultValue
+     *            The default value.
+     * @return The value.
+     */
+    public float optFloat(int index, float defaultValue) {
+        final Number val = this.optNumber(index, null);
+        if (val == null) {
+            return defaultValue;
+        }
+        final float floatValue = val.floatValue();
+        // if (Float.isNaN(floatValue) || Float.isInfinite(floatValue)) {
+        // return floatValue;
+        // }
+        return floatValue;
+    }
+
+    /**
+     * Get the optional Float object associated with an index. NaN is returned
+     * if there is no value for the index, or if the value is not a number and
+     * cannot be converted to a number.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The object.
+     */
+    public Float optFloatObject(int index) {
+        return this.optFloatObject(index, Float.NaN);
+    }
+
+    /**
+     * Get the optional Float object associated with an index. The defaultValue
+     * is returned if there is no value for the index, or if the value is not a
+     * number and cannot be converted to a number.
+     *
+     * @param index
+     *            subscript
+     * @param defaultValue
+     *            The default object.
+     * @return The object.
+     */
+    public Float optFloatObject(int index, Float defaultValue) {
+        final Number val = this.optNumber(index, null);
+        if (val == null) {
+            return defaultValue;
+        }
+        final Float floatValue = val.floatValue();
+        // if (Float.isNaN(floatValue) || Float.isInfinite(floatValue)) {
+        // return floatValue;
+        // }
+        return floatValue;
+    }
+
+    /**
+     * Get the optional int value associated with an index. Zero is returned if
+     * there is no value for the index, or if the value is not a number and
+     * cannot be converted to a number.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The value.
+     */
+    public int optInt(int index) {
+        return this.optInt(index, 0);
+    }
+
+    /**
+     * Get the optional int value associated with an index. The defaultValue is
+     * returned if there is no value for the index, or if the value is not a
+     * number and cannot be converted to a number.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @param defaultValue
+     *            The default value.
+     * @return The value.
+     */
+    public int optInt(int index, int defaultValue) {
+        final Number val = this.optNumber(index, null);
+        if (val == null) {
+            return defaultValue;
+        }
+        return val.intValue();
+    }
+
+    /**
+     * Get the optional Integer object associated with an index. Zero is returned if
+     * there is no value for the index, or if the value is not a number and
+     * cannot be converted to a number.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The object.
+     */
+    public Integer optIntegerObject(int index) {
+        return this.optIntegerObject(index, 0);
+    }
+
+    /**
+     * Get the optional Integer object associated with an index. The defaultValue is
+     * returned if there is no value for the index, or if the value is not a
+     * number and cannot be converted to a number.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @param defaultValue
+     *            The default object.
+     * @return The object.
+     */
+    public Integer optIntegerObject(int index, Integer defaultValue) {
+        final Number val = this.optNumber(index, null);
+        if (val == null) {
+            return defaultValue;
+        }
+        return val.intValue();
+    }
+
+    /**
+     * Get the enum value associated with a key.
+     * 
+     * @param <E>
+     *            Enum Type
+     * @param clazz
+     *            The type of enum to retrieve.
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The enum value at the index location or null if not found
+     */
+    public <E extends Enum<E>> E optEnum(Class<E> clazz, int index) {
+        return this.optEnum(clazz, index, null);
+    }
+
+    /**
+     * Get the enum value associated with a key.
+     * 
+     * @param <E>
+     *            Enum Type
+     * @param clazz
+     *            The type of enum to retrieve.
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @param defaultValue
+     *            The default in case the value is not found
+     * @return The enum value at the index location or defaultValue if
+     *            the value is not found or cannot be assigned to clazz
+     */
+    public <E extends Enum<E>> E optEnum(Class<E> clazz, int index, E defaultValue) {
+        try {
+            Object val = this.opt(index);
+            if (JSONObject.NULL.equals(val)) {
+                return defaultValue;
+            }
+            if (clazz.isAssignableFrom(val.getClass())) {
+                // we just checked it!
+                @SuppressWarnings("unchecked")
+                E myE = (E) val;
+                return myE;
+            }
+            return Enum.valueOf(clazz, val.toString());
+        } catch (IllegalArgumentException e) {
+            return defaultValue;
+        } catch (NullPointerException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Get the optional BigInteger value associated with an index. The 
+     * defaultValue is returned if there is no value for the index, or if the 
+     * value is not a number and cannot be converted to a number.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @param defaultValue
+     *            The default value.
+     * @return The value.
+     */
+    public BigInteger optBigInteger(int index, BigInteger defaultValue) {
+        Object val = this.opt(index);
+        return JSONObject.objectToBigInteger(val, defaultValue);
+    }
+
+    /**
+     * Get the optional BigDecimal value associated with an index. The 
+     * defaultValue is returned if there is no value for the index, or if the 
+     * value is not a number and cannot be converted to a number. If the value
+     * is float or double, the {@link BigDecimal#BigDecimal(double)}
+     * constructor will be used. See notes on the constructor for conversion
+     * issues that may arise.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @param defaultValue
+     *            The default value.
+     * @return The value.
+     */
+    public BigDecimal optBigDecimal(int index, BigDecimal defaultValue) {
+        Object val = this.opt(index);
+        return JSONObject.objectToBigDecimal(val, defaultValue);
+    }
+
+    /**
+     * Get the optional JSONArray associated with an index. Null is returned if
+     * there is no value at that index or if the value is not a JSONArray.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return A JSONArray value.
+     */
+    public JSONArray optJSONArray(int index) {
+        return this.optJSONArray(index, null);
+    }
+
+    /**
+     * Get the optional JSONArray associated with an index. The defaultValue is returned if
+     * there is no value at that index or if the value is not a JSONArray.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @param defaultValue
+     *            The default.
+     * @return A JSONArray value.
+     */
+    public JSONArray optJSONArray(int index, JSONArray defaultValue) {
+        Object object = this.opt(index);
+        return object instanceof JSONArray ? (JSONArray) object : defaultValue;
+    }
+
+    /**
+     * Get the optional JSONObject associated with an index. Null is returned if
+     * there is no value at that index or if the value is not a JSONObject.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return A JSONObject value.
+     */
+    public JSONObject optJSONObject(int index) {
+        return this.optJSONObject(index, null);
+    }
+
+    /**
+     * Get the optional JSONObject associated with an index. The defaultValue is returned if
+     * there is no value at that index or if the value is not a JSONObject.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @param defaultValue
+     *            The default.
+     * @return A JSONObject value.
+     */
+    public JSONObject optJSONObject(int index, JSONObject defaultValue) {
+        Object object = this.opt(index);
+        return object instanceof JSONObject ? (JSONObject) object : defaultValue;
+    }
+
+    /**
+     * Get the optional long value associated with an index. Zero is returned if
+     * there is no value for the index, or if the value is not a number and
+     * cannot be converted to a number.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The value.
+     */
+    public long optLong(int index) {
+        return this.optLong(index, 0);
+    }
+
+    /**
+     * Get the optional long value associated with an index. The defaultValue is
+     * returned if there is no value for the index, or if the value is not a
+     * number and cannot be converted to a number.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @param defaultValue
+     *            The default value.
+     * @return The value.
+     */
+    public long optLong(int index, long defaultValue) {
+        final Number val = this.optNumber(index, null);
+        if (val == null) {
+            return defaultValue;
+        }
+        return val.longValue();
+    }
+
+    /**
+     * Get the optional Long object associated with an index. Zero is returned if
+     * there is no value for the index, or if the value is not a number and
+     * cannot be converted to a number.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return The object.
+     */
+    public Long optLongObject(int index) {
+        return this.optLongObject(index, 0L);
+    }
+
+    /**
+     * Get the optional Long object associated with an index. The defaultValue is
+     * returned if there is no value for the index, or if the value is not a
+     * number and cannot be converted to a number.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @param defaultValue
+     *            The default object.
+     * @return The object.
+     */
+    public Long optLongObject(int index, Long defaultValue) {
+        final Number val = this.optNumber(index, null);
+        if (val == null) {
+            return defaultValue;
+        }
+        return val.longValue();
+    }
+
+    /**
+     * Get an optional {@link Number} value associated with a key, or <code>null</code>
+     * if there is no such key or if the value is not a number. If the value is a string,
+     * an attempt will be made to evaluate it as a number ({@link BigDecimal}). This method
+     * would be used in cases where type coercion of the number value is unwanted.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return An object which is the value.
+     */
+    public Number optNumber(int index) {
+        return this.optNumber(index, null);
+    }
+
+    /**
+     * Get an optional {@link Number} value associated with a key, or the default if there
+     * is no such key or if the value is not a number. If the value is a string,
+     * an attempt will be made to evaluate it as a number ({@link BigDecimal}). This method
+     * would be used in cases where type coercion of the number value is unwanted.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @param defaultValue
+     *            The default.
+     * @return An object which is the value.
+     */
+    public Number optNumber(int index, Number defaultValue) {
+        Object val = this.opt(index);
+        if (JSONObject.NULL.equals(val)) {
+            return defaultValue;
+        }
+        if (val instanceof Number){
+            return (Number) val;
+        }
+        
+        if (val instanceof String) {
+            try {
+                return JSONObject.stringToNumber((String) val);
+            } catch (Exception e) {
+                return defaultValue;
+            }
+        }
+        return defaultValue;
+    }
+
+    /**
+     * Get the optional string value associated with an index. It returns an
+     * empty string if there is no value at that index. If the value is not a
+     * string and is not null, then it is converted to a string.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @return A String value.
+     */
+    public String optString(int index) {
+        return this.optString(index, "");
+    }
+
+    /**
+     * Get the optional string associated with an index. The defaultValue is
+     * returned if the key is not found.
+     *
+     * @param index
+     *            The index must be between 0 and length() - 1.
+     * @param defaultValue
+     *            The default value.
+     * @return A String value.
+     */
+    public String optString(int index, String defaultValue) {
+        Object object = this.opt(index);
+        return JSONObject.NULL.equals(object) ? defaultValue : object
+                .toString();
+    }
+
+    /**
+     * Append a boolean value. This increases the array's length by one.
+     *
+     * @param value
+     *            A boolean value.
+     * @return this.
+     */
+    public JSONArray put(boolean value) {
+        return this.put(value ? Boolean.TRUE : Boolean.FALSE);
+    }
+
+    /**
+     * Put a value in the JSONArray, where the value will be a JSONArray which
+     * is produced from a Collection.
+     *
+     * @param value
+     *            A Collection value.
+     * @return this.
+     * @throws JSONException
+     *            If the value is non-finite number.
+     */
+    public JSONArray put(Collection<?> value) {
+        return this.put(new JSONArray(value));
+    }
+
+    /**
+     * Append a double value. This increases the array's length by one.
+     *
+     * @param value
+     *            A double value.
+     * @return this.
+     * @throws JSONException
+     *             if the value is not finite.
+     */
+    public JSONArray put(double value) throws JSONException {
+        return this.put(Double.valueOf(value));
+    }
+    
+    /**
+     * Append a float value. This increases the array's length by one.
+     *
+     * @param value
+     *            A float value.
+     * @return this.
+     * @throws JSONException
+     *             if the value is not finite.
+     */
+    public JSONArray put(float value) throws JSONException {
+        return this.put(Float.valueOf(value));
+    }
+
+    /**
+     * Append an int value. This increases the array's length by one.
+     *
+     * @param value
+     *            An int value.
+     * @return this.
+     */
+    public JSONArray put(int value) {
+        return this.put(Integer.valueOf(value));
+    }
+
+    /**
+     * Append an long value. This increases the array's length by one.
+     *
+     * @param value
+     *            A long value.
+     * @return this.
+     */
+    public JSONArray put(long value) {
+        return this.put(Long.valueOf(value));
+    }
+
+    /**
+     * Put a value in the JSONArray, where the value will be a JSONObject which
+     * is produced from a Map.
+     *
+     * @param value
+     *            A Map value.
+     * @return this.
+     * @throws JSONException
+     *            If a value in the map is non-finite number.
+     * @throws NullPointerException
+     *            If a key in the map is <code>null</code>
+     */
+    public JSONArray put(Map<?, ?> value) {
+        return this.put(new JSONObject(value));
+    }
+
+    /**
+     * Append an object value. This increases the array's length by one.
+     *
+     * @param value
+     *            An object value. The value should be a Boolean, Double,
+     *            Integer, JSONArray, JSONObject, Long, or String, or the
+     *            JSONObject.NULL object.
+     * @return this.
+     * @throws JSONException
+     *            If the value is non-finite number.
+     */
+    public JSONArray put(Object value) {
+        JSONObject.testValidity(value);
+        this.myArrayList.add(value);
+        return this;
+    }
+
+    /**
+     * Put or replace a boolean value in the JSONArray. If the index is greater
+     * than the length of the JSONArray, then null elements will be added as
+     * necessary to pad it out.
+     *
+     * @param index
+     *            The subscript.
+     * @param value
+     *            A boolean value.
+     * @return this.
+     * @throws JSONException
+     *             If the index is negative.
+     */
+    public JSONArray put(int index, boolean value) throws JSONException {
+        return this.put(index, value ? Boolean.TRUE : Boolean.FALSE);
+    }
+
+    /**
+     * Put a value in the JSONArray, where the value will be a JSONArray which
+     * is produced from a Collection.
+     *
+     * @param index
+     *            The subscript.
+     * @param value
+     *            A Collection value.
+     * @return this.
+     * @throws JSONException
+     *             If the index is negative or if the value is non-finite.
+     */
+    public JSONArray put(int index, Collection<?> value) throws JSONException {
+        return this.put(index, new JSONArray(value));
+    }
+
+    /**
+     * Put or replace a double value. If the index is greater than the length of
+     * the JSONArray, then null elements will be added as necessary to pad it
+     * out.
+     *
+     * @param index
+     *            The subscript.
+     * @param value
+     *            A double value.
+     * @return this.
+     * @throws JSONException
+     *             If the index is negative or if the value is non-finite.
+     */
+    public JSONArray put(int index, double value) throws JSONException {
+        return this.put(index, Double.valueOf(value));
+    }
+
+    /**
+     * Put or replace a float value. If the index is greater than the length of
+     * the JSONArray, then null elements will be added as necessary to pad it
+     * out.
+     *
+     * @param index
+     *            The subscript.
+     * @param value
+     *            A float value.
+     * @return this.
+     * @throws JSONException
+     *             If the index is negative or if the value is non-finite.
+     */
+    public JSONArray put(int index, float value) throws JSONException {
+        return this.put(index, Float.valueOf(value));
+    }
+
+    /**
+     * Put or replace an int value. If the index is greater than the length of
+     * the JSONArray, then null elements will be added as necessary to pad it
+     * out.
+     *
+     * @param index
+     *            The subscript.
+     * @param value
+     *            An int value.
+     * @return this.
+     * @throws JSONException
+     *             If the index is negative.
+     */
+    public JSONArray put(int index, int value) throws JSONException {
+        return this.put(index, Integer.valueOf(value));
+    }
+
+    /**
+     * Put or replace a long value. If the index is greater than the length of
+     * the JSONArray, then null elements will be added as necessary to pad it
+     * out.
+     *
+     * @param index
+     *            The subscript.
+     * @param value
+     *            A long value.
+     * @return this.
+     * @throws JSONException
+     *             If the index is negative.
+     */
+    public JSONArray put(int index, long value) throws JSONException {
+        return this.put(index, Long.valueOf(value));
+    }
+
+    /**
+     * Put a value in the JSONArray, where the value will be a JSONObject that
+     * is produced from a Map.
+     *
+     * @param index
+     *            The subscript.
+     * @param value
+     *            The Map value.
+     * @return
+     *             reference to self
+     * @throws JSONException
+     *             If the index is negative or if the value is an invalid
+     *             number.
+     * @throws NullPointerException
+     *             If a key in the map is <code>null</code>
+     */
+    public JSONArray put(int index, Map<?, ?> value) throws JSONException {
+        this.put(index, new JSONObject(value, new JSONParserConfiguration()));
+        return this;
+    }
+
+    /**
+     * Put a value in the JSONArray, where the value will be a JSONObject that
+     * is produced from a Map.
+     *
+     * @param index
+     *          The subscript
+     * @param value
+     *          The Map value.
+     * @param jsonParserConfiguration
+     *          Configuration object for the JSON parser
+     * @return reference to self
+     * @throws JSONException
+     *          If the index is negative or if the value is an invalid
+     *          number.
+     */
+    public JSONArray put(int index, Map<?, ?> value, JSONParserConfiguration jsonParserConfiguration) throws JSONException {
+        this.put(index, new JSONObject(value, jsonParserConfiguration));
+        return this;
+    }
+
+    /**
+     * Put or replace an object value in the JSONArray. If the index is greater
+     * than the length of the JSONArray, then null elements will be added as
+     * necessary to pad it out.
+     *
+     * @param index
+     *            The subscript.
+     * @param value
+     *            The value to put into the array. The value should be a
+     *            Boolean, Double, Integer, JSONArray, JSONObject, Long, or
+     *            String, or the JSONObject.NULL object.
+     * @return this.
+     * @throws JSONException
+     *             If the index is negative or if the value is an invalid
+     *             number.
+     */
+    public JSONArray put(int index, Object value) throws JSONException {
+        if (index < 0) {
+            throw new JSONException("JSONArray[" + index + "] not found.");
+        }
+        if (index < this.length()) {
+            JSONObject.testValidity(value);
+            this.myArrayList.set(index, value);
+            return this;
+        }
+        if(index == this.length()){
+            // simple append
+            return this.put(value);
+        }
+        // if we are inserting past the length, we want to grow the array all at once
+        // instead of incrementally.
+        this.myArrayList.ensureCapacity(index + 1);
+        while (index != this.length()) {
+            // we don't need to test validity of NULL objects
+            this.myArrayList.add(JSONObject.NULL);
+        }
+        return this.put(value);
+    }
+
+    /**
+     * Put a collection's elements in to the JSONArray.
+     *
+     * @param collection
+     *            A Collection.
+     * @return this. 
+     */
+    public JSONArray putAll(Collection<?> collection) {
+        this.addAll(collection, false);
+        return this;
+    }
+    
+    /**
+     * Put an Iterable's elements in to the JSONArray.
+     *
+     * @param iter
+     *            An Iterable.
+     * @return this. 
+     */
+    public JSONArray putAll(Iterable<?> iter) {
+        this.addAll(iter, false);
+        return this;
+    }
+
+    /**
+     * Put a JSONArray's elements in to the JSONArray.
+     *
+     * @param array
+     *            A JSONArray.
+     * @return this. 
+     */
+    public JSONArray putAll(JSONArray array) {
+        // directly copy the elements from the source array to this one
+        // as all wrapping should have been done already in the source.
+        this.myArrayList.addAll(array.myArrayList);
+        return this;
+    }
+
+    /**
+     * Put an array's elements in to the JSONArray.
+     *
+     * @param array
+     *            Array. If the parameter passed is null, or not an array or Iterable, an
+     *            exception will be thrown.
+     * @return this. 
+     *
+     * @throws JSONException
+     *            If not an array, JSONArray, Iterable or if an value is non-finite number.
+     * @throws NullPointerException
+     *            Thrown if the array parameter is null.
+     */
+    public JSONArray putAll(Object array) throws JSONException {
+        this.addAll(array, false);
+        return this;
+    }
+    
+    /**
+     * Creates a JSONPointer using an initialization string and tries to 
+     * match it to an item within this JSONArray. For example, given a
+     * JSONArray initialized with this document:
+     * <pre>
+     * [
+     *     {"b":"c"}
+     * ]
+     * </pre>
+     * and this JSONPointer string: 
+     * <pre>
+     * "/0/b"
+     * </pre>
+     * Then this method will return the String "c"
+     * A JSONPointerException may be thrown from code called by this method.
+     *
+     * @param jsonPointer string that can be used to create a JSONPointer
+     * @return the item matched by the JSONPointer, otherwise null
+     */
+    public Object query(String jsonPointer) {
+        return query(new JSONPointer(jsonPointer));
+    }
+    
+    /**
+     * Uses a user initialized JSONPointer  and tries to 
+     * match it to an item within this JSONArray. For example, given a
+     * JSONArray initialized with this document:
+     * <pre>
+     * [
+     *     {"b":"c"}
+     * ]
+     * </pre>
+     * and this JSONPointer: 
+     * <pre>
+     * "/0/b"
+     * </pre>
+     * Then this method will return the String "c"
+     * A JSONPointerException may be thrown from code called by this method.
+     *
+     * @param jsonPointer string that can be used to create a JSONPointer
+     * @return the item matched by the JSONPointer, otherwise null
+     */
+    public Object query(JSONPointer jsonPointer) {
+        return jsonPointer.queryFrom(this);
+    }
+    
+    /**
+     * Queries and returns a value from this object using {@code jsonPointer}, or
+     * returns null if the query fails due to a missing key.
+     * 
+     * @param jsonPointer the string representation of the JSON pointer
+     * @return the queried value or {@code null}
+     * @throws IllegalArgumentException if {@code jsonPointer} has invalid syntax
+     */
+    public Object optQuery(String jsonPointer) {
+    	return optQuery(new JSONPointer(jsonPointer));
+    }
+    
+    /**
+     * Queries and returns a value from this object using {@code jsonPointer}, or
+     * returns null if the query fails due to a missing key.
+     * 
+     * @param jsonPointer The JSON pointer
+     * @return the queried value or {@code null}
+     * @throws IllegalArgumentException if {@code jsonPointer} has invalid syntax
+     */
+    public Object optQuery(JSONPointer jsonPointer) {
+        try {
+            return jsonPointer.queryFrom(this);
+        } catch (JSONPointerException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Remove an index and close the hole.
+     *
+     * @param index
+     *            The index of the element to be removed.
+     * @return The value that was associated with the index, or null if there
+     *         was no value.
+     */
+    public Object remove(int index) {
+        return index >= 0 && index < this.length()
+            ? this.myArrayList.remove(index)
+            : null;
+    }
+
+    /**
+     * Determine if two JSONArrays are similar.
+     * They must contain similar sequences.
+     *
+     * @param other The other JSONArray
+     * @return true if they are equal
+     */
+    public boolean similar(Object other) {
+        if (!(other instanceof JSONArray)) {
+            return false;
+        }
+        int len = this.length();
+        if (len != ((JSONArray)other).length()) {
+            return false;
+        }
+        for (int i = 0; i < len; i += 1) {
+            Object valueThis = this.myArrayList.get(i);
+            Object valueOther = ((JSONArray)other).myArrayList.get(i);
+            if(valueThis == valueOther) {
+            	continue;
+            }
+            if(valueThis == null) {
+            	return false;
+            }
+            if (valueThis instanceof JSONObject) {
+                if (!((JSONObject)valueThis).similar(valueOther)) {
+                    return false;
+                }
+            } else if (valueThis instanceof JSONArray) {
+                if (!((JSONArray)valueThis).similar(valueOther)) {
+                    return false;
+                }
+            } else if (valueThis instanceof Number && valueOther instanceof Number) {
+                if (!JSONObject.isNumberSimilar((Number)valueThis, (Number)valueOther)) {
+                	return false;
+                }
+            } else if (valueThis instanceof JSONString && valueOther instanceof JSONString) {
+                if (!((JSONString) valueThis).toJSONString().equals(((JSONString) valueOther).toJSONString())) {
+                    return false;
+                }
+            } else if (!valueThis.equals(valueOther)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Produce a JSONObject by combining a JSONArray of names with the values of
+     * this JSONArray.
+     *
+     * @param names
+     *            A JSONArray containing a list of key strings. These will be
+     *            paired with the values.
+     * @return A JSONObject, or null if there are no names or if this JSONArray
+     *         has no values.
+     * @throws JSONException
+     *             If any of the names are null.
+     */
+    public JSONObject toJSONObject(JSONArray names) throws JSONException {
+        if (names == null || names.isEmpty() || this.isEmpty()) {
+            return null;
+        }
+        JSONObject jo = new JSONObject(names.length());
+        for (int i = 0; i < names.length(); i += 1) {
+            jo.put(names.getString(i), this.opt(i));
+        }
+        return jo;
+    }
+
+    /**
+     * Make a JSON text of this JSONArray. For compactness, no unnecessary
+     * whitespace is added. If it is not possible to produce a syntactically
+     * correct JSON text then null will be returned instead. This could occur if
+     * the array contains an invalid number.
+     * <p><b>
+     * Warning: This method assumes that the data structure is acyclical.
+     * </b>
+     *
+     * @return a printable, displayable, transmittable representation of the
+     *         array.
+     */
+    @Override
+    public String toString() {
+        try {
+            return this.toString(0);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Make a pretty-printed JSON text of this JSONArray.
+     * 
+     * <p>If <pre> {@code indentFactor > 0}</pre> and the {@link JSONArray} has only
+     * one element, then the array will be output on a single line:
+     * <pre>{@code [1]}</pre>
+     * 
+     * <p>If an array has 2 or more elements, then it will be output across
+     * multiple lines: <pre>{@code
+     * [
+     * 1,
+     * "value 2",
+     * 3
+     * ]
+     * }</pre>
+     * <p><b>
+     * Warning: This method assumes that the data structure is acyclical.
+     * </b>
+     * 
+     * @param indentFactor
+     *            The number of spaces to add to each level of indentation.
+     * @return a printable, displayable, transmittable representation of the
+     *         object, beginning with <code>[</code>&nbsp;<small>(left
+     *         bracket)</small> and ending with <code>]</code>
+     *         &nbsp;<small>(right bracket)</small>.
+     * @throws JSONException if a called function fails
+     */
+    @SuppressWarnings("resource")
+    public String toString(int indentFactor) throws JSONException {
+        StringWriter sw = new StringWriter();
+        return this.write(sw, indentFactor, 0).toString();
+    }
+
+    /**
+     * Write the contents of the JSONArray as JSON text to a writer. For
+     * compactness, no whitespace is added.
+     * <p><b>
+     * Warning: This method assumes that the data structure is acyclical.
+     *</b>
+     * @param writer the writer object
+     * @return The writer.
+     * @throws JSONException if a called function fails
+     */
+    public Writer write(Writer writer) throws JSONException {
+        return this.write(writer, 0, 0);
+    }
+
+    /**
+     * Write the contents of the JSONArray as JSON text to a writer.
+     * 
+     * <p>If <pre>{@code indentFactor > 0}</pre> and the {@link JSONArray} has only
+     * one element, then the array will be output on a single line:
+     * <pre>{@code [1]}</pre>
+     * 
+     * <p>If an array has 2 or more elements, then it will be output across
+     * multiple lines: <pre>{@code
+     * [
+     * 1,
+     * "value 2",
+     * 3
+     * ]
+     * }</pre>
+     * <p><b>
+     * Warning: This method assumes that the data structure is acyclical.
+     * </b>
+     *
+     * @param writer
+     *            Writes the serialized JSON
+     * @param indentFactor
+     *            The number of spaces to add to each level of indentation.
+     * @param indent
+     *            The indentation of the top level.
+     * @return The writer.
+     * @throws JSONException if a called function fails or unable to write
+     */
+    @SuppressWarnings("resource")
+    public Writer write(Writer writer, int indentFactor, int indent)
+            throws JSONException {
+        try {
+            boolean needsComma = false;
+            int length = this.length();
+            writer.write('[');
+
+            if (length == 1) {
+                try {
+                    JSONObject.writeValue(writer, this.myArrayList.get(0),
+                            indentFactor, indent);
+                } catch (Exception e) {
+                    throw new JSONException("Unable to write JSONArray value at index: 0", e);
+                }
+            } else if (length != 0) {
+                final int newIndent = indent + indentFactor;
+
+                for (int i = 0; i < length; i += 1) {
+                    if (needsComma) {
+                        writer.write(',');
+                    }
+                    if (indentFactor > 0) {
+                        writer.write('\n');
+                    }
+                    JSONObject.indent(writer, newIndent);
+                    try {
+                        JSONObject.writeValue(writer, this.myArrayList.get(i),
+                                indentFactor, newIndent);
+                    } catch (Exception e) {
+                        throw new JSONException("Unable to write JSONArray value at index: " + i, e);
+                    }
+                    needsComma = true;
+                }
+                if (indentFactor > 0) {
+                    writer.write('\n');
+                }
+                JSONObject.indent(writer, indent);
+            }
+            writer.write(']');
+            return writer;
+        } catch (IOException e) {
+            throw new JSONException(e);
+        }
+    }
+
+    /**
+     * Returns a java.util.List containing all of the elements in this array.
+     * If an element in the array is a JSONArray or JSONObject it will also
+     * be converted to a List and a Map respectively.
+     * <p>
+     * Warning: This method assumes that the data structure is acyclical.
+     *
+     * @return a java.util.List containing the elements of this array
+     */
+    public List<Object> toList() {
+        List<Object> results = new ArrayList<Object>(this.myArrayList.size());
+        for (Object element : this.myArrayList) {
+            if (element == null || JSONObject.NULL.equals(element)) {
+                results.add(null);
+            } else if (element instanceof JSONArray) {
+                results.add(((JSONArray) element).toList());
+            } else if (element instanceof JSONObject) {
+                results.add(((JSONObject) element).toMap());
+            } else {
+                results.add(element);
+            }
+        }
+        return results;
+    }
+
+    /**
+     * Check if JSONArray is empty.
+     *
+     * @return true if JSONArray is empty, otherwise false.
+     */
+    public boolean isEmpty() {
+        return this.myArrayList.isEmpty();
+    }
+
+    /**
+     * Add a collection's elements to the JSONArray.
+     *
+     * @param collection
+     *            A Collection.
+     * @param wrap
+     *            {@code true} to call {@link JSONObject#wrap(Object)} for each item,
+     *            {@code false} to add the items directly
+     * @param recursionDepth
+     *            Variable for tracking the count of nested object creations.
+     */
+    private void addAll(Collection<?> collection, boolean wrap, int recursionDepth, JSONParserConfiguration jsonParserConfiguration) {
+        this.myArrayList.ensureCapacity(this.myArrayList.size() + collection.size());
+        if (wrap) {
+            for (Object o: collection){
+                this.put(JSONObject.wrap(o, recursionDepth + 1, jsonParserConfiguration));
+            }
+        } else {
+            for (Object o: collection){
+                this.put(o);
+            }
+        }
+    }
+
+    /**
+     * Add an Iterable's elements to the JSONArray.
+     *
+     * @param iter
+     *            An Iterable.
+     * @param wrap
+     *            {@code true} to call {@link JSONObject#wrap(Object)} for each item,
+     *            {@code false} to add the items directly
+     */
+    private void addAll(Iterable<?> iter, boolean wrap) {
+        if (wrap) {
+            for (Object o: iter){
+                this.put(JSONObject.wrap(o));
+            }
+        } else {
+            for (Object o: iter){
+                this.put(o);
+            }
+        }
+    }
+
+    /**
+     * Add an array's elements to the JSONArray.
+     *
+     * @param array
+     *          Array. If the parameter passed is null, or not an array,
+     *          JSONArray, Collection, or Iterable, an exception will be
+     *          thrown.
+     * @param wrap
+     *          {@code true} to call {@link JSONObject#wrap(Object)} for each item,
+     *          {@code false} to add the items directly
+     * @throws JSONException
+     *          If not an array or if an array value is non-finite number.
+     */
+    private void addAll(Object array, boolean wrap) throws JSONException {
+      this.addAll(array, wrap, 0);
+    }
+
+    /**
+     * Add an array's elements to the JSONArray.
+     *
+     * @param array
+     *            Array. If the parameter passed is null, or not an array,
+     *            JSONArray, Collection, or Iterable, an exception will be
+     *            thrown.
+     * @param wrap
+     *          {@code true} to call {@link JSONObject#wrap(Object)} for each item,
+     *          {@code false} to add the items directly
+     * @param recursionDepth
+     *          Variable for tracking the count of nested object creations.
+     */
+    private void addAll(Object array, boolean wrap, int recursionDepth) {
+        addAll(array, wrap, recursionDepth, new JSONParserConfiguration());
+    }
+    /**
+     * Add an array's elements to the JSONArray.
+     *`
+     * @param array
+     *            Array. If the parameter passed is null, or not an array,
+     *            JSONArray, Collection, or Iterable, an exception will be
+     *            thrown.
+     * @param wrap
+     *            {@code true} to call {@link JSONObject#wrap(Object)} for each item,
+     *            {@code false} to add the items directly
+     * @param recursionDepth
+     *            Variable for tracking the count of nested object creations.
+     * @param jsonParserConfiguration
+     *            Variable to pass parser custom configuration for json parsing.
+     * @throws JSONException
+     *            If not an array or if an array value is non-finite number.
+     * @throws NullPointerException
+     *            Thrown if the array parameter is null.
+     */
+    private void addAll(Object array, boolean wrap, int recursionDepth, JSONParserConfiguration jsonParserConfiguration) throws JSONException {
+        if (array.getClass().isArray()) {
+            int length = Array.getLength(array);
+            this.myArrayList.ensureCapacity(this.myArrayList.size() + length);
+            if (wrap) {
+                for (int i = 0; i < length; i += 1) {
+                    this.put(JSONObject.wrap(Array.get(array, i), recursionDepth + 1, jsonParserConfiguration));
+                }
+            } else {
+                for (int i = 0; i < length; i += 1) {
+                    this.put(Array.get(array, i));
+                }
+            }
+        } else if (array instanceof JSONArray) {
+            // use the built in array list `addAll` as all object
+            // wrapping should have been completed in the original
+            // JSONArray
+            this.myArrayList.addAll(((JSONArray)array).myArrayList);
+        } else if (array instanceof Collection) {
+            this.addAll((Collection<?>)array, wrap, recursionDepth);
+        } else if (array instanceof Iterable) {
+            this.addAll((Iterable<?>)array, wrap);
+        } else {
+            throw new JSONException(
+                    "JSONArray initial value should be a string or collection or array.");
+        }
+    }
+    
+    /**
+     * Create a new JSONException in a common format for incorrect conversions.
+     * @param idx index of the item
+     * @param valueType the type of value being coerced to
+     * @param cause optional cause of the coercion failure
+     * @return JSONException that can be thrown.
+     */
+    private static JSONException wrongValueFormatException(
+            int idx,
+            String valueType,
+            Object value,
+            Throwable cause) {
+        if(value == null) {
+            return new JSONException(
+                    "JSONArray[" + idx + "] is not a " + valueType + " (null)."
+                    , cause);
+        }
+        // don't try to toString collections or known object types that could be large.
+        if(value instanceof Map || value instanceof Iterable || value instanceof JSONObject) {
+            return new JSONException(
+                    "JSONArray[" + idx + "] is not a " + valueType + " (" + value.getClass() + ")."
+                    , cause);
+        }
+        return new JSONException(
+                "JSONArray[" + idx + "] is not a " + valueType + " (" + value.getClass() + " : " + value + ")."
+                , cause);
+    }
+
+}

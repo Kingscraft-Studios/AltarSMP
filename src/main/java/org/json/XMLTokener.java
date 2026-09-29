@@ -1,415 +1,410 @@
-/*     */ package org.json;
-/*     */ 
-/*     */ import java.io.Reader;
-/*     */ import java.util.HashMap;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ public class XMLTokener
-/*     */   extends JSONTokener
-/*     */ {
-/*  23 */   private XMLParserConfiguration configuration = XMLParserConfiguration.ORIGINAL;
-/*     */ 
-/*     */   
-/*  26 */   public static final HashMap<String, Character> entity = new HashMap<>(8); static {
-/*  27 */     entity.put("amp", XML.AMP);
-/*  28 */     entity.put("apos", XML.APOS);
-/*  29 */     entity.put("gt", XML.GT);
-/*  30 */     entity.put("lt", XML.LT);
-/*  31 */     entity.put("quot", XML.QUOT);
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public XMLTokener(Reader r) {
-/*  39 */     super(r);
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public XMLTokener(String s) {
-/*  47 */     super(s);
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public XMLTokener(Reader r, XMLParserConfiguration configuration) {
-/*  56 */     super(r);
-/*  57 */     this.configuration = configuration;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public String nextCDATA() throws JSONException {
-/*  68 */     StringBuilder sb = new StringBuilder();
-/*  69 */     while (more()) {
-/*  70 */       char c = next();
-/*  71 */       sb.append(c);
-/*  72 */       int i = sb.length() - 3;
-/*  73 */       if (i >= 0 && sb.charAt(i) == ']' && sb
-/*  74 */         .charAt(i + 1) == ']' && sb.charAt(i + 2) == '>') {
-/*  75 */         sb.setLength(i);
-/*  76 */         return sb.toString();
-/*     */       } 
-/*     */     } 
-/*  79 */     throw syntaxError("Unclosed CDATA");
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public Object nextContent() throws JSONException {
-/*     */     char c;
-/*     */     do {
-/*  97 */       c = next();
-/*  98 */     } while (Character.isWhitespace(c) && this.configuration.shouldTrimWhiteSpace());
-/*  99 */     if (c == '\000') {
-/* 100 */       return null;
-/*     */     }
-/* 102 */     if (c == '<') {
-/* 103 */       return XML.LT;
-/*     */     }
-/* 105 */     StringBuilder sb = new StringBuilder();
-/*     */     while (true) {
-/* 107 */       if (c == '\000') {
-/* 108 */         return sb.toString().trim();
-/*     */       }
-/* 110 */       if (c == '<') {
-/* 111 */         back();
-/* 112 */         if (this.configuration.shouldTrimWhiteSpace())
-/* 113 */           return sb.toString().trim(); 
-/* 114 */         return sb.toString();
-/*     */       } 
-/* 116 */       if (c == '&') {
-/* 117 */         sb.append(nextEntity(c));
-/*     */       } else {
-/* 119 */         sb.append(c);
-/*     */       } 
-/* 121 */       c = next();
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public Object nextEntity(char ampersand) throws JSONException {
-/*     */     char c;
-/* 136 */     StringBuilder sb = new StringBuilder();
-/*     */     while (true) {
-/* 138 */       c = next();
-/* 139 */       if (Character.isLetterOrDigit(c) || c == '#')
-/* 140 */       { sb.append(Character.toLowerCase(c)); continue; }  break;
-/* 141 */     }  if (c == ';') {
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */       
-/* 147 */       String string = sb.toString();
-/* 148 */       return unescapeEntity(string);
-/*     */     } 
-/*     */     throw syntaxError("Missing ';' in XML entity: &" + sb);
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   static String unescapeEntity(String e) {
-/* 158 */     if (e == null || e.isEmpty()) {
-/* 159 */       return "";
-/*     */     }
-/*     */     
-/* 162 */     if (e.charAt(0) == '#') {
-/*     */       int cp;
-/* 164 */       if (e.charAt(1) == 'x' || e.charAt(1) == 'X') {
-/*     */         
-/* 166 */         cp = Integer.parseInt(e.substring(2), 16);
-/*     */       } else {
-/*     */         
-/* 169 */         cp = Integer.parseInt(e.substring(1));
-/*     */       } 
-/* 171 */       return new String(new int[] { cp }, 0, 1);
-/*     */     } 
-/* 173 */     Character knownEntity = entity.get(e);
-/* 174 */     if (knownEntity == null)
-/*     */     {
-/* 176 */       return '&' + e + ';';
-/*     */     }
-/* 178 */     return knownEntity.toString();
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public Object nextMeta() throws JSONException {
-/*     */     char c, q;
-/*     */     do {
-/* 198 */       c = next();
-/* 199 */     } while (Character.isWhitespace(c));
-/* 200 */     switch (c) {
-/*     */       case '\000':
-/* 202 */         throw syntaxError("Misshaped meta tag");
-/*     */       case '<':
-/* 204 */         return XML.LT;
-/*     */       case '>':
-/* 206 */         return XML.GT;
-/*     */       case '/':
-/* 208 */         return XML.SLASH;
-/*     */       case '=':
-/* 210 */         return XML.EQ;
-/*     */       case '!':
-/* 212 */         return XML.BANG;
-/*     */       case '?':
-/* 214 */         return XML.QUEST;
-/*     */       case '"':
-/*     */       case '\'':
-/* 217 */         q = c;
-/*     */         while (true) {
-/* 219 */           c = next();
-/* 220 */           if (c == '\000') {
-/* 221 */             throw syntaxError("Unterminated string");
-/*     */           }
-/* 223 */           if (c == q) {
-/* 224 */             return Boolean.TRUE;
-/*     */           }
-/*     */         } 
-/*     */     } 
-/*     */     while (true)
-/* 229 */     { c = next();
-/* 230 */       if (Character.isWhitespace(c)) {
-/* 231 */         return Boolean.TRUE;
-/*     */       }
-/* 233 */       switch (c)
-/*     */       { case '\000':
-/* 235 */           throw syntaxError("Unterminated string");
-/*     */         case '!':
-/*     */         case '"':
-/*     */         case '\'':
-/*     */         case '/':
-/*     */         case '<':
-/*     */         case '=':
-/*     */         case '>':
-/*     */         case '?':
-/* 244 */           break; }  }  back();
-/* 245 */     return Boolean.TRUE;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public Object nextToken() throws JSONException {
-/*     */     char c, q;
-/*     */     do {
-/* 267 */       c = next();
-/* 268 */     } while (Character.isWhitespace(c));
-/* 269 */     switch (c) {
-/*     */       case '\000':
-/* 271 */         throw syntaxError("Misshaped element");
-/*     */       case '<':
-/* 273 */         throw syntaxError("Misplaced '<'");
-/*     */       case '>':
-/* 275 */         return XML.GT;
-/*     */       case '/':
-/* 277 */         return XML.SLASH;
-/*     */       case '=':
-/* 279 */         return XML.EQ;
-/*     */       case '!':
-/* 281 */         return XML.BANG;
-/*     */       case '?':
-/* 283 */         return XML.QUEST;
-/*     */ 
-/*     */ 
-/*     */       
-/*     */       case '"':
-/*     */       case '\'':
-/* 289 */         q = c;
-/* 290 */         StringBuilder sb = new StringBuilder();
-/*     */         while (true) {
-/* 292 */           c = next();
-/* 293 */           if (c == '\000') {
-/* 294 */             throw syntaxError("Unterminated string");
-/*     */           }
-/* 296 */           if (c == q) {
-/* 297 */             return sb.toString();
-/*     */           }
-/* 299 */           if (c == '&') {
-/* 300 */             sb.append(nextEntity(c)); continue;
-/*     */           } 
-/* 302 */           sb.append(c);
-/*     */         } 
-/*     */     } 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */     
-/* 309 */     StringBuilder sb = new StringBuilder();
-/*     */     while (true)
-/* 311 */     { sb.append(c);
-/* 312 */       c = next();
-/* 313 */       if (Character.isWhitespace(c)) {
-/* 314 */         return sb.toString();
-/*     */       }
-/* 316 */       switch (c)
-/*     */       { case '\000':
-/* 318 */           return sb.toString();
-/*     */         case '!':
-/*     */         case '/':
-/*     */         case '=':
-/*     */         case '>':
-/*     */         case '?':
-/*     */         case '[':
-/*     */         case ']':
-/* 326 */           back();
-/* 327 */           return sb.toString();
-/*     */         case '"':
-/*     */         case '\'':
-/*     */         case '<':
-/* 331 */           break; }  }  throw syntaxError("Bad character in a name");
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public void skipPast(String to) {
-/* 351 */     int offset = 0;
-/* 352 */     int length = to.length();
-/* 353 */     char[] circle = new char[length];
-/*     */ 
-/*     */ 
-/*     */     
-/*     */     int i;
-/*     */ 
-/*     */     
-/* 360 */     for (i = 0; i < length; i++) {
-/* 361 */       char c = next();
-/* 362 */       if (c == '\000') {
-/*     */         return;
-/*     */       }
-/* 365 */       circle[i] = c;
-/*     */     } 
-/*     */ 
-/*     */ 
-/*     */     
-/*     */     while (true) {
-/* 371 */       int j = offset;
-/* 372 */       boolean b = true;
-/*     */ 
-/*     */ 
-/*     */       
-/* 376 */       for (i = 0; i < length; i++) {
-/* 377 */         if (circle[j] != to.charAt(i)) {
-/* 378 */           b = false;
-/*     */           break;
-/*     */         } 
-/* 381 */         j++;
-/* 382 */         if (j >= length) {
-/* 383 */           j -= length;
-/*     */         }
-/*     */       } 
-/*     */ 
-/*     */ 
-/*     */       
-/* 389 */       if (b) {
-/*     */         return;
-/*     */       }
-/*     */ 
-/*     */ 
-/*     */       
-/* 395 */       char c = next();
-/* 396 */       if (c == '\000') {
-/*     */         return;
-/*     */       }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */       
-/* 403 */       circle[offset] = c;
-/* 404 */       offset++;
-/* 405 */       if (offset >= length)
-/* 406 */         offset -= length; 
-/*     */     } 
-/*     */   }
-/*     */ }
+package org.json;
 
+/*
+Public Domain.
+*/
 
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/org/json/XMLTokener.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       1.1.3
+import java.io.Reader;
+
+/**
+ * The XMLTokener extends the JSONTokener to provide additional methods
+ * for the parsing of XML texts.
+ * @author JSON.org
+ * @version 2015-12-09
  */
+public class XMLTokener extends JSONTokener {
+
+
+   /** The table of entity values. It initially contains Character values for
+    * amp, apos, gt, lt, quot.
+    */
+   public static final java.util.HashMap<String, Character> entity;
+
+   private XMLParserConfiguration configuration = XMLParserConfiguration.ORIGINAL;
+
+   static {
+       entity = new java.util.HashMap<String, Character>(8);
+       entity.put("amp",  XML.AMP);
+       entity.put("apos", XML.APOS);
+       entity.put("gt",   XML.GT);
+       entity.put("lt",   XML.LT);
+       entity.put("quot", XML.QUOT);
+   }
+
+    /**
+     * Construct an XMLTokener from a Reader.
+     * @param r A source reader.
+     */
+    public XMLTokener(Reader r) {
+        super(r);
+    }
+
+    /**
+     * Construct an XMLTokener from a string.
+     * @param s A source string.
+     */
+    public XMLTokener(String s) {
+        super(s);
+    }
+
+    /**
+     * Construct an XMLTokener from a Reader and an XMLParserConfiguration.
+     * @param r A source reader.
+     * @param configuration the configuration that can be used to set certain flags
+     */
+    public XMLTokener(Reader r, XMLParserConfiguration configuration) {
+        super(r);
+        this.configuration = configuration;
+    }
+
+    /**
+     * Get the text in the CDATA block.
+     * @return The string up to the <code>]]&gt;</code>.
+     * @throws JSONException If the <code>]]&gt;</code> is not found.
+     */
+    public String nextCDATA() throws JSONException {
+        char         c;
+        int          i;
+        StringBuilder sb = new StringBuilder();
+        while (more()) {
+            c = next();
+            sb.append(c);
+            i = sb.length() - 3;
+            if (i >= 0 && sb.charAt(i) == ']' &&
+                          sb.charAt(i + 1) == ']' && sb.charAt(i + 2) == '>') {
+                sb.setLength(i);
+                return sb.toString();
+            }
+        }
+        throw syntaxError("Unclosed CDATA");
+    }
+
+
+    /**
+     * Get the next XML outer token, trimming whitespace. There are two kinds
+     * of tokens: the <pre>{@code '<' }</pre> character which begins a markup
+     * tag, and the content
+     * text between markup tags.
+     *
+     * @return  A string, or a <pre>{@code '<' }</pre> Character, or null if
+     * there is no more source text.
+     * @throws JSONException if a called function has an error
+     */
+    public Object nextContent() throws JSONException {
+        char         c;
+        StringBuilder sb;
+        do {
+            c = next();
+        } while (Character.isWhitespace(c) && configuration.shouldTrimWhiteSpace());
+        if (c == 0) {
+            return null;
+        }
+        if (c == '<') {
+            return XML.LT;
+        }
+        sb = new StringBuilder();
+        for (;;) {
+            if (c == 0) {
+                return sb.toString().trim();
+            }
+            if (c == '<') {
+                back();
+                if (configuration.shouldTrimWhiteSpace()) {
+                    return sb.toString().trim();
+                } else return sb.toString();
+            }
+            if (c == '&') {
+                sb.append(nextEntity(c));
+            } else {
+                sb.append(c);
+            }
+            c = next();
+        }
+    }
+
+
+    /**
+     * <pre>{@code
+     * Return the next entity. These entities are translated to Characters:
+     *     &amp;  &apos;  &gt;  &lt;  &quot;.
+     * }</pre>
+     * @param ampersand An ampersand character.
+     * @return  A Character or an entity String if the entity is not recognized.
+     * @throws JSONException If missing ';' in XML entity.
+     */
+    public Object nextEntity(@SuppressWarnings("unused") char ampersand) throws JSONException {
+        StringBuilder sb = new StringBuilder();
+        for (;;) {
+            char c = next();
+            if (Character.isLetterOrDigit(c) || c == '#') {
+                sb.append(Character.toLowerCase(c));
+            } else if (c == ';') {
+                break;
+            } else {
+                throw syntaxError("Missing ';' in XML entity: &" + sb);
+            }
+        }
+        String string = sb.toString();
+        return unescapeEntity(string);
+    }
+    
+    /**
+     * Unescape an XML entity encoding;
+     * @param e entity (only the actual entity value, not the preceding & or ending ;
+     * @return
+     */
+    static String unescapeEntity(String e) {
+        // validate
+        if (e == null || e.isEmpty()) {
+            return "";
+        }
+        // if our entity is an encoded unicode point, parse it.
+        if (e.charAt(0) == '#') {
+            int cp;
+            if (e.charAt(1) == 'x' || e.charAt(1) == 'X') {
+                // hex encoded unicode
+                cp = Integer.parseInt(e.substring(2), 16);
+            } else {
+                // decimal encoded unicode
+                cp = Integer.parseInt(e.substring(1));
+            }
+            return new String(new int[] {cp},0,1);
+        } 
+        Character knownEntity = entity.get(e);
+        if(knownEntity==null) {
+            // we don't know the entity so keep it encoded
+            return '&' + e + ';';
+        }
+        return knownEntity.toString();
+    }
+
+
+    /**
+     * <pre>{@code 
+     * Returns the next XML meta token. This is used for skipping over <!...>
+     * and <?...?> structures.
+     *  }</pre>
+     * @return <pre>{@code Syntax characters (< > / = ! ?) are returned as
+     *  Character, and strings and names are returned as Boolean. We don't care
+     *  what the values actually are.
+     *  }</pre>
+     * @throws JSONException If a string is not properly closed or if the XML
+     *  is badly structured.
+     */
+    public Object nextMeta() throws JSONException {
+        char c;
+        char q;
+        do {
+            c = next();
+        } while (Character.isWhitespace(c));
+        switch (c) {
+        case 0:
+            throw syntaxError("Misshaped meta tag");
+        case '<':
+            return XML.LT;
+        case '>':
+            return XML.GT;
+        case '/':
+            return XML.SLASH;
+        case '=':
+            return XML.EQ;
+        case '!':
+            return XML.BANG;
+        case '?':
+            return XML.QUEST;
+        case '"':
+        case '\'':
+            q = c;
+            for (;;) {
+                c = next();
+                if (c == 0) {
+                    throw syntaxError("Unterminated string");
+                }
+                if (c == q) {
+                    return Boolean.TRUE;
+                }
+            }
+        default:
+            for (;;) {
+                c = next();
+                if (Character.isWhitespace(c)) {
+                    return Boolean.TRUE;
+                }
+                switch (c) {
+                case 0:
+                    throw syntaxError("Unterminated string");
+                case '<':
+                case '>':
+                case '/':
+                case '=':
+                case '!':
+                case '?':
+                case '"':
+                case '\'':
+                    back();
+                    return Boolean.TRUE;
+                }
+            }
+        }
+    }
+
+
+    /**
+     * <pre>{@code
+     * Get the next XML Token. These tokens are found inside of angle
+     * brackets. It may be one of these characters: / > = ! ? or it
+     * may be a string wrapped in single quotes or double quotes, or it may be a
+     * name.
+     * }</pre>
+     * @return a String or a Character.
+     * @throws JSONException If the XML is not well formed.
+     */
+    public Object nextToken() throws JSONException {
+        char c;
+        char q;
+        StringBuilder sb;
+        do {
+            c = next();
+        } while (Character.isWhitespace(c));
+        switch (c) {
+        case 0:
+            throw syntaxError("Misshaped element");
+        case '<':
+            throw syntaxError("Misplaced '<'");
+        case '>':
+            return XML.GT;
+        case '/':
+            return XML.SLASH;
+        case '=':
+            return XML.EQ;
+        case '!':
+            return XML.BANG;
+        case '?':
+            return XML.QUEST;
+
+// Quoted string
+
+        case '"':
+        case '\'':
+            q = c;
+            sb = new StringBuilder();
+            for (;;) {
+                c = next();
+                if (c == 0) {
+                    throw syntaxError("Unterminated string");
+                }
+                if (c == q) {
+                    return sb.toString();
+                }
+                if (c == '&') {
+                    sb.append(nextEntity(c));
+                } else {
+                    sb.append(c);
+                }
+            }
+        default:
+
+// Name
+
+            sb = new StringBuilder();
+            for (;;) {
+                sb.append(c);
+                c = next();
+                if (Character.isWhitespace(c)) {
+                    return sb.toString();
+                }
+                switch (c) {
+                case 0:
+                    return sb.toString();
+                case '>':
+                case '/':
+                case '=':
+                case '!':
+                case '?':
+                case '[':
+                case ']':
+                    back();
+                    return sb.toString();
+                case '<':
+                case '"':
+                case '\'':
+                    throw syntaxError("Bad character in a name");
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Skip characters until past the requested string.
+     * If it is not found, we are left at the end of the source with a result of false.
+     * @param to A string to skip past.
+     */
+    // The Android implementation of JSONTokener has a public method of public void skipPast(String to)
+    // even though ours does not have that method, to have API compatibility, our method in the subclass
+    // should match.
+    public void skipPast(String to) {
+        boolean b;
+        char c;
+        int i;
+        int j;
+        int offset = 0;
+        int length = to.length();
+        char[] circle = new char[length];
+
+        /*
+         * First fill the circle buffer with as many characters as are in the
+         * to string. If we reach an early end, bail.
+         */
+
+        for (i = 0; i < length; i += 1) {
+            c = next();
+            if (c == 0) {
+                return;
+            }
+            circle[i] = c;
+        }
+
+        /* We will loop, possibly for all of the remaining characters. */
+
+        for (;;) {
+            j = offset;
+            b = true;
+
+            /* Compare the circle buffer with the to string. */
+
+            for (i = 0; i < length; i += 1) {
+                if (circle[j] != to.charAt(i)) {
+                    b = false;
+                    break;
+                }
+                j += 1;
+                if (j >= length) {
+                    j -= length;
+                }
+            }
+
+            /* If we exit the loop with b intact, then victory is ours. */
+
+            if (b) {
+                return;
+            }
+
+            /* Get the next character. If there isn't one, then defeat is ours. */
+
+            c = next();
+            if (c == 0) {
+                return;
+            }
+            /*
+             * Shove the character in the circle buffer and advance the
+             * circle offset. The offset is mod n.
+             */
+            circle[offset] = c;
+            offset += 1;
+            if (offset >= length) {
+                offset -= length;
+            }
+        }
+    }
+}

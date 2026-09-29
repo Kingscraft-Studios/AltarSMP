@@ -1,5 +1,5 @@
 name: AltarSMP
-version: 3.3 #pom.xml
+version: 3.3
 main: pl.Main
 api-version: '1.21'
 authors: [Doomwen, Solstate]

@@ -1,378 +1,372 @@
-/*     */ package org.json;
-/*     */ 
-/*     */ import java.util.Collections;
-/*     */ import java.util.HashMap;
-/*     */ import java.util.HashSet;
-/*     */ import java.util.Map;
-/*     */ import java.util.Set;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ public class XMLParserConfiguration
-/*     */   extends ParserConfiguration
-/*     */ {
-/*  26 */   public static final XMLParserConfiguration ORIGINAL = new XMLParserConfiguration();
-/*     */ 
-/*     */   
-/*  29 */   public static final XMLParserConfiguration KEEP_STRINGS = (new XMLParserConfiguration())
-/*  30 */     .withKeepStrings(true);
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   private String cDataTagName;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   private boolean convertNilAttributeToNull;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   private boolean closeEmptyTag;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   private Map<String, XMLXsiTypeConverter<?>> xsiTypeMap;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   private Set<String> forceList;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   private boolean shouldTrimWhiteSpace;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public XMLParserConfiguration() {
-/*  79 */     this.cDataTagName = "content";
-/*  80 */     this.convertNilAttributeToNull = false;
-/*  81 */     this.xsiTypeMap = Collections.emptyMap();
-/*  82 */     this.forceList = Collections.emptySet();
-/*  83 */     this.shouldTrimWhiteSpace = true;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   @Deprecated
-/*     */   public XMLParserConfiguration(boolean keepStrings) {
-/*  96 */     this(keepStrings, "content", false);
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   @Deprecated
-/*     */   public XMLParserConfiguration(String cDataTagName) {
-/* 111 */     this(false, cDataTagName, false);
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   @Deprecated
-/*     */   public XMLParserConfiguration(boolean keepStrings, String cDataTagName) {
-/* 126 */     super(keepStrings, 512);
-/* 127 */     this.cDataTagName = cDataTagName;
-/* 128 */     this.convertNilAttributeToNull = false;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   @Deprecated
-/*     */   public XMLParserConfiguration(boolean keepStrings, String cDataTagName, boolean convertNilAttributeToNull) {
-/* 145 */     super(keepStrings, 512);
-/* 146 */     this.cDataTagName = cDataTagName;
-/* 147 */     this.convertNilAttributeToNull = convertNilAttributeToNull;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   private XMLParserConfiguration(boolean keepStrings, String cDataTagName, boolean convertNilAttributeToNull, Map<String, XMLXsiTypeConverter<?>> xsiTypeMap, Set<String> forceList, int maxNestingDepth, boolean closeEmptyTag) {
-/* 167 */     super(keepStrings, maxNestingDepth);
-/* 168 */     this.cDataTagName = cDataTagName;
-/* 169 */     this.convertNilAttributeToNull = convertNilAttributeToNull;
-/* 170 */     this.xsiTypeMap = Collections.unmodifiableMap(xsiTypeMap);
-/* 171 */     this.forceList = Collections.unmodifiableSet(forceList);
-/* 172 */     this.closeEmptyTag = closeEmptyTag;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   protected XMLParserConfiguration clone() {
-/* 185 */     XMLParserConfiguration config = new XMLParserConfiguration(this.keepStrings, this.cDataTagName, this.convertNilAttributeToNull, this.xsiTypeMap, this.forceList, this.maxNestingDepth, this.closeEmptyTag);
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */     
-/* 194 */     config.shouldTrimWhiteSpace = this.shouldTrimWhiteSpace;
-/* 195 */     return config;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public XMLParserConfiguration withKeepStrings(boolean newVal) {
-/* 210 */     return super.<XMLParserConfiguration>withKeepStrings(newVal);
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public String getcDataTagName() {
-/* 221 */     return this.cDataTagName;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public XMLParserConfiguration withcDataTagName(String newVal) {
-/* 235 */     XMLParserConfiguration newConfig = clone();
-/* 236 */     newConfig.cDataTagName = newVal;
-/* 237 */     return newConfig;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public boolean isConvertNilAttributeToNull() {
-/* 248 */     return this.convertNilAttributeToNull;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public XMLParserConfiguration withConvertNilAttributeToNull(boolean newVal) {
-/* 262 */     XMLParserConfiguration newConfig = clone();
-/* 263 */     newConfig.convertNilAttributeToNull = newVal;
-/* 264 */     return newConfig;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public Map<String, XMLXsiTypeConverter<?>> getXsiTypeMap() {
-/* 275 */     return this.xsiTypeMap;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public XMLParserConfiguration withXsiTypeMap(Map<String, XMLXsiTypeConverter<?>> xsiTypeMap) {
-/* 288 */     XMLParserConfiguration newConfig = clone();
-/* 289 */     Map<String, XMLXsiTypeConverter<?>> cloneXsiTypeMap = new HashMap<>(xsiTypeMap);
-/* 290 */     newConfig.xsiTypeMap = Collections.unmodifiableMap(cloneXsiTypeMap);
-/* 291 */     return newConfig;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public Set<String> getForceList() {
-/* 300 */     return this.forceList;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public XMLParserConfiguration withForceList(Set<String> forceList) {
-/* 310 */     XMLParserConfiguration newConfig = clone();
-/* 311 */     Set<String> cloneForceList = new HashSet<>(forceList);
-/* 312 */     newConfig.forceList = Collections.unmodifiableSet(cloneForceList);
-/* 313 */     return newConfig;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public XMLParserConfiguration withMaxNestingDepth(int maxNestingDepth) {
-/* 328 */     return super.<XMLParserConfiguration>withMaxNestingDepth(maxNestingDepth);
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public XMLParserConfiguration withCloseEmptyTag(boolean closeEmptyTag) {
-/* 337 */     XMLParserConfiguration clonedConfiguration = clone();
-/* 338 */     clonedConfiguration.closeEmptyTag = closeEmptyTag;
-/* 339 */     return clonedConfiguration;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public XMLParserConfiguration withShouldTrimWhitespace(boolean shouldTrimWhiteSpace) {
-/* 350 */     XMLParserConfiguration clonedConfiguration = clone();
-/* 351 */     clonedConfiguration.shouldTrimWhiteSpace = shouldTrimWhiteSpace;
-/* 352 */     return clonedConfiguration;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public boolean isCloseEmptyTag() {
-/* 361 */     return this.closeEmptyTag;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public boolean shouldTrimWhiteSpace() {
-/* 370 */     return this.shouldTrimWhiteSpace;
-/*     */   }
-/*     */ }
+package org.json;
+/*
+Public Domain.
+*/
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/org/json/XMLParserConfiguration.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       1.1.3
+/**
+ * Configuration object for the XML parser. The configuration is immutable.
+ * @author AylwardJ
  */
+@SuppressWarnings({""})
+public class XMLParserConfiguration extends ParserConfiguration {
+
+    /**
+     * The default maximum nesting depth when parsing a XML document to JSON.
+     */
+//    public static final int DEFAULT_MAXIMUM_NESTING_DEPTH = 512; // We could override
+
+    /** Original Configuration of the XML Parser. */
+    public static final XMLParserConfiguration ORIGINAL
+        = new XMLParserConfiguration();
+    /** Original configuration of the XML Parser except that values are kept as strings. */
+    public static final XMLParserConfiguration KEEP_STRINGS
+        = new XMLParserConfiguration().withKeepStrings(true);
+
+    /**
+     * The name of the key in a JSON Object that indicates a CDATA section. Historically this has
+     * been the value "content" but can be changed. Use <code>null</code> to indicate no CDATA
+     * processing.
+     */
+    private String cDataTagName;
+
+    /**
+     * When parsing the XML into JSON, specifies if values with attribute xsi:nil="true"
+     * should be kept as attribute(<code>false</code>), or they should be converted to
+     * <code>null</code>(<code>true</code>)
+     */
+    private boolean convertNilAttributeToNull;
+
+    /**
+     * When creating an XML from JSON Object, an empty tag by default will self-close.
+     * If it has to be closed explicitly, with empty content between start and end tag,
+     * this flag is to be turned on.
+     */
+    private boolean closeEmptyTag;
+
+    /**
+     * This will allow type conversion for values in XML if xsi:type attribute is defined
+     */
+    private Map<String, XMLXsiTypeConverter<?>> xsiTypeMap;
+
+    /**
+     * When parsing the XML into JSON, specifies the tags whose values should be converted
+     * to arrays
+     */
+    private Set<String> forceList;
+
+
+    /**
+     * Flag to indicate whether white space should be trimmed when parsing XML.
+     * The default behaviour is to trim white space. When this is set to false, inputting XML
+     * with tags that are the same as the value of cDataTagName is unsupported. It is recommended to set cDataTagName
+     * to a distinct value in this case.
+     */
+    private boolean shouldTrimWhiteSpace;
+
+    /**
+     * Default parser configuration. Does not keep strings (tries to implicitly convert
+     * values), and the CDATA Tag Name is "content". Trims whitespace.
+     */
+    public XMLParserConfiguration () {
+        super();
+        this.cDataTagName = "content";
+        this.convertNilAttributeToNull = false;
+        this.xsiTypeMap = Collections.emptyMap();
+        this.forceList = Collections.emptySet();
+        this.shouldTrimWhiteSpace = true;
+    }
+
+    /**
+     * Configure the parser string processing and use the default CDATA Tag Name as "content".
+     * @param keepStrings <code>true</code> to parse all values as string.
+     *      <code>false</code> to try and convert XML string values into a JSON value.
+     * @deprecated This constructor has been deprecated in favor of using the new builder
+     *      pattern for the configuration.
+     *      This constructor may be removed in a future release.
+     */
+    @Deprecated
+    public XMLParserConfiguration (final boolean keepStrings) {
+        this(keepStrings, "content", false);
+    }
+
+    /**
+     * Configure the parser string processing to try and convert XML values to JSON values and
+     * use the passed CDATA Tag Name the processing value. Pass <code>null</code> to
+     * disable CDATA processing
+     * @param cDataTagName <code>null</code> to disable CDATA processing. Any other value
+     *      to use that value as the JSONObject key name to process as CDATA.
+     * @deprecated This constructor has been deprecated in favor of using the new builder
+     *      pattern for the configuration.
+     *      This constructor may be removed in a future release.
+     */
+    @Deprecated
+    public XMLParserConfiguration (final String cDataTagName) {
+        this(false, cDataTagName, false);
+    }
+
+    /**
+     * Configure the parser to use custom settings.
+     * @param keepStrings <code>true</code> to parse all values as string.
+     *      <code>false</code> to try and convert XML string values into a JSON value.
+     * @param cDataTagName <code>null</code> to disable CDATA processing. Any other value
+     *      to use that value as the JSONObject key name to process as CDATA.
+     * @deprecated This constructor has been deprecated in favor of using the new builder
+     *      pattern for the configuration.
+     *      This constructor may be removed in a future release.
+     */
+    @Deprecated
+    public XMLParserConfiguration (final boolean keepStrings, final String cDataTagName) {
+        super(keepStrings, DEFAULT_MAXIMUM_NESTING_DEPTH);
+        this.cDataTagName = cDataTagName;
+        this.convertNilAttributeToNull = false;
+    }
+
+    /**
+     * Configure the parser to use custom settings.
+     * @param keepStrings <code>true</code> to parse all values as string.
+     *      <code>false</code> to try and convert XML string values into a JSON value.
+     * @param cDataTagName <code>null</code> to disable CDATA processing. Any other value
+     *      to use that value as the JSONObject key name to process as CDATA.
+     * @param convertNilAttributeToNull <code>true</code> to parse values with attribute xsi:nil="true" as null.
+     *                                  <code>false</code> to parse values with attribute xsi:nil="true" as {"xsi:nil":true}.
+     * @deprecated This constructor has been deprecated in favor of using the new builder
+     *      pattern for the configuration.
+     *      This constructor may be removed or marked private in a future release.
+     */
+    @Deprecated
+    public XMLParserConfiguration (final boolean keepStrings, final String cDataTagName, final boolean convertNilAttributeToNull) {
+        super(keepStrings, DEFAULT_MAXIMUM_NESTING_DEPTH);
+        this.cDataTagName = cDataTagName;
+        this.convertNilAttributeToNull = convertNilAttributeToNull;
+    }
+
+    /**
+     * Configure the parser to use custom settings.
+     * @param keepStrings <code>true</code> to parse all values as string.
+     *      <code>false</code> to try and convert XML string values into a JSON value.
+     * @param cDataTagName <code>null</code> to disable CDATA processing. Any other value
+     *      to use that value as the JSONObject key name to process as CDATA.
+     * @param convertNilAttributeToNull <code>true</code> to parse values with attribute xsi:nil="true" as null.
+     *                                  <code>false</code> to parse values with attribute xsi:nil="true" as {"xsi:nil":true}.
+     * @param xsiTypeMap  <code>new HashMap<String, XMLXsiTypeConverter<?>>()</code> to parse values with attribute
+     *                   xsi:type="integer" as integer,  xsi:type="string" as string
+     * @param forceList  <code>new HashSet<String>()</code> to parse the provided tags' values as arrays
+     * @param maxNestingDepth <code>int</code> to limit the nesting depth
+     * @param closeEmptyTag <code>boolean</code> to turn on explicit end tag for tag with empty value
+     */
+    private XMLParserConfiguration (final boolean keepStrings, final String cDataTagName,
+            final boolean convertNilAttributeToNull, final Map<String, XMLXsiTypeConverter<?>> xsiTypeMap, final Set<String> forceList,
+            final int maxNestingDepth, final boolean closeEmptyTag) {
+        super(keepStrings, maxNestingDepth);
+        this.cDataTagName = cDataTagName;
+        this.convertNilAttributeToNull = convertNilAttributeToNull;
+        this.xsiTypeMap = Collections.unmodifiableMap(xsiTypeMap);
+        this.forceList = Collections.unmodifiableSet(forceList);
+        this.closeEmptyTag = closeEmptyTag;
+    }
+
+    /**
+     * Provides a new instance of the same configuration.
+     */
+    @Override
+    protected XMLParserConfiguration clone() {
+        // future modifications to this method should always ensure a "deep"
+        // clone in the case of collections. i.e. if a Map is added as a configuration
+        // item, a new map instance should be created and if possible each value in the
+        // map should be cloned as well. If the values of the map are known to also
+        // be immutable, then a shallow clone of the map is acceptable.
+        final XMLParserConfiguration config = new XMLParserConfiguration(
+                this.keepStrings,
+                this.cDataTagName,
+                this.convertNilAttributeToNull,
+                this.xsiTypeMap,
+                this.forceList,
+                this.maxNestingDepth,
+                this.closeEmptyTag
+        );
+        config.shouldTrimWhiteSpace = this.shouldTrimWhiteSpace;
+        return config;
+    }
+
+    /**
+     * When parsing the XML into JSON, specifies if values should be kept as strings (<code>true</code>), or if
+     * they should try to be guessed into JSON values (numeric, boolean, string)
+     *
+     * @param newVal
+     *      new value to use for the <code>keepStrings</code> configuration option.
+     *
+     * @return The existing configuration will not be modified. A new configuration is returned.
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public XMLParserConfiguration withKeepStrings(final boolean newVal) {
+        return super.withKeepStrings(newVal);
+    }
+
+    /**
+     * The name of the key in a JSON Object that indicates a CDATA section. Historically this has
+     * been the value "content" but can be changed. Use <code>null</code> to indicate no CDATA
+     * processing.
+     *
+     * @return The <code>cDataTagName</code> configuration value.
+     */
+    public String getcDataTagName() {
+        return this.cDataTagName;
+    }
+
+    /**
+     * The name of the key in a JSON Object that indicates a CDATA section. Historically this has
+     * been the value "content" but can be changed. Use <code>null</code> to indicate no CDATA
+     * processing.
+     *
+     * @param newVal
+     *      new value to use for the <code>cDataTagName</code> configuration option.
+     *
+     * @return The existing configuration will not be modified. A new configuration is returned.
+     */
+    public XMLParserConfiguration withcDataTagName(final String newVal) {
+        XMLParserConfiguration newConfig = this.clone();
+        newConfig.cDataTagName = newVal;
+        return newConfig;
+    }
+
+    /**
+     * When parsing the XML into JSON, specifies if values with attribute xsi:nil="true"
+     * should be kept as attribute(<code>false</code>), or they should be converted to
+     * <code>null</code>(<code>true</code>)
+     *
+     * @return The <code>convertNilAttributeToNull</code> configuration value.
+     */
+    public boolean isConvertNilAttributeToNull() {
+        return this.convertNilAttributeToNull;
+    }
+
+    /**
+     * When parsing the XML into JSON, specifies if values with attribute xsi:nil="true"
+     * should be kept as attribute(<code>false</code>), or they should be converted to
+     * <code>null</code>(<code>true</code>)
+     *
+     * @param newVal
+     *      new value to use for the <code>convertNilAttributeToNull</code> configuration option.
+     *
+     * @return The existing configuration will not be modified. A new configuration is returned.
+     */
+    public XMLParserConfiguration withConvertNilAttributeToNull(final boolean newVal) {
+        XMLParserConfiguration newConfig = this.clone();
+        newConfig.convertNilAttributeToNull = newVal;
+        return newConfig;
+    }
+
+    /**
+     * When parsing the XML into JSON, specifies that the values with attribute xsi:type
+     * will be converted to target type defined to client in this configuration
+     * {@code Map<String, XMLXsiTypeConverter<?>>} to parse values with attribute
+     * xsi:type="integer" as integer,  xsi:type="string" as string
+     * @return <code>xsiTypeMap</code> unmodifiable configuration map.
+     */
+    public Map<String, XMLXsiTypeConverter<?>> getXsiTypeMap() {
+        return this.xsiTypeMap;
+    }
+
+    /**
+     * When parsing the XML into JSON, specifies that the values with attribute xsi:type
+     * will be converted to target type defined to client in this configuration
+     * {@code Map<String, XMLXsiTypeConverter<?>>} to parse values with attribute
+     * xsi:type="integer" as integer,  xsi:type="string" as string
+     * @param xsiTypeMap  {@code new HashMap<String, XMLXsiTypeConverter<?>>()} to parse values with attribute
+     *                   xsi:type="integer" as integer,  xsi:type="string" as string
+     * @return The existing configuration will not be modified. A new configuration is returned.
+     */
+    public XMLParserConfiguration withXsiTypeMap(final Map<String, XMLXsiTypeConverter<?>> xsiTypeMap) {
+        XMLParserConfiguration newConfig = this.clone();
+        Map<String, XMLXsiTypeConverter<?>> cloneXsiTypeMap = new HashMap<String, XMLXsiTypeConverter<?>>(xsiTypeMap);
+        newConfig.xsiTypeMap = Collections.unmodifiableMap(cloneXsiTypeMap);
+        return newConfig;
+    }
+
+    /**
+     * When parsing the XML into JSON, specifies that tags that will be converted to arrays
+     * in this configuration {@code Set<String>} to parse the provided tags' values as arrays
+     * @return <code>forceList</code> unmodifiable configuration set.
+     */
+    public Set<String> getForceList() {
+        return this.forceList;
+    }
+
+    /**
+     * When parsing the XML into JSON, specifies that tags that will be converted to arrays
+     * in this configuration {@code Set<String>} to parse the provided tags' values as arrays
+     * @param forceList  {@code new HashSet<String>()} to parse the provided tags' values as arrays
+     * @return The existing configuration will not be modified. A new configuration is returned.
+     */
+    public XMLParserConfiguration withForceList(final Set<String> forceList) {
+        XMLParserConfiguration newConfig = this.clone();
+        Set<String> cloneForceList = new HashSet<String>(forceList);
+        newConfig.forceList = Collections.unmodifiableSet(cloneForceList);
+        return newConfig;
+    }
+
+    /**
+     * Defines the maximum nesting depth that the parser will descend before throwing an exception
+     * when parsing the XML into JSON. The default max nesting depth is 512, which means the parser
+     * will throw a JsonException if the maximum depth is reached.
+     * Using any negative value as a parameter is equivalent to setting no limit to the nesting depth,
+     * which means the parses will go as deep as the maximum call stack size allows.
+     * @param maxNestingDepth the maximum nesting depth allowed to the XML parser
+     * @return The existing configuration will not be modified. A new configuration is returned.
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public XMLParserConfiguration withMaxNestingDepth(int maxNestingDepth) {
+        return super.withMaxNestingDepth(maxNestingDepth);
+    }
+
+    /**
+     * To enable explicit end tag with empty value.
+     * @param closeEmptyTag new value for the closeEmptyTag property
+     * @return same instance of configuration with empty tag config updated
+     */
+    public XMLParserConfiguration withCloseEmptyTag(boolean closeEmptyTag){
+        XMLParserConfiguration clonedConfiguration = this.clone();
+        clonedConfiguration.closeEmptyTag = closeEmptyTag;
+        return clonedConfiguration;
+    }
+
+    /**
+     * Sets whether whitespace should be trimmed inside of tags. *NOTE* Do not use this if
+     * you expect your XML tags to have names that are the same as cDataTagName as this is unsupported.
+     * cDataTagName should be set to a distinct value in these cases.
+     * @param shouldTrimWhiteSpace boolean to set trimming on or off. Off is default.
+     * @return same instance of configuration with empty tag config updated
+     */
+    public XMLParserConfiguration withShouldTrimWhitespace(boolean shouldTrimWhiteSpace){
+        XMLParserConfiguration clonedConfiguration = this.clone();
+        clonedConfiguration.shouldTrimWhiteSpace = shouldTrimWhiteSpace;
+        return clonedConfiguration;
+    }
+
+    /**
+     * Checks if the parser should automatically close empty XML tags.
+     *
+     * @return {@code true} if empty XML tags should be automatically closed, {@code false} otherwise.
+     */
+    public boolean isCloseEmptyTag() {
+        return this.closeEmptyTag;
+    }
+
+    /**
+     * Checks if the parser should trim white spaces from XML content.
+     *
+     * @return {@code true} if white spaces should be trimmed, {@code false} otherwise.
+     */
+    public boolean shouldTrimWhiteSpace() {
+        return this.shouldTrimWhiteSpace;
+    }
+}

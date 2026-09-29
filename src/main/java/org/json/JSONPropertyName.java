@@ -1,20 +1,28 @@
 package org.json;
 
+/*
+Public Domain.
+*/
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
-public @interface JSONPropertyName {
-  String value();
-}
-
-
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/org/json/JSONPropertyName.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       1.1.3
+/**
+ * Use this annotation on a getter method to override the Bean name
+ * parser for Bean -&gt; JSONObject mapping. A value set to empty string <code>""</code>
+ * will have the Bean parser fall back to the default field name processing.
  */
+@Documented
+@Retention(RUNTIME)
+@Target({METHOD})
+public @interface JSONPropertyName {
+    /**
+     * The value of the JSON property.
+     * @return The name of the property as to be used in the JSON Object.
+     */
+    String value();
+}

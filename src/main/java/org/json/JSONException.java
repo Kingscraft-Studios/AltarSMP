@@ -1,54 +1,49 @@
-/*    */ package org.json;
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ public class JSONException
-/*    */   extends RuntimeException
-/*    */ {
-/*    */   private static final long serialVersionUID = 0L;
-/*    */   
-/*    */   public JSONException(String message) {
-/* 24 */     super(message);
-/*    */   }
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */   
-/*    */   public JSONException(String message, Throwable cause) {
-/* 36 */     super(message, cause);
-/*    */   }
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */   
-/*    */   public JSONException(Throwable cause) {
-/* 46 */     super(cause.getMessage(), cause);
-/*    */   }
-/*    */ }
+package org.json;
 
-
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/org/json/JSONException.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       1.1.3
+/*
+Public Domain.
  */
+
+/**
+ * The JSONException is thrown by the JSON.org classes when things are amiss.
+ *
+ * @author JSON.org
+ * @version 2015-12-09
+ */
+public class JSONException extends RuntimeException {
+    /** Serialization ID */
+    private static final long serialVersionUID = 0;
+
+    /**
+     * Constructs a JSONException with an explanatory message.
+     *
+     * @param message
+     *            Detail about the reason for the exception.
+     */
+    public JSONException(final String message) {
+        super(message);
+    }
+
+    /**
+     * Constructs a JSONException with an explanatory message and cause.
+     * 
+     * @param message
+     *            Detail about the reason for the exception.
+     * @param cause
+     *            The cause.
+     */
+    public JSONException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     * Constructs a new JSONException with the specified cause.
+     * 
+     * @param cause
+     *            The cause.
+     */
+    public JSONException(final Throwable cause) {
+        super(cause.getMessage(), cause);
+    }
+
+}

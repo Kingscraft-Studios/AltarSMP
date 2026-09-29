@@ -6,12 +6,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a5 {
-  private static final String a;
+  private static final String a = "trueDamage";
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(LivingEntity paramLivingEntity, double paramDouble, Player paramPlayer) {
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramLivingEntity, paramDouble, paramPlayer, false);
   }
-  
+
+  // TODO: FIX
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(LivingEntity paramLivingEntity, double paramDouble, Player paramPlayer, boolean paramBoolean) {
     // Byte code:
     //   0: aload_0

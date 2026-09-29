@@ -1,78 +1,72 @@
-/*    */ package org.json;
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ public class CookieList
-/*    */ {
-/*    */   public static JSONObject toJSONObject(String string) throws JSONException {
-/* 34 */     JSONObject jo = new JSONObject();
-/* 35 */     JSONTokener x = new JSONTokener(string);
-/* 36 */     while (x.more()) {
-/* 37 */       String name = Cookie.unescape(x.nextTo('='));
-/* 38 */       x.next('=');
-/* 39 */       jo.put(name, Cookie.unescape(x.nextTo(';')));
-/* 40 */       x.next();
-/*    */     } 
-/* 42 */     return jo;
-/*    */   }
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */   
-/*    */   public static String toString(JSONObject jo) throws JSONException {
-/* 55 */     boolean isEndOfPair = false;
-/* 56 */     StringBuilder sb = new StringBuilder();
-/*    */     
-/* 58 */     for (String key : jo.keySet()) {
-/* 59 */       Object value = jo.opt(key);
-/* 60 */       if (!JSONObject.NULL.equals(value)) {
-/* 61 */         if (isEndOfPair) {
-/* 62 */           sb.append(';');
-/*    */         }
-/* 64 */         sb.append(Cookie.escape(key));
-/* 65 */         sb.append("=");
-/* 66 */         sb.append(Cookie.escape(value.toString()));
-/* 67 */         isEndOfPair = true;
-/*    */       } 
-/*    */     } 
-/* 70 */     return sb.toString();
-/*    */   }
-/*    */ }
+package org.json;
 
-
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/org/json/CookieList.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       1.1.3
+/*
+Public Domain.
  */
+
+/**
+ * Convert a web browser cookie list string to a JSONObject and back.
+ * @author JSON.org
+ * @version 2015-12-09
+ */
+public class CookieList {
+
+    /**
+     * Constructs a new CookieList object.
+     */
+    public CookieList() {
+    }
+ 
+    /**
+     * Convert a cookie list into a JSONObject. A cookie list is a sequence
+     * of name/value pairs. The names are separated from the values by '='.
+     * The pairs are separated by ';'. The names and the values
+     * will be unescaped, possibly converting '+' and '%' sequences.
+     *
+     * To add a cookie to a cookie list,
+     * cookielistJSONObject.put(cookieJSONObject.getString("name"),
+     *     cookieJSONObject.getString("value"));
+     * @param string  A cookie list string
+     * @return A JSONObject
+     * @throws JSONException if a called function fails
+     */
+    public static JSONObject toJSONObject(String string) throws JSONException {
+        JSONObject jo = new JSONObject();
+        JSONTokener x = new JSONTokener(string);
+        while (x.more()) {
+            String name = Cookie.unescape(x.nextTo('='));
+            x.next('=');
+            jo.put(name, Cookie.unescape(x.nextTo(';')));
+            x.next();
+        }
+        return jo;
+    }
+
+    /**
+     * Convert a JSONObject into a cookie list. A cookie list is a sequence
+     * of name/value pairs. The names are separated from the values by '='.
+     * The pairs are separated by ';'. The characters '%', '+', '=', and ';'
+     * in the names and values are replaced by "%hh".
+     * @param jo A JSONObject
+     * @return A cookie list string
+     * @throws JSONException if a called function fails
+     */
+    public static String toString(JSONObject jo) throws JSONException {
+        boolean             isEndOfPair = false;
+        final StringBuilder sb = new StringBuilder();
+        // Don't use the new entrySet API to maintain Android support
+        for (final String key : jo.keySet()) {
+            final Object value = jo.opt(key);
+            if (!JSONObject.NULL.equals(value)) {
+                if (isEndOfPair) {
+                    sb.append(';');
+                }
+                sb.append(Cookie.escape(key));
+                sb.append("=");
+                sb.append(Cookie.escape(value.toString()));
+                isEndOfPair = true;
+            }
+        }
+        return sb.toString();
+    }
+}
