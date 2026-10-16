@@ -247,7 +247,7 @@ public class XML {
     private static boolean parse(XMLTokener x, JSONObject context, String name, XMLParserConfiguration config, int currentNestingDepth)
             throws JSONException {
         char c;
-        int i;
+        int i = 0;
         JSONObject jsonObject = null;
         String string;
         String tagName;

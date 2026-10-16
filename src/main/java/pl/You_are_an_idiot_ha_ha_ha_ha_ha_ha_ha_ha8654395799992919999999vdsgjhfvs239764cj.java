@@ -1,6 +1,0 @@
-package pl;
-
-import net.kyori.adventure.text.Component;
-
-record You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cj(Component label, String key) implements You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764w {
-}

@@ -37,8 +37,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player);
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player.getLocation());
     Main.getInstance().getConfig().set("lightningFine", Boolean.valueOf(false));
-    player.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN));
-    player.sendMessage(String.valueOf(ChatColor.GOLD) + String.valueOf(ChatColor.GOLD));
+    player.sendMessage(String.valueOf(ChatColor.GREEN) + "You have started the Copper Chestplate event");
+    player.sendMessage(String.valueOf(ChatColor.GOLD) + "Use /altar spawn copperchestplate to spawn the altar for copper chestplate");
     return false;
   }
   
@@ -49,12 +49,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   private void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Player paramPlayer) {
     Location location = paramPlayer.getEyeLocation();
-    int i = location.getBlockZ();
-    int j = location.getBlockY();
-    int k = location.getBlockX();
-    String str1 = ChatColor.of("#B06736").toString();
-    String str2 = String.valueOf(ChatColor.of("#B06736"));
-    Bukkit.broadcastMessage("A " + "A " + str2 + "§lChestplate Shard §rhas spawned!\\nLocation: " + str1 + "§lX: " + k + " §lY: " + j + " §lZ: ");
+    Bukkit.broadcastMessage("A " + String.valueOf(ChatColor.of("#B06736")) + "§lChestplate Shard §rhas spawned!\\nLocation: " + ChatColor.of("#B06736").toString() + "§lX: " + location.getBlockX() + " §lY: " + location.getBlockY() + " §lZ: " + location.getBlockZ());
     location.setYaw(0.0F);
     location.setPitch(0.0F);
     location.getWorld().spawn(location.clone().add(0.0D, 2.0D, 0.0D), ItemDisplay.class, You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bg::lambda$spawnCore$0);
@@ -82,8 +77,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     {
       if (paramPlayerInteractAtEntityEvent.getRightClicked().getPersistentDataContainer().get(this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a, PersistentDataType.STRING) != "chest")
         return; 
-    }paramPlayerInteractAtEntityEvent.getPlayer().getInventory().addItem(new ItemStack[] { You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764x.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764A() });
-    Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")) + "§lALERT! §r" + paramPlayerInteractAtEntityEvent.getPlayer().getName());
+    }paramPlayerInteractAtEntityEvent.getPlayer().getInventory().addItem(new ItemStack[] { CustomItemRegistry.getChestplateShard() });
+    Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + paramPlayerInteractAtEntityEvent.getPlayer().getName() + "§lALERT! §r" + " has retrieved a Chestplate Shard!");
     Bukkit.broadcastMessage("The weather has calmed down near the shard´s location.");
     Main.getInstance().getConfig().set("lightningFine", Boolean.valueOf(true));
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a();
@@ -127,14 +122,14 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   }
   
   public boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(ItemStack paramItemStack) {
-    return Main.areSimilar(paramItemStack, You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764x.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764A());
+    return Main.areSimilar(paramItemStack, CustomItemRegistry.getChestplateShard());
   }
   
   private static void lambda$spawnCore$0(ItemDisplay paramItemDisplay) {
-    paramItemDisplay.setItemStack(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764x.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764A());
+    paramItemDisplay.setItemStack(CustomItemRegistry.getChestplateShard());
     paramItemDisplay.setBrightness(new Display.Brightness(15, 15));
     paramItemDisplay.setCustomNameVisible(true);
-    paramItemDisplay.setCustomName(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")));
+    paramItemDisplay.setCustomName(String.valueOf(ChatColor.of("#B06736")) + "Chestplate Shard");
   }
   
   private static MatchException a(MatchException paramMatchException) {

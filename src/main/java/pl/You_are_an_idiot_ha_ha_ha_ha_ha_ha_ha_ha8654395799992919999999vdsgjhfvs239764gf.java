@@ -30,9 +30,9 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
         return;
       } 
     }this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a++;
-    player.getInventory().addItem(new ItemStack[] { You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764x.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764B() });
-    Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")));
-    Bukkit.broadcastMessage(String.valueOf(ChatColor.WHITE) + String.valueOf(ChatColor.WHITE) + "(" + this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a);
+    player.getInventory().addItem(new ItemStack[] { CustomItemRegistry.getHelmetShard() });
+    Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + "§lA Helmet Fragment has spawned!");
+    Bukkit.broadcastMessage(String.valueOf(ChatColor.WHITE) + "(" + this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a + "/5)");
   }
   
   private static MatchException a(MatchException paramMatchException) {

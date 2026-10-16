@@ -62,7 +62,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     } 
     ItemStack itemStack = abstractArrow.getWeapon();
     {
-      if (!Main.areSimilar(itemStack, You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764x.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d()))
+      if (!Main.areSimilar(itemStack, CustomItemRegistry.getStrikerBow()))
         return; 
     }{
       if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.contains(player.getUniqueId())) {
@@ -74,18 +74,18 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Player paramPlayer, Location paramLocation) {
     {
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer.getUniqueId(), "stabShotCooldown"))
+      if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "stabShotCooldown"))
         return false; 
     }{
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764t.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramLocation))
+      if (WorldGuardHook.isBlocked(paramLocation))
         return false; 
     }paramLocation.setRotation(0.0F, 0.0F);
     int i = Main.getInstance().getConfig().getInt("stabShotRadius", 5);
     int j = Main.getInstance().getConfig().getInt("stabShotRadiusY", 5);
     World world = paramLocation.getWorld();
     int k = Main.getInstance().getConfig().getInt("stabShotCooldown", 60);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer.getUniqueId(), "stabShotCooldown", k);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, "Stab Shot", k, ChatColor.YELLOW);
+    CooldownManager.setCooldown(paramPlayer.getUniqueId(), "stabShotCooldown", k);
+    BossBarManager.createBar(paramPlayer, "Stab Shot", k, ChatColor.YELLOW);
     ItemDisplay itemDisplay = (ItemDisplay)world.spawnEntity(paramLocation, EntityType.ITEM_DISPLAY);
     itemDisplay.setItemStack(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a());
     Transformation transformation = itemDisplay.getTransformation();
@@ -97,7 +97,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(Player paramPlayer, Location paramLocation) {
     {
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer.getUniqueId(), "orbitalShotCooldown"))
+      if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "orbitalShotCooldown"))
         return false; 
     }paramLocation.setRotation(0.0F, 0.0F);
     World world = paramPlayer.getWorld();
@@ -106,15 +106,15 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     int j = Main.getInstance().getConfig().getInt("orbitalShotStrikes", 40);
     int k = Main.getInstance().getConfig().getInt("orbitalShotExplosionPower", 2);
     int m = Main.getInstance().getConfig().getInt("orbitalShotCooldown", 120);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer.getUniqueId(), "orbitalShotCooldown", m);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, "Orbital Shot", m, ChatColor.YELLOW);
+    CooldownManager.setCooldown(paramPlayer.getUniqueId(), "orbitalShotCooldown", m);
+    BossBarManager.createBar(paramPlayer, "Orbital Shot", m, ChatColor.YELLOW);
     for (byte b = 0; b < j; b++) {
       double d1 = random.nextDouble() * Math.PI * 2.0D;
       double d2 = random.nextDouble() * i;
       double d3 = Math.cos(d1) * d2;
       double d4 = Math.sin(d1) * d2;
       Location location1 = paramLocation.clone().add(d3, 0.0D, d4);
-      int n = (int)You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ad.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(location1, 40).getY();
+      int n = (int) VulcanGauntletAbility.findSafeExplosionLocation(location1, 40).getY();
       Location location2 = new Location(world, location1.getX() + 0.5D, (n + 20), location1.getZ() + 0.5D);
       (new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f2(location2, n, world, paramPlayer, k)).runTaskTimer((Plugin)Main.getInstance(), 0L, 1L);
     } 
@@ -148,7 +148,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       }{
         if (Main.isTrusted(paramPlayer, (Entity)player))
           continue; 
-      }You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a5.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a((LivingEntity)player, d, paramPlayer);
+      }
+        TrueDamage.apply((LivingEntity)player, d, paramPlayer);
     } 
     for (int j = -i; j <= i; j++) {
       location = paramLocation.clone().add(0.0D, j, 0.0D);
@@ -168,7 +169,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Location paramLocation) {
     char c = 'Ũ';
-    double d1 = 0.0D;
+    double d1 = 0;
     double d2 = 1500000.0D;
     Location location = paramLocation.clone();
     for (byte b = 0; b < c; b += 4) {
@@ -177,7 +178,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       double d5 = location.getY();
       double d6 = location.getZ() + d1 * Math.sin(d3);
       double d7 = Math.cos(d3) * d2;
-      double d8 = 0.0D;
+      double d8 = 0;
       double d9 = Math.sin(d3) * d2;
       location.getWorld().spawnParticle(Particle.CLOUD, d4, d5, d6, 0, d7, d8, d9, 6.0E-7D);
     } 

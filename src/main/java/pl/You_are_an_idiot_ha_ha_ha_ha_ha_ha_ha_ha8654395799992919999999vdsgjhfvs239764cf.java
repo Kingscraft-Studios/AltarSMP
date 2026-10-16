@@ -30,10 +30,10 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     ItemStack itemStack = new ItemStack(Material.CLAY_BALL);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setCustomModelData(Integer.valueOf(4));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.GOLD) + String.valueOf(ChatColor.GOLD) + ChatColor.BOLD.toString());
+    itemMeta.setDisplayName(String.valueOf(ChatColor.GOLD) + "Crazy Randomizer" + "Crazy Randomizer");
     itemMeta.setUnbreakable(true);
     ArrayList<String> arrayList = new ArrayList();
-    arrayList.add(String.valueOf(ChatColor.GRAY) + String.valueOf(ChatColor.GRAY));
+    arrayList.add(String.valueOf(ChatColor.GRAY) + "Right-Click to get a random legendary!");
     itemMeta.setLore(arrayList);
     itemStack.setItemMeta(itemMeta);
     return itemStack;
@@ -55,7 +55,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   }
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Player paramPlayer) {
-    List<ItemStack> list = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764l.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b();
+    List<ItemStack> list = CustomItem.getRollingDropItems();
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, list);
   }
   

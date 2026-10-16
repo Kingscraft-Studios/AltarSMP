@@ -166,7 +166,7 @@ public class JSONTokener {
      * @throws JSONException Thrown if there is an error reading the source string.
      */
     public char next() throws JSONException {
-        int c;
+        int c = 0;
         if (this.usePrevious) {
             this.usePrevious = false;
             c = this.previous;

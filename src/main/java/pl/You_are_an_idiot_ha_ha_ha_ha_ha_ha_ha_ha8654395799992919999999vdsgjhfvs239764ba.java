@@ -14,7 +14,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   
   public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
-    int i;
+    int i = 0;
     Player player;
     {
       if (paramArrayOfString.length < 2) {
@@ -47,11 +47,11 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     } 
     {
       if (str.equalsIgnoreCase("bloodlust")) {
-        (Main.getInstance()).killTracker.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player, i);
+        (Main.getInstance()).bloodLustKillTracker.setKillCount(player, i);
       } else {
         {
           if (str.equalsIgnoreCase("knightfall")) {
-            (Main.getInstance()).killTracker2.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player, i);
+            (Main.getInstance()).knightFallKillTracker.setKillCount(player, i);
           } else {
             paramCommandSender.sendMessage("§c/setkills <bloodlust/knightfall> <num> <player>");
             return true;

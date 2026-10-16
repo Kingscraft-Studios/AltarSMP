@@ -2250,7 +2250,7 @@ public class JSONObject {
         char b;
         char c = 0;
         String hhhh;
-        int i;
+        int i = 0;
         int len = string.length();
 
         w.write('"');

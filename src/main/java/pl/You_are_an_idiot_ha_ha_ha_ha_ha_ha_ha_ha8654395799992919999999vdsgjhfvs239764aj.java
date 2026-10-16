@@ -37,14 +37,15 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(player))
         return; 
     }{
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player.getUniqueId(), "cutlassCuts"))
+      if (CooldownManager.isOnCooldown(player.getUniqueId(), "cutlassCuts"))
         return; 
-    }You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764v.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a((LivingEntity)player, Particle.ELECTRIC_SPARK, Particle.CRIT, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2.0F);
+    }
+      CombatEffectUtils.spawnDualParticleRings((LivingEntity)player, Particle.ELECTRIC_SPARK, Particle.CRIT, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2.0F);
   }
   
   public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(Player paramPlayer) {
     {
-      if (Main.areSimilar(paramPlayer.getInventory().getItemInMainHand(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764l.CUTLASS.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0()))
+      if (Main.areSimilar(paramPlayer.getInventory().getItemInMainHand(), CustomItem.CUTLASS.getItem()))
         return true; 
     }return false;
   }
@@ -61,13 +62,13 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     Entity entity2 = paramEntityDamageByEntityEvent.getEntity();
     if (entity2 instanceof Player) {
       Player player = (Player)entity2;
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player.getUniqueId(), "active_parry")) {
+      if (CooldownManager.isOnCooldown(player.getUniqueId(), "active_parry")) {
         int i = Main.getInstance().getConfig().getInt("CutlassParryDuration", 7);
         You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c.put(player.getUniqueId(), Integer.valueOf(((Integer)You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c.getOrDefault(player.getUniqueId(), Integer.valueOf(3))).intValue() - 1));
         int j = ((Integer)You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c.getOrDefault(player.getUniqueId(), Integer.valueOf(3))).intValue();
         {
           if (j != 0)
-            You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player, "§6§l!! §e§lParry x" + "§6§l!! §e§lParry x" + j, Integer.valueOf(i), ChatColor.YELLOW, BarColor.RED); 
+            BossBarManager.createBar(player, "§6§l!! §e§lParry x" + j + " §6§l!!", i, ChatColor.YELLOW, BarColor.RED);
         }{
           paramEntityDamageByEntityEvent.setCancelled(true);
           player.getWorld().playSound((Entity)player, Sound.BLOCK_ANVIL_LAND, 1.0F, 1.0F);
@@ -83,20 +84,20 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Player paramPlayer) {
     int i = Main.getInstance().getConfig().getInt("CutlassParryCooldown", 30);
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayer);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, "§e§lParry", i, ChatColor.YELLOW);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer.getUniqueId(), "active_parry", 0.0D);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer.getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b, i);
+    BossBarManager.createBar(paramPlayer, "§e§lParry", i, ChatColor.YELLOW);
+    CooldownManager.setCooldown(paramPlayer.getUniqueId(), "active_parry", 0.0D);
+    CooldownManager.setCooldown(paramPlayer.getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b, i);
   }
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(Player paramPlayer) {
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, "!! Parry x3 !!");
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, "!! Parry x2 !!");
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, "!! Parry x1 !!");
+    BossBarManager.removeBar(paramPlayer, "!! Parry x3 !!");
+    BossBarManager.removeBar(paramPlayer, "!! Parry x2 !!");
+    BossBarManager.removeBar(paramPlayer, "!! Parry x1 !!");
   }
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c(Player paramPlayer) {
     byte b = 2;
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer.getUniqueId(), "cutlassCuts", 1.0D);
+    CooldownManager.setCooldown(paramPlayer.getUniqueId(), "cutlassCuts", 1.0D);
     (new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d6(paramPlayer, b)).runTaskTimer((Plugin)Main.getInstance(), 0L, b);
   }
   

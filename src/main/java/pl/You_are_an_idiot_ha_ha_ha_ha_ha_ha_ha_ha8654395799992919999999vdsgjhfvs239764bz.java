@@ -15,10 +15,10 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       String s5 = java.util.UUID.randomUUID().toString();
       String s6 = java.net.URLEncoder.encode(paramString1, StandardCharsets.UTF_8.toString()).replace("+", "%20");
       String s7 = java.net.URLEncoder.encode(paramString2, StandardCharsets.UTF_8.toString()).replace("+", "%20");
-      String s8 = String.format("https://api.mclicense.org/validate/%s/%s", s6, s7) + s4 + s5 + "?sessionId=" + "&nonce=";
+      String s8 = String.format("https://api.mclicense.org/validate/%s/%s", s6, s7) + "?sessionId=" + s4 + "&nonce=" + s5;
       String s9 = MarketplaceProvider.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b();
       if (s9 != null) {
-        s8 = s8 + java.net.URLEncoder.encode(s9, StandardCharsets.UTF_8.toString()) + "&polymartUserId=";
+        s8 = s8 + "&polymartUserId=" + java.net.URLEncoder.encode(s9, StandardCharsets.UTF_8.toString());
       }
       java.net.HttpURLConnection connection = (java.net.HttpURLConnection)(new java.net.URL(s8).openConnection());
       connection.setRequestMethod("GET");
@@ -29,18 +29,18 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
         StringBuilder stringBuilder = new StringBuilder();
         String s13;
         while ((s13 = reader.readLine()) != null)
-          stringBuilder.append(s13); 
+          stringBuilder.append(s13);
         s12 = stringBuilder.toString();
-      } 
+      }
       if (connection.getResponseCode() != 200) {
         String s14 = "\n\n\n\n\n\n\n\n\n\n";
         try {
           org.json.JSONObject jsonObject = new org.json.JSONObject(s12);
-          String s15 = s14 + "§cLicense validation failed for §e" + paramJavaPlugin.getName() + " §c(" + jsonObject.getString("message") + ")" + s14;
+          String s15 = "\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n" + "\u00a7cLicense validation failed for \u00a7e" + paramJavaPlugin.getName() + " \u00a7c(" + jsonObject.getString("message") + ")" + "\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n";
           You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bv.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.info(s15);
           for (org.bukkit.entity.Player onlinePlayer : org.bukkit.Bukkit.getOnlinePlayers()) {
             if (onlinePlayer.isOp())
-              onlinePlayer.sendMessage(s15); 
+              onlinePlayer.sendMessage(s15);
           }
         } catch (Exception exception) {
           You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bv.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.info("License validation failed for " + paramJavaPlugin.getName() + " (Server error)");
@@ -98,34 +98,30 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
         } else {
           str1 = (new String(Files.readAllBytes(Paths.get(file.getPath(), new String[0])), StandardCharsets.UTF_8)).trim();
         } 
-      }String str2 = str1;
+      }
+      String str2 = str1;
       if (str2.isEmpty()) {
         String str = MarketplaceProvider.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a();
         if (str != null) {
           str2 = str;
         } else {
-          You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bv.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.info("License key is empty for " + "License key is empty for " + paramJavaPlugin.getName());
+          You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bv.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.info(paramJavaPlugin.getName() + "License key is empty for " + "! Place your key in the 'mclicense.txt' file in the plugin folder and restart the server.");
           return false;
-        } 
-      } 
+        }
+      }
       boolean bool = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramJavaPlugin, paramString, str2, file);
       {
         if (bool)
           {
             if (!str2.equals(str1))
-              Files.write(file.toPath(), str2.getBytes(StandardCharsets.UTF_8), new java.nio.file.OpenOption[0]); 
+              Files.write(file.toPath(), str2.getBytes(StandardCharsets.UTF_8), new java.nio.file.OpenOption[0]);
           }}{
         if (bool) {
-          You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bu.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b = String.valueOf(System.currentTimeMillis());
-          You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bu.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c = String.valueOf(Runtime.getRuntime().freeMemory());
-          You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bu.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764by.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c;
-          You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bu.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d = String.valueOf(Thread.activeCount());
-          You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bu.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e = String.valueOf(System.nanoTime());
-          You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bu.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f = String.valueOf(Runtime.getRuntime().totalMemory());
+          AntiTamperGuard.markLicensed();
         } 
       }return bool;
     } catch (Exception exception) {
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bv.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.info("License validation failed for " + "License validation failed for " + paramJavaPlugin.getName());
+      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bv.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.info(paramJavaPlugin.getName() + "License validation failed for " + " (System error)");
       exception.printStackTrace();
       return false;
     } 
@@ -142,7 +138,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       }Files.write(file.toPath(), paramString2.getBytes(StandardCharsets.UTF_8), new java.nio.file.OpenOption[0]);
       return You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramJavaPlugin, paramString1, paramString2, file);
     } catch (Exception exception) {
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bv.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.info("License write and validation failed for " + "License write and validation failed for " + paramJavaPlugin.getName());
+      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bv.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.info(paramJavaPlugin.getName() + "License write and validation failed for " + " (System error)");
       exception.printStackTrace();
       return false;
     } 

@@ -11,7 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d8 extends BukkitRunnable {
   final int You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a = 2;
   
-  int You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b = 0;
+  int You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b;
   
   final You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d7 You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c;
   
@@ -38,14 +38,14 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
           if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity)entity;
             {
-              if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(livingEntity.getUniqueId(), "already_hit_cutlass"))
+              if (CooldownManager.isOnCooldown(livingEntity.getUniqueId(), "already_hit_cutlass"))
                 continue; 
             }{
               if (livingEntity.equals(this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a))
                 continue; 
             }livingEntity.setNoDamageTicks(0);
             livingEntity.damage(2.0D);
-            You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(livingEntity.getUniqueId(), "already_hit_cutlass", 2.0D);
+            CooldownManager.setCooldown(livingEntity.getUniqueId(), "already_hit_cutlass", 2.0D);
             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 60, 1));
           } 
         } 

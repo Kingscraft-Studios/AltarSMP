@@ -54,7 +54,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   public boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e = false;
   
-  private static final String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f = ChatColor.of("#B06736").toString() + ChatColor.BOLD.toString() + "Bingo Board";
+  private static final String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f =String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + "Bingo Board";
   
   private static final int[] You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g = new int[] {0,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,28,29,30,31,32,33,34,36,37,38,39,40,41,42,43};
   
@@ -98,7 +98,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       if (paramCommand.getName().equalsIgnoreCase("startbingo")) {
         {
           if (this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e) {
-            paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+            paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + "Bingo is already running.");
             return true;
           } 
         }You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a();
@@ -108,7 +108,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       if (paramCommand.getName().equalsIgnoreCase("bingo")) {
         {
           if (!this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e) {
-            player.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+            player.sendMessage(String.valueOf(ChatColor.RED) + "Bingo event did not start yet.");
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
             return true;
           } 
@@ -134,7 +134,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.put(player.getUniqueId(), EnumSet.noneOf(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.class));
       You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d(player);
     } 
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a("Bingo Time Remaining:", i, BarColor.PURPLE);
+    BossBarManager.showBingoBar("Bingo Time Remaining:", i, BarColor.PURPLE);
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c();
     this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c = new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764gc(this);
     this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c.runTaskTimer((Plugin)this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a, 20L, 20L);
@@ -147,7 +147,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     for (Player player : Bukkit.getOnlinePlayers())
       player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard()); 
     {
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b();
+      BossBarManager.hideBingoBar();
       You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c();
       if (this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c != null) {
         this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c.cancel();
@@ -162,12 +162,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     }{
       if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayer) < (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.values()).length)
         return; 
-    }String str1 = String.valueOf(ChatColor.GRAY);
-    String str2 = paramPlayer.getName();
-    String str3 = String.valueOf(ChatColor.WHITE);
-    String str4 = String.valueOf(ChatColor.RESET);
-    {
-      Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")) + "Bingo Event" + str4 + " was automatically finished because " + str3 + str2 + str1);
+    }{
+      Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + "Bingo Event" + String.valueOf(ChatColor.RESET) + " was automatically finished because " + String.valueOf(ChatColor.WHITE) + paramPlayer.getName() + String.valueOf(ChatColor.GRAY) + " completed all 40/40 quests.");
       if (this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c != null) {
         this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c.cancel();
         this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c = null;
@@ -221,7 +217,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     }}
   
   private void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c(Player paramPlayer) {
-    Inventory inventory = Bukkit.createInventory(null, 54, String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD));
+    Inventory inventory = Bukkit.createInventory(null, 54,String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + "Bingo Board");
     ItemStack itemStack = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setDisplayName(" ");
@@ -243,11 +239,11 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       ItemMeta itemMeta1 = itemStack1.getItemMeta();
       {
         if (bool) {
-          itemMeta1.setDisplayName(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN));
-          itemMeta1.setLore(List.of(String.valueOf(ChatColor.WHITE) + String.valueOf(ChatColor.WHITE), String.valueOf(ChatColor.GRAY) + String.valueOf(ChatColor.GRAY), " ", String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN)));
+          itemMeta1.setDisplayName(String.valueOf(ChatColor.GREEN) + you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b);
+          itemMeta1.setLore(List.of(String.valueOf(ChatColor.WHITE) + you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c, String.valueOf(ChatColor.GRAY) + "Requirement completed.", " ", String.valueOf(ChatColor.GREEN) + "\u2714 Completed"));
         } else {
-          itemMeta1.setDisplayName(String.valueOf(ChatColor.GOLD) + String.valueOf(ChatColor.GOLD));
-          itemMeta1.setLore(List.of(String.valueOf(ChatColor.WHITE) + String.valueOf(ChatColor.WHITE), String.valueOf(ChatColor.GRAY) + String.valueOf(ChatColor.GRAY) + "Required amount: ", " ", String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED)));
+          itemMeta1.setDisplayName(String.valueOf(ChatColor.GOLD) + you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b);
+          itemMeta1.setLore(List.of(String.valueOf(ChatColor.WHITE) + you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c, String.valueOf(ChatColor.GRAY) + "Required amount: " + you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f, " ", String.valueOf(ChatColor.RED) + "\u2718 Not Completed"));
         } 
       }itemStack1.setItemMeta(itemMeta1);
       inventory.setItem(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g[b2], itemStack1);
@@ -264,7 +260,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     } 
     for (Player player : Bukkit.getOnlinePlayers()) {
       Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-      Objective objective = scoreboard.registerNewObjective("bingo", "dummy", String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")));
+      Objective objective = scoreboard.registerNewObjective("bingo", "dummy",String.valueOf(ChatColor.of("#B06736")) + "Bingo Progress");
       objective.setDisplaySlot(DisplaySlot.SIDEBAR);
       List list = (List)Bukkit.getOnlinePlayers().stream().sorted(Comparator.comparingInt((Player paramPlayer1) -> this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayer1)).reversed().thenComparing(Player::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
       byte b1 = 15;
@@ -281,7 +277,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
         String str3 = String.valueOf(ChatColor.WHITE);
         byte b = b2;
         team.setPrefix(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(String.valueOf(ChatColor.GOLD) + String.valueOf(ChatColor.GOLD) + b + ". " + str3, 16));
-        team.setSuffix(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(String.valueOf(ChatColor.GRAY) + String.valueOf(ChatColor.GRAY) + " " + i, 16));
+        team.setSuffix(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(String.valueOf(ChatColor.GRAY) + " " + "/40" + "/40", 16));
         objective.getScore(str1).setScore(b1--);
         b2++;
       } 
@@ -312,10 +308,10 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.addEnchant(Enchantment.UNBREAKING, 1, true);
     itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
-    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD));
+    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + "Bingo Card");
     ArrayList<String> arrayList = new ArrayList();
     arrayList.add(" ");
-    arrayList.add(String.valueOf(ChatColor.WHITE) + String.valueOf(ChatColor.WHITE) + "RIGHT CLICK " + String.valueOf(ChatColor.GRAY));
+    arrayList.add(String.valueOf(ChatColor.WHITE) + "RIGHT CLICK " + String.valueOf(ChatColor.GRAY) + "to open your Bingo Board");
     itemMeta.setLore(arrayList);
     itemStack.setItemMeta(itemMeta);
     return itemStack;
@@ -364,7 +360,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       if (player2.getUniqueId().equals(player1.getUniqueId()))
         return; 
     }{
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b9.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(player2, player1))
+      if (TrustManager.isTrusted(player2, player1))
         return; 
     }Set<You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n> set = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.computeIfAbsent(player2.getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764be::lambda$death$2);
     {
@@ -385,7 +381,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.putIfAbsent(paramPlayerJoinEvent.getPlayer().getUniqueId(), EnumSet.noneOf(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.class));
       if (this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e) {
         You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d(paramPlayerJoinEvent.getPlayer());
-        You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayerJoinEvent.getPlayer());
+        BossBarManager.addPlayerToBingoBar(paramPlayerJoinEvent.getPlayer());
         You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c();
       } else {
         paramPlayerJoinEvent.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());

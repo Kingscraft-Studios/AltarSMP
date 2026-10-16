@@ -1,0 +1,390 @@
+package pl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Structure;
+import org.bukkit.block.structure.UsageMode;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Display;
+import org.bukkit.entity.ItemDisplay;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Transformation;
+
+public class AltarController implements Listener {
+  public Main plugin;
+  
+  public final NamespacedKey altartypeKey;
+  
+  public final Map<Location, AltarInstance> altars = new HashMap<>();
+  
+  public final NamespacedKey altarUsedKey;
+  
+  
+  
+  public AltarController(Main paramMain) {
+    this.plugin = paramMain;
+    this.altartypeKey = new NamespacedKey((Plugin)paramMain, "altar_type");
+    this.altarUsedKey = new NamespacedKey((Plugin)paramMain, "altar_used");
+    startUpdateTask();
+  }
+  
+  public List<AltarInstance> getAltarsByType(String paramString) {
+    ArrayList<AltarInstance> arrayList = new ArrayList();
+    for (AltarInstance altarInstance : this.altars.values()) {
+      {
+        if (altarInstance.getType().equalsIgnoreCase(paramString))
+          arrayList.add(altarInstance);
+      }} 
+    return arrayList;
+  }
+  
+  public boolean isAltarUsed(Location paramLocation) {
+    Structure structure;
+    BlockState blockState = paramLocation.getBlock().getState();
+    if (blockState instanceof Structure) {
+      structure = (Structure)blockState;
+    } else {
+      return false;
+    } 
+    return ((Boolean)structure.getPersistentDataContainer().getOrDefault(this.altarUsedKey, PersistentDataType.BOOLEAN, Boolean.valueOf(false))).booleanValue();
+  }
+  
+  public void setAltarUsed(Location paramLocation, boolean paramBoolean) {
+    Structure structure;
+    BlockState blockState = paramLocation.getBlock().getState();
+    if (blockState instanceof Structure) {
+      structure = (Structure)blockState;
+    } else {
+      return;
+    } 
+    structure.getPersistentDataContainer().set(this.altarUsedKey, PersistentDataType.BOOLEAN, Boolean.valueOf(paramBoolean));
+    structure.update();
+  }
+  
+  public List<RecipeIngredient> getMissingIngredients(Player paramPlayer, AltarRecipe altarRecipe) {
+    ArrayList<RecipeIngredient> arrayList = new ArrayList();
+    for (RecipeIngredient recipeIngredient : altarRecipe.getIngredients()) {
+      int i = recipeIngredient.getAmount();
+      int j = 0;
+      for (ItemStack itemStack : paramPlayer.getInventory().getContents()) {
+        {
+          if (itemStack != null && recipeIngredient.matches(itemStack))
+            j += itemStack.getAmount(); 
+        }} 
+      {
+        if (j < i)
+          arrayList.add(new RecipeIngredient(recipeIngredient.getMaterial(), i - j, recipeIngredient.getCustomModelData()));
+      }} 
+    return arrayList;
+  }
+  
+  public static ItemStack createCustomModelItem(Material paramMaterial, int paramInt) {
+    ItemStack itemStack = new ItemStack(paramMaterial);
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    itemMeta.setCustomModelData(Integer.valueOf(paramInt));
+    itemStack.setItemMeta(itemMeta);
+    return itemStack;
+  }
+  
+  public static String toTitleCase(String paramString) {
+    {
+      if (paramString != null)
+        {
+          if (!paramString.isEmpty()) {
+            String[] arrayOfString = paramString.toLowerCase().split(" ");
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String str : arrayOfString) {
+              {
+                if (!str.isEmpty())
+                  stringBuilder.append(Character.toUpperCase(str.charAt(0))).append(str.substring(1)).append(" "); 
+              }} 
+            return stringBuilder.toString().trim();
+          } 
+          return paramString;
+        }}return paramString;
+  }
+  
+  public void sendMissingIngredients(Player paramPlayer, List<RecipeIngredient> paramList) {
+    {
+      if (paramList.isEmpty())
+        return; 
+    }paramPlayer.sendMessage("§c§lMissing items:");
+    for (RecipeIngredient paramB4 : paramList) {
+      String str;
+      CustomItemType itemType = CustomItemType.fromItem(createCustomModelItem(paramB4.material, paramB4.customModelData));
+      if (itemType != null) {
+        str = itemType.getItem().getItemMeta().getDisplayName();
+      } else {
+        CustomItem customItem = CustomItem.fromItem(createCustomModelItem(paramB4.material, paramB4.customModelData));
+        if (customItem != null) {
+          str = customItem.getItem().getItemMeta().getDisplayName();
+        } else {
+          str = paramB4.getMaterial().toString();
+          str = str.toLowerCase().replace("_", " ");
+          str = toTitleCase(str);
+        } 
+      } 
+      paramPlayer.sendMessage(str, "§7- §7" + paramB4.getAmount() + "x §f" + str);
+    } 
+  }
+  
+  public void broadcastCraftAnnouncement(Player paramPlayer, ItemStack paramItemStack) {
+    String str1 = paramItemStack.getItemMeta().getDisplayName();
+    String str3 = ChatColor.BOLD.toString();
+    String str4 = String.valueOf(ChatColor.GOLD);
+    String str5 = str1;
+    String str6 = ChatColor.BOLD.toString();
+    String str7 = ChatColor.BOLD.toString();
+    String str8 = String.valueOf(ChatColor.GOLD);
+    String str9 = paramPlayer.getName();
+    String str10 = ChatColor.BOLD.toString();
+    String str2 = String.valueOf(ChatColor.WHITE) + str9 + String.valueOf(ChatColor.GOLD) + String.valueOf(ChatColor.GOLD) + " has crafted the " + " has crafted the " + str5 + String.valueOf(ChatColor.GOLD) + String.valueOf(ChatColor.GOLD) + "!";
+    Bukkit.broadcastMessage(str2);
+    for (Player player : Bukkit.getOnlinePlayers())
+      player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0F, 1.0F); 
+  }
+  
+  public AltarInstance getAltarInstance(Location paramLocation) {
+    return this.altars.get(paramLocation);
+  }
+  
+  public static ItemStack createItemStack(String paramString) {
+    try {
+      CustomItem customItem = CustomItem.valueOf(paramString.toUpperCase());
+      return customItem.getItem();
+    } catch (IllegalArgumentException illegalArgumentException) {
+      try {
+        CustomItemType customItem = CustomItemType.valueOf(paramString.toUpperCase());
+        return customItem.getItem();
+      } catch (IllegalArgumentException illegalArgumentException1) {
+        return new ItemStack(Material.NETHER_STAR);
+      } 
+    } 
+  }
+  
+  public double getItemDisplayOffsetY(String paramString) {
+    try {
+      switch (CustomItemIds.ID_BY_ITEM[CustomItem.valueOf(paramString.toUpperCase()).ordinal()]) {
+
+      }
+      return 1.0D;
+    } catch (IllegalArgumentException illegalArgumentException) {
+      return 1.0D;
+    } 
+  }
+  
+  public double getItemDisplayScale(String paramString) {
+    try {
+      return switch (CustomItemIds.ID_BY_ITEM[CustomItem.valueOf(paramString.toUpperCase()).ordinal()]) {
+          case 1 -> 2.75D;
+          case 2 -> 2.0D;
+          case 3 -> 1.75D;
+          case 4 -> 2.3D;
+          case 5 -> 2.25D;
+          case 6 -> 2.75D;
+          case 7 -> 2.25D;
+          case 8 -> 2.0D;
+          case 9 -> 2.0D;
+          case 10 -> 2.5D;
+          case 11 -> 2.75D;
+          case 12 -> 2.0D;
+          case 13 -> 2.0D;
+          case 14 -> 2.0D;
+          case 15 -> 2.0D;
+          case 16 -> 2.5D;
+          case 17 -> 1.85D;
+          case 18 -> 2.1D;
+          case 19 -> 2.3D;
+          default -> 1.75D;
+        };
+    } catch (IllegalArgumentException illegalArgumentException) {
+      return 1.75D;
+    } 
+  }
+  
+  public void removeAltarEntities(Location paramLocation) {
+    AltarInstance altarInstance = this.altars.get(paramLocation);
+    {
+      if (altarInstance == null)
+        return; 
+    }
+
+    {
+      setAltarUsed(paramLocation, false);
+      if (!altarInstance.hasItemDisplay())
+        spawnItemDisplay(altarInstance, paramLocation, altarInstance.getType());
+    }
+  }
+  
+  public boolean createAltar(Location paramLocation, String paramString) {
+    Structure structure;
+    Altar altar = this.plugin.getConfigManager().getAltar(paramString);
+    {
+      if (altar == null)
+        return false; 
+    }Block block = paramLocation.getBlock();
+    block.setType(Material.STRUCTURE_BLOCK);
+    BlockState blockState = block.getState();
+    if (blockState instanceof Structure) {
+      structure = (Structure)blockState;
+    } else {
+      return false;
+    } 
+    structure.setUsageMode(UsageMode.LOAD);
+    structure.getPersistentDataContainer().set(this.altartypeKey, PersistentDataType.STRING, paramString);
+    structure.update();
+    block.getChunk().addPluginChunkTicket((Plugin)this.plugin);
+    AltarInstance altarInstance = new AltarInstance(paramString, paramLocation);
+    {
+      if (!isAltarUsed(paramLocation))
+        spawnItemDisplay(altarInstance, paramLocation, paramString);
+    }
+    spawnHologram(altarInstance, paramLocation, paramString, altar.getIngredientDisplay());
+    this.altars.put(paramLocation, altarInstance);
+    saveAltar(paramLocation, paramString);
+    return true;
+  }
+  
+  @EventHandler
+  public void onBlockBreak(BlockBreakEvent paramBlockBreakEvent) {
+    {
+      if (paramBlockBreakEvent.getBlock().getType() != Material.STRUCTURE_BLOCK)
+        return; 
+    }
+    deleteAltarFromConfig(paramBlockBreakEvent.getBlock().getLocation());
+  }
+  
+  public void loadAltars() {
+    FileConfiguration fileConfiguration = this.plugin.getConfigManager().getAltarConfig();
+    {
+      if (!fileConfiguration.contains("altars"))
+        return; 
+    }for (String str1 : fileConfiguration.getConfigurationSection("altars").getKeys(false)) {
+      String str2 = fileConfiguration.getString("altars." + str1 + ".world");
+      World world = Bukkit.getWorld(str2);
+      {
+        if (world == null)
+          continue; 
+      }double d1 = fileConfiguration.getDouble("altars." + str1 + ".x");
+      double d2 = fileConfiguration.getDouble("altars." + str1 + ".y");
+      double d3 = fileConfiguration.getDouble("altars." + str1 + ".z");
+      String str3 = fileConfiguration.getString("altars." + str1 + ".type");
+      Location location = new Location(world, d1, d2, d3);
+      {
+        if (this.altars.containsKey(location))
+          continue; 
+      }location.getChunk().load(true);
+      saveAltar(location, str3);
+    } 
+  }
+  
+  public boolean removeAltar(Location paramLocation) {
+    AltarInstance altarInstance = this.altars.remove(paramLocation);
+    {
+      if (altarInstance == null)
+        return false; 
+    }altarInstance.getType();
+    altarInstance.itemDisplay.remove();
+    BlockState blockState = paramLocation.getBlock().getState();
+    if (blockState instanceof Structure) {
+      Structure structure = (Structure)blockState;
+      structure.getPersistentDataContainer().remove(this.altartypeKey);
+      structure.update();
+    } 
+    deleteAltarFromConfig(paramLocation);
+    return true;
+  }
+  
+  public void removeAllAltars() {
+    this.altars.values().forEach(AltarInstance::getType);
+    this.altars.clear();
+  }
+  
+  public void spawnItemDisplay(AltarInstance altarInstance, Location paramLocation, String paramString) {
+    double d1 = getItemDisplayScale(paramString);
+    double d2 = getItemDisplayOffsetY(paramString);
+    Location location = paramLocation.clone().add(0.5D, d1, 0.5D);
+    ItemDisplay itemDisplay = (ItemDisplay)paramLocation.getWorld().spawn(location, ItemDisplay.class, display -> configureItemDisplay(paramString, d2, display));
+    altarInstance.setItemDisplay(itemDisplay);
+  }
+  
+  public void spawnHologram(AltarInstance altarInstance, Location paramLocation, String paramString, List<String> paramList) {
+    Altar bs = this.plugin.getConfigManager().getAltar(paramString);
+    double d = (bs != null && bs.getHologramHeight() > 0.0D) ? bs.getHologramHeight() : this.plugin.getConfigManager().getHologramHeight();
+    World world = paramLocation.getWorld();
+    for (int i = 0; i < paramList.size(); i++) {
+      String str = paramList.get(paramList.size() - 1 - i);
+      Location location = paramLocation.clone().add(0.5D, d + i * 0.25D, 0.5D);
+      TextDisplay textDisplay = (TextDisplay)world.spawn(location, TextDisplay.class, display -> configureHologram(str, display));
+      altarInstance.addHologram(textDisplay);
+    }
+  }
+  
+  public void startUpdateTask() {
+    (new ItemDisplayRotationTask(this)).runTaskTimer((Plugin)this.plugin, 0L, 1L);
+  }
+  
+  public void saveAltar(Location paramLocation, String paramString) {
+    FileConfiguration fileConfiguration = this.plugin.getConfigManager().getAltarConfig();
+    String str = paramLocation.getWorld().getName() + "_" + paramLocation.getBlockX() + "_" + paramLocation.getBlockY() + "_" + paramLocation.getBlockZ();
+    fileConfiguration.set("altars." + str + ".world", paramLocation.getWorld().getName());
+    fileConfiguration.set("altars." + str + ".x", Double.valueOf(paramLocation.getX()));
+    fileConfiguration.set("altars." + str + ".y", Double.valueOf(paramLocation.getY()));
+    fileConfiguration.set("altars." + str + ".z", Double.valueOf(paramLocation.getZ()));
+    fileConfiguration.set("altars." + str + ".type", paramString);
+    this.plugin.getConfigManager().getHologramHeight();
+  }
+  
+  public void deleteAltarFromConfig(Location paramLocation) {
+    FileConfiguration fileConfiguration = this.plugin.getConfigManager().getAltarConfig();
+    String str = paramLocation.getWorld().getName() + "_" + paramLocation.getBlockX() + "_" + paramLocation.getBlockY() + "_" + paramLocation.getBlockZ();
+    fileConfiguration.set("altars." + str, null);
+    this.plugin.getConfigManager().getHologramHeight();
+  }
+  
+  private static void configureHologram(String paramString, TextDisplay paramTextDisplay) {
+    paramTextDisplay.setShadowed(false);
+    paramTextDisplay.setBillboard(Display.Billboard.CENTER);
+    paramTextDisplay.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
+    paramTextDisplay.setGravity(false);
+    paramTextDisplay.setInvulnerable(true);
+    paramTextDisplay.setText(ChatColor.translateAlternateColorCodes('&', paramString));
+  }
+  
+  private static void configureItemDisplay(String paramString, double paramDouble, ItemDisplay paramItemDisplay) {
+    paramItemDisplay.setItemStack(createItemStack(paramString));
+    paramItemDisplay.setInvulnerable(true);
+    paramItemDisplay.setPersistent(true);
+    Transformation transformation = paramItemDisplay.getTransformation();
+    transformation.getScale().set(paramDouble);
+    paramItemDisplay.setTransformation(transformation);
+  }
+
+
+}
+
+
+/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bm.class
+ * Java compiler version: 21 (65.0)
+ * JD-Core Version:       1.1.3
+ */

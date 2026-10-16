@@ -35,7 +35,7 @@ import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 
 public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764z implements Listener {
-  public final You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a2 You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a;
+  public final BloodLustKillTracker You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a;
   
   public final Map<UUID, BukkitRunnable> You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b = new ConcurrentHashMap<>();
   
@@ -65,14 +65,14 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   
   
-  public You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764z(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a2 paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a2) {
-    this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a = paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a2;
-    (new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cs(this, paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a2)).runTaskTimer((Plugin)You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g, 0L, 20L);
+  public You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764z(BloodLustKillTracker paramBloodLustKillTracker) {
+    this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a = paramBloodLustKillTracker;
+    (new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cs(this, paramBloodLustKillTracker)).runTaskTimer((Plugin)You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g, 0L, 20L);
   }
   
   public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
-    return Main.areSimilar(itemStack, You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764x.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(null, false));
+    return Main.areSimilar(itemStack, CustomItemRegistry.getBloodlust(null, false));
   }
   
   @EventHandler
@@ -86,16 +86,16 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
         {
           if (paramPlayerInteractEvent.getAction() == Action.LEFT_CLICK_BLOCK) {
             if (player.isSneaking()) {
-              int i = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player);
-              player.sendActionBar(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED) + "You are at " + i);
+              int i = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.getKillCount(player);
+              player.sendActionBar(String.valueOf(ChatColor.RED) + "You are at " + i + " bloodlust kill(s).");
             } 
             return;
           } 
         }return;
       } 
     }if (player.isSneaking()) {
-      int i = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player);
-      player.sendActionBar(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED) + "You are at " + i);
+      int i = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.getKillCount(player);
+      player.sendActionBar(String.valueOf(ChatColor.RED) + "You are at " + i + " bloodlust kill(s).");
     } 
   }
   
@@ -108,8 +108,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     }{
       if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(player))
         return; 
-    }this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player);
-    player.sendActionBar(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+    }this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.incrementKillCount(player);
+    player.sendActionBar(String.valueOf(ChatColor.RED) + "Your weapon grows stronger...");
     player.getWorld().playSound(player.getLocation(), "minecraft:bloodlust.kill", 1.0F, 1.0F);
   }
   
@@ -130,7 +130,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       if (paramEntityDamageByEntityEvent.getFinalDamage() < 0.5D)
         return; 
     }{
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player.getUniqueId(), "infection"))
+      if (CooldownManager.isOnCooldown(player.getUniqueId(), "infection"))
         return; 
     }{
       if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(player))
@@ -148,7 +148,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     }int i = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g.getConfig().getInt("infectionCooldown", 15);
     int j = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g.getConfig().getInt("infectionDuration", 5) * 20;
     int k = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g.getConfig().getInt("infectionDamage", 2);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player.getUniqueId(), "infection", i);
+    CooldownManager.setCooldown(player.getUniqueId(), "infection", i);
     (new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ct(this, j, livingEntity, k)).runTaskTimer((Plugin)You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g, 0L, 1L);
   }
   
@@ -253,8 +253,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
         return; 
     }bukkitRunnable.cancel();
     int i = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g.getConfig().getInt("bloodTrailCooldown", 60);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, "Blood Trail", i, ChatColor.YELLOW);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer.getUniqueId(), "bloodTrail", i);
+    BossBarManager.createBar(paramPlayer, "Blood Trail", i, ChatColor.YELLOW);
+    CooldownManager.setCooldown(paramPlayer.getUniqueId(), "bloodTrail", i);
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), "minecraft:bloodlust.resurface", 2.0F, 1.0F);
     AttributeInstance attributeInstance1 = paramPlayer.getAttribute(Attribute.SCALE);
     {
@@ -305,8 +305,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e.containsKey(player.getUniqueId())) {
       You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h(player);
       int i = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g.getConfig().getInt("bloodTrailCooldown", 60);
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player, "Blood Trail", i, ChatColor.YELLOW);
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player.getUniqueId(), "bloodTrail", i);
+      BossBarManager.createBar(player, "Blood Trail", i, ChatColor.YELLOW);
+      CooldownManager.setCooldown(player.getUniqueId(), "bloodTrail", i);
     } 
   }
   
@@ -322,8 +322,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e.containsKey(player.getUniqueId())) {
       You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h(player);
       int i = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g.getConfig().getInt("bloodTrailCooldown", 60);
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player, "Blood Trail", i, ChatColor.YELLOW);
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player.getUniqueId(), "bloodTrail", i);
+      BossBarManager.createBar(player, "Blood Trail", i, ChatColor.YELLOW);
+      CooldownManager.setCooldown(player.getUniqueId(), "bloodTrail", i);
     } 
   }
   
@@ -333,8 +333,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     double d2 = Main.getInstance().getConfig().getDouble("hookMaxDistance", 100.0D);
     double d3 = Main.getInstance().getConfig().getDouble("hookDamage", 4.0D);
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), "minecraft:bloodlust.resurface", 2.0F, 1.4F);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer.getUniqueId(), "bloodHook", i);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, "Blood Hook", i, ChatColor.YELLOW);
+    CooldownManager.setCooldown(paramPlayer.getUniqueId(), "bloodHook", i);
+    BossBarManager.createBar(paramPlayer, "Blood Hook", i, ChatColor.YELLOW);
     Location location = paramPlayer.getEyeLocation();
     Vector vector = location.getDirection().normalize().clone();
     World world = paramPlayer.getWorld();
@@ -349,7 +349,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(LivingEntity paramLivingEntity, Player paramPlayer) {
     {
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764t.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramLivingEntity.getLocation()))
+      if (WorldGuardHook.isBlocked(paramLivingEntity.getLocation()))
         return; 
     }(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c0(paramLivingEntity, paramPlayer)).runTaskTimer((Plugin)Main.getInstance(), 0L, 1L);
   }

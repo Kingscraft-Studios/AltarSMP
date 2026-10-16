@@ -22,7 +22,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     {
       if (configurationSection != null && configurationSection.getBoolean("enabled")) {
         List list = configurationSection.getStringList("shape");
-        ItemStack itemStack = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764x.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764w();
+        ItemStack itemStack = CustomItemRegistry.getIllusionCore();
         ShapedRecipe shapedRecipe = new ShapedRecipe(new NamespacedKey((Plugin)paramMain, "core_crafting"), itemStack);
         shapedRecipe.shape((String[])list.toArray((Object[])new String[0]));
         ConfigurationSection configurationSection1 = configurationSection.getConfigurationSection("ingredients");

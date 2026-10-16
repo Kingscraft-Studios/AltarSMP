@@ -25,8 +25,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       return true;
     } 
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a();
-    player.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN));
-    player.sendMessage(String.valueOf(ChatColor.GOLD) + String.valueOf(ChatColor.GOLD));
+    player.sendMessage(String.valueOf(ChatColor.GREEN) + "You have started the Copper Helmet event, 5 random players will get the Helmet Fragment which is needed for copper helmet altar");
+    player.sendMessage(String.valueOf(ChatColor.GOLD) + "Use /altar spawn copperhelmet to spawn the altar for copper helmet");
     return false;
   }
   
@@ -69,7 +69,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   }
   
   public boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(ItemStack paramItemStack) {
-    return Main.areSimilar(paramItemStack, You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764x.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764B());
+    return Main.areSimilar(paramItemStack, CustomItemRegistry.getHelmetShard());
   }
   
   private static MatchException a(MatchException paramMatchException) {

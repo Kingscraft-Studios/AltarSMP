@@ -22,10 +22,10 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
         boolean bool = ((Boolean)this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.getOrDefault(uUID, Boolean.valueOf(true))).booleanValue();
         {
           if (bool) {
-            player.sendActionBar(String.valueOf(ChatColor.GOLD) + String.valueOf(ChatColor.GOLD) + "3x3 Mining: " + String.valueOf(ChatColor.GREEN));
+            player.sendActionBar(String.valueOf(ChatColor.GOLD) + "3x3 Mining: " + String.valueOf(ChatColor.GREEN) + "Enabled");
             continue;
           } 
-        }player.sendActionBar(String.valueOf(ChatColor.GOLD) + String.valueOf(ChatColor.GOLD) + "3x3 Mining: " + String.valueOf(ChatColor.RED));
+        }player.sendActionBar(String.valueOf(ChatColor.GOLD) + "3x3 Mining: " + String.valueOf(ChatColor.RED) + "Disabled");
       } 
     } 
   }

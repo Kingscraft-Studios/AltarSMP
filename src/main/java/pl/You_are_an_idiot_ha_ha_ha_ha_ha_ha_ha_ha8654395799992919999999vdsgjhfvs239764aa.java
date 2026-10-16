@@ -89,11 +89,11 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayerItemConsumeEvent.getItem())) {
         paramPlayerItemConsumeEvent.setCancelled(true);
         (new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c9(this, paramPlayerItemConsumeEvent)).runTaskLater((Plugin)Main.getInstance(), 1L);
-        if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayerItemConsumeEvent.getPlayer().getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c)) {
+        if (!CooldownManager.isOnCooldown(paramPlayerItemConsumeEvent.getPlayer().getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c)) {
           int i = Main.getInstance().getConfig().getInt("scytheThrowCooldown", 30);
           You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayerItemConsumeEvent.getPlayer());
-          You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayerItemConsumeEvent.getPlayer(), "Scythe Throw", i, ChatColor.YELLOW);
-          You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayerItemConsumeEvent.getPlayer().getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c, i);
+          BossBarManager.createBar(paramPlayerItemConsumeEvent.getPlayer(), "Scythe Throw", i, ChatColor.YELLOW);
+          CooldownManager.setCooldown(paramPlayerItemConsumeEvent.getPlayer().getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c, i);
         } 
       } 
     }}
@@ -102,9 +102,9 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     byte b1 = 35;
     double d = 2.2D;
     for (byte b2 = 0; b2 < b1; b2++) {
-      double d2;
-      double d3;
-      double d4;
+      double d2 = 0;
+      double d3 = 0;
+      double d4 = 0;
       double d1 = b2 / b1;
       if (!paramBoolean1)
         d1 = 1.0D - d1; 
@@ -206,7 +206,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       if (!paramPlayer.getWorld().equals(paramItemDisplay.getWorld()))
         return; 
     }{
-      if (paramPlayer.getInventory().contains(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764x.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g())) {
+      if (paramPlayer.getInventory().contains(CustomItemRegistry.getCrazySlots())) {
         {
           if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ae.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramItemDisplay.getItemStack())) {
             paramItemDisplay.remove();
@@ -237,7 +237,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     ArrayList<ItemDisplay> arrayList = new ArrayList();
     Location location = paramPlayer.getLocation();
     int i = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.getConfig().getInt("commandOfIceCooldown", 45);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, "Command Of Ice", i, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Command Of Ice", i, ChatColor.YELLOW);
     for (byte b = 0; b < 3; b++) {
       double d = 0.0D;
       Vector vector1 = location.getDirection();
@@ -279,7 +279,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       {
         if (entity instanceof LivingEntity && entity != paramPlayer) {
           LivingEntity livingEntity = (LivingEntity)entity;
-          You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a5.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(livingEntity, d1, paramPlayer);
+          TrueDamage.apply(livingEntity, d1, paramPlayer);
           livingEntity.setNoDamageTicks(0);
           livingEntity.setFreezeTicks(100);
           Vector vector = livingEntity.getLocation().toVector().subtract(paramLocation.toVector()).normalize().multiply(0.5D);

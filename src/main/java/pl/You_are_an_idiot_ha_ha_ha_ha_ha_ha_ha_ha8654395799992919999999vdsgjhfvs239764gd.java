@@ -18,7 +18,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
   public void run() {
     for (Player player : Bukkit.getOnlinePlayers()) {
       {
-        if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bk.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(player)) {
+        if (AltarRitualListener.isCopperChestplatePlayer(player)) {
           cancel();
           return;
         } 
@@ -30,14 +30,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
         } 
       } 
       if (bool) {
-        int i = player.getLocation().getBlockZ();
-        int j = player.getLocation().getBlockY();
-        int k = player.getLocation().getBlockX();
-        String str1 = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player.getWorld());
-        String str2 = String.valueOf(ChatColor.of("#B06736"));
-        String str3 = player.getName();
-        String str4 = ChatColor.BOLD.toString();
-        Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")) + str4 + str3 + " §rhas the " + str2 + "§lChestplate Shard§r in the " + str1 + " at (" + k + ", " + j + ", " + i);
+        Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + ChatColor.BOLD.toString() + player.getName() + " §rhas the " + String.valueOf(ChatColor.of("#B06736")) + "§lChestplate Shard§r in the " + this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player.getWorld()) + " at (" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ() + ")");
       } 
     } 
   }

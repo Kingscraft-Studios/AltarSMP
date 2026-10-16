@@ -70,16 +70,16 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       {
       
       }String str1 = (player != null) ? player.getName() : Bukkit.getOfflinePlayer(uUID).getName();
-      Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")) + ChatColor.BOLD.toString() + str1);
-      String str2 = String.valueOf(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ch.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(i));
+      Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + ChatColor.BOLD.toString() + str1 + "§r has won the event!");
+      String str2 = TimeUtils.formatMmSs(i);
       String str3 = String.valueOf(ChatColor.of("#B06736"));
       {
-        Bukkit.broadcastMessage("Total holding time: §l" + "Total holding time: §l" + str3);
+        Bukkit.broadcastMessage("Total holding time: §l" + str2 + str3);
         if (player != null && player.isOnline()) {
           ItemStack itemStack1 = player.getInventory().getLeggings();
-          player.getInventory().setLeggings(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764x.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764E());
+          player.getInventory().setLeggings(CustomItemRegistry.getCopperLeggings());
           player.getInventory().addItem(new ItemStack[] { itemStack1 });
-          player.sendMessage(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")) + ChatColor.BOLD.toString());
+          player.sendMessage(String.valueOf(ChatColor.of("#B06736")) + ChatColor.BOLD.toString() + "You have received the Copper Leggings!");
           ItemStack itemStack2 = null;
           for (ItemStack itemStack : player.getInventory().getContents()) {
             if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(itemStack)) {
@@ -195,19 +195,19 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     int i = Main.getInstance().getConfig().getInt("leggingsTime", 30) * 60;
     for (Player player : Bukkit.getOnlinePlayers()) {
       player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1.0F, 1.0F);
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")), i, BarColor.PINK);
+      BossBarManager.showEventBar(String.valueOf(ChatColor.of("#B06736")) + "\u00a7lEvent Time Remaining:", i, BarColor.PINK);
     } 
   }
   
   private void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c(Player paramPlayer) {
     Location location = paramPlayer.getEyeLocation();
     String str1 = String.valueOf(ChatColor.of("#B06736"));
-    int i = location.getBlockZ();
-    int j = location.getBlockY();
     int k = location.getBlockX();
+    int j = location.getBlockY();
+    int i = location.getBlockZ();
     String str2 = ChatColor.of("#B06736").toString();
     String str3 = String.valueOf(ChatColor.of("#B06736"));
-    Bukkit.broadcastMessage("A " + "A " + str3 + "§lCopper Infused Heavy Core §rhas spawned!\\nLocation: " + str2 + "§lX: " + k + " §lY: " + j + " §lZ: " + i + " §rPunch players to steal the core! Whoever holds it longest receives the " + str1);
+    Bukkit.broadcastMessage("A " + String.valueOf(ChatColor.of("#B06736")) + "\u00a7lCopper Infused Heavy Core \u00a7rhas spawned!\\nLocation: " + str2 + "\u00a7lX: " + k + " \u00a7lY: " + j + " \u00a7lZ: " + i + " \u00a7rPunch players to steal the core! Whoever holds it longest receives the " + String.valueOf(ChatColor.of("#B06736")) + "\u00a7lCopper Leggings\u00a7r!");
     location.setYaw(0.0F);
     location.setPitch(0.0F);
     location.getWorld().spawn(location.clone().add(0.0D, 2.0D, 0.0D), ItemDisplay.class, You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bi::lambda$spawnCore$1);
@@ -223,7 +223,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     itemMeta.setCustomModelData(Integer.valueOf(998));
     itemMeta.addEnchant(Enchantment.BREACH, 1, true);
     itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
-    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")));
+    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + "Copper Infused Heavy Core");
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
@@ -241,7 +241,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       if (paramPlayerInteractAtEntityEvent.getRightClicked().getPersistentDataContainer().get(this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c, PersistentDataType.STRING) != "legs")
         return; 
     }paramPlayerInteractAtEntityEvent.getPlayer().getInventory().addItem(new ItemStack[] { You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a() });
-    Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")) + "§lALERT! §r" + paramPlayerInteractAtEntityEvent.getPlayer().getName());
+    Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + "\u00a7lALERT! \u00a7r" + paramPlayerInteractAtEntityEvent.getPlayer().getName() + " has picked up the Copper Infused Heavy Core!");
     for (Entity entity1 : paramPlayerInteractAtEntityEvent.getRightClicked().getNearbyEntities(2.0D, 2.0D, 2.0D)) {
       {
         if (entity1 instanceof ItemDisplay) {
@@ -272,7 +272,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
         if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(itemStack)) {
           player2.getInventory().removeItem(new ItemStack[] { itemStack });
           player1.getInventory().addItem(new ItemStack[] { You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a() });
-          Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.of("#B06736")) + "§lALERT! §r" + player1.getName());
+          Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + "\u00a7lALERT! \u00a7r" + player1.getName() + " stole the core!");
           break;
         } 
       }} 
@@ -289,19 +289,10 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   }
   
   public boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(ItemStack paramItemStack) {
-    {
-      if (paramItemStack != null) {
-        {
-          if (!paramItemStack.hasItemMeta())
-            return false; 
-        }} else {
-        return false;
-      } 
-    }{
-      if (paramItemStack.getType() == Material.HEAVY_CORE)
-        {
-          if (paramItemStack.getItemMeta().getCustomModelData() == 998);
-        }}return false;
+    if (paramItemStack == null || !paramItemStack.hasItemMeta()) {
+      return false;
+    }
+    return paramItemStack.getType() == Material.HEAVY_CORE && paramItemStack.getItemMeta().getCustomModelData() == 998;
   }
   
   private static void lambda$spawnCore$1(ItemDisplay paramItemDisplay) {

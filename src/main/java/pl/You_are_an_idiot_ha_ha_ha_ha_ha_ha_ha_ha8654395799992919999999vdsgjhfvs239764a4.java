@@ -29,10 +29,10 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     ItemStack itemStack = new ItemStack(Material.CLAY_BALL);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setCustomModelData(Integer.valueOf(4));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.GOLD) + String.valueOf(ChatColor.GOLD) + ChatColor.BOLD.toString());
+    itemMeta.setDisplayName(String.valueOf(ChatColor.GOLD) + "Crazy Selector" + "Crazy Selector");
     itemMeta.setUnbreakable(true);
     ArrayList<String> arrayList = new ArrayList();
-    arrayList.add(String.valueOf(ChatColor.GRAY) + String.valueOf(ChatColor.GRAY));
+    arrayList.add(String.valueOf(ChatColor.GRAY) + "Right-Click to select a legendary!");
     itemMeta.setLore(arrayList);
     itemStack.setItemMeta(itemMeta);
     return itemStack;
@@ -46,7 +46,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
           if (paramPlayerInteractEvent.getPlayer().getInventory().getItemInMainHand().isSimilar(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a())) {
             paramPlayerInteractEvent.getPlayer().getInventory().getItemInMainHand().setAmount(paramPlayerInteractEvent.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
             You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayerInteractEvent.getPlayer());
-            You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayerInteractEvent.getPlayer().getUniqueId(), "open", 2.147483647E9D);
+            CooldownManager.setCooldown(paramPlayerInteractEvent.getPlayer().getUniqueId(), "open", 2.147483647E9D);
           } 
         }}}
   
@@ -58,14 +58,14 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       {
         if (paramInventoryCloseEvent.getView().getTitle().equals(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a))
           {
-            if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player.getUniqueId(), "open"))
+            if (CooldownManager.isOnCooldown(player.getUniqueId(), "open"))
               player.getInventory().addItem(new ItemStack[] { You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a() }); 
           }}} 
   }
   
   public void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Player paramPlayer) {
     Inventory inventory = Bukkit.createInventory((InventoryHolder)paramPlayer, 27, You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a);
-    List<ItemStack> list = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764l.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b();
+    List<ItemStack> list = CustomItem.getRollingDropItems();
     for (ItemStack itemStack : list) {
       inventory.addItem(new ItemStack[] { itemStack });
     } 
@@ -88,12 +88,12 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
             if (itemStack == null)
               return; 
           }{
-            if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764l.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v1(itemStack) == You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764l.ILLUSION_WAND) {
+            if (CustomItem.fromItem(itemStack) == CustomItem.ILLUSION_WAND) {
               You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ab.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player, itemStack, EntityType.WARDEN);
               return;
             } 
           }player.getInventory().addItem(new ItemStack[] { itemStack });
-          You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player.getUniqueId(), "open", 0.0D);
+          CooldownManager.setCooldown(player.getUniqueId(), "open", 0.0D);
           player.closeInventory();
           player.playSound((Entity)player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
         } 

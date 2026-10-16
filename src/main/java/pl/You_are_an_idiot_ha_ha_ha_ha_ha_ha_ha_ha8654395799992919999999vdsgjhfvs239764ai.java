@@ -131,15 +131,15 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   public void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(Player paramPlayer) {
     {
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer.getUniqueId(), "palecannon"))
+      if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "palecannon"))
         return; 
     }CrossbowMeta crossbowMeta = (CrossbowMeta)paramPlayer.getInventory().getItemInMainHand().getItemMeta();
     crossbowMeta.setChargedProjectiles(null);
     paramPlayer.getInventory().getItemInMainHand().setItemMeta((ItemMeta)crossbowMeta);
     paramPlayer.setVelocity(paramPlayer.getLocation().getDirection().normalize().multiply(-0.5D));
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 2.0F, 1.5F);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer.getUniqueId(), "palecannon", You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, "Pale Cannon", You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b, ChatColor.YELLOW, BarColor.YELLOW);
+    CooldownManager.setCooldown(paramPlayer.getUniqueId(), "palecannon", You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b);
+    BossBarManager.createBar(paramPlayer, "Pale Cannon", You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b, ChatColor.YELLOW, BarColor.YELLOW);
     Location location = paramPlayer.getEyeLocation();
     Vector vector1 = location.getDirection().normalize();
     ItemDisplay itemDisplay = (ItemDisplay)paramPlayer.getWorld().spawnEntity(location, EntityType.ITEM_DISPLAY);
@@ -151,7 +151,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   }
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Location paramLocation, Player paramPlayer) {
-    paramLocation = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ad.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramLocation, 3);
+    paramLocation = VulcanGauntletAbility.findSafeExplosionLocation(paramLocation, 3);
     World world = paramLocation.getWorld();
     world.playSound(paramLocation, Sound.ENTITY_GENERIC_EXPLODE, 2.0F, 1.0F);
     double d = Main.getInstance().getConfig().getDouble("paleDamage", 8.0D);
@@ -163,7 +163,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       }{
         if (!Main.isTrusted(paramPlayer, entity) && entity instanceof LivingEntity) {
           LivingEntity livingEntity = (LivingEntity)entity;
-          You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a5.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(livingEntity, d, paramPlayer);
+          TrueDamage.apply(livingEntity, d, paramPlayer);
         } 
       }} 
     if (Main.getInstance().getConfig().getBoolean("paleParticleEffects", true)) {

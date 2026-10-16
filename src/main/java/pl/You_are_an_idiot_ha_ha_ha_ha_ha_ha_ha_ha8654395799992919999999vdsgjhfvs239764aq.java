@@ -58,8 +58,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     Vector vector1 = location2.getDirection().normalize();
     {
       if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(itemStack)) {
-        You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer.getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b, 0.0D);
-        You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, "Sonic Blast");
+        CooldownManager.setCooldown(paramPlayer.getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b, 0.0D);
+        BossBarManager.removeBar(paramPlayer, "Sonic Blast");
         paramPlayer.sendMessage("You must keep holding Echo");
         return;
       } 
@@ -88,7 +88,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       double d5 = location2.getY();
       double d6 = location2.getZ() + d1 * Math.sin(d3);
       double d7 = Math.cos(d3) * d2;
-      double d8 = 0.0D;
+      double d8 = 0;
       double d9 = Math.sin(d3) * d2;
       location2.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME, d4, d5, d6, 0, d7, d8, d9, 6.0E-7D);
       location2.getWorld().spawnParticle(Particle.SCULK_SOUL, d4, d5, d6, 0, d7, d8, d9, 6.0E-7D);
@@ -111,7 +111,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
         if (Main.isTrusted(paramPlayer, (Entity)player))
           continue; 
       }player.removePotionEffect(PotionEffectType.INVISIBILITY);
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cb.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player);
+      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cb.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(player);
     } 
   }
 

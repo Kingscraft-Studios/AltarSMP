@@ -160,7 +160,7 @@ public class XMLTokener extends JSONTokener {
         }
         // if our entity is an encoded unicode point, parse it.
         if (e.charAt(0) == '#') {
-            int cp;
+            int cp = 0;
             if (e.charAt(1) == 'x' || e.charAt(1) == 'X') {
                 // hex encoded unicode
                 cp = Integer.parseInt(e.substring(2), 16);
@@ -344,10 +344,10 @@ public class XMLTokener extends JSONTokener {
     // even though ours does not have that method, to have API compatibility, our method in the subclass
     // should match.
     public void skipPast(String to) {
-        boolean b;
+        boolean b = false;
         char c;
-        int i;
-        int j;
+        int i = 0;
+        int j = 0;
         int offset = 0;
         int length = to.length();
         char[] circle = new char[length];

@@ -84,47 +84,20 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
   }
   
   private static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a() {
-    // Byte code:
-    //   0: iconst_1
-    //   1: invokestatic You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a : (Z)V
-    //   4: getstatic pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bv.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h : Z
-    //   7: ifeq -> 43
-    //   10: getstatic pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bw.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e : Lio/papermc/paper/threadedregions/scheduler/ScheduledTask;
-    //   13: ifnull -> 43
-    //   16: goto -> 23
-    //   19: invokestatic a : (Ljava/lang/Throwable;)Ljava/lang/Throwable;
-    //   22: athrow
-    //   23: getstatic pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bw.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e : Lio/papermc/paper/threadedregions/scheduler/ScheduledTask;
-    //   26: invokeinterface cancel : ()Lio/papermc/paper/threadedregions/scheduler/ScheduledTask$CancelledState;
-    //   31: pop
-    //   32: aconst_null
-    //   33: putstatic pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bw.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e : Lio/papermc/paper/threadedregions/scheduler/ScheduledTask;
-    //   36: goto -> 81
-    //   39: invokestatic a : (Ljava/lang/Throwable;)Ljava/lang/Throwable;
-    //   42: athrow
-    //   43: getstatic pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bv.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h : Z
-    //   46: ifne -> 81
-    //   49: getstatic pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bw.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f : Lorg/bukkit/scheduler/BukkitTask;
-    //   52: ifnull -> 81
-    //   55: goto -> 62
-    //   58: invokestatic a : (Ljava/lang/Throwable;)Ljava/lang/Throwable;
-    //   61: athrow
-    //   62: getstatic pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bw.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f : Lorg/bukkit/scheduler/BukkitTask;
-    //   65: invokeinterface cancel : ()V
-    //   70: aconst_null
-    //   71: putstatic pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bw.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f : Lorg/bukkit/scheduler/BukkitTask;
-    //   74: goto -> 81
-    //   77: invokestatic a : (Ljava/lang/Throwable;)Ljava/lang/Throwable;
-    //   80: athrow
-    //   81: iconst_0
-    //   82: putstatic pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bw.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a : Z
-    //   85: return
-    // Exception table:
-    //   from	to	target	type
-    //   0	16	19	java/lang/MatchException
-    //   10	39	39	java/lang/MatchException
-    //   43	55	58	java/lang/MatchException
-    //   49	74	77	java/lang/MatchException
+    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(true);
+    if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bv.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h) {
+      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e != null) {
+        You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e.cancel();
+        You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e = null;
+      } 
+    } 
+    if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bv.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h) {
+      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f != null) {
+        You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f.cancel();
+        You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f = null;
+      } 
+    } 
+    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a = false;
   }
   
   private static void lambda$startHeartbeat$1() {

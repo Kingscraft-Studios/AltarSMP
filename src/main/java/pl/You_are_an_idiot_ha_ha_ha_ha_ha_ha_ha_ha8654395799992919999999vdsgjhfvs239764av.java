@@ -82,7 +82,8 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       }{
         if (Main.isTrusted(paramPlayer, (Entity)player))
           continue; 
-      }You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a5.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a((LivingEntity)player, d, paramPlayer);
+      }
+        TrueDamage.apply((LivingEntity)player, d, paramPlayer);
     } 
   }
 

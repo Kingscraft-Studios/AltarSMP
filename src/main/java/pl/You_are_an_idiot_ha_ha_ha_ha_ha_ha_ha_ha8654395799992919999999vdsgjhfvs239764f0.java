@@ -59,7 +59,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
         Player player = Bukkit.getPlayer(uUID);
         {
           if (player != null)
-            You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player, "⚠ YOU ARE IN NUKE RADIUS ⚠"); 
+            BossBarManager.removeBar(player, "⚠ YOU ARE IN NUKE RADIUS ⚠");
         }} 
       cancel();
       return;
@@ -83,14 +83,14 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
           {
             if (!this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f.contains(player.getUniqueId())) {
               this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f.add(player.getUniqueId());
-              You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player, "§c⚠ §c§lYOU ARE IN NUKE RADIUS §c⚠", this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a, ChatColor.RED);
+              BossBarManager.createBar(player, "§c⚠ §c§lYOU ARE IN NUKE RADIUS §c⚠", this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a, ChatColor.RED);
             } 
           }}{
         if (!bool)
           {
             if (this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f.contains(player.getUniqueId())) {
               this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f.remove(player.getUniqueId());
-              You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player, "⚠ YOU ARE IN NUKE RADIUS ⚠");
+              BossBarManager.removeBar(player, "⚠ YOU ARE IN NUKE RADIUS ⚠");
             } 
           }}} 
     if (this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a % this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h == 0)
@@ -100,8 +100,8 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
         String str1 = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764k;
         String str2 = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764j;
         String str3 = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764i;
-        player.sendMessage("§cArea §e[" + "§cArea §e[" + str3 + " " + str2 + " " + str1);
-        player.sendMessage("§cwill be §4NUKED §cin §e" + "§cwill be §4NUKED §cin §e" + this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a);
+        player.sendMessage("§cArea §e[" + str3 + " " + str2 + " " + str1 + "]");
+        player.sendMessage("§cwill be §4NUKED §cin §e" + this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a + " seconds");
         player.sendMessage(" ");
       }  
     this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a--;

@@ -62,7 +62,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     paramPlayer.setVelocity(paramPlayer.getLocation().getDirection().multiply(d1));
     paramPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 2));
     int i = Main.getInstance().getConfig().getInt("skeletalLeapCooldown", 30);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, "Skeletal Leap", i, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Skeletal Leap", i, ChatColor.YELLOW);
   }
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Location paramLocation, Material paramMaterial, int paramInt1, double paramDouble, int paramInt2) {
@@ -97,13 +97,13 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_SKELETON_AMBIENT, 1.0F, 0.8F);
     Location location = paramPlayer.getLocation().clone().add(0.0D, 1.0D, 0.0D);
     Vector vector = location.getDirection().normalize();
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer, "Bone Cage", k, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Bone Cage", k, ChatColor.YELLOW);
     (new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c6(i, location, vector, paramPlayer, j)).runTaskTimer((Plugin)Main.getInstance(), 0L, 1L);
   }
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(LivingEntity paramLivingEntity, int paramInt) {
     {
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764t.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramLivingEntity.getLocation()))
+      if (WorldGuardHook.isBlocked(paramLivingEntity.getLocation()))
         return; 
     }paramLivingEntity.getWorld().playSound(paramLivingEntity.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 2.0F, 0.7F);
     paramLivingEntity.getWorld().playSound(paramLivingEntity.getLocation(), Sound.ENTITY_SKELETON_DEATH, 1.0F, 0.8F);

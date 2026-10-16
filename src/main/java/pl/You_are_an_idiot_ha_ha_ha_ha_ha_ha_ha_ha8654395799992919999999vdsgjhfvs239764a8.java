@@ -12,28 +12,29 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a8 implements CommandExecutor, TabCompleter {
-  public final You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bm You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a;
+  public final AltarController You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a;
   
-  public final You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764br You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b;
+  public final AltarManager You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b;
   
   
   
-  public You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a8(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bm paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bm, You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764br paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764br) {
+  public You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a8(AltarController paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bm, AltarManager paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764br) {
     this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a = paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bm;
     this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b = paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764br;
   }
-  
+
+  @Override
   public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
     Player player;
     if (paramCommandSender instanceof Player) {
       player = (Player)paramCommandSender;
     } else {
-      paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+      paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + "Only players can use this command!");
       return true;
     } 
     {
       if (paramArrayOfString.length < 1) {
-        player.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+        player.sendMessage(String.valueOf(ChatColor.RED) + "Usage: /altar <spawn|remove|reset|settings> <type>");
         return true;
       } 
     }String str1 = paramArrayOfString[0].toLowerCase();
@@ -44,13 +45,13 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       } 
     }{
       if (paramArrayOfString.length < 2) {
-        player.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+        player.sendMessage(String.valueOf(ChatColor.RED) + "Usage: /altar <spawn|remove|reset> <type>");
         return true;
       } 
     }String str2 = paramArrayOfString[1];
     {
-      if (!this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a().contains(str2)) {
-        player.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED) + "Unknown altar type: ");
+      if (!this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.getAltarNames().contains(str2)) {
+    player.sendMessage(String.valueOf(ChatColor.RED) + "Unknown altar type: " + str2);
         return true;
       } 
     }String str3 = str1;
@@ -71,38 +72,41 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
           break;
       } 
     }{
-      byte b1;
       switch (b) {
         case 0:
           {
-            if (this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(player.getLocation().getBlock().getLocation(), str2)) {
-              player.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN));
+            if (this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.createAltar(player.getLocation().getBlock().getLocation(), str2)) {
+              player.sendMessage(String.valueOf(ChatColor.GREEN) + "Altar spawned!");
             } else {
-              player.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+              player.sendMessage(String.valueOf(ChatColor.RED) + "Failed to spawn altar!");
             } 
           }return true;
         case 1:
-          b1 = 0;
-          for (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1 you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1 : this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(str2)) {
+          {
+          int b1 = 0;
+          for (AltarInstance you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1 : this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.getAltarsByType(str2)) {
             {
-              if (this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b__v0(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v1()))
+              if (this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.removeAltar(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.getLocation()))
                 b1++; 
             }} 
-          player.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN) + "Removed " + b1);
+          player.sendMessage(String.valueOf(ChatColor.GREEN) + "Removed " + b1 + " altar(s).");
           return true;
+          }
         case 2:
-          b1 = 0;
-          for (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1 you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1 : this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(str2)) {
-            this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a());
+          {
+          int b1 = 0;
+          for (AltarInstance you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1 : this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.getAltarsByType(str2)) {
+            this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.getAltarsByType(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.getType());
             b1++;
           } 
-          player.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN) + "Reset " + b1);
+          player.sendMessage(String.valueOf(ChatColor.GREEN) + "Reset " + b1 + " altar(s).");
           return true;
+          }
       } 
-    }player.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+    }player.sendMessage(String.valueOf(ChatColor.RED) + "Usage: /altar <spawn|remove|reset> <type>");
     return true;
   }
-  
+
   public List<String> onTabComplete(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
     ArrayList<String> arrayList = new ArrayList();
     {
@@ -111,12 +115,14 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       } else if (paramArrayOfString.length == 2) {
         String str = paramArrayOfString[1].toUpperCase();
         Objects.requireNonNull(arrayList);
-        this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a().stream().filter(paramTab -> lambda$onTabComplete$0(str, paramTab)).forEach(arrayList::add);
-      } 
+        // Changed the method reference name to avoid collision
+        this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.getAltarNames().stream().filter(paramTab -> isValidTab(str, paramTab)).forEach(arrayList::add);
+      }
     }return arrayList;
   }
-  
-  private static boolean lambda$onTabComplete$0(String paramString1, String paramString2) {
+
+  // Renamed from lambda$onTabComplete$0 to a custom name
+  private static boolean isValidTab(String paramString1, String paramString2) {
     return paramString2.toUpperCase().startsWith(paramString1);
   }
   

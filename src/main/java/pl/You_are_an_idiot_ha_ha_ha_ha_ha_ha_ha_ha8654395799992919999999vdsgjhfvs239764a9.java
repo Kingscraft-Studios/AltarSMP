@@ -19,35 +19,34 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
         if (paramCommandSender instanceof Player) {
           Player player1 = (Player)paramCommandSender;
           You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player1);
-          player1.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN));
+          player1.sendMessage(String.valueOf(ChatColor.GREEN) + "Your cooldowns have been cleared!");
           player1.setCooldown(Material.CROSSBOW, 1);
         } else {
-          paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+          paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + "Only players can clear their own cooldowns.");
         } 
         return true;
       } 
     }Player player = Bukkit.getPlayer(paramArrayOfString[0]);
     {
-      if (player != null)
-        {
-          if (player.isOnline()) {
-            You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player);
-            player.setCooldown(Material.CROSSBOW, 1);
-            paramCommandSender.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN) + "Cooldowns cleared for " + player.getName());
-            return true;
-          } 
-        }}paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED) + "Player '" + paramArrayOfString[0]);
-    return true;
+      if (player != null && player.isOnline()) {
+        You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player);
+        player.setCooldown(Material.CROSSBOW, 1);
+        paramCommandSender.sendMessage(String.valueOf(ChatColor.GREEN) + "Cooldowns cleared for " + player.getName() + "!");
+      } else {
+        paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + "Player '" + paramArrayOfString[0] + "' not found or not online.");
+      } 
+    }return true;
   }
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Player paramPlayer) {
     {
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bt.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer.getUniqueId());
+      CooldownManager.clearExpiries(paramPlayer.getUniqueId());
       You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ae.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayer);
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764at.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e.put(paramPlayer.getUniqueId(), Integer.valueOf(0));
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764at.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f.get(paramPlayer.getUniqueId()) != null)
-        ((BukkitTask)You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764at.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f.get(paramPlayer.getUniqueId())).cancel(); 
-    }You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bo.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.removeIf(paramBar3 -> lambda$removeAllCooldowns$0(paramPlayer, paramBar3));
+      KnightfallListener.hookCharges.put(paramPlayer.getUniqueId(), Integer.valueOf(0));
+      if (KnightfallListener.hookCooldownTasks.get(paramPlayer.getUniqueId()) != null)
+        ((BukkitTask) KnightfallListener.hookCooldownTasks.get(paramPlayer.getUniqueId())).cancel();
+    }
+    BossBarManager.activeBars.removeIf(paramBar3 -> lambda$removeAllCooldowns$0(paramPlayer, paramBar3));
   }
   
   private static boolean lambda$removeAllCooldowns$0(Player paramPlayer, BossBar paramBossBar) {

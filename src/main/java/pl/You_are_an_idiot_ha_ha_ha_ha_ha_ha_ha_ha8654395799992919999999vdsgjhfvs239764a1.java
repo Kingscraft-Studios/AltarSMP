@@ -105,15 +105,18 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player)) {
       UUID uUID = player.getUniqueId();
       boolean bool = ((Boolean)this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.getOrDefault(uUID, Boolean.valueOf(true))).booleanValue();
-      if (bool)
+      if (bool) {
         for (byte b = -1; b <= 1; b++) {
-          byte b1 = -1;
-          while (b1 <= 1) {
-            byte b2 = -1;
-            while (true)
-              b1++; 
+          for (byte b1 = -1; b1 <= 1; b1++) {
+            for (byte b2 = -1; b2 <= 1; b2++) {
+              if (b != 0 && b1 != 0 && b2 != 0) {
+                Block block1 = location.clone().add((double)b, (double)b1, (double)b2).getBlock();
+                this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(block1, player);
+              } 
+            } 
           } 
-        }  
+        } 
+      } 
     } 
   }
   

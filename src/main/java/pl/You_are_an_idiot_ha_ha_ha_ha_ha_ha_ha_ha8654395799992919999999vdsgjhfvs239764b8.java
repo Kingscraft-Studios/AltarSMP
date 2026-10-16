@@ -8,18 +8,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b8 implements CommandExecutor {
-  private final You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b9 You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a;
+  private final TrustManager You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a;
   
   
   
-  public You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b8(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b9 paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b9) {
+  public You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b8(TrustManager paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b9) {
     this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a = paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b9;
   }
   
   public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
     {
       if (!(paramCommandSender instanceof Player)) {
-        paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+        paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + "Only players can use this command.");
         return true;
       } 
     }Player player1 = (Player)paramCommandSender;
@@ -27,38 +27,38 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       if (paramArrayOfString.length == 1)
         {
           if (paramArrayOfString[0].equalsIgnoreCase("reload")) {
-            paramCommandSender.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN));
+            paramCommandSender.sendMessage(String.valueOf(ChatColor.GREEN) + "Trust configuration reloaded successfully.");
             return true;
           } 
         }}{
       if (paramArrayOfString.length != 1) {
-        player1.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED) + "Usage: /" + paramString);
+        player1.sendMessage(String.valueOf(ChatColor.RED) + "Usage: /" + paramString + " <player>");
         return true;
       } 
     }Player player2 = Bukkit.getPlayer(paramArrayOfString[0]);
     {
       if (player2 == null) {
-        player1.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+        player1.sendMessage(String.valueOf(ChatColor.RED) + "Player not found.");
         return true;
       } 
     }{
       if (paramString.equalsIgnoreCase("trust")) {
         {
-          if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b9.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(player1, player2)) {
-            player1.sendMessage(String.valueOf(ChatColor.YELLOW) + String.valueOf(ChatColor.YELLOW) + player2.getName());
+          if (TrustManager.isTrusted(player1, player2)) {
+            player1.sendMessage(String.valueOf(ChatColor.YELLOW) + player2.getName() + " is already trusted.");
           } else {
-            this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player1, player2);
-            player1.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN) + "You have trusted " + player2.getName());
+            this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.addTrust(player1, player2);
+            player1.sendMessage(String.valueOf(ChatColor.GREEN) + "You have trusted " + player2.getName() + ".");
           } 
         }} else {
         {
           if (paramString.equalsIgnoreCase("untrust"))
             {
-              if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b9.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(player1, player2)) {
-                player1.sendMessage(String.valueOf(ChatColor.YELLOW) + String.valueOf(ChatColor.YELLOW) + player2.getName());
+              if (!TrustManager.isTrusted(player1, player2)) {
+                player1.sendMessage(String.valueOf(ChatColor.YELLOW) + player2.getName() + " is not trusted.");
               } else {
-                this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(player1, player2);
-                player1.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED) + "You have untrusted " + player2.getName());
+                this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.removeTrust(player1, player2);
+                player1.sendMessage(String.valueOf(ChatColor.RED) + "You have untrusted " + player2.getName() + ".");
               } 
             }}} 
     }return true;
