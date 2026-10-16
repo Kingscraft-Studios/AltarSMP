@@ -27,7 +27,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
             player.getInventory().addItem(new ItemStack[] { You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cf.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a() });
             return true;
           } 
-          paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+          paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + a);
           return true;
         } catch (MatchException matchException) {
           throw a(null);
@@ -35,7 +35,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
     } catch (MatchException matchException) {
       throw a(null);
     } 
-    paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+    paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + a);
     return true;
   }
   

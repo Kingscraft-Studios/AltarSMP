@@ -21,7 +21,7 @@ class RestoreHookChargesTask extends BukkitRunnable {
     int i = ((Integer) KnightfallListener.hookCharges.getOrDefault(this.player.getUniqueId(), Integer.valueOf(1))).intValue();
       KnightfallListener.showHookCharges(this.player);
       if (i > 0) {
-        BossBarManager.createBar(this.player, HOOK_LABEL + HOOK_LABEL, this.cooldownSeconds, ChatColor.YELLOW);
+        BossBarManager.createBar(this.player, HOOK_LABEL + i, this.cooldownSeconds, ChatColor.YELLOW);
         KnightfallListener.startHookCooldown(this.player, this.cooldownSeconds);
       }
   }

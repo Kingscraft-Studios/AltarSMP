@@ -50,7 +50,7 @@ public class BossBarManager {
         {
           if (paramPlayer.isOnline()) {
             removeBar(paramPlayer, paramString);
-            BossBar bossBar = Bukkit.createBossBar(String.valueOf(paramChatColor) + String.valueOf(paramChatColor) + String.valueOf(ChatColor.BOLD), paramBarColor, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
+            BossBar bossBar = Bukkit.createBossBar(String.valueOf(paramChatColor) + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
             bossBar.addPlayer(paramPlayer);
             bossBar.setProgress(1.0D);
             PlayerBossBar playerBossBar = new PlayerBossBar();
@@ -67,7 +67,7 @@ public class BossBarManager {
   
   public static void showBingoBar(String paramString, int paramInt, BarColor paramBarColor) {
     hideBingoBar();
-    bingoBar = (BossBar)Bukkit.createBossBar(BossBarKeys.bossBarKey, String.valueOf(net.md_5.bungee.api.ChatColor.of("#B06736")) + String.valueOf(net.md_5.bungee.api.ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD), paramBarColor, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
+    bingoBar = (BossBar)Bukkit.createBossBar(BossBarKeys.bossBarKey, String.valueOf(net.md_5.bungee.api.ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
     bingoBar.setProgress(1.0D);
     for (Player player : Bukkit.getOnlinePlayers())
       bingoBar.addPlayer(player);
@@ -77,7 +77,7 @@ public class BossBarManager {
   
   public static void showEventBar(String paramString, int paramInt, BarColor paramBarColor) {
     hideEventBar();
-    eventBar = (BossBar)Bukkit.createBossBar(BossBarKeys.bossBarKey, String.valueOf(net.md_5.bungee.api.ChatColor.of("#B06736")) + String.valueOf(net.md_5.bungee.api.ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD), paramBarColor, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
+    eventBar = (BossBar)Bukkit.createBossBar(BossBarKeys.bossBarKey, String.valueOf(net.md_5.bungee.api.ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
     eventBar.setProgress(1.0D);
     for (Player player : Bukkit.getOnlinePlayers())
       eventBar.addPlayer(player);

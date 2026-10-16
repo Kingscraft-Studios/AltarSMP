@@ -40,7 +40,7 @@ class HolyLanceTask extends BukkitRunnable {
 
     if (this.ticks % 2 == 0) {
       byte b1 = 3;
-      for (byte b2 = 0; b2 < 'Ũ'; b2 += 8) {
+      for (byte b2 = 0; b2 < 360; b2 += 8) {
         Location location1 = this.player.getLocation().clone().add(0.0D, 1.0D, 0.0D);
         World world = this.player.getWorld();
         double d1 = Math.toRadians(b2);

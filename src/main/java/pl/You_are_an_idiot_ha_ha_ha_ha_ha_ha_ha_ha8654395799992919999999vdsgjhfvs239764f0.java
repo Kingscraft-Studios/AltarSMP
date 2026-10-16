@@ -65,7 +65,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
       return;
     } 
     for (byte b = 0; b < 5; b++) {
-      for (byte b1 = 0; b1 < 'Ũ'; b1++) {
+      for (byte b1 = 0; b1 < 360; b1++) {
         double d1 = Math.toRadians(b1);
         double d2 = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c.getX() + this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e * Math.cos(d1);
         double d3 = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c.getY() + b;

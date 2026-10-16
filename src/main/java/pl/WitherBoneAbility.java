@@ -151,7 +151,7 @@ public class WitherBoneAbility implements Listener {
   public static Location findLandingLocation(Location paramLocation, Vector paramVector, World paramWorld) {
     Location location1 = paramLocation.clone();
     Vector vector = paramVector.clone();
-    char c = 'È';
+    char c = 200;
     for (byte b = 0; b < c; b++) {
       vector.setY(vector.getY() - 0.08D);
       vector.multiply(0.98D);

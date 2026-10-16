@@ -21,7 +21,7 @@ class WitherBoneChargeBarTask extends BukkitRunnable {
         String str1 = "§7";
         if (b <= i)
           str1 = "§8"; 
-        str ="\u00a7f\u2620 -\u00a77" + "\u00a78" + "|";
+        str = str + str1 + "|";
       } 
       player.sendActionBar(str);
     } 

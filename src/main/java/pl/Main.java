@@ -69,10 +69,10 @@ public final class Main extends JavaPlugin implements Listener {
       Bukkit.getPluginManager().registerEvents(new MobDropListener(this), this);
       Bukkit.getPluginManager().registerEvents(new AltarRitualListener(this.altarController), this);
       Vampire.startPassiveTask();
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b7(this), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b6(this), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b5(this), this);
-      this.getCommand("cooldown").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a9());
+      Bukkit.getPluginManager().registerEvents(new WeaponHandleRecipeListener(this), this);
+      Bukkit.getPluginManager().registerEvents(new VulcanSkullRecipeListener(this), this);
+      Bukkit.getPluginManager().registerEvents(new IllusionCoreRecipeListener(this), this);
+      this.getCommand("cooldown").setExecutor(new ClearCooldownsCommand());
       NIGHT_PIERCER = new Vampire();
       PURE_BLADE = new ShadeSoul(this);
       WITHER_BONE = new WitherBoneAbility();
@@ -83,9 +83,9 @@ public final class Main extends JavaPlugin implements Listener {
       Bukkit.getPluginManager().registerEvents(WITHER_BONE, this);
       Bukkit.getPluginManager().registerEvents(EARTH_GAUNTLET, this);
       Bukkit.getPluginManager().registerEvents(DARK_BLADE, this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764as(), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ar(), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bx(), this);
+      Bukkit.getPluginManager().registerEvents(new KnightfallEnchantmentListener(), this);
+      Bukkit.getPluginManager().registerEvents(new EclipseAbility(), this);
+      Bukkit.getPluginManager().registerEvents(new PluginEnableListener(), this);
       Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cf(), this);
       Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764aj(), this);
       Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ao(this), this);

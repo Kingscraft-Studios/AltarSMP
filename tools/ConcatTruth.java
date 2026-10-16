@@ -177,6 +177,41 @@ public class ConcatTruth {
                         locals.put(((VarInsnNode) in).var, pop(st));
                     else if (op == Opcodes.POP2) { pop(st); pop(st); }
                     else if (op == Opcodes.DUP) { if (!st.isEmpty()) st.add(st.get(st.size()-1)); }
+                    else if (op == Opcodes.DUP_X1) {          // ...,v2,v1 -> ...,v1,v2,v1
+                        if (st.size() >= 2) {
+                            Object v1 = pop(st), v2 = pop(st);
+                            st.add(v1); st.add(v2); st.add(v1);
+                        }
+                    }
+                    else if (op == Opcodes.DUP_X2) {          // ...,v3,v2,v1 -> ...,v1,v3,v2,v1 (cat1)
+                        if (st.size() >= 3) {
+                            Object v1 = pop(st), v2 = pop(st), v3 = pop(st);
+                            st.add(v1); st.add(v3); st.add(v2); st.add(v1);
+                        } else if (st.size() == 2) {          // Form 2 (v2 cat2)
+                            Object v1 = pop(st), v2 = pop(st);
+                            st.add(v1); st.add(v2); st.add(v1);
+                        }
+                    }
+                    else if (op == Opcodes.DUP2) {            // ...,v2,v1 -> ...,v2,v1,v2,v1 (cat1)
+                        if (st.size() >= 2) {
+                            Object v1 = pop(st), v2 = pop(st);
+                            st.add(v2); st.add(v1); st.add(v2); st.add(v1);
+                        } else if (st.size() == 1) {          // Form 2 (single cat2)
+                            Object v1 = pop(st); st.add(v1); st.add(v1);
+                        }
+                    }
+                    else if (op == Opcodes.DUP2_X1) {         // ...,v3,v2,v1 -> ...,v2,v1,v3,v2,v1
+                        if (st.size() >= 3) {
+                            Object v1 = pop(st), v2 = pop(st), v3 = pop(st);
+                            st.add(v2); st.add(v1); st.add(v3); st.add(v2); st.add(v1);
+                        }
+                    }
+                    else if (op == Opcodes.DUP2_X2) {         // ...,v4,v3,v2,v1 -> ...,v2,v1,v4,v3,v2,v1
+                        if (st.size() >= 4) {
+                            Object v1 = pop(st), v2 = pop(st), v3 = pop(st), v4 = pop(st);
+                            st.add(v2); st.add(v1); st.add(v4); st.add(v3); st.add(v2); st.add(v1);
+                        }
+                    }
                     else if (op == Opcodes.SWAP) {
                         int n2 = st.size();
                         if (n2 >= 2) { Object t = st.get(n2 - 1); st.set(n2 - 1, st.get(n2 - 2)); st.set(n2 - 2, t); }

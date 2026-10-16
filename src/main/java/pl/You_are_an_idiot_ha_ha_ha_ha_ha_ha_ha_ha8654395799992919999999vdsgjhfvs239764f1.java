@@ -49,7 +49,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
     } catch (MatchException matchException) {
       throw a(null);
     } 
-    for (byte b = 0; b < 'Ũ'; b += 30) {
+    for (byte b = 0; b < 360; b += 30) {
       for (double d = 0.0D; d < 2.0D; d += 0.2D) {
         double d1 = Math.toRadians((this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a + b));
         double d2 = this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c.getX() + this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b * Math.cos(d1);

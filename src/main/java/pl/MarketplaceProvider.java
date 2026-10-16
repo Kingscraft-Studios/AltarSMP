@@ -1,26 +1,26 @@
 package pl;
 
 public class MarketplaceProvider {
-  private static String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a = "%%__POLYMART__%%";
+  private static String polymartEnabled = "%%__POLYMART__%%";
   
-  private static String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b = "%%__LICENSE__%%";
+  private static String licenseKey = "%%__LICENSE__%%";
   
-  private static String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c = "%%__USER__%%";
+  private static String polymartUserId = "%%__USER__%%";
   
-  private static String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d = "%%__BBB_LICENSE__%%";
+  private static String bbbLicenseKey = "%%__BBB_LICENSE__%%";
   
-  protected static String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a() {
+  protected static String getLicenseKey() {
     try {
-      if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d.startsWith("%%__"))
-        return You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d; 
+      if (!bbbLicenseKey.startsWith("%%__"))
+        return bbbLicenseKey;
     } catch (MatchException matchException) {
       throw a(null);
     } 
     try {
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.equals("1"))
+      if (polymartEnabled.equals("1"))
         try {
-          if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.startsWith("%%__"))
-            return "pm_" + You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b; 
+          if (!licenseKey.startsWith("%%__"))
+            return "pm_" + licenseKey;
         } catch (MatchException matchException) {
           throw a(null);
         }  
@@ -30,12 +30,12 @@ public class MarketplaceProvider {
     return null;
   }
   
-  protected static String You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b() {
+  protected static String getPolymartUserId() {
     try {
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.equals("1"))
+      if (polymartEnabled.equals("1"))
         try {
-          if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c.startsWith("%%__"))
-            return You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c; 
+          if (!polymartUserId.startsWith("%%__"))
+            return polymartUserId;
         } catch (MatchException matchException) {
           throw a(null);
         }  

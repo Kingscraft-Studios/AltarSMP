@@ -17,7 +17,7 @@ class ContagionRitualAnnouncementTask extends BukkitRunnable {
     for (Player player : Bukkit.getOnlinePlayers()) {
       player.sendMessage(" ");
       player.sendMessage("§8>> §a# CONTAGION RITUAL CALIBRATED TO");
-      player.sendMessage("\u00a7n" + this.winnerType.toUpperCase());
+      player.sendMessage("§n" + this.winnerType.toUpperCase());
       player.sendMessage(" ");
     } 
   }

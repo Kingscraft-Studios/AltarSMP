@@ -29,7 +29,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
           } 
           paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + "Player not found or not online.");
           return true;
-        }}paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.RED));
+        }}paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + "Player not found or not online.");
     return true;
   }
   

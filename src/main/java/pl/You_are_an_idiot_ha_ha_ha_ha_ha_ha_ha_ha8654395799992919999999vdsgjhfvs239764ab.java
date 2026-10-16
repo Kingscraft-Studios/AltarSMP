@@ -107,7 +107,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       String str1 = player1.getName();
       String str2 = ChatColor.UNDERLINE.toString();
       String str3 = String.valueOf(ChatColor.RED);
-      player.sendMessage(String.valueOf(ChatColor.DARK_RED) + String.valueOf(ChatColor.DARK_RED) + "» You captured " + str3 + str2);
+      player.sendMessage(String.valueOf(ChatColor.DARK_RED) + "» You captured " + str3 + str2 + str1);
       player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.5F);
     } else {
       You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player, itemStack, livingEntity.getType());
@@ -128,7 +128,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     String str1 = paramEntityType.name();
     String str2 = ChatColor.UNDERLINE.toString();
     String str3 = String.valueOf(ChatColor.RED);
-    paramPlayer.sendMessage(String.valueOf(ChatColor.DARK_RED) + String.valueOf(ChatColor.DARK_RED) + "» You captured a " + str3 + str2);
+    paramPlayer.sendMessage(String.valueOf(ChatColor.DARK_RED) + "» You captured a " + str3 + str2 + str1);
     paramPlayer.playSound((Entity)paramPlayer, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.2F);
   }
   

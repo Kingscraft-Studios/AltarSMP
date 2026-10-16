@@ -417,7 +417,7 @@ public class CustomItemRegistry {
     String str20 = String.valueOf(ChatColor.BOLD);
     String str21 = String.valueOf(ChatColor.of("#242424"));
     String str22 = String.valueOf(ChatColor.BOLD);
-    String str1 =String.valueOf(ChatColor.of("#1a1a1a")) + String.valueOf(ChatColor.BOLD) + "\u0455" + String.valueOf(ChatColor.of("#242424")) + String.valueOf(ChatColor.BOLD) + "\u029c" + String.valueOf(ChatColor.of("#2e2e2e")) + String.valueOf(ChatColor.BOLD) + "\u1d00" + String.valueOf(ChatColor.of("#383838")) + String.valueOf(ChatColor.BOLD) + "\u1d05" + String.valueOf(ChatColor.of("#424242")) + String.valueOf(ChatColor.BOLD) + "\u1d0f" + String.valueOf(ChatColor.of("#4c4c4c")) + String.valueOf(ChatColor.BOLD) + "\u1d21 " + String.valueOf(ChatColor.of("#565656")) + String.valueOf(ChatColor.BOLD) + "\u0299" + String.valueOf(ChatColor.of("#606060")) + String.valueOf(ChatColor.BOLD) + "\u029f" + String.valueOf(ChatColor.of("#6a6a6a")) + String.valueOf(ChatColor.BOLD) + "\u1d00" + String.valueOf(ChatColor.of("#747474")) + String.valueOf(ChatColor.BOLD) + "\u1d05" + String.valueOf(ChatColor.of("#888888")) + String.valueOf(ChatColor.BOLD) + "\u1d07";
+    String str1 =String.valueOf(ChatColor.of("#1a1a1a")) + String.valueOf(ChatColor.BOLD) + "ѕ" + String.valueOf(ChatColor.of("#242424")) + String.valueOf(ChatColor.BOLD) + "ʜ" + String.valueOf(ChatColor.of("#2e2e2e")) + String.valueOf(ChatColor.BOLD) + "ᴀ" + String.valueOf(ChatColor.of("#383838")) + String.valueOf(ChatColor.BOLD) + "ᴅ" + String.valueOf(ChatColor.of("#424242")) + String.valueOf(ChatColor.BOLD) + "ᴏ" + String.valueOf(ChatColor.of("#4c4c4c")) + String.valueOf(ChatColor.BOLD) + "ᴡ " + String.valueOf(ChatColor.of("#565656")) + String.valueOf(ChatColor.BOLD) + "ʙ" + String.valueOf(ChatColor.of("#606060")) + String.valueOf(ChatColor.BOLD) + "ʟ" + String.valueOf(ChatColor.of("#6a6a6a")) + String.valueOf(ChatColor.BOLD) + "ᴀ" + String.valueOf(ChatColor.of("#747474")) + String.valueOf(ChatColor.BOLD) + "ᴅ" + String.valueOf(ChatColor.of("#888888")) + String.valueOf(ChatColor.BOLD) + "ᴇ";
     itemMeta.setDisplayName(ChatColor.BOLD.toString() + str1);
     itemStack.setItemMeta(itemMeta);
     shadowBlade = itemStack;
@@ -696,7 +696,7 @@ public class CustomItemRegistry {
     ItemStack itemStack = new ItemStack(Material.AMETHYST_SHARD);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setCustomModelData(Integer.valueOf(66));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + "\u00a7lChestplate Shard");
+    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + "§lChestplate Shard");
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "gold"));
     itemMeta.setLore(List.of("§7Used to forge the Copper Chestplate"));
     itemStack.setItemMeta(itemMeta);
@@ -707,7 +707,7 @@ public class CustomItemRegistry {
     ItemStack itemStack = new ItemStack(Material.AMETHYST_SHARD);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setCustomModelData(Integer.valueOf(67));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + "\u00a7lHelmet Shard");
+    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + "§lHelmet Shard");
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "gold"));
     itemMeta.setLore(List.of("§7Used to forge the Copper Helmet"));
     itemStack.setItemMeta(itemMeta);

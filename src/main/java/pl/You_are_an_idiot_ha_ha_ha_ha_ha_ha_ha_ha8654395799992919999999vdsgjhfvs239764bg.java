@@ -78,7 +78,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       if (paramPlayerInteractAtEntityEvent.getRightClicked().getPersistentDataContainer().get(this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a, PersistentDataType.STRING) != "chest")
         return; 
     }paramPlayerInteractAtEntityEvent.getPlayer().getInventory().addItem(new ItemStack[] { CustomItemRegistry.getChestplateShard() });
-    Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + paramPlayerInteractAtEntityEvent.getPlayer().getName() + "§lALERT! §r" + " has retrieved a Chestplate Shard!");
+    Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + "§lALERT! §r" + paramPlayerInteractAtEntityEvent.getPlayer().getName() + " has retrieved a Chestplate Shard!");
     Bukkit.broadcastMessage("The weather has calmed down near the shard´s location.");
     Main.getInstance().getConfig().set("lightningFine", Boolean.valueOf(true));
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a();

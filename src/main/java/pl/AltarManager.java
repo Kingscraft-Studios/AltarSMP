@@ -108,7 +108,7 @@ public class AltarManager {
       String str1 = map.get("material").toString();
       int i = ((Integer)map.get("amount")).intValue();
       String str2 = getMaterialDisplayName(str1);
-      arrayList.add("§7" + i + str2 + "x §f");
+      arrayList.add("§7" + i + "x §f" + str2);
     } 
     arrayList.add(str);
     Map<Object, Object> hashMap = new HashMap<>();

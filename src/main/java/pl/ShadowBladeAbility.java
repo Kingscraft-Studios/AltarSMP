@@ -74,7 +74,7 @@ public class ShadowBladeAbility implements Listener {
     String str3 = ChatColor.BOLD.toString();
     String str4 = String.valueOf(ChatColor.WHITE);
     String str5 = ChatColor.BOLD.toString();
-    BossBarManager.createBar(paramPlayer, String.valueOf(ChatColor.GRAY) + String.valueOf(ChatColor.GRAY) + str5 + "! " + str4 + str3 + "INVISIBLE " + str2 + str1, 1, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, String.valueOf(ChatColor.GRAY) + str5 + "! " + str4 + str3 + "INVISIBLE " + str2 + str1 + "!", 1, ChatColor.YELLOW);
     if (Main.getInstance().getConfig().getBoolean("shadowBladeBorderLogic", true)) {
       WorldBorder worldBorder = Bukkit.createWorldBorder();
       worldBorder.setCenter(paramPlayer.getLocation());

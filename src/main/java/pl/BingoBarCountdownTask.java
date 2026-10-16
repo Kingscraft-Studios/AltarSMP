@@ -31,7 +31,7 @@ class BingoBarCountdownTask extends BukkitRunnable {
     this.elapsedTicks += BossBarManager.updateInterval;
     int i = Math.max(0, this.totalTicks - this.elapsedTicks);
     {
-      BossBarManager.bingoBar.setTitle(String.valueOf(ChatColor.valueOf("#B06736")) + String.valueOf(ChatColor.valueOf("#B06736")) + String.valueOf(ChatColor.BOLD) + " " + this.title + String.valueOf(ChatColor.valueOf("#B06736")) + String.valueOf(ChatColor.BOLD) + TimeUtils.formatMmSs(i));
+      BossBarManager.bingoBar.setTitle(String.valueOf(ChatColor.valueOf("#B06736")) + String.valueOf(ChatColor.BOLD) + this.title + " " + String.valueOf(ChatColor.valueOf("#B06736")) + String.valueOf(ChatColor.BOLD) + TimeUtils.formatMmSs(i));
       BossBarManager.bingoBar.setProgress(Math.max(0.0D, 1.0D - this.elapsedTicks / this.totalTicks));
       if (this.elapsedTicks >= this.totalTicks) {
         BossBarManager.hideBingoBar();

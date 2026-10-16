@@ -38,7 +38,7 @@ class PlayerBossBarUpdater extends BukkitRunnable {
                 if (bar.repeatCount > 0)
                   if (!bar.repeated) {
                     bar.repeated = true;
-                    bar.bossBar.setTitle(String.valueOf(ChatColor.YELLOW) + String.valueOf(ChatColor.YELLOW) + String.valueOf(ChatColor.BOLD));
+                    bar.bossBar.setTitle(String.valueOf(ChatColor.YELLOW) + String.valueOf(ChatColor.BOLD) + bar.title);
                     bar.bossBar.setColor(BarColor.YELLOW);
                     bar.expiryTime = System.currentTimeMillis() + bar.repeatCount * 1000L;
                     bar.durationMillis = bar.repeatCount * 1000L;

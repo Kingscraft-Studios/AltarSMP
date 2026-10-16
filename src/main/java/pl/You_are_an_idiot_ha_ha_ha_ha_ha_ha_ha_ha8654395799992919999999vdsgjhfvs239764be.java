@@ -184,7 +184,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
                 bool = true;
                 String str1 = you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b;
                 String str2 = String.valueOf(ChatColor.WHITE);
-                paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN) + "Completed bingo objective: " + str2);
+                paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + "Completed bingo objective: " + str2 + str1);
                 paramPlayer.playSound(paramPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.8F, 1.2F);
               } 
             } else {
@@ -203,7 +203,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
                         bool = true;
                         String str1 = you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b;
                         String str2 = String.valueOf(ChatColor.WHITE);
-                        paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN) + "Completed bingo objective: " + str2);
+                        paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + "Completed bingo objective: " + str2 + str1);
                         paramPlayer.playSound(paramPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.8F, 1.2F);
                       } 
                     } 
@@ -240,10 +240,10 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       {
         if (bool) {
           itemMeta1.setDisplayName(String.valueOf(ChatColor.GREEN) + you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b);
-          itemMeta1.setLore(List.of(String.valueOf(ChatColor.WHITE) + you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c, String.valueOf(ChatColor.GRAY) + "Requirement completed.", " ", String.valueOf(ChatColor.GREEN) + "\u2714 Completed"));
+          itemMeta1.setLore(List.of(String.valueOf(ChatColor.WHITE) + you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c, String.valueOf(ChatColor.GRAY) + "Requirement completed.", " ", String.valueOf(ChatColor.GREEN) + "✔ Completed"));
         } else {
           itemMeta1.setDisplayName(String.valueOf(ChatColor.GOLD) + you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b);
-          itemMeta1.setLore(List.of(String.valueOf(ChatColor.WHITE) + you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c, String.valueOf(ChatColor.GRAY) + "Required amount: " + you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f, " ", String.valueOf(ChatColor.RED) + "\u2718 Not Completed"));
+          itemMeta1.setLore(List.of(String.valueOf(ChatColor.WHITE) + you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c, String.valueOf(ChatColor.GRAY) + "Required amount: " + you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f, " ", String.valueOf(ChatColor.RED) + "✘ Not Completed"));
         } 
       }itemStack1.setItemMeta(itemMeta1);
       inventory.setItem(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g[b2], itemStack1);
@@ -269,15 +269,15 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
         {
           if (b2 > 10)
             break; 
-        }String str1 = ChatColor.values()[Math.min(b2, (ChatColor.values()).length - 1)].toString() + ChatColor.values()[Math.min(b2, (ChatColor.values()).length - 1)].toString();
+        }String str1 = ChatColor.values()[Math.min(b2, (ChatColor.values()).length - 1)].toString() + String.valueOf(ChatColor.RESET);
         Team team = scoreboard.registerNewTeam("t" + b2);
         team.addEntry(str1);
         int i = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(player1);
         String str2 = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player1.getName(), 10);
         String str3 = String.valueOf(ChatColor.WHITE);
         byte b = b2;
-        team.setPrefix(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(String.valueOf(ChatColor.GOLD) + String.valueOf(ChatColor.GOLD) + b + ". " + str3, 16));
-        team.setSuffix(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(String.valueOf(ChatColor.GRAY) + " " + "/40" + "/40", 16));
+        team.setPrefix(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(String.valueOf(ChatColor.GOLD) + b + ". " + str3 + str2, 16));
+        team.setSuffix(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(String.valueOf(ChatColor.GRAY) + " " + i + "/40", 16));
         objective.getScore(str1).setScore(b1--);
         b2++;
       } 
@@ -369,7 +369,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     }set.add(You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.SLAYER);
     String str1 = You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764n.SLAYER.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b;
     String str2 = String.valueOf(ChatColor.WHITE);
-    player2.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN) + "Completed bingo objective: " + str2);
+    player2.sendMessage(String.valueOf(ChatColor.GREEN) + "Completed bingo objective: " + str2 + str1);
     player2.playSound(player2.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.8F, 1.2F);
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c();
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player2);

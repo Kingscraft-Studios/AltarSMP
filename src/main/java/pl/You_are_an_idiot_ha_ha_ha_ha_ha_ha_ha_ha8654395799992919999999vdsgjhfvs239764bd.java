@@ -154,21 +154,21 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   private void lambda$boolDialog$6(String paramString, Dialog paramDialog, Player paramPlayer, Boolean paramBoolean) {
     this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.set(paramString, paramBoolean);
     Main.getInstance().saveConfig();
-    paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN) + paramString + " set to ");
+    paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + paramString + " set to " + paramBoolean);
     paramPlayer.showDialog((DialogLike)paramDialog);
   }
   
   private void lambda$floatDialog$5(String paramString, Dialog paramDialog, Player paramPlayer, Float paramFloat) {
     this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.set(paramString, paramFloat);
     Main.getInstance().saveConfig();
-    paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN) + paramString + " set to ");
+    paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + paramString + " set to " + paramFloat);
     paramPlayer.showDialog((DialogLike)paramDialog);
   }
   
   private void lambda$numDialog$4(String paramString, Dialog paramDialog, Player paramPlayer, Integer paramInteger) {
     this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b.set(paramString, paramInteger);
     Main.getInstance().saveConfig();
-    paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.GREEN) + paramString + " set to ");
+    paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + paramString + " set to " + paramInteger);
     paramPlayer.showDialog((DialogLike)paramDialog);
   }
   

@@ -155,7 +155,7 @@ public class AltarRitualListener implements Listener {
     textDisplay.setBillboard(Display.Billboard.CENTER);
     String str2 = "";
     for (byte b1 = 0; b1 < CONTAGION_SIGNAL_HEALTH; b1++)
-      str2 ="" + "\u00a7a|";
+      str2 = str2 + "§a|";
     textDisplay.setText(str2);
     Transformation transformation2 = textDisplay.getTransformation();
     transformation2.getTranslation().set(0.0F, 0.0F, 0.0F);
@@ -166,7 +166,7 @@ public class AltarRitualListener implements Listener {
     interaction.setResponsive(false);
     int i = (int)(CONTAGION_RITUAL_DURATION * 60.0D * 20.0D);
     startContagionSequence(str1, paramLocation);
-    BossBar bossBar = Bukkit.createBossBar("HUMAN" + "\u00a7a\u00a7kaa \u00a7f" + " \u00a7aCONTAGION RITUAL \u00a7a\u00a7kaa", BarColor.PINK, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
+    BossBar bossBar = Bukkit.createBossBar("§a§kaa §f" + str1 + " §aCONTAGION RITUAL §a§kaa", BarColor.PINK, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
     byte b2 = 5;
     String str3 = str1;
     (new ContagionSignalAnimationTask(interaction, bossBar, paramLocation, itemDisplay, textDisplay, i, str3, b2)).runTaskTimer((Plugin)Main.getInstance(), 140L, 1L);

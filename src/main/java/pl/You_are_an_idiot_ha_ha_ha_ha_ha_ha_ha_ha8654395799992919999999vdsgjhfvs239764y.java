@@ -205,20 +205,20 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
           if ((Main.getInstance()).bloodLustKillTracker.getKillCount(paramPlayer) >= 5) {
             paramPlayer.swingMainHand();
             paramPlayer.updateInventory();
-            You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764z.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764i(paramPlayer);
+            BloodLustAbilityListener.launchBloodHook(paramPlayer);
           } 
         }return true;
       } 
     }{
       if (Main.areSimilar(itemStack, CustomItemRegistry.getBoneBlade())) {
         {
-          if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764_.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b))
+          if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), BoneBladeAbility.SKELETAL_LEAP_ABILITY_ID))
             return true; 
         }int k = Main.getInstance().getConfig().getInt("skeletalLeapCooldown", 30);
         paramPlayer.swingMainHand();
         paramPlayer.updateInventory();
-        CooldownManager.setCooldown(paramPlayer.getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764_.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b, k);
-        You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764_.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer);
+        CooldownManager.setCooldown(paramPlayer.getUniqueId(), BoneBladeAbility.SKELETAL_LEAP_ABILITY_ID, k);
+        BoneBladeAbility.skeletalLeap(paramPlayer);
         return true;
       } 
     }{
@@ -228,9 +228,9 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
             return true; 
         }int k = Main.getInstance().getConfig().getInt("scytheThrowCooldown", 30);
         {
-          if (!CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764aa.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c)) {
-            You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764aa.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayer);
-            CooldownManager.setCooldown(paramPlayer.getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764aa.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c, k);
+          if (!CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), FrostScytheAbilityListener.SCYTHE_THROW_COOLDOWN_KEY)) {
+            FrostScytheAbilityListener.launchScythe(paramPlayer);
+            CooldownManager.setCooldown(paramPlayer.getUniqueId(), FrostScytheAbilityListener.SCYTHE_THROW_COOLDOWN_KEY, k);
             BossBarManager.createBar(paramPlayer, "Scythe Throw", k, ChatColor.YELLOW);
           } 
         }return true;
@@ -434,34 +434,34 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
           if ((Main.getInstance()).bloodLustKillTracker.getKillCount(paramPlayer) >= 3) {
             paramPlayer.swingMainHand();
             paramPlayer.updateInventory();
-            You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764z.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764g(paramPlayer);
+            BloodLustAbilityListener.startBloodTrailEffect(paramPlayer);
           } 
         }return true;
       } 
     }{
       if (Main.areSimilar(itemStack, CustomItemRegistry.getBoneBlade())) {
         {
-          if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764_.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a))
+          if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), BoneBladeAbility.BONE_CAGE_ABILITY_ID))
             return true; 
         }paramPlayer.swingMainHand();
         paramPlayer.updateInventory();
         int k = Main.getInstance().getConfig().getInt("boneCageCooldown", 20);
         paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_SKELETON_DEATH, 1.0F, 1.0F);
         paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.BLOCK_VAULT_AMBIENT, 1.0F, 1.0F);
-        You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764_.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayer);
-        CooldownManager.setCooldown(paramPlayer.getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764_.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a, k);
+        BoneBladeAbility.boneCage(paramPlayer);
+        CooldownManager.setCooldown(paramPlayer.getUniqueId(), BoneBladeAbility.BONE_CAGE_ABILITY_ID, k);
         return true;
       } 
     }{
       if (Main.areSimilar(itemStack, CustomItemRegistry.getFrostScythe())) {
         {
-          if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764aa.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b))
+          if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), FrostScytheAbilityListener.ICE_THROW_COOLDOWN_KEY))
             return true; 
         }int k = Main.getInstance().getConfig().getInt("commandOfIceCooldown", 45);
         paramPlayer.swingMainHand();
         paramPlayer.updateInventory();
-        You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764aa.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c(paramPlayer);
-        CooldownManager.setCooldown(paramPlayer.getUniqueId(), You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764aa.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b, k);
+        FrostScytheAbilityListener.activateCommandOfIce(paramPlayer);
+        CooldownManager.setCooldown(paramPlayer.getUniqueId(), FrostScytheAbilityListener.ICE_THROW_COOLDOWN_KEY, k);
         return true;
       } 
     }{
@@ -511,13 +511,13 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     {
       if (paramPlayer.getWorld().isDayTime()) {
         {
-          if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ar.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(paramPlayer)) {
+          if (EclipseAbility.solarExplosion(paramPlayer)) {
             paramPlayer.swingMainHand();
             paramPlayer.updateInventory();
           } 
         }} else {
         {
-          if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ar.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c(paramPlayer)) {
+          if (EclipseAbility.moonlitStars(paramPlayer)) {
             paramPlayer.swingMainHand();
             paramPlayer.updateInventory();
           } 
@@ -528,13 +528,13 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     {
       if (paramPlayer.getWorld().isDayTime()) {
         {
-          if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ar.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayer)) {
+          if (EclipseAbility.solarLeap(paramPlayer)) {
             paramPlayer.swingMainHand();
             paramPlayer.updateInventory();
           } 
         }} else {
         {
-          if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ar.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764d(paramPlayer)) {
+          if (EclipseAbility.moonlitShadows(paramPlayer)) {
             paramPlayer.swingMainHand();
             paramPlayer.updateInventory();
           } 

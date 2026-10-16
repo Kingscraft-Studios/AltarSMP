@@ -41,7 +41,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   
   private static void lambda$checkForUpdate$1(Player paramPlayer, ScheduledTask paramScheduledTask) {
     try {
-      String str = "" + "https://gist.githubusercontent.com/Doomwen/407b6dc6cf7e8d23432b670045523226/raw/updates.txt?t=" + System.currentTimeMillis();
+      String str = "https://gist.githubusercontent.com/Doomwen/407b6dc6cf7e8d23432b670045523226/raw/updates.txt?t=" + System.currentTimeMillis();
       URL url = new URL(str);
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
       String str2 = null;

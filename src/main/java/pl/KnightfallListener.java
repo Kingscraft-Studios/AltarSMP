@@ -284,7 +284,7 @@ public class KnightfallListener implements Listener {
     hookCharges.put(paramPlayer.getUniqueId(), Integer.valueOf(((Integer) hookCharges.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(0))).intValue() + 1));
     showHookCharges(paramPlayer);
     int k = ((Integer) hookCharges.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(1))).intValue();
-    BossBarManager.createBar(paramPlayer, "Grappling Hook §6§lx", i, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Grappling Hook §6§lx" + k, i, ChatColor.YELLOW);
     startHookCooldown(paramPlayer, i);
     launchGrapple(location, paramPlayer, j);
     return true;

@@ -29,7 +29,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
     ItemStack itemStack = new ItemStack(Material.CLAY_BALL);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setCustomModelData(Integer.valueOf(4));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.GOLD) + "Crazy Selector" + "Crazy Selector");
+    itemMeta.setDisplayName(String.valueOf(ChatColor.GOLD) + ChatColor.BOLD.toString() + "Crazy Selector");
     itemMeta.setUnbreakable(true);
     ArrayList<String> arrayList = new ArrayList();
     arrayList.add(String.valueOf(ChatColor.GRAY) + "Right-Click to select a legendary!");

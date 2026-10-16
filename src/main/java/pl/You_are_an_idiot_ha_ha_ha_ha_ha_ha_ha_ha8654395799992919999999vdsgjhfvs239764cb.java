@@ -185,7 +185,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
       if (you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cm.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f().getType() != EntityType.PLAYER)
         you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cm.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f().remove(); 
     }{
-      paramPlayer.sendTitle("", "" + String.valueOf(ChatColor.GREEN) + String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.GREEN) + "You have been " + "REVEALED" + ".");
+      paramPlayer.sendTitle("", String.valueOf(ChatColor.GREEN) + "You have been " + String.valueOf(ChatColor.RED) + "REVEALED" + String.valueOf(ChatColor.GREEN) + ".");
       You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(paramPlayer);
       paramPlayer.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20.0D);
       paramPlayer.setHealth(20.0D);
@@ -201,7 +201,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b(Player paramPlayer) {
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.5F);
     double d = 1.5D;
-    char c = 'Ϩ';
+    char c = 1000;
     for (byte b = 0; b < c; b++) {
       double d1 = Math.random() * 2.0D * Math.PI;
       double d2 = Math.acos(2.0D * Math.random() - 1.0D);

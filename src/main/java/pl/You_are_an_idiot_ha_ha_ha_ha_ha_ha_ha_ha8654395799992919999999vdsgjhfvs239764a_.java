@@ -191,8 +191,8 @@ for (CustomItemType you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha86543957999929199999
     ItemMeta itemMeta = paramItemStack.getItemMeta();
     itemMeta.addItemFlags(ItemFlag.values());
     itemMeta.removeEnchantments();
-    itemMeta.setDisplayName(paramString1 + "\u00a7l" + "\u00a7l");
-    itemMeta.setLore(List.of("\u00a77Click to view " + "\u00a77Click to view "));
+    itemMeta.setDisplayName(paramString1 + "§l" + paramString2);
+    itemMeta.setLore(List.of("§7Click to view " + paramString2));
     paramItemStack.setItemMeta(itemMeta);
     return paramItemStack;
   }

@@ -80,9 +80,9 @@ class ContagionSignalAnimationTask extends BukkitRunnable {
     int j = AltarRitualListener.CONTAGION_SIGNAL_HEALTH - i;
     byte b = 0;
 for (b = 0; b < i; b++)
-      str = "" + "\u00a7a|";
+      str = str + "§a|";
     for (b = 0; b < j; b++)
-      str = "" + "\u00a7a|";
+      str = str + "§7|";
     this.textDisplay.setText(str);
     this.bossBar.setProgress(1.0D - (double)this.ticksLived / (double)this.duration);
     this.ticksLived++;

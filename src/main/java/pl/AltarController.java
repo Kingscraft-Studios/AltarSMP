@@ -144,7 +144,7 @@ public class AltarController implements Listener {
           str = toTitleCase(str);
         } 
       } 
-      paramPlayer.sendMessage(str, "§7- §7" + paramB4.getAmount() + "x §f" + str);
+      paramPlayer.sendMessage("§7- §7" + paramB4.getAmount() + "x §f" + str);
     } 
   }
   
@@ -158,7 +158,7 @@ public class AltarController implements Listener {
     String str8 = String.valueOf(ChatColor.GOLD);
     String str9 = paramPlayer.getName();
     String str10 = ChatColor.BOLD.toString();
-    String str2 = String.valueOf(ChatColor.WHITE) + str9 + String.valueOf(ChatColor.GOLD) + String.valueOf(ChatColor.GOLD) + " has crafted the " + " has crafted the " + str5 + String.valueOf(ChatColor.GOLD) + String.valueOf(ChatColor.GOLD) + "!";
+    String str2 = String.valueOf(ChatColor.WHITE) + str3 + str9 + str4 + str6 + " has crafted the " + str7 + str5 + str8 + str10 + "!";
     Bukkit.broadcastMessage(str2);
     for (Player player : Bukkit.getOnlinePlayers())
       player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0F, 1.0F); 

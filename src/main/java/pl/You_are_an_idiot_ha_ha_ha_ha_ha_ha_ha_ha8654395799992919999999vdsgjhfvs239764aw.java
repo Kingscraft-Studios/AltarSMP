@@ -168,7 +168,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
   }
   
   public static void You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(Location paramLocation) {
-    char c = 'Ũ';
+    char c = 360;
     double d1 = 0;
     double d2 = 1500000.0D;
     Location location = paramLocation.clone();
