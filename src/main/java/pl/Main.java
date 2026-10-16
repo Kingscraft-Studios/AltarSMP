@@ -66,18 +66,22 @@ public final class Main extends JavaPlugin implements Listener {
       this.knightFallKillTracker = new KnightFallKillTracker(this);
       this.altarConfigManager = new AltarManager(this);
       this.altarController = new AltarController(this);
+
       Bukkit.getPluginManager().registerEvents(new MobDropListener(this), this);
       Bukkit.getPluginManager().registerEvents(new AltarRitualListener(this.altarController), this);
       Vampire.startPassiveTask();
       Bukkit.getPluginManager().registerEvents(new WeaponHandleRecipeListener(this), this);
       Bukkit.getPluginManager().registerEvents(new VulcanSkullRecipeListener(this), this);
       Bukkit.getPluginManager().registerEvents(new IllusionCoreRecipeListener(this), this);
+
       this.getCommand("cooldown").setExecutor(new ClearCooldownsCommand());
+
       NIGHT_PIERCER = new Vampire();
       PURE_BLADE = new ShadeSoul(this);
       WITHER_BONE = new WitherBoneAbility();
       EARTH_GAUNTLET = new EarthGauntletAbility();
       DARK_BLADE = new ShadowBladeAbility();
+
       Bukkit.getPluginManager().registerEvents(NIGHT_PIERCER, this);
       Bukkit.getPluginManager().registerEvents(PURE_BLADE, this);
       Bukkit.getPluginManager().registerEvents(WITHER_BONE, this);
@@ -86,59 +90,70 @@ public final class Main extends JavaPlugin implements Listener {
       Bukkit.getPluginManager().registerEvents(new KnightfallEnchantmentListener(), this);
       Bukkit.getPluginManager().registerEvents(new EclipseAbility(), this);
       Bukkit.getPluginManager().registerEvents(new PluginEnableListener(), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cf(), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764aj(), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ao(this), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764al(this), this);
+      Bukkit.getPluginManager().registerEvents(new CrazyRandomizerListener(), this);
+      Bukkit.getPluginManager().registerEvents(new CutlassAbility(), this);
+      Bukkit.getPluginManager().registerEvents(new WindweaverAbility(this), this);
+      Bukkit.getPluginManager().registerEvents(new PaladinEarthAbility(this), this);
       Bukkit.getPluginManager().registerEvents(this, this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cb(), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764az(this), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a0(this), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ay(this), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ax(this), this);
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764be var11 = new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764be(
-         this
-      );
+      Bukkit.getPluginManager().registerEvents(new IllusionDisguiseManager(), this);
+      Bukkit.getPluginManager().registerEvents(new NetheriteHelmetAbilityListener(this), this);
+      Bukkit.getPluginManager().registerEvents(new CopperLeggingsShockwaveAbility(this), this);
+      Bukkit.getPluginManager().registerEvents(new NetheriteChestplateComboAbility(this), this);
+      Bukkit.getPluginManager().registerEvents(new CopperBootsSpeedAbility(this), this);
+
+      BingoEventManager var11 = new BingoEventManager(this);
       Bukkit.getPluginManager().registerEvents(var11, this);
       this.getCommand("startbingo").setExecutor(var11);
       this.getCommand("bingo").setExecutor(var11);
+
       You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bi var12 = new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bi();
       this.getCommand("startleggingsevent").setExecutor(var12);
       Bukkit.getPluginManager().registerEvents(var12, this);
+
       You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bh var4 = new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bh();
       Bukkit.getPluginManager().registerEvents(var4, this);
       this.getCommand("starthelmetevent").setExecutor(var4);
+
       You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bg var5 = new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bg();
       Bukkit.getPluginManager().registerEvents(var5, this);
       this.getCommand("startchestplateevent").setExecutor(var5);
+
       Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a4(), this);
       Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bd(), this);
       Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a1(this), this);
       Bukkit.getPluginManager().registerEvents(this.altarController, this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764aq(), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764aw(), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ai(this), this);
+      Bukkit.getPluginManager().registerEvents(new EchoAbility(), this);
+      Bukkit.getPluginManager().registerEvents(new StrikerBowAbility(), this);
+      Bukkit.getPluginManager().registerEvents(new PaleCannonAbility(this), this);
       Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b_(), this);
+
       VampireEventManager var6 = new VampireEventManager();
       Bukkit.getPluginManager().registerEvents(var6, this);
       this.getCommand("vampire").setExecutor(var6);
       this.getCommand("vampire").setTabCompleter(var6);
+
       VampireEventManager.loadVampireData();
       VampireEventManager.startSunDamageTask();
-      this.getCommand("altar")
-         .setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a8(this.altarController, this.altarConfigManager));
+
+      this.getCommand("altar").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a8(this.altarController, this.altarConfigManager));
       this.getCommand("legendaries").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a_());
       this.getCommand("setkills").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ba());
       this.getCommand("setkills").setTabCompleter(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ba());
+
       WitherBoneAbility.startTask();
+
       this.getCommand("controls").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764q(this));
       this.getCommand("giveselector").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764r(this));
       Objects.requireNonNull(this.getCommand("dtest")).setExecutor(Main::lambda$onEnable$0);
       this.getCommand("checklegendary").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764s(this));
       Objects.requireNonNull(this.getCommand("credits")).setExecutor(Main::lambda$onEnable$1);
+
       this.registerTrust();
+
       Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a_(), this);
+
       BossBarManager.startUpdater();
+
       new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764co(this).runTaskLater(getInstance(), 40L);
    }
 
@@ -200,7 +215,7 @@ public final class Main extends JavaPlugin implements Listener {
          BossBarManager.removeAllBars(
             var2
          );
-         You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cb.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(
+         IllusionDisguiseManager.revealPlayer(
             var2
          );
       }
@@ -312,16 +327,16 @@ public final class Main extends JavaPlugin implements Listener {
 
    private static boolean lambda$onEnable$0(CommandSender var0, Command var1, String var2, String[] var3) {
       if (var0 instanceof Player var4) {
-         if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cb.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v1(
+         if (IllusionDisguiseManager.isDisguised(
             var4
          )) {
-            You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cb.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a__v0(
+            IllusionDisguiseManager.revealPlayer(
                var4
             );
             return true;
          }
 
-         You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cb.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(
+         IllusionDisguiseManager.disguisePlayer(
             var4, EntityType.ZOMBIE, null
          );
       }

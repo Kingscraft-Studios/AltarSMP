@@ -15,62 +15,37 @@ public class PluginEnableListener implements Listener {
     {
       if (!paramPluginEnableEvent.getPlugin().getName().equals(LicenseConstants.PLUGIN_NAME))
         return;
-    }Main main = Main.getInstance();
+    }
+    Main main = Main.getInstance();
     PluginManager pluginManager = Bukkit.getPluginManager();
-    {
-      if (System.currentTimeMillis() < 0L) {
-        pluginManager.disablePlugin((Plugin)main);
-        return;
-      }
-    }{
-      if (Runtime.getRuntime().availableProcessors() < 0) {
-        pluginManager.disablePlugin((Plugin)main);
-        return;
-      }
-    }{
-      if (Thread.activeCount() < 0) {
-        pluginManager.disablePlugin((Plugin)main);
-        return;
-      }
-    }{
 
-    }{
+    {
       if ((LicenseValidator.validateLicense(main, LicenseConstants.PLUGIN_ID) ? 1 : 0) < 1) {
-        pluginManager.disablePlugin((Plugin)main);
-        return;
-      }
-    }{
-      if (Runtime.getRuntime().freeMemory() < 0L) {
-        pluginManager.disablePlugin((Plugin)main);
-        return;
-      }
-    }{
-      if (Runtime.getRuntime().totalMemory() < 0L) {
-        pluginManager.disablePlugin((Plugin)main);
+        pluginManager.disablePlugin(main);
         return;
       }
     }
 
-    BoneBladeAbility you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764_ = new BoneBladeAbility();
-    VulcanGauntletAbility you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ad = new VulcanGauntletAbility(main);
-    BloodLustAbilityListener you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764z = new BloodLustAbilityListener(main.bloodLustKillTracker);
-    KnightfallListener you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764at = new KnightfallListener(main.knightFallKillTracker);
-    FrostScytheAbilityListener you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764aa = new FrostScytheAbilityListener(main);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ab you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ab = new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ab(main);
-    Bukkit.getPluginManager().registerEvents(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ab, (Plugin)main);
-    CrazySlotsListener you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ae = new CrazySlotsListener(main);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ag you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ag = new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ag();
-    Bukkit.getPluginManager().registerEvents(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764_, (Plugin)main);
-    Bukkit.getPluginManager().registerEvents(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ad, (Plugin)main);
-    Bukkit.getPluginManager().registerEvents(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764z, (Plugin)main);
-    Bukkit.getPluginManager().registerEvents(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764at, (Plugin)main);
-    Bukkit.getPluginManager().registerEvents(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764aa, (Plugin)main);
-    Bukkit.getPluginManager().registerEvents(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ae, (Plugin)main);
-    Bukkit.getPluginManager().registerEvents(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ag, (Plugin)main);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764y you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764y = new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764y();
-    Bukkit.getPluginManager().registerEvents(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764y, (Plugin)main);
-    main.getCommand("ability1").setExecutor(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764y);
-    main.getCommand("ability2").setExecutor(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764y);
+    BoneBladeAbility boneBladeAbility = new BoneBladeAbility();
+    VulcanGauntletAbility vulcanGauntletAbility = new VulcanGauntletAbility(main);
+    BloodLustAbilityListener bloodLustAbilityListener = new BloodLustAbilityListener(main.bloodLustKillTracker);
+    KnightfallListener knightfallListener = new KnightfallListener(main.knightFallKillTracker);
+    FrostScytheAbilityListener frostScytheAbilityListener = new FrostScytheAbilityListener(main);
+    IllusionWandAbility illusionWandAbility = new IllusionWandAbility(main);
+    Bukkit.getPluginManager().registerEvents(illusionWandAbility, main);
+    CrazySlotsListener crazySlotsListener = new CrazySlotsListener(main);
+    ScorchingBladeAbility scorchingBladeAbility = new ScorchingBladeAbility();
+    Bukkit.getPluginManager().registerEvents(boneBladeAbility, main);
+    Bukkit.getPluginManager().registerEvents(vulcanGauntletAbility, main);
+    Bukkit.getPluginManager().registerEvents(bloodLustAbilityListener, main);
+    Bukkit.getPluginManager().registerEvents(knightfallListener, main);
+    Bukkit.getPluginManager().registerEvents(frostScytheAbilityListener, main);
+    Bukkit.getPluginManager().registerEvents(crazySlotsListener, main);
+    Bukkit.getPluginManager().registerEvents(scorchingBladeAbility, main);
+    AbilityInputListener abilityInputListener = new AbilityInputListener();
+    Bukkit.getPluginManager().registerEvents(abilityInputListener, main);
+    main.getCommand("ability1").setExecutor(abilityInputListener);
+    main.getCommand("ability2").setExecutor(abilityInputListener);
   }
 
 

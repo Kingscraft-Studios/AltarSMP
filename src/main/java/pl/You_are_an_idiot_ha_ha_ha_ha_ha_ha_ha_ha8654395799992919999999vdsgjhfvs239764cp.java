@@ -21,7 +21,7 @@ class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239
               this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.getInventory().setItem(b, CustomItemRegistry.getFrostScythe());
             } else {
               try {
-                if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ab.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(itemStack))
+                if (IllusionWandAbility.isIllusionWand(itemStack))
                   this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a.getInventory().setItem(b, CustomItemRegistry.getIllusionWand());
               } catch (MatchException matchException) {
                 throw a(null);

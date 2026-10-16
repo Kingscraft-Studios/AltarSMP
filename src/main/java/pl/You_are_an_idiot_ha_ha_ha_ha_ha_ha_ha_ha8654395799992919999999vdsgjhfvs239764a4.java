@@ -89,7 +89,7 @@ public class You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgj
               return; 
           }{
             if (CustomItem.fromItem(itemStack) == CustomItem.ILLUSION_WAND) {
-              You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ab.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a(player, itemStack, EntityType.WARDEN);
+              IllusionWandAbility.storeCapturedMob(player, itemStack, EntityType.WARDEN);
               return;
             } 
           }player.getInventory().addItem(new ItemStack[] { itemStack });
