@@ -106,26 +106,26 @@ public final class Main extends JavaPlugin implements Listener {
       this.getCommand("startbingo").setExecutor(var11);
       this.getCommand("bingo").setExecutor(var11);
 
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bi var12 = new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bi();
+      CopperLeggingsEventManager var12 = new CopperLeggingsEventManager();
       this.getCommand("startleggingsevent").setExecutor(var12);
       Bukkit.getPluginManager().registerEvents(var12, this);
 
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bh var4 = new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bh();
+      CopperHelmetEventManager var4 = new CopperHelmetEventManager();
       Bukkit.getPluginManager().registerEvents(var4, this);
       this.getCommand("starthelmetevent").setExecutor(var4);
 
-      You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bg var5 = new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bg();
+      CopperChestplateEventManager var5 = new CopperChestplateEventManager();
       Bukkit.getPluginManager().registerEvents(var5, this);
       this.getCommand("startchestplateevent").setExecutor(var5);
 
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a4(), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bd(), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a1(this), this);
+      Bukkit.getPluginManager().registerEvents(new CrazySelectorMenuListener(), this);
+      Bukkit.getPluginManager().registerEvents(new LegendaryItemConfigMenu(), this);
+      Bukkit.getPluginManager().registerEvents(new CopperOreVeinMinerListener(this), this);
       Bukkit.getPluginManager().registerEvents(this.altarController, this);
       Bukkit.getPluginManager().registerEvents(new EchoAbility(), this);
       Bukkit.getPluginManager().registerEvents(new StrikerBowAbility(), this);
       Bukkit.getPluginManager().registerEvents(new PaleCannonAbility(this), this);
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b_(), this);
+      Bukkit.getPluginManager().registerEvents(new UpdateChecker(), this);
 
       VampireEventManager var6 = new VampireEventManager();
       Bukkit.getPluginManager().registerEvents(var6, this);
@@ -135,26 +135,26 @@ public final class Main extends JavaPlugin implements Listener {
       VampireEventManager.loadVampireData();
       VampireEventManager.startSunDamageTask();
 
-      this.getCommand("altar").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a8(this.altarController, this.altarConfigManager));
-      this.getCommand("legendaries").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a_());
-      this.getCommand("setkills").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ba());
-      this.getCommand("setkills").setTabCompleter(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ba());
+      this.getCommand("altar").setExecutor(new AltarCommand(this.altarController, this.altarConfigManager));
+      this.getCommand("legendaries").setExecutor(new LegendaryItemsMenu());
+      this.getCommand("setkills").setExecutor(new SetKillsCommand());
+      this.getCommand("setkills").setTabCompleter(new SetKillsCommand());
 
       WitherBoneAbility.startTask();
 
-      this.getCommand("controls").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764q(this));
-      this.getCommand("giveselector").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764r(this));
+      this.getCommand("controls").setExecutor(new OffhandAbilityCommand(this));
+      this.getCommand("giveselector").setExecutor(new GiveCrazySelectorCommand(this));
       Objects.requireNonNull(this.getCommand("dtest")).setExecutor(Main::lambda$onEnable$0);
-      this.getCommand("checklegendary").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764s(this));
+      this.getCommand("checklegendary").setExecutor(new FindLegendaryItemDuplicatesCommand());
       Objects.requireNonNull(this.getCommand("credits")).setExecutor(Main::lambda$onEnable$1);
 
       this.registerTrust();
 
-      Bukkit.getPluginManager().registerEvents(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a_(), this);
+      Bukkit.getPluginManager().registerEvents(new LegendaryItemsMenu(), this);
 
       BossBarManager.startUpdater();
 
-      new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764co(this).runTaskLater(getInstance(), 40L);
+      new AltarReloadTask(this).runTaskLater(getInstance(), 40L);
    }
 
    public static boolean areSimilar(ItemStack var0, ItemStack var1) {
@@ -194,7 +194,7 @@ public final class Main extends JavaPlugin implements Listener {
          var3.setBaseValue(20.0);
       }
 
-      new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cp(this, var2).runTaskLater(getInstance(), 20L);
+      new CustomItemRefreshTask(this, var2).runTaskLater(getInstance(), 20L);
    }
 
    @Override
@@ -227,8 +227,8 @@ public final class Main extends JavaPlugin implements Listener {
 
    public void registerTrust() {
       trust = new TrustManager();
-      this.getCommand("trust").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b8(trust));
-      this.getCommand("untrust").setExecutor(new You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b8(trust));
+      this.getCommand("trust").setExecutor(new TrustCommand(trust));
+      this.getCommand("untrust").setExecutor(new TrustCommand(trust));
    }
 
    public static boolean isTrusted(Player var0, Entity var1) {
@@ -314,9 +314,9 @@ public final class Main extends JavaPlugin implements Listener {
          var4.getWorld().playSound(var4.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
       }
 
-      Component var6 = ((TextComponent)Component.text("§ePurchase ").clickEvent(ClickEvent.clickEvent(Action.OPEN_URL, Payload.string("https://mc-shop-plugins.tebex.io"))))
+      Component var6 = Component.text("§ePurchase ").clickEvent(ClickEvent.clickEvent(Action.OPEN_URL, Payload.string("https://mc-shop-plugins.tebex.io")))
          .decorate(TextDecoration.UNDERLINED);
-      Component var5 = ((TextComponent)Component.text("§7| §bDownload Pack ").clickEvent(ClickEvent.clickEvent(Action.OPEN_URL, Payload.string("https://modrinth.com/resourcepack/altar-smp-texture-pack"))))
+      Component var5 = Component.text("§7| §bDownload Pack ").clickEvent(ClickEvent.clickEvent(Action.OPEN_URL, Payload.string("https://modrinth.com/resourcepack/altar-smp-texture-pack")))
          .decorate(TextDecoration.UNDERLINED);
       var0.sendMessage(var6.append(var5));
       var0.sendMessage("§8---------------------");

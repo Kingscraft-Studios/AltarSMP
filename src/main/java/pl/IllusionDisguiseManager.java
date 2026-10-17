@@ -272,11 +272,11 @@ public class IllusionDisguiseManager implements Listener {
       try {
         ProfileProperty profileProperty = new ProfileProperty("textures", str1, (str2 == null || str2.isEmpty()) ? null : str2);
         PlayerProfile playerProfile = Main.getInstance().getServer().createProfile(paramPlayer.getUniqueId(), str3);
+
         if (playerProfile == null)
           return;
         playerProfile.clearProperties();
         playerProfile.setProperty(profileProperty);
-        playerProfile.setName(str3);
         paramPlayer.setPlayerProfile(playerProfile);
       } catch (Exception exception) {
         exception.printStackTrace();
@@ -288,7 +288,8 @@ public class IllusionDisguiseManager implements Listener {
         {
           if (!player.isOnline())
             continue;
-        }player.hidePlayer((Plugin)Main.getInstance(), paramPlayer);
+        }
+        player.hidePlayer((Plugin)Main.getInstance(), paramPlayer);
         player.showPlayer((Plugin)Main.getInstance(), paramPlayer);
       } 
   }
@@ -303,13 +304,14 @@ public class IllusionDisguiseManager implements Listener {
   }
   
   private static void applyPlayerProfile(Player paramPlayer, String paramString, ProfileProperty paramProfileProperty) {
-    PlayerProfile playerProfile = Main.getInstance().getServer().createProfile(paramPlayer.getUniqueId(), paramString);
-    {
-      if (playerProfile == null)
-        return; 
-    }playerProfile.clearProperties();
+    PlayerProfile playerProfile = Main.getInstance().getServer()
+            .createProfile(paramPlayer.getUniqueId(), paramString);
+
+    if (playerProfile == null)
+      return;
+
+    playerProfile.clearProperties();
     playerProfile.setProperty(paramProfileProperty);
-    playerProfile.setName(paramString);
     paramPlayer.setPlayerProfile(playerProfile);
     for (Player player : Bukkit.getOnlinePlayers()) {
       player.hidePlayer((Plugin)Main.getInstance(), paramPlayer);
