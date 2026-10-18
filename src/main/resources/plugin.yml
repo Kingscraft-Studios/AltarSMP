@@ -1,6 +1,6 @@
 name: AltarSMP
 version: ${project.version}
-main: pl.Main
+main: net.kingscraft.zenixmc.altarsmp.AltarSMP
 api-version: '1.21'
 authors: [Doomwen, Solstate]
 softdepend: [WorldGuard]

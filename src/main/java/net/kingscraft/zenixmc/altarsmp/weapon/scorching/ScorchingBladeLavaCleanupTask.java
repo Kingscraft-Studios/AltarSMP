@@ -1,0 +1,42 @@
+package net.kingscraft.zenixmc.altarsmp.weapon.scorching;
+
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.scheduler.BukkitRunnable;
+import net.kingscraft.zenixmc.altarsmp.AltarSMP;
+
+class ScorchingBladeLavaCleanupTask extends BukkitRunnable {
+  public int cleanupIndex;
+  public final ScorchingBladeLavaColumnTask parentTask;
+  public final int totalBlocks;
+  
+  public ScorchingBladeLavaCleanupTask(ScorchingBladeLavaColumnTask scorchingBladeLavaColumnTask) {
+        this.parentTask = scorchingBladeLavaColumnTask;
+        this.totalBlocks = this.parentTask.lavaBlocks.size();
+        this.cleanupIndex = 0;
+    }
+  
+  public void run() {
+    try {
+      if (this.cleanupIndex >= this.totalBlocks) {
+        cancel();
+        return;
+      } 
+    } catch (MatchException matchException) {
+    } 
+    Block block = (Block)this.parentTask.lavaBlocks.get(this.totalBlocks - this.cleanupIndex - 1);
+    try {
+      if (block.getType() == Material.LAVA)
+        block.setType(Material.AIR); 
+    } catch (MatchException matchException) {
+    } 
+    ScorchingBladeAbility.FIRE_BLOCK_LOCATIONS.remove(block.getLocation());
+    this.cleanupIndex++;
+  }
+}
+
+
+/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764dy.class
+ * Java compiler version: 21 (65.0)
+ * JD-Core Version:       1.1.3
+ */
