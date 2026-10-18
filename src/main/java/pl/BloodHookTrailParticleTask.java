@@ -28,7 +28,7 @@ class BloodHookTrailParticleTask extends BukkitRunnable {
       if (this.ticksElapsed < 100)
         try {
           if (this.targetingTask.player.isOnline()) {
-            byte b = 0;
+            int b = 0;
             while (true) {
               try {
                 if (b < 5 && this.ticksElapsed < 100) {

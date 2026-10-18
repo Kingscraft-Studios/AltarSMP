@@ -88,7 +88,7 @@ import org.bukkit.util.Vector;
     paramPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, i * 20, 0));
     ArrayList<Bat> arrayList = new ArrayList();
     HashMap<Object, Object> hashMap = new HashMap<>();
-    for (byte b = 0; b < 7; b++) {
+    for (int b = 0; b < 7; b++) {
       double d1 = (Math.random() - 0.5D) * 2.0D;
       double d2 = Math.random();
       double d3 = (Math.random() - 0.5D) * 2.0D;
@@ -106,15 +106,15 @@ import org.bukkit.util.Vector;
   }
   
   public static void spawnBiteParticles(LivingEntity paramLivingEntity) {
-    byte b1 = 0;
+    int b1 = 0;
     double d = 1.0D;
     Location location = paramLivingEntity.getLocation().clone().add(0.0D, 1.5D, 0.0D);
     World world = paramLivingEntity.getWorld();
     Vector vector1 = paramLivingEntity.getLocation().getDirection().normalize();
     Vector vector2 = new Vector(0, 1, 0);
     Vector vector3 = vector1.getCrossProduct(vector2).normalize();
-    for (byte b2 = 0; b2 < 2; b2++) {
-      for (byte b = -60; b < 60; b += 4) {
+    for (int b2 = 0; b2 < 2; b2++) {
+      for (int b = -60; b < 60; b += 4) {
         Vector vector;
         double d1 = Math.toRadians(b);
         double d2 = Math.cos(d1);

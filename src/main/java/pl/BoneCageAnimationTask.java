@@ -47,7 +47,7 @@ class BoneCageAnimationTask extends BukkitRunnable {
     Location location = this.target.getLocation().add(0.0D, 1.0D, 0.0D);
     double d1 = this.ticks / this.durationTicks;
     double d2 = 2.0D * (1.0D - d1);
-    for (byte b = 0; b < this.cageDisplays.size(); b++) {
+    for (int b = 0; b < this.cageDisplays.size(); b++) {
       double d3 = this.rotationAngle + 6.283185307179586D * b / this.cageDisplays.size();
       double d4 = Math.cos(d3) * d2;
       double d5 = Math.sin(d3) * d2;

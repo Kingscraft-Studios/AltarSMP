@@ -101,7 +101,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
             return true;
           } 
         }
-        createBingoCard();
+        startBingoEvent();
         return true;
       } 
     }{
@@ -224,7 +224,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setDisplayName(" ");
     itemStack.setItemMeta(itemMeta);
-    byte b1 = 0;
+    int b1 = 0;
     {
       while (b1 < 54) {
         inventory.setItem(b1, itemStack);
@@ -233,7 +233,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
     }
     BingoQuestType[] bingoQuestTypes = BingoQuestType.values();
     Set set = this.playerCompletedQuests.getOrDefault(paramPlayer.getUniqueId(), EnumSet.noneOf(BingoQuestType.class));
-    for (byte b2 = 0; b2 < bingoQuestTypes.length; b2++) {
+    for (int b2 = 0; b2 < bingoQuestTypes.length; b2++) {
       BingoQuestType bingoQuestType = bingoQuestTypes[b2];
       boolean bool = set.contains(bingoQuestType);
       {
@@ -266,8 +266,8 @@ public class BingoEventManager implements CommandExecutor, Listener {
       Objective objective = scoreboard.registerNewObjective("bingo", "dummy",String.valueOf(ChatColor.of("#B06736")) + "Bingo Progress");
       objective.setDisplaySlot(DisplaySlot.SIDEBAR);
       List list = (List)Bukkit.getOnlinePlayers().stream().sorted(Comparator.comparingInt((Player paramPlayer1) -> this.getCompletedQuestCount(paramPlayer1)).reversed().thenComparing(Player::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
-      byte b1 = 15;
-      byte b2 = 1;
+      int b1 = 15;
+      int b2 = 1;
       for (Player player1 : (Iterable<Player>)(Iterable<?>)list) {
         {
           if (b2 > 10)
@@ -278,7 +278,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
         int i = getCompletedQuestCount(player1);
         String str2 = truncateString(player1.getName(), 10);
         String str3 = String.valueOf(ChatColor.WHITE);
-        byte b = b2;
+        int b = b2;
         team.setPrefix(truncateString(String.valueOf(ChatColor.GOLD) + b + ". " + str3 + str2, 16));
         team.setSuffix(truncateString(String.valueOf(ChatColor.GRAY) + " " + i + "/40", 16));
         objective.getScore(str1).setScore(b1--);

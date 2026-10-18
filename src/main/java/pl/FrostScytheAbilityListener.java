@@ -100,9 +100,9 @@ public class FrostScytheAbilityListener implements Listener {
     }}
   
   public static void spawnIceSpiralParticles(Location paramLocation, double paramDouble, boolean paramBoolean1, boolean paramBoolean2) {
-    byte b1 = 35;
+    int b1 = 35;
     double d = 2.2D;
-    for (byte b2 = 0; b2 < b1; b2++) {
+    for (int b2 = 0; b2 < b1; b2++) {
       double d2 = 0;
       double d3 = 0;
       double d4 = 0;
@@ -189,7 +189,7 @@ public class FrostScytheAbilityListener implements Listener {
   
   public static Boolean hasEmptyInventorySlot(Player paramPlayer) {
     PlayerInventory playerInventory = paramPlayer.getInventory();
-    byte b = 0;
+    int b = 0;
     while (true) {
       {
         if (b < 36) {
@@ -240,7 +240,7 @@ public class FrostScytheAbilityListener implements Listener {
     Location location = paramPlayer.getLocation();
     int i = plugin.getConfig().getInt("commandOfIceCooldown", 45);
     BossBarManager.createBar(paramPlayer, "Command Of Ice", i, ChatColor.YELLOW);
-    for (byte b = 0; b < 3; b++) {
+    for (int b = 0; b < 3; b++) {
       double d = 0.0D;
       Vector vector1 = location.getDirection();
       Vector vector2 = vector1.clone().crossProduct(new Vector(0, 1, 0)).normalize();
@@ -261,7 +261,7 @@ public class FrostScytheAbilityListener implements Listener {
   
   public static void scheduleIceBladeLaunches(List<ItemDisplay> paramList, Player paramPlayer) {
     int[] arrayOfInt = { 0, 2, 1 };
-    for (byte b = 0; b < arrayOfInt.length; b++) {
+    for (int b = 0; b < arrayOfInt.length; b++) {
       int i = arrayOfInt[b];
       int j = b * 3;
       (new FrostScytheBladeLaunchTask(paramList, i, paramPlayer)).runTaskLater((Plugin) plugin, j);

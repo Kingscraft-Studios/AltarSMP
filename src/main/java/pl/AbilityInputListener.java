@@ -25,12 +25,12 @@ public class AbilityInputListener implements Listener, CommandExecutor {
       Player player = (Player)paramCommandSender;
       {
         if (paramCommand.getName().equals("ability1")) {
-          activateDayNightAbilityOne(player);
+          activateMainHandAbility(player);
           return true;
         } 
       }{
         if (paramCommand.getName().equals("ability2")) {
-          activateDayNightAbilityTwo(player);
+          activateOffhandAbility(player);
           return true;
         } 
       }} 

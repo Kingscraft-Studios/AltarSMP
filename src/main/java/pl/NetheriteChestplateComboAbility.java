@@ -154,8 +154,8 @@ public class NetheriteChestplateComboAbility implements Listener {
 
   public void triggerLightningCombo(Location paramLocation, Player paramPlayer, LivingEntity paramLivingEntity) {
     double d = 3.0D;
-    byte b1 = 5;
-    for (byte b2 = 0; b2 < b1; b2++) {
+    int b1 = 5;
+    for (int b2 = 0; b2 < b1; b2++) {
       double d1 = 6.283185307179586D / b1 * b2;
       double d2 = paramLocation.getX() + d * Math.cos(d1);
       double d3 = paramLocation.getZ() + d * Math.sin(d1);

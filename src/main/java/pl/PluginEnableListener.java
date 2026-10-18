@@ -13,18 +13,11 @@ public class PluginEnableListener implements Listener {
   @EventHandler
   public void onPluginEnable(PluginEnableEvent paramPluginEnableEvent) {
     {
-      if (!paramPluginEnableEvent.getPlugin().getName().equals(LicenseConstants.PLUGIN_NAME))
+      if (!paramPluginEnableEvent.getPlugin().getName().equals(Main.getInstance().getName()))
         return;
     }
     Main main = Main.getInstance();
-    PluginManager pluginManager = Bukkit.getPluginManager();
 
-    {
-      if ((LicenseValidator.validateLicense(main, LicenseConstants.PLUGIN_ID) ? 1 : 0) < 1) {
-        pluginManager.disablePlugin(main);
-        return;
-      }
-    }
 
     BoneBladeAbility boneBladeAbility = new BoneBladeAbility();
     VulcanGauntletAbility vulcanGauntletAbility = new VulcanGauntletAbility(main);

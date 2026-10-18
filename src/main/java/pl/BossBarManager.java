@@ -30,8 +30,6 @@ public class BossBarManager {
   
   public static int updateInterval;
   
-  
-  
   public BossBarManager() {
     updateInterval = Main.getInstance().getConfig().getInt("bossbar_update_interval", 1);
   }

@@ -146,7 +146,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
   
   public String getWorldDisplayName(World paramWorld) {
     String str = paramWorld.getName();
-    byte b = -1;
+    int b = -1;
     {
       switch (str.hashCode()) {
         case 113318802:
@@ -236,7 +236,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
       return;
     } 
     {
-      if (paramPlayerInteractAtEntityEvent.getRightClicked().getPersistentDataContainer().get(this.coreInteractionKey, PersistentDataType.STRING) != "legs")
+      if (!"legs".equals(paramPlayerInteractAtEntityEvent.getRightClicked().getPersistentDataContainer().get(this.coreInteractionKey, PersistentDataType.STRING)))
         return; 
     }paramPlayerInteractAtEntityEvent.getPlayer().getInventory().addItem(new ItemStack[] { createCopperCoreItem() });
     Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + "§lALERT! §r" + paramPlayerInteractAtEntityEvent.getPlayer().getName() + " has picked up the Copper Infused Heavy Core!");

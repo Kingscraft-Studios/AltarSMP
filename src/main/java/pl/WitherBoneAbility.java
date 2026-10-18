@@ -119,7 +119,7 @@ public class WitherBoneAbility implements Listener {
     Location location = paramPlayer.getLocation();
     World world = paramPlayer.getWorld();
     int i = Main.getInstance().getConfig().getInt("WitherBoneCleansingDuration", 5);
-    for (byte b = 0; b < 48; b++) {
+    for (int b = 0; b < 48; b++) {
       Location location1 = location.clone().add(0.0D, 1.0D, 0.0D);
       ItemDisplay itemDisplay1 = (ItemDisplay)world.spawnEntity(location1, EntityType.ITEM_DISPLAY);
       itemDisplay1.setItemStack(new ItemStack(Material.BLACK_CONCRETE));
@@ -151,14 +151,14 @@ public class WitherBoneAbility implements Listener {
   public static Location findLandingLocation(Location paramLocation, Vector paramVector, World paramWorld) {
     Location location1 = paramLocation.clone();
     Vector vector = paramVector.clone();
-    char c = 200;
-    for (byte b = 0; b < c; b++) {
+    int c = 200;
+    for (int b = 0; b < c; b++) {
       vector.setY(vector.getY() - 0.08D);
       vector.multiply(0.98D);
       Location location = location1.clone().add(vector);
       double d = Math.max(1.0D, vector.length() * 5.0D);
       Vector vector1 = vector.clone().multiply(1.0D / d);
-      for (byte b1 = 0; b1 < d; b1++) {
+      for (int b1 = 0; b1 < d; b1++) {
         Location location3 = location1.clone().add(vector1.clone().multiply(b1));
         Location location4 = location3.clone().subtract(0.0D, 0.1D, 0.0D);
         if (location4.getBlock().getType().isSolid())

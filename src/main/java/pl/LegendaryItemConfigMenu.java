@@ -30,7 +30,7 @@ public class LegendaryItemConfigMenu implements Listener {
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setDisplayName(" ");
     itemStack.setItemMeta(itemMeta);
-    byte b = 0;
+    int b = 0;
     {
       while (b < 9) {
         inventory.setItem(b, itemStack);

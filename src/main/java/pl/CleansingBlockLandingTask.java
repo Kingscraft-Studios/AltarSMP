@@ -5,8 +5,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 class CleansingBlockLandingTask extends BukkitRunnable {
   final CleansingBlockAnimationTask animationTask;
   
-  CleansingBlockLandingTask(CleansingBlockAnimationTask paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764fj) {
-        this.animationTask = paramYou_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764fj;
+  CleansingBlockLandingTask(CleansingBlockAnimationTask cleansingBlockAnimationTask) {
+        this.animationTask = cleansingBlockAnimationTask;
     }
   
   public void run() {

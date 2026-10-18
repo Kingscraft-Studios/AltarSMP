@@ -152,6 +152,7 @@ public final class Main extends JavaPlugin implements Listener {
 
       Bukkit.getPluginManager().registerEvents(new LegendaryItemsMenu(), this);
 
+      new BossBarManager();
       BossBarManager.startUpdater();
 
       new AltarReloadTask(this).runTaskLater(getInstance(), 40L);

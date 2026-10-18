@@ -29,7 +29,7 @@ public class EclipseAbility implements Listener {
     BossBarManager.createBar(paramPlayer, "Solar Explosion", i, ChatColor.YELLOW);
     double d1 = (2.0F * f);
     double d2 = (1000.0F * f);
-    for (byte b = 0; b < d2; b++) {
+    for (int b = 0; b < d2; b++) {
       double d3 = Math.random() * 2.0D * Math.PI;
       double d4 = Math.acos(2.0D * Math.random() - 1.0D);
       double d5 = d1 * Math.sin(d4) * Math.cos(d3);

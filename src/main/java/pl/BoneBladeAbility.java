@@ -69,7 +69,7 @@ public class BoneBladeAbility implements Listener {
     paramDouble *= 0.1D;
     World world = paramLocation.getWorld();
     ArrayList<Item> arrayList = new ArrayList();
-    for (byte b = 0; b < paramInt1; b++) {
+    for (int b = 0; b < paramInt1; b++) {
       Item item = world.dropItem(paramLocation.clone(), new ItemStack(paramMaterial));
       item.setPickupDelay(2147483647);
       item.setVelocity(randomBoneVelocity(paramDouble));
@@ -112,7 +112,7 @@ public class BoneBladeAbility implements Listener {
     ArrayList<ItemDisplay> arrayList = new ArrayList();
     boneCageDisplays.put(paramLivingEntity, arrayList);
     (new BoneCageStunTitleTask(paramLivingEntity)).runTaskTimer((Plugin)Main.getInstance(), 0L, 1L);
-    for (byte b = 0; b < 3; b++) {
+    for (int b = 0; b < 3; b++) {
       ItemDisplay itemDisplay = (ItemDisplay)paramLivingEntity.getWorld().spawnEntity(paramLivingEntity.getLocation().add(0.0D, 1.0D, 0.0D), EntityType.ITEM_DISPLAY);
       itemDisplay.setItemStack(new ItemStack(Material.BONE_BLOCK));
       itemDisplay.setTransformation(new Transformation(new Vector3f(0.0F, 0.0F, 0.0F), new AxisAngle4f(0.0F, 0.0F, 0.0F, 1.0F), new Vector3f(0.4F, 0.4F, 0.4F), new AxisAngle4f(0.0F, 0.0F, 0.0F, 1.0F)));

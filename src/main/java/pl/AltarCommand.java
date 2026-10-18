@@ -53,7 +53,7 @@ public class AltarCommand implements CommandExecutor, TabCompleter {
         return true;
       } 
     }String str3 = str1;
-    byte b = -1;
+    int b = -1;
     {
       switch (str3.hashCode()) {
         case 109638523:

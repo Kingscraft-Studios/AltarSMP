@@ -267,11 +267,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
   }
   
   public static boolean isSpecialPlayer(Player paramPlayer) {
-    {
-      if (!isPale(paramPlayer))
-        {
-          if (!isVampire(paramPlayer));
-        }}return false;
+    return !isPale(paramPlayer) && !isVampire(paramPlayer);
   }
   
   public static String getPlayerType(Player paramPlayer) {
@@ -281,8 +277,9 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
   public static void endVampireEvent(String paramString) {
     eventEnabled = false;
     config.set("vampire_event_enabled", Boolean.valueOf(false));
+    String str1 = null;
     String str2 = paramString.toLowerCase();
-    byte b = -1;
+    int b = -1;
     {
       switch (str2.hashCode()) {
         case 3433258:
@@ -297,13 +294,15 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
     }{
       switch (b) {
         case 0:
-        
+          str1 = "PALE";
+          break;
         case 1:
-        
+          str1 = "VAMPIRE";
+          break;
         default:
           break;
       } 
-    }String str1 = null;
+    }
     vampireWinner = str1;
     config.set("vampire_winner", str1);
     Main.getInstance().saveConfig();
@@ -337,6 +336,10 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
   }
   
   public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
+    if (paramArrayOfString.length == 0) {
+      paramCommandSender.sendMessage("§cUsage: /vampire <player> <pale|vampire|human>");
+      return true;
+    }
     String str1 = paramArrayOfString[0];
     Player player = Bukkit.getPlayer(str1);
     {
@@ -366,7 +369,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
         return true;
       } 
     }String str2 = paramArrayOfString[1].toLowerCase();
-    byte b = -1;
+    int b = -1;
     {
       switch (str2.hashCode()) {
         case 3433258:

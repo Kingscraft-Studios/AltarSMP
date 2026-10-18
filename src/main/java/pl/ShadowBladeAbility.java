@@ -82,18 +82,18 @@ public class ShadowBladeAbility implements Listener {
       worldBorder.setWarningDistance(59999968);
       paramPlayer.setWorldBorder(worldBorder);
     } 
-    ShadowLeapTask you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e9 = new ShadowLeapTask(location, paramPlayer);
+    ShadowLeapTask shadowLeapTask = new ShadowLeapTask(location, paramPlayer);
     (new ShadowLeapCleanupTask(paramPlayer)).runTaskLater((Plugin)Main.getInstance(), 20L);
-    leapTasks.put(paramPlayer.getUniqueId(), you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e9);
+    leapTasks.put(paramPlayer.getUniqueId(), shadowLeapTask);
     leapLocations.put(paramPlayer.getUniqueId(), location.clone());
-    you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e9.runTaskTimer((Plugin)Main.getInstance(), 0L, 1L);
+    shadowLeapTask.runTaskTimer((Plugin)Main.getInstance(), 0L, 1L);
   }
   
   public static void spawnShadowParticles(Player paramPlayer, Location paramLocation) {
     {
       if (paramLocation == null)
         return; 
-    }for (byte b = 0; b < 100; b++) {
+    }for (int b = 0; b < 100; b++) {
       double d1 = Math.random() * 2.0D * Math.PI;
       double d2 = Math.random() * Math.PI;
       double d3 = 1.5D * Math.sin(d2) * Math.cos(d1);
@@ -109,8 +109,11 @@ public class ShadowBladeAbility implements Listener {
     Player player = paramPlayerInteractEvent.getPlayer();
     if ((paramPlayerInteractEvent.getAction() == Action.RIGHT_CLICK_BLOCK || paramPlayerInteractEvent.getAction() == Action.RIGHT_CLICK_AIR)
         && hasShadowBlade(player)
-        && leapLocations.containsKey(player.getUniqueId())
-        && !CooldownManager.isOnCooldown(player.getUniqueId(), "shadwoleap")) {
+        && leapLocations.containsKey(player.getUniqueId())) {
+      if (CooldownManager.isOnCooldown(player.getUniqueId(), "shadwoleap")) {
+        paramPlayerInteractEvent.setCancelled(true);
+        return;
+      }
       Location location = leapLocations.get(player.getUniqueId());
       BukkitRunnable bukkitRunnable = leapTasks.get(player.getUniqueId());
       if (bukkitRunnable != null) {
@@ -144,8 +147,8 @@ public class ShadowBladeAbility implements Listener {
       BossBarManager.createBar(player, "Shadow Leap", leapCooldown, ChatColor.YELLOW);
       BossBarManager.removeBar(player, String.valueOf(ChatColor.GRAY) + ChatColor.BOLD.toString() + "! " + String.valueOf(ChatColor.WHITE) + ChatColor.BOLD.toString() + "INVISIBLE " + String.valueOf(ChatColor.GRAY) + ChatColor.BOLD.toString() + "!");
       CooldownManager.setCooldown(player.getUniqueId(), "shadwoleap", leapCooldown);
+      paramPlayerInteractEvent.setCancelled(true);
     }
-    paramPlayerInteractEvent.setCancelled(true);
   }
   
   public static void spawnBackstabEffect(Player paramPlayer) {

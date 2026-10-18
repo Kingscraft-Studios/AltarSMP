@@ -94,7 +94,7 @@ public class CutlassAbility implements Listener {
   }
   
   public static void startCutlassAttack(Player paramPlayer) {
-    byte b = 2;
+    int b = 2;
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "cutlassCuts", 1.0D);
     (new CutlassAttackTask(paramPlayer, b)).runTaskTimer((Plugin)Main.getInstance(), 0L, b);
   }

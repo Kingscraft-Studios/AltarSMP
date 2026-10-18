@@ -31,7 +31,7 @@ class FindLegendaryItemDuplicatesCommand implements CommandExecutor {
         {
           if (player1 == player)
             continue; 
-        }byte b = 0;
+        }int b = 0;
         while (true) {
           {
             if (b < player1.getInventory().getSize()) {

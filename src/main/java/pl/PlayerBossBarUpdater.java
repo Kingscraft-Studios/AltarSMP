@@ -31,7 +31,7 @@ class PlayerBossBarUpdater extends BukkitRunnable {
                 iterator1.remove();
                 continue;
               } 
-              double d = (bar.expiryTime - l) / bar.durationMillis;
+              double d = (bar.expiryTime - l) / (double)bar.durationMillis;
               d = Math.max(0.0D, Math.min(1.0D, d));
               bar.bossBar.setProgress(d);
               if (l >= bar.expiryTime) {

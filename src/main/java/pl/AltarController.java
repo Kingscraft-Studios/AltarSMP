@@ -271,7 +271,7 @@ public class AltarController implements Listener {
       if (paramBlockBreakEvent.getBlock().getType() != Material.STRUCTURE_BLOCK)
         return; 
     }
-    deleteAltarFromConfig(paramBlockBreakEvent.getBlock().getLocation());
+    removeAltar(paramBlockBreakEvent.getBlock().getLocation());
   }
   
   public void loadAltars() {
@@ -294,7 +294,7 @@ public class AltarController implements Listener {
         if (this.altars.containsKey(location))
           continue; 
       }location.getChunk().load(true);
-      saveAltar(location, str3);
+      createAltar(location, str3);
     } 
   }
   
@@ -303,8 +303,8 @@ public class AltarController implements Listener {
     {
       if (altarInstance == null)
         return false; 
-    }altarInstance.getType();
-    altarInstance.itemDisplay.remove();
+    }
+    altarInstance.removeAllEntities();
     BlockState blockState = paramLocation.getBlock().getState();
     if (blockState instanceof Structure) {
       Structure structure = (Structure)blockState;
@@ -316,7 +316,7 @@ public class AltarController implements Listener {
   }
   
   public void removeAllAltars() {
-    this.altars.values().forEach(AltarInstance::getType);
+    this.altars.values().forEach(AltarInstance::removeAllEntities);
     this.altars.clear();
   }
   
@@ -352,14 +352,14 @@ public class AltarController implements Listener {
     fileConfiguration.set("altars." + str + ".y", Double.valueOf(paramLocation.getY()));
     fileConfiguration.set("altars." + str + ".z", Double.valueOf(paramLocation.getZ()));
     fileConfiguration.set("altars." + str + ".type", paramString);
-    this.plugin.getConfigManager().getHologramHeight();
+    this.plugin.getConfigManager().saveAltarConfig();
   }
   
   public void deleteAltarFromConfig(Location paramLocation) {
     FileConfiguration fileConfiguration = this.plugin.getConfigManager().getAltarConfig();
     String str = paramLocation.getWorld().getName() + "_" + paramLocation.getBlockX() + "_" + paramLocation.getBlockY() + "_" + paramLocation.getBlockZ();
     fileConfiguration.set("altars." + str, null);
-    this.plugin.getConfigManager().getHologramHeight();
+    this.plugin.getConfigManager().saveAltarConfig();
   }
   
   private static void configureHologram(String paramString, TextDisplay paramTextDisplay) {

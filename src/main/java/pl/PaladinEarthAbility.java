@@ -118,7 +118,7 @@ public class PaladinEarthAbility implements Listener {
           if (rayTraceResult.getHitBlock() == null)
             throw new AssertionError(); 
         }}Location location = rayTraceResult.getHitBlock().getLocation().add(0.0D, 1.0D, 0.0D);
-    byte b = 10;
+    int b = 10;
     {
       if (WorldGuardHook.isBlocked(location))
         return false; 

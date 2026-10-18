@@ -224,7 +224,7 @@ public class ScorchingBladeAbility implements Listener {
     Vector vector1 = player.getEyeLocation().getDirection().normalize();
     Vector vector2 = vector1.clone().crossProduct(new Vector(0, 1, 0)).normalize();
     HashSet<FallingBlock> hashSet = new HashSet();
-    for (byte b = 0; b < 40; b++) {
+    for (int b = 0; b < 40; b++) {
       double d1 = b * 0.3D - 6.0D;
       Location location = player.getEyeLocation().clone().add(vector2.clone().multiply(d1));
       double d2 = 0.03D;
@@ -257,7 +257,7 @@ public class ScorchingBladeAbility implements Listener {
   
   public static void detonateScorchingBlade(Location paramLocation, Player paramPlayer) {
     Block block = paramLocation.getBlock();
-    byte b = 0;
+    int b = 0;
     {
       while (b < 3)
         b++; 

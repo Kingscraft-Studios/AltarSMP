@@ -22,7 +22,9 @@ public class WorldGuardHook {
               return false;
             }  
           return false;
-        }}return false;
+        }
+    }
+    return false;
   }
   static {
     DISABLED = false;

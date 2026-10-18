@@ -1,5 +1,5 @@
 name: AltarSMP
-version: 3.3
+version: ${project.version}
 main: pl.Main
 api-version: '1.21'
 authors: [Doomwen, Solstate]
@@ -9,6 +9,7 @@ permissions:
     default: op
 commands:
   bingo:
+    description: "Bingo command"
   startbingo:
     permission: altar.admin
   startleggingsevent:
@@ -24,12 +25,17 @@ commands:
   legendaries:
     permission: altar.admin
   controls:
+    description: "Controls"
   cooldown:
     permission: altar.admin
   ability1:
+    description: "Ability 1"
   ability2:
+    description: "Ability 2"
   trust:
+    description: "Trust"
   untrust:
+    description: "Untrust"
   giveselector:
     permission: op
   setkills:
@@ -39,5 +45,6 @@ commands:
   dtest:
     permission: op
   credits:
+    description: "Credits"
   vampire:
     permission: op

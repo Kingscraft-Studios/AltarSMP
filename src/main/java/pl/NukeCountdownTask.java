@@ -64,8 +64,8 @@ class NukeCountdownTask extends BukkitRunnable {
       cancel();
       return;
     } 
-    for (byte b = 0; b < 5; b++) {
-      for (byte b1 = 0; b1 < 360; b1++) {
+    for (int b = 0; b < 5; b++) {
+      for (int b1 = 0; b1 < 360; b1++) {
         double d1 = Math.toRadians(b1);
         double d2 = this.location.getX() + this.radius * Math.cos(d1);
         double d3 = this.location.getY() + b;

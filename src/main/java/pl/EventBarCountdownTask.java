@@ -31,8 +31,8 @@ class EventBarCountdownTask extends BukkitRunnable {
     this.elapsedTicks += BossBarManager.updateInterval;
     int i = Math.max(0, this.totalTicks - this.elapsedTicks);
     {
-      BossBarManager.eventBar.setTitle(String.valueOf(ChatColor.valueOf("#B06736")) + String.valueOf(ChatColor.BOLD) + this.title + " " + String.valueOf(ChatColor.valueOf("#B06736")) + String.valueOf(ChatColor.BOLD) + TimeUtils.formatMmSs(i));
-      BossBarManager.eventBar.setProgress(Math.max(0.0D, 1.0D - this.elapsedTicks / this.totalTicks));
+      BossBarManager.eventBar.setTitle(String.valueOf(net.md_5.bungee.api.ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + this.title + " " + String.valueOf(net.md_5.bungee.api.ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + TimeUtils.formatMmSs(i));
+      BossBarManager.eventBar.setProgress(Math.max(0.0D, 1.0D - (double)this.elapsedTicks / (double)this.totalTicks));
       if (this.elapsedTicks >= this.totalTicks) {
         BossBarManager.hideEventBar();
         cancel();

@@ -38,7 +38,7 @@ public class CopperHelmetEventManager implements CommandExecutor, Listener {
   
   public String getWorldDisplayName(World paramWorld) {
     String str = paramWorld.getName();
-    byte b = -1;
+    int b = -1;
     {
       switch (str.hashCode()) {
         case 113318802:

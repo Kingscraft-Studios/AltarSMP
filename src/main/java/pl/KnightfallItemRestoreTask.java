@@ -13,7 +13,7 @@ class KnightfallItemRestoreTask extends BukkitRunnable {
     }
 
   public void run() {
-    for (byte b = 0; b < this.player.getInventory().getSize(); b++) {
+    for (int b = 0; b < this.player.getInventory().getSize(); b++) {
       ItemStack itemStack = this.player.getInventory().getItem(b);
       if (itemStack != null && KnightfallListener.isKnightfall(itemStack)) {
         ItemMeta itemMeta = itemStack.getItemMeta();

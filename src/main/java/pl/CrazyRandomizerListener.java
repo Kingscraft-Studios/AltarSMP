@@ -65,7 +65,7 @@ public class CrazyRandomizerListener implements Listener {
     double d = 2.0D;
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.0F, 1.0F);
     ArrayList<ItemDisplay> arrayList = new ArrayList();
-    for (byte b = 0; b < i; b++) {
+    for (int b = 0; b < i; b++) {
       double d1 = Math.toRadians(360.0D / i * b);
       double d2 = d * Math.cos(d1);
       double d3 = d * Math.sin(d1);

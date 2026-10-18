@@ -32,7 +32,7 @@ public class CombatEffectUtils implements Listener {
     Vector vector1 = paramLivingEntity.getLocation().getDirection().normalize();
     Vector vector2 = new Vector(0.0D, Math.random(), 0.0D);
     Vector vector3 = vector1.getCrossProduct(vector2).normalize();
-    for (byte b = -60; b < 60; b += 4) {
+    for (int b = -60; b < 60; b += 4) {
       Vector vector;
       double d1 = Math.toRadians(b);
       double d2 = Math.cos(d1);

@@ -56,7 +56,7 @@ class FloatingTextSpawnTask extends BukkitRunnable {
     } catch (MatchException matchException) {
       throw a(null);
     } 
-    byte b = 0;
+    int b = 0;
     try {
       while (b < this.spawnCount) {
         FloatingTextEffectUtils.spawnFloatingTextDisplay(this.location, this.backgroundColor, this.textColor, this.verticalOffset, this.interpolationDuration, this.displayDuration, this.animated, this.text, this.spawnInterval, this.cleanupDelay);

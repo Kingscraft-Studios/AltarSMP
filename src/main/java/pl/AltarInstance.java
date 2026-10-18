@@ -72,9 +72,7 @@ public class AltarInstance {
   }
   
   public boolean hasItemDisplay() {
-    if (this.itemDisplay != null)
-      if (!this.itemDisplay.isDead());
-    return false;
+    return this.itemDisplay != null && !this.itemDisplay.isDead();
   }
   
 }

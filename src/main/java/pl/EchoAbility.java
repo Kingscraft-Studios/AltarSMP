@@ -76,11 +76,11 @@ public class EchoAbility implements Listener {
     int i = Main.getInstance().getConfig().getInt("echoShriekDuration", 10) * 20;
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.BLOCK_SCULK_SHRIEKER_SHRIEK, 1.0F, 1.0F);
     Location location1 = paramPlayer.getLocation().add(0.0D, 0.1D, 0.0D);
-    byte b1 = 30;
+    int b1 = 30;
     double d1 = 0.1D;
     double d2 = 1000000.0D;
     Location location2 = location1.clone();
-    for (byte b2 = 0; b2 < b1; b2++) {
+    for (int b2 = 0; b2 < b1; b2++) {
       double d3 = 6.283185307179586D * b2 / b1;
       double d4 = location2.getX() + d1 * Math.cos(d3);
       double d5 = location2.getY();

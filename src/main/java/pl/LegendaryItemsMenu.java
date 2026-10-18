@@ -39,7 +39,7 @@ public class LegendaryItemsMenu implements CommandExecutor, Listener {
   public static void openLegendaryItemsMenu(Player paramPlayer) {
     Inventory inventory = Bukkit.createInventory(null, 45, MENU_TITLE);
     decorateInventory(inventory);
-    byte b = 2;
+    int b = 2;
     {
       while (b < 7) {
         inventory.setItem(b, null);
@@ -146,7 +146,7 @@ for (CustomItemType customItemType : CustomItemType.values()) {
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setDisplayName(" ");
     itemStack.setItemMeta(itemMeta);
-    byte b = 0;
+    int b = 0;
     {
       while (b < 9) {
         paramInventory.setItem(b, itemStack);

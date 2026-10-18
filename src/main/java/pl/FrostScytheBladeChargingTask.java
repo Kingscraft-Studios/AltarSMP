@@ -30,7 +30,7 @@ class FrostScytheBladeChargingTask extends BukkitRunnable {
     } catch (MatchException matchException) {
       throw a(null);
     } 
-    for (byte b = 0; b < this.bladeDisplays.size(); b++) {
+    for (int b = 0; b < this.bladeDisplays.size(); b++) {
       ItemDisplay itemDisplay = (ItemDisplay)this.bladeDisplays.get(b);
       itemDisplay.setTeleportDuration(2);
       itemDisplay.setRotation(this.player.getYaw(), 0.0F);

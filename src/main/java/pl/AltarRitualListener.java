@@ -56,8 +56,8 @@ public class AltarRitualListener implements Listener {
   
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent paramPlayerInteractEvent) {
-    List<RecipeIngredient> list;
-    UUID uUID;
+    List<RecipeIngredient> list = null;
+    UUID uUID = null;
     long l = 0;
     {
       if (paramPlayerInteractEvent.getAction() != Action.RIGHT_CLICK_BLOCK)
@@ -80,43 +80,47 @@ public class AltarRitualListener implements Listener {
         return;
       } 
     }
-    AltarInstance you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1 = this.altarController.getAltarInstance(paramPlayerInteractEvent.getClickedBlock().getLocation());
+    AltarInstance altarInstance = this.altarController.getAltarInstance(paramPlayerInteractEvent.getClickedBlock().getLocation());
     {
-      if (you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1 == null)
+      if (altarInstance == null)
         return; 
     }{
       paramPlayerInteractEvent.setCancelled(true);
-      if (this.altarController.isAltarUsed(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.getLocation()))
+      if (this.altarController.isAltarUsed(altarInstance.getLocation()))
         return; 
     }
-    Altar you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bs = Main.getInstance().getConfigManager().getAltar(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.getType());
+    Altar altar = Main.getInstance().getConfigManager().getAltar(altarInstance.getType());
     {
-      if (you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bs == null)
+      if (altar == null)
         return; 
-    }Iterator<AltarRecipe> iterator = you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bs.getRecipe().values().iterator();
-    if (iterator.hasNext()) {
-      AltarRecipe you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b2 = iterator.next();
-      list = this.altarController.getMissingIngredients(player, you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b2);
+    }    Iterator<AltarRecipe> iterator = altar.getRecipe().values().iterator();
+    if (!iterator.hasNext()) {
+      player.sendMessage(String.valueOf(ChatColor.RED) + "No valid recipe found!");
+      return;
+    }
+    while (iterator.hasNext()) {
+      AltarRecipe altarRecipe = iterator.next();
+      list = this.altarController.getMissingIngredients(player, altarRecipe);
       if (list.isEmpty()) {
-        consumeIngredients(player, you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b2);
-        ItemStack itemStack1 = AltarController.createItemStack(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.getType());
+        consumeIngredients(player, altarRecipe);
+        ItemStack itemStack1 = AltarController.createItemStack(altarInstance.getType());
         {
           player.getInventory().addItem(new ItemStack[] { itemStack1 });
-          if (you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.getType().equalsIgnoreCase("crazyslots"))
-            player.getInventory().addItem(new ItemStack[] { new ItemStack(Material.DRAGON_EGG) }); 
+          if (altarInstance.getType().equalsIgnoreCase("crazyslots"))
+            player.getInventory().addItem(new ItemStack[] { new ItemStack(Material.DRAGON_EGG) });
         }{
-          if (you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.getType().equalsIgnoreCase("copperhelmet"))
+          if (altarInstance.getType().equalsIgnoreCase("copperhelmet"))
             copperHelmetPlayers.put(player.getUniqueId(), player.getUniqueId());
         }{
-          if (you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.getType().equalsIgnoreCase("copperchestplate"))
+          if (altarInstance.getType().equalsIgnoreCase("copperchestplate"))
             copperChestplatePlayers.put(player.getUniqueId(), player.getUniqueId());
-        }you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.getLocation().getWorld().strikeLightning(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.getLocation());
+        }altarInstance.getLocation().getWorld().strikeLightning(altarInstance.getLocation());
         this.altarController.broadcastCraftAnnouncement(player, itemStack1);
-        this.altarController.setAltarUsed(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.getLocation(), true);
-        this.altarController.getItemDisplayScale(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.getType());
-        you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b1.removeItemDisplay();
+        this.altarController.setAltarUsed(altarInstance.getLocation(), true);
+        this.altarController.removeAltar(altarInstance.getLocation());
+        altarInstance.removeItemDisplay();
         return;
-      } 
+      }
       uUID = player.getUniqueId();
       l = System.currentTimeMillis();
       Long long_ = this.missingIngredientsCooldowns.get(uUID);
@@ -127,13 +131,12 @@ public class AltarRitualListener implements Listener {
               this.altarController.sendMissingIngredients(player, list);
               this.missingIngredientsCooldowns.put(uUID, Long.valueOf(l));
               return;
-            } 
-          }return;
-        } 
-      }} else {
-      player.sendMessage(String.valueOf(ChatColor.RED) + "No valid recipe found!");
-      return;
-    } 
+            }
+          }
+          return;
+        }
+      }
+    }
     this.altarController.sendMissingIngredients(player, list);
     this.missingIngredientsCooldowns.put(uUID, Long.valueOf(l));
   }
@@ -154,7 +157,7 @@ public class AltarRitualListener implements Listener {
     TextDisplay textDisplay = (TextDisplay)world.spawnEntity(location.clone().add(0.0D, 2.5D, 0.0D), EntityType.TEXT_DISPLAY);
     textDisplay.setBillboard(Display.Billboard.CENTER);
     String str2 = "";
-    for (byte b1 = 0; b1 < CONTAGION_SIGNAL_HEALTH; b1++)
+    for (int b1 = 0; b1 < CONTAGION_SIGNAL_HEALTH; b1++)
       str2 = str2 + "§a|";
     textDisplay.setText(str2);
     Transformation transformation2 = textDisplay.getTransformation();
@@ -167,7 +170,7 @@ public class AltarRitualListener implements Listener {
     int i = (int)(CONTAGION_RITUAL_DURATION * 60.0D * 20.0D);
     startContagionSequence(str1, paramLocation);
     BossBar bossBar = Bukkit.createBossBar("§a§kaa §f" + str1 + " §aCONTAGION RITUAL §a§kaa", BarColor.PINK, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
-    byte b2 = 5;
+    int b2 = 5;
     String str3 = str1;
     (new ContagionSignalAnimationTask(interaction, bossBar, paramLocation, itemDisplay, textDisplay, i, str3, b2)).runTaskTimer((Plugin)Main.getInstance(), 140L, 1L);
   }
@@ -235,9 +238,9 @@ public class AltarRitualListener implements Listener {
   public void consumeIngredients(Player paramPlayer, AltarRecipe altarRecipe) {
     PlayerInventory playerInventory = paramPlayer.getInventory();
     HashMap<Object, Object> hashMap = new HashMap<>();
-    for (RecipeIngredient you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b4 : altarRecipe.getIngredients())
-      hashMap.put(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b4, Integer.valueOf(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b4.getAmount()));
-    for (byte b = 0; b < playerInventory.getSize(); b++) {
+    for (RecipeIngredient recipeIngredient : altarRecipe.getIngredients())
+      hashMap.put(recipeIngredient, Integer.valueOf(recipeIngredient.getAmount()));
+    for (int b = 0; b < playerInventory.getSize(); b++) {
       ItemStack itemStack = playerInventory.getItem(b);
       {
         if (itemStack != null)
@@ -246,12 +249,12 @@ public class AltarRitualListener implements Listener {
               if (((Integer)entry.getValue()).intValue() <= 0)
                 continue; 
             }
-            RecipeIngredient you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b4 = (RecipeIngredient)entry.getKey();
-            if (you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b4.matches(itemStack)) {
+            RecipeIngredient recipeIngredient = (RecipeIngredient)entry.getKey();
+            if (recipeIngredient.matches(itemStack)) {
               int i = Math.min(((Integer)entry.getValue()).intValue(), itemStack.getAmount());
               {
                 itemStack.setAmount(itemStack.getAmount() - i);
-                hashMap.put(you_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b4, Integer.valueOf(((Integer)entry.getValue()).intValue() - i));
+                hashMap.put(recipeIngredient, Integer.valueOf(((Integer)entry.getValue()).intValue() - i));
                 if (itemStack.getAmount() <= 0)
                   playerInventory.setItem(b, null); 
               }} 

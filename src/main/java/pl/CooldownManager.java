@@ -13,8 +13,6 @@ public class CooldownManager {
   private static final Map<UUID, Map<String, Double>> remainingCooldowns = new ConcurrentHashMap<>();
   
   public static boolean isOnCooldown(UUID paramUUID, String paramString) {
-    if (AntiTamperGuard.isLicenseInvalid())
-      return true;
     return (getRemainingMillis(paramUUID, paramString) > 0.0D);
   }
   

@@ -13,7 +13,7 @@ import org.bukkit.util.Transformation;
 public class FloatingTextEffectUtils {
   public static void spawnPlayerStarEffect(Player paramPlayer) {
     Location location = paramPlayer.getLocation();
-    byte b = 5;
+    int b = 5;
     spawnAnimatedTextEffect(location, 1, Color.WHITE, Color.WHITE, b, b * 10, 10, b, true, "✦", 40, 10);
   }
   

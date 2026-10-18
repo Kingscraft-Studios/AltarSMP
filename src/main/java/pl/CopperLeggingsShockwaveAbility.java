@@ -220,7 +220,7 @@ public class CopperLeggingsShockwaveAbility implements Listener {
   
   private static void lambda$triggerShockwave$1(double paramDouble, Location paramLocation) {
     for (int i = -((int)paramDouble); i <= paramDouble; i++) {
-      for (byte b = -1; b <= 1; b++) {
+      for (int b = -1; b <= 1; b++) {
         for (int j = -((int)paramDouble); j <= paramDouble; j++) {
           Location location = paramLocation.clone().add(i, b, j);
 

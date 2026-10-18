@@ -201,8 +201,8 @@ public class IllusionDisguiseManager implements Listener {
   public static void spawnRevealParticles(Player paramPlayer) {
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.5F);
     double d = 1.5D;
-    char c = 1000;
-    for (byte b = 0; b < c; b++) {
+    int c = 1000;
+    for (int b = 0; b < c; b++) {
       double d1 = Math.random() * 2.0D * Math.PI;
       double d2 = Math.acos(2.0D * Math.random() - 1.0D);
       double d3 = d * Math.sin(d2) * Math.cos(d1);

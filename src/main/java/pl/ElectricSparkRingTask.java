@@ -27,7 +27,7 @@ class ElectricSparkRingTask extends BukkitRunnable {
       throw a(null);
     } 
     int i = (int)(this.radius * 32.0D);
-    for (byte b = 0; b < i; b++) {
+    for (int b = 0; b < i; b++) {
       double d1 = 6.283185307179586D * b / i;
       double d2 = this.center.getX() + this.radius * Math.cos(d1);
       double d3 = this.center.getZ() + this.radius * Math.sin(d1);

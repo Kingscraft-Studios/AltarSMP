@@ -106,7 +106,7 @@ public class StrikerBowAbility implements Listener {
     int m = Main.getInstance().getConfig().getInt("orbitalShotCooldown", 120);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "orbitalShotCooldown", m);
     BossBarManager.createBar(paramPlayer, "Orbital Shot", m, ChatColor.YELLOW);
-    for (byte b = 0; b < j; b++) {
+    for (int b = 0; b < j; b++) {
       double d1 = random.nextDouble() * Math.PI * 2.0D;
       double d2 = random.nextDouble() * i;
       double d3 = Math.cos(d1) * d2;
@@ -166,11 +166,11 @@ public class StrikerBowAbility implements Listener {
   }
   
   public static void createStabShotShockwave(Location paramLocation) {
-    char c = 360;
+    int c = 360;
     double d1 = 0;
     double d2 = 1500000.0D;
     Location location = paramLocation.clone();
-    for (byte b = 0; b < c; b += 4) {
+    for (int b = 0; b < c; b += 4) {
       double d3 = 6.283185307179586D * b / c;
       double d4 = location.getX() + d1 * Math.cos(d3);
       double d5 = location.getY();
@@ -193,7 +193,7 @@ public class StrikerBowAbility implements Listener {
     }{
       if (material2 == null || !material2.isItem())
         material2 = Material.DEEPSLATE; 
-    }byte b = 0;
+    }int b = 0;
     while (true) {
       {
         if (b < 50) {

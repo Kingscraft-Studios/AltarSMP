@@ -164,9 +164,9 @@ import org.bukkit.util.Transformation;
   }
   
   public void spawnSlashParticles(Location paramLocation, double paramDouble, boolean paramBoolean1, boolean paramBoolean2) {
-    byte b1 = 35;
+    int b1 = 35;
     double d = 2.2D;
-    for (byte b2 = 0; b2 < b1; b2++) {
+    for (int b2 = 0; b2 < b1; b2++) {
       double d2 = 0;
       double d3 = 0;
       double d4 = 0;

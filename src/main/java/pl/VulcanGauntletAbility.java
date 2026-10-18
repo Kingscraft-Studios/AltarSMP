@@ -270,7 +270,7 @@ public class VulcanGauntletAbility implements Listener {
     {
       if (isSafeExplosionLocation(paramLocation))
         return paramLocation;
-    }for (byte b = 1; b <= paramInt; b++) {
+    }for (int b = 1; b <= paramInt; b++) {
       Location location1 = paramLocation.clone().add(0.0D, b, 0.0D);
       {
         if (isSafeExplosionLocation(location1))

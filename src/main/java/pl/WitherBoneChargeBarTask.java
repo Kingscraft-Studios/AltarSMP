@@ -17,7 +17,7 @@ class WitherBoneChargeBarTask extends BukkitRunnable {
           return; 
       }int i = ((Integer) WitherBoneAbility.cleansingChargeBars.getOrDefault(player.getUniqueId(), Integer.valueOf(0))).intValue();
       String str = "§f☠ -§7";
-      for (byte b = 1; b < WitherBoneAbility.cleansingRequiredBars + 1; b++) {
+      for (int b = 1; b < WitherBoneAbility.cleansingRequiredBars + 1; b++) {
         String str1 = "§7";
         if (b <= i)
           str1 = "§8"; 

@@ -49,7 +49,7 @@ class StabShotChargeTask extends BukkitRunnable {
     } catch (MatchException matchException) {
       throw a(null);
     } 
-    for (byte b = 0; b < 360; b += 30) {
+    for (int b = 0; b < 360; b += 30) {
       for (double d = 0.0D; d < 2.0D; d += 0.2D) {
         double d1 = Math.toRadians((this.remainingTicks + b));
         double d2 = this.location.getX() + this.currentRadius * Math.cos(d1);

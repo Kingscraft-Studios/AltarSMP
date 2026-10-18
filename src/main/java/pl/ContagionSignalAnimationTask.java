@@ -78,7 +78,7 @@ class ContagionSignalAnimationTask extends BukkitRunnable {
     }String str = "";
     int i = ((Integer) AltarRitualListener.contagionInteractions.get(this.interaction)).intValue();
     int j = AltarRitualListener.CONTAGION_SIGNAL_HEALTH - i;
-    byte b = 0;
+    int b = 0;
 for (b = 0; b < i; b++)
       str = str + "§a|";
     for (b = 0; b < j; b++)
