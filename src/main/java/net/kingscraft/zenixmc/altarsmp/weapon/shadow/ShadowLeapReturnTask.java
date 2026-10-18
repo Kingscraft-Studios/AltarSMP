@@ -10,30 +10,24 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class ShadowLeapReturnTask extends BukkitRunnable {
   public final Player player;
-  
+
   public final Location targetLocation;
-  
+
   public ShadowLeapReturnTask(ShadowBladeAbility shadowBladeAbility, Player paramPlayer, Location paramLocation) {
         this.player = paramPlayer;
         this.targetLocation = paramLocation;
     }
-  
+
   public void run() {
     for (Player player : Bukkit.getOnlinePlayers()) {
-      try {
-        if (!player.equals(this.player))
-          player.showPlayer((Plugin)AltarSMP.getInstance(), this.player);
-      } catch (MatchException matchException) {
-        throw a(null);
-      } 
+      if (!player.equals(this.player))
+        player.showPlayer((Plugin)AltarSMP.getInstance(), this.player);
+
     } 
     this.player.removePotionEffect(PotionEffectType.INVISIBILITY);
     this.player.teleport(this.targetLocation);
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

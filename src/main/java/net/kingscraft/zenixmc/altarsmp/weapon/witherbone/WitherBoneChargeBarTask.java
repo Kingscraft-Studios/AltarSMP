@@ -6,8 +6,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class WitherBoneChargeBarTask extends BukkitRunnable {
-  
-  
+
+
   public void run() {
     for (Player player : Bukkit.getOnlinePlayers()) {
       {

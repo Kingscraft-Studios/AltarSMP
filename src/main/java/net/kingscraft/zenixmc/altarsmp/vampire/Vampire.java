@@ -23,35 +23,33 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
-import net.kingscraft.zenixmc.altarsmp.task.BatTransformationTask;
-import net.kingscraft.zenixmc.altarsmp.task.NightPiercerPassiveTask;
 import net.kingscraft.zenixmc.altarsmp.weapon.blood.CrimsonBiteTask;
 
   public class Vampire implements Listener {
   public static AltarSMP plugin;
-  
+
   public static FileConfiguration config;
-  
+
   public static final Map<UUID, Double> healthStealMap;
-  
+
   public static final Map<UUID, Boolean> transformedPlayers;
-  
+
   public static int unusedInt1;
-  
+
   public static int unusedInt2;
-  
+
   public static double unusedDouble;
 
   public Vampire() {
     config = plugin.getConfig();
   }
-  
+
   public static void startPassiveTask() {
     (new NightPiercerPassiveTask()).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 40L);
   }
-  
+
   public static void crimsonBite(Player paramPlayer) {
     {
       if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "crimsonBite"))
@@ -84,7 +82,7 @@ import net.kingscraft.zenixmc.altarsmp.weapon.blood.CrimsonBiteTask;
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_PHANTOM_BITE, 1.0F, 1.0F);
     (new CrimsonBiteTask(livingEntity2, d, paramPlayer, j, i)).runTaskLater((Plugin) plugin, 1L);
   }
-  
+
   public static void transformIntoBat(Player paramPlayer) {
     for (Player player : Bukkit.getOnlinePlayers())
       player.hidePlayer((Plugin)AltarSMP.getInstance(), paramPlayer); 
@@ -110,7 +108,7 @@ import net.kingscraft.zenixmc.altarsmp.weapon.blood.CrimsonBiteTask;
     transformedPlayers.put(paramPlayer.getUniqueId(), Boolean.valueOf(true));
     (new BatTransformationTask(i, paramPlayer, arrayList, hashMap, d, j)).runTaskTimer((Plugin) plugin, 0L, 1L);
   }
-  
+
   public static void spawnBiteParticles(LivingEntity paramLivingEntity) {
     int b1 = 0;
     double d = 1.0D;
@@ -137,7 +135,7 @@ import net.kingscraft.zenixmc.altarsmp.weapon.blood.CrimsonBiteTask;
       b1++;
     } 
   }
-  
+
   public static boolean isHoldingNightPiercer(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
     return AltarSMP.areSimilar(itemStack, CustomItemRegistry.getNightpiercer());

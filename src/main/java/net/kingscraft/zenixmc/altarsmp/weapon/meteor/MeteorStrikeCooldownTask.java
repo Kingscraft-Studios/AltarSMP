@@ -5,16 +5,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.weapon.earth.EarthGauntletAbility;
 
 public class MeteorStrikeCooldownTask extends BukkitRunnable {
   public final Player player;
-  
+
   public MeteorStrikeCooldownTask(Player paramPlayer) {
         this.player = paramPlayer;
     }
-  
+
   public void run() {
     {
       if (CooldownManager.isOnCooldown(this.player.getUniqueId(), "used_meteor")) {
@@ -22,10 +22,7 @@ public class MeteorStrikeCooldownTask extends BukkitRunnable {
         CooldownManager.setCooldown(this.player.getUniqueId(), EarthGauntletAbility.meteorStrikeCooldownKey, EarthGauntletAbility.meteorStrikeCooldown);
       } 
     }}
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 
 }

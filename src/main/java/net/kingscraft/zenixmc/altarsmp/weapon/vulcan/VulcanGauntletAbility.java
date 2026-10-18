@@ -39,7 +39,7 @@ import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
@@ -47,7 +47,6 @@ public class VulcanGauntletAbility implements Listener {
   public AltarSMP plugin;
 
   public Set<Player> chargedCrossbowUsers = new HashSet<>();
-
 
 
   public VulcanGauntletAbility(AltarSMP paramAltarSMP) {
@@ -339,9 +338,6 @@ public class VulcanGauntletAbility implements Listener {
     arrow.setMetadata("passive_main", (MetadataValue)new FixedMetadataValue((Plugin)AltarSMP.getInstance(), paramPlayer.getUniqueId().toString()));
   }
 
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
 
 
 }

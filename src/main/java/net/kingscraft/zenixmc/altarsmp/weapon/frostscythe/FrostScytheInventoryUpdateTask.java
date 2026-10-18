@@ -6,11 +6,11 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class FrostScytheInventoryUpdateTask extends BukkitRunnable {
   final PlayerItemConsumeEvent consumeEvent ;
-  
+
   public FrostScytheInventoryUpdateTask(FrostScytheAbilityListener frostScytheAbilityListener, PlayerItemConsumeEvent paramPlayerItemConsumeEvent) {
         this.consumeEvent = paramPlayerItemConsumeEvent;
     }
-  
+
   public void run() {
     this.consumeEvent.getPlayer().updateInventory();
   }

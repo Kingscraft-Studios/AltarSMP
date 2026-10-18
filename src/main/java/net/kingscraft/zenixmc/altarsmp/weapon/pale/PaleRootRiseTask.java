@@ -7,11 +7,11 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class PaleRootRiseTask extends BukkitRunnable {
   public final ItemDisplay rootDisplay;
-  
+
   public PaleRootRiseTask(PaleRootsGrowthTask paleRootsGrowthTask, ItemDisplay paramItemDisplay) {
         this.rootDisplay = paramItemDisplay;
     }
-  
+
   public void run() {
     Transformation transformation = this.rootDisplay.getTransformation();
     transformation.getTranslation().set(0.0D, 1.5D, 0.0D);

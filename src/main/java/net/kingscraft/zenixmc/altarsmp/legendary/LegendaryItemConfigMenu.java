@@ -28,9 +28,9 @@ import net.kingscraft.zenixmc.altarsmp.menu.DialogBuilder;
 
 public class LegendaryItemConfigMenu implements Listener {
   public static String MENU_TITLE;
-  
+
   FileConfiguration config = AltarSMP.getInstance().getConfig();
-  
+
   public static void openConfigMenu(Player paramPlayer) {
     Inventory inventory = Bukkit.createInventory(null, 45, MENU_TITLE);
     ItemStack itemStack = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
@@ -67,7 +67,7 @@ public class LegendaryItemConfigMenu implements Listener {
     } 
     paramPlayer.openInventory(inventory);
   }
-  
+
   @EventHandler
   public void onMenuClick(InventoryClickEvent paramInventoryClickEvent) {
     Player player;
@@ -97,7 +97,7 @@ public class LegendaryItemConfigMenu implements Listener {
         return; 
     }player.showDialog((DialogLike) buildWeaponDialog(customItem));
   }
-  
+
   public Dialog buildWeaponDialog(CustomItem customItem) {
     String s = ChatColor.stripColor(customItem.getItem().getItemMeta().getDisplayName());
     DialogBuilder builder = DialogBuilder.multiAction().title("Configure " + s);
@@ -124,7 +124,7 @@ public class LegendaryItemConfigMenu implements Listener {
     }
     return builder.build();
   }
-  
+
   public void openNumberConfigDialog(Player paramPlayer, CustomItem customItem, String paramString1, String paramString2, float paramFloat1, float paramFloat2) {
     float f = (float)this.config.getDouble(paramString2);
     Dialog dialog = this.buildWeaponDialog(customItem);
@@ -136,7 +136,7 @@ public class LegendaryItemConfigMenu implements Listener {
         .onIntegerSubmit((player, integer) -> saveNumberConfig(paramString2, dialog, player, integer))
         .show(paramPlayer);
   }
-  
+
   public void openFloatConfigDialog(Player paramPlayer, CustomItem customItem, String paramString1, String paramString2, float paramFloat1, float paramFloat2, float paramFloat3) {
     float f = (float)this.config.getDouble(paramString2);
     Dialog dialog = this.buildWeaponDialog(customItem);
@@ -149,7 +149,7 @@ public class LegendaryItemConfigMenu implements Listener {
         .onFloatSubmit((player, float1) -> saveFloatConfig(paramString2, dialog, player, float1))
         .show(paramPlayer);
   }
-  
+
   public void openBooleanConfigDialog(Player paramPlayer, CustomItem customItem, String paramString1, String paramString2) {
     boolean b = this.config.getBoolean(paramString2);
     Dialog dialog = this.buildWeaponDialog(customItem);
@@ -160,36 +160,36 @@ public class LegendaryItemConfigMenu implements Listener {
         .onBooleanSubmit((player, bool) -> saveBooleanConfig(paramString2, dialog, player, bool))
         .show(paramPlayer);
   }
-  
+
   public void saveBooleanConfig(String paramString, Dialog paramDialog, Player paramPlayer, Boolean paramBoolean) {
     this.config.set(paramString, paramBoolean);
     AltarSMP.getInstance().saveConfig();
     paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + paramString + " set to " + paramBoolean);
     paramPlayer.showDialog((DialogLike)paramDialog);
   }
-  
+
   public void saveFloatConfig(String paramString, Dialog paramDialog, Player paramPlayer, Float paramFloat) {
     this.config.set(paramString, paramFloat);
     AltarSMP.getInstance().saveConfig();
     paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + paramString + " set to " + paramFloat);
     paramPlayer.showDialog((DialogLike)paramDialog);
   }
-  
+
   public void saveNumberConfig(String paramString, Dialog paramDialog, Player paramPlayer, Integer paramInteger) {
     this.config.set(paramString, paramInteger);
     AltarSMP.getInstance().saveConfig();
     paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + paramString + " set to " + paramInteger);
     paramPlayer.showDialog((DialogLike)paramDialog);
   }
-  
+
   public void openSteppedStatDialog(CustomItem customItem, String paramString, SteppedStat steppedStat, Player paramPlayer) {
     openFloatConfigDialog(paramPlayer, customItem, paramString, steppedStat.key(), steppedStat.min(), steppedStat.max(), steppedStat.step());
   }
-  
+
   public void openToggleStatDialog(CustomItem customItem, String paramString, ToggleStat toggleStat, Player paramPlayer) {
     openBooleanConfigDialog(paramPlayer, customItem, paramString, toggleStat.key());
   }
-  
+
   public void openRangedStatDialog(CustomItem customItem, String paramString, RangedStat rangedStat, Player paramPlayer) {
     openNumberConfigDialog(paramPlayer, customItem, paramString, rangedStat.key(), rangedStat.min(), rangedStat.max());
   }

@@ -7,17 +7,17 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class CycloneSlashSpinTask extends BukkitRunnable {
   double scale = 7.5D;
-  
+
   public int ticks;
-  
+
   public final ItemDisplay display;
-  
+
   public CycloneSlashSpinTask(ItemDisplay paramItemDisplay) {
         this.display = paramItemDisplay;
         this.scale = 7.5;
         this.ticks = 0;
     }
-  
+
   public void run() {
     if (this.display.isDead()) {
       cancel();

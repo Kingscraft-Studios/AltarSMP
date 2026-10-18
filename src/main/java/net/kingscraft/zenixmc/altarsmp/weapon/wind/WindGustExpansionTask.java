@@ -13,19 +13,19 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class WindGustExpansionTask extends BukkitRunnable {
   public double radius;
-  
+
   HashSet<UUID> affectedEntities = new HashSet<>();
-  
+
   public final int durationTicks;
-  
+
   public final Location center;
-  
+
   public final Particle particle;
-  
+
   public final Player player;
-  
+
   public final int gustStrength;
-  
+
   public WindGustExpansionTask(int paramInt1, Location paramLocation, Particle paramParticle, Player paramPlayer, int paramInt2) {
         this.durationTicks = paramInt1;
         this.center = paramLocation;
@@ -35,16 +35,13 @@ class WindGustExpansionTask extends BukkitRunnable {
         this.radius = 0.0;
         this.affectedEntities = new HashSet();
     }
-  
+
   public void run() {
-    try {
-      if (this.radius >= this.durationTicks) {
-        cancel();
-        return;
-      } 
-    } catch (MatchException matchException) {
-      throw a(null);
+    if (this.radius >= this.durationTicks) {
+      cancel();
+      return;
     } 
+
     for (double d = 0.0D; d < 6.283185307179586D; d += 0.09817477042468103D) {
       double d1 = this.radius * Math.cos(d);
       double d2 = this.radius * Math.sin(d);
@@ -52,44 +49,30 @@ class WindGustExpansionTask extends BukkitRunnable {
       this.center.getWorld().spawnParticle(this.particle, location, 1, 0.0D, 0.0D, 0.0D, 0.0D);
     } 
     for (Entity entity : this.center.getWorld().getNearbyEntities(this.center, this.radius + 1.0D, 3.0D, this.radius + 1.0D)) {
-      try {
-        if (entity instanceof LivingEntity)
-          try {
-            if (entity != this.player && !this.affectedEntities.contains(entity.getUniqueId())) {
-              LivingEntity livingEntity = (LivingEntity)entity;
-              try {
-                if (livingEntity.getWorld() != this.center.getWorld())
-                  continue; 
-              } catch (MatchException matchException) {
-                throw a(null);
-              } 
-              double d1 = livingEntity.getLocation().distance(this.center);
-              try {
-                if (d1 <= this.radius + 0.5D && d1 >= this.radius - 0.5D) {
-                  Vector vector = livingEntity.getLocation().toVector().subtract(this.center.toVector()).normalize();
-                  vector.setY(0.5D);
-                  vector.multiply(1.5D + this.gustStrength * 0.2D);
-                  livingEntity.setVelocity(vector);
-                  livingEntity.damage(2.0D + this.gustStrength * 0.5D, (Entity)this.player);
-                  this.affectedEntities.add(entity.getUniqueId());
-                } 
-              } catch (MatchException matchException) {
-                throw a(null);
-              } 
+      if (entity instanceof LivingEntity)
+        {
+          if (entity != this.player && !this.affectedEntities.contains(entity.getUniqueId())) {
+            LivingEntity livingEntity = (LivingEntity)entity;
+            if (livingEntity.getWorld() != this.center.getWorld())
+              continue; 
+
+            double d1 = livingEntity.getLocation().distance(this.center);
+            if (d1 <= this.radius + 0.5D && d1 >= this.radius - 0.5D) {
+              Vector vector = livingEntity.getLocation().toVector().subtract(this.center.toVector()).normalize();
+              vector.setY(0.5D);
+              vector.multiply(1.5D + this.gustStrength * 0.2D);
+              livingEntity.setVelocity(vector);
+              livingEntity.damage(2.0D + this.gustStrength * 0.5D, (Entity)this.player);
+              this.affectedEntities.add(entity.getUniqueId());
             } 
-          } catch (MatchException matchException) {
-            throw a(null);
-          }  
-      } catch (MatchException matchException) {
-        throw a(null);
-      } 
+
+          } 
+        }  
+
     } 
     this.radius += 0.5D;
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

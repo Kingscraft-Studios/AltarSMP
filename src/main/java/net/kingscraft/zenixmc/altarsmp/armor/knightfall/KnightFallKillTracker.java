@@ -13,27 +13,27 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class KnightFallKillTracker {
   public AltarSMP plugin;
-  
+
   public File dataFile;
-  
+
   public FileConfiguration config;
-  
+
   public Map<UUID, Integer> killCounts;
-  
+
   public static boolean bool;
-  
-  
+
+
   static {
     bool = AltarSMP.getInstance().getConfig().getBoolean("nimlot", false);
   }
-  
+
   public KnightFallKillTracker(AltarSMP plugin) {
     this.plugin = plugin;
     this.killCounts = new HashMap<>();
     loadDataFile();
     loadKillCount();
   }
-  
+
   public void loadDataFile() {
     {
       if (!this.plugin.getDataFolder().exists())
@@ -48,7 +48,7 @@ public class KnightFallKillTracker {
         }  
     }this.config = (FileConfiguration)YamlConfiguration.loadConfiguration(this.dataFile);
   }
-  
+
   public void loadKillCount() {
     for (String str : this.config.getKeys(false)) {
       try {
@@ -60,7 +60,7 @@ public class KnightFallKillTracker {
       } 
     } 
   }
-  
+
   public void incrementKillCount(Player paramPlayer) {
     UUID uUID = paramPlayer.getUniqueId();
     int i = getKillCount(paramPlayer);
@@ -70,14 +70,14 @@ public class KnightFallKillTracker {
     this.config.set(uUID.toString() + ".kills", Integer.valueOf(j));
     saveDataFile();
   }
-  
+
   public int getKillCount(Player paramPlayer) {
     {
       if (bool)
         return 10; 
     }return ((Integer)this.killCounts.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(0))).intValue();
   }
-  
+
   public void setKillCount(Player paramPlayer, int paramInt) {
     {
       if (bool)
@@ -89,11 +89,11 @@ public class KnightFallKillTracker {
     saveDataFile();
     (new KnightfallItemRestoreTask(this, paramPlayer)).runTaskLater((Plugin)AltarSMP.getInstance(), 1L);
   }
-  
+
   public void resetKillCount(Player paramPlayer) {
     setKillCount(paramPlayer, 0);
   }
-  
+
   public void saveDataFile() {
     try {
       this.config.save(this.dataFile);
@@ -102,7 +102,7 @@ public class KnightFallKillTracker {
       iOException.printStackTrace();
     } 
   }
-  
+
   public void flush() {
     saveDataFile();
   }}

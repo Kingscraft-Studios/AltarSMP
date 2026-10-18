@@ -7,28 +7,22 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class NetheriteHelmetEffectTask extends BukkitRunnable {
   public final NetheriteHelmetAbilityListener helmetAbilityListener;
-  
+
   public NetheriteHelmetEffectTask(NetheriteHelmetAbilityListener netheriteHelmetAbilityListener) {
         this.helmetAbilityListener = netheriteHelmetAbilityListener;
     }
-  
+
   public void run() {
     for (Player player : Bukkit.getOnlinePlayers()) {
-      try {
-        if (NetheriteHelmetAbilityListener.isCustomNetheriteHelmet(player)) {
-          this.helmetAbilityListener.applyStrength(player);
-          this.helmetAbilityListener.applyWaterBreathing(player);
-          this.helmetAbilityListener.handleSneakAbility(player);
-        } 
-      } catch (MatchException matchException) {
-        throw a(null);
+      if (NetheriteHelmetAbilityListener.isCustomNetheriteHelmet(player)) {
+        this.helmetAbilityListener.applyStrength(player);
+        this.helmetAbilityListener.applyWaterBreathing(player);
+        this.helmetAbilityListener.handleSneakAbility(player);
       } 
+
     } 
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

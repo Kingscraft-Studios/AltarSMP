@@ -14,22 +14,16 @@ public class BlockAreaUtils {
     for (int k = -i; k <= i; k++) {
       for (int m = -i; m <= i; m++) {
         int n = -j;
-        try {
-          while (n <= j) {
-            arrayList.add(paramLocation.clone().add(k, n, m).getBlock());
-            n++;
-          } 
-        } catch (MatchException matchException) {
-          throw a(null);
+        while (n <= j) {
+          arrayList.add(paramLocation.clone().add(k, n, m).getBlock());
+          n++;
         } 
+
       } 
     } 
     return arrayList;
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

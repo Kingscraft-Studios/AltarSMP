@@ -8,15 +8,15 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class VulcanArrowTrailTask extends BukkitRunnable {
   public int ticksLived;
-  
+
   public final Arrow primaryArrow;
-  
+
   public final Arrow secondaryArrow;
-  
+
   public final Arrow tertiaryArrow;
-  
+
   public final World world;
-  
+
   public VulcanArrowTrailTask(Arrow paramArrow1, Arrow paramArrow2, Arrow paramArrow3, World paramWorld) {
         this.primaryArrow = paramArrow1;
         this.secondaryArrow = paramArrow2;
@@ -24,77 +24,46 @@ class VulcanArrowTrailTask extends BukkitRunnable {
         this.world = paramWorld;
         this.ticksLived = 0;
     }
-  
+
   public void run() {
-    try {
-      this.ticksLived++;
-      if (this.ticksLived >= 20) {
-        try {
-          if (this.primaryArrow.isValid())
-            this.primaryArrow.remove();
-        } catch (MatchException matchException) {
-          throw a(null);
-        } 
-        try {
-          if (this.secondaryArrow.isValid())
-            this.secondaryArrow.remove();
-        } catch (MatchException matchException) {
-          throw a(null);
-        } 
-        try {
-          if (this.tertiaryArrow.isValid())
-            this.tertiaryArrow.remove();
-        } catch (MatchException matchException) {
-          throw a(null);
-        } 
-        cancel();
-        return;
-      } 
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
-    try {
+    this.ticksLived++;
+    if (this.ticksLived >= 20) {
       if (this.primaryArrow.isValid())
-        try {
-          if (this.primaryArrow.isOnGround()) {
-            this.world.spawnParticle(Particle.FLAME, this.primaryArrow.getLocation(), 5, 0.1D, 0.1D, 0.1D, 0.1D);
-            this.world.spawnParticle(Particle.FLAME, this.primaryArrow.getLocation(), 5, 0.1D, 0.1D, 0.1D, 0.1D);
-            this.world.spawnParticle(Particle.CRIT, this.primaryArrow.getLocation(), 20, 0.0D, 0.0D, 0.0D, 0.5D);
-          } 
-        } catch (MatchException matchException) {
-          throw a(null);
-        }  
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
-    try {
-      if (this.primaryArrow.isValid())
-        try {
-          if (!this.primaryArrow.isOnGround())
-            this.world.spawnParticle(Particle.FLAME, this.primaryArrow.getLocation(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
-        } catch (MatchException matchException) {
-          throw a(null);
-        }  
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
-    try {
+        this.primaryArrow.remove();
+
       if (this.secondaryArrow.isValid())
-        this.world.spawnParticle(Particle.SOUL_FIRE_FLAME, this.secondaryArrow.getLocation(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
-    try {
+        this.secondaryArrow.remove();
+
       if (this.tertiaryArrow.isValid())
-        this.world.spawnParticle(Particle.SOUL_FIRE_FLAME, this.tertiaryArrow.getLocation(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
-    } catch (MatchException matchException) {
-      throw a(null);
+        this.tertiaryArrow.remove();
+
+      cancel();
+      return;
     } 
+
+    if (this.primaryArrow.isValid())
+      {
+        if (this.primaryArrow.isOnGround()) {
+          this.world.spawnParticle(Particle.FLAME, this.primaryArrow.getLocation(), 5, 0.1D, 0.1D, 0.1D, 0.1D);
+          this.world.spawnParticle(Particle.FLAME, this.primaryArrow.getLocation(), 5, 0.1D, 0.1D, 0.1D, 0.1D);
+          this.world.spawnParticle(Particle.CRIT, this.primaryArrow.getLocation(), 20, 0.0D, 0.0D, 0.0D, 0.5D);
+        } 
+      }  
+
+    if (this.primaryArrow.isValid())
+      {
+        if (!this.primaryArrow.isOnGround())
+          this.world.spawnParticle(Particle.FLAME, this.primaryArrow.getLocation(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+      }  
+
+    if (this.secondaryArrow.isValid())
+      this.world.spawnParticle(Particle.SOUL_FIRE_FLAME, this.secondaryArrow.getLocation(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+
+    if (this.tertiaryArrow.isValid())
+      this.world.spawnParticle(Particle.SOUL_FIRE_FLAME, this.tertiaryArrow.getLocation(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

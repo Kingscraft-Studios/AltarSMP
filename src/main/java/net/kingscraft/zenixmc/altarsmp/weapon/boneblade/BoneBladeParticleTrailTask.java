@@ -9,11 +9,11 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BoneBladeParticleTrailTask extends BukkitRunnable {
   public final List boneItems;
-  
+
   public BoneBladeParticleTrailTask(List paramList) {
         this.boneItems = paramList;
     }
-  
+
   public void run() {
     for (Item item : (Iterable<Item>)(Iterable<?>)this.boneItems)
       item.getLocation().getWorld().spawnParticle(Particle.DUST, item.getLocation(), 0, 0.0D, 0.0D, 0.0D, 0.0D, new Particle.DustOptions(Color.fromRGB(204, 176, 143), 1.0F)); 

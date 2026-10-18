@@ -20,14 +20,14 @@ import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.illusion.IllusionDisguiseManager;
 
 public class EchoAbility implements Listener {
   public static String ECHO_SHRIEK_COOLDOWN_KEY;
-  
+
   public static String ECHO_SONIC_COOLDOWN_KEY;
-  
+
   public static boolean isEchoSword(ItemStack paramItemStack) {
     {
       if (paramItemStack.getType() != Material.NETHERITE_SWORD)
@@ -43,15 +43,15 @@ public class EchoAbility implements Listener {
       if (!itemMeta.hasCustomModelData())
         return false; 
     }{
-    
+
     }return (itemMeta.getCustomModelData() == 13);
   }
-  
+
   public static void activateSonicCharge(Player paramPlayer) {
     paramPlayer.playSound((Entity)paramPlayer, Sound.ENTITY_WARDEN_SONIC_CHARGE, 1.0F, 1.0F);
     (new EchoSonicBlastDelayTask(paramPlayer)).runTaskLater((Plugin)AltarSMP.getInstance(), 30L);
   }
-  
+
   public static void launchSonicBlast(Player paramPlayer) {
     Location location1 = paramPlayer.getLocation().clone().add(paramPlayer.getLocation().getDirection()).add(0.0D, 1.2D, 0.0D);
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
@@ -75,7 +75,7 @@ public class EchoAbility implements Listener {
     Vector vector2 = vector1.multiply(d);
     (new EchoSonicProjectileTask(vector2, itemDisplay, paramPlayer, i)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void activateEchoShriek(Player paramPlayer) {
     int i = AltarSMP.getInstance().getConfig().getInt("echoShriekDuration", 10) * 20;
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.BLOCK_SCULK_SHRIEKER_SHRIEK, 1.0F, 1.0F);

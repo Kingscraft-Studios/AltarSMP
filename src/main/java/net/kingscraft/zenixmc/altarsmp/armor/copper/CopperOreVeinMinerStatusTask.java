@@ -13,7 +13,7 @@ class CopperOreVeinMinerStatusTask extends BukkitRunnable {
   public CopperOreVeinMinerStatusTask(CopperOreVeinMinerListener copperOreVeinMinerListener) {
         this.veinMinerListener = copperOreVeinMinerListener;
     }
-  
+
   public void run() {
     for (Player player : Bukkit.getOnlinePlayers()) {
       if (CopperOreVeinMinerListener.isCopperPickaxe(player)) {
@@ -28,10 +28,7 @@ class CopperOreVeinMinerStatusTask extends BukkitRunnable {
       } 
     } 
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 
 }

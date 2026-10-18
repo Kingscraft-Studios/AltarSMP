@@ -15,9 +15,9 @@ import net.kingscraft.zenixmc.altarsmp.legendary.LegendaryItemConfigMenu;
 
 public class AltarCommand implements CommandExecutor, TabCompleter {
   public final AltarController altarController;
-  
+
   public final AltarManager altarManager;
-  
+
   public AltarCommand(AltarController altarController, AltarManager altarManager) {
     this.altarController = altarController;
     this.altarManager = altarManager;

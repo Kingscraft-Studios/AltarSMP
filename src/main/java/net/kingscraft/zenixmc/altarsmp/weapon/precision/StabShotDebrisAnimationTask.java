@@ -12,28 +12,25 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class StabShotDebrisAnimationTask extends BukkitRunnable {
   public int ticks;
-  
+
   public final HashSet debrisDisplays;
-  
+
   public final HashMap debrisVelocities;
-  
+
   public StabShotDebrisAnimationTask(HashSet paramHashSet, HashMap paramHashMap) {
         this.debrisDisplays = paramHashSet;
         this.debrisVelocities = paramHashMap;
         this.ticks = 0;
     }
-  
+
   public void run() {
     this.ticks++;
     if (this.ticks <= 40)
       for (ItemDisplay itemDisplay : (Iterable<ItemDisplay>)(Iterable<?>) this.debrisDisplays) {
         double[] arrayOfDouble = (double[])this.debrisVelocities.get(itemDisplay);
-        try {
-          if (arrayOfDouble == null)
-            continue; 
-        } catch (MatchException matchException) {
-          throw a(null);
-        } 
+        if (arrayOfDouble == null)
+          continue; 
+
         arrayOfDouble[1] = arrayOfDouble[1] - 0.04D;
         arrayOfDouble[0] = arrayOfDouble[0] * 0.98D;
         arrayOfDouble[1] = arrayOfDouble[1] * 0.98D;
@@ -66,10 +63,7 @@ class StabShotDebrisAnimationTask extends BukkitRunnable {
       cancel();
     } 
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

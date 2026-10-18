@@ -1,11 +1,12 @@
 package net.kingscraft.zenixmc.altarsmp.util;
 
-import org.bukkit.ChatColor;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
+import org.bukkit.ChatColor;
+
 public class ColorUtil {
-  
-  
+
+
   public static String translateColors(String paramString) {
     {
       if (paramString != null)
@@ -17,7 +18,7 @@ public class ColorUtil {
           return paramString;
         }}return paramString;
   }
-  
+
   public static String translateHexColors(String paramString) {
     StringBuilder stringBuilder = new StringBuilder();
     int i = 0;
@@ -28,7 +29,7 @@ public class ColorUtil {
           stringBuilder.append(paramString.substring(i));
           break;
         } 
-      }stringBuilder.append(paramString.substring(i, j));
+      }stringBuilder.append(paramString, i, j);
       if (j + 8 <= paramString.length()) {
         String str = paramString.substring(j, j + 8);
         if (isValidHexColor(str)) {
@@ -50,7 +51,7 @@ public class ColorUtil {
     } 
     return stringBuilder.toString();
   }
-  
+
   public static boolean isValidHexColor(String paramString) {
     {
       if (paramString.startsWith("&#")) {
@@ -70,7 +71,7 @@ public class ColorUtil {
       }} 
     return true;
   }
-  
+
   public static boolean isHexDigit(char paramChar) {
     if (paramChar >= '0' && paramChar <= '9')
       return true;
@@ -80,40 +81,19 @@ public class ColorUtil {
       return true;
     return false;
   }
-  
+
   public static String toMinecraftHexColor(String paramString) {
     StringBuilder stringBuilder = new StringBuilder("§x");
     for (char c : paramString.toCharArray())
       stringBuilder.append("§").append(c); 
     return stringBuilder.toString();
   }
-  
+
   public static String expandShortHexColor(String paramString) {
     StringBuilder stringBuilder = new StringBuilder();
     for (char c : paramString.toCharArray())
       stringBuilder.append(c).append(c); 
     return toMinecraftHexColor(stringBuilder.toString());
-  }
-  
-  public static String toMinecraftHexColorIfValid(String paramString) {
-    {
-      if (paramString != null)
-        {
-          if (!paramString.isEmpty()) {
-            {
-              if (paramString.startsWith("#"))
-                {
-                  if (paramString.length() == 7)
-                    return toMinecraftHexColor(paramString.substring(1));
-                }}{
-              if (paramString.startsWith("&#"))
-                {
-                  if (paramString.length() == 8)
-                    return toMinecraftHexColor(paramString.substring(2));
-                }}return paramString;
-          } 
-          return "";
-        }}return "";
   }
 
 

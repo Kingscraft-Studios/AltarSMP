@@ -9,21 +9,15 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class ShadowBladePassiveTask extends BukkitRunnable {
   ShadowBladePassiveTask(ShadowBladeAbility shadowBladeAbility) {}
-  
+
   public void run() {
     for (Player player : Bukkit.getOnlinePlayers()) {
-      try {
-        if (ShadowBladeAbility.hasShadowBlade(player))
-          player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1, true, true, true)); 
-      } catch (MatchException matchException) {
-        throw a(null);
-      } 
+      if (ShadowBladeAbility.hasShadowBlade(player))
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1, true, true, true)); 
+
     } 
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

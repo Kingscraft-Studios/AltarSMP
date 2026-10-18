@@ -7,27 +7,21 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BoneBladeItemCleanupTask extends BukkitRunnable {
   public final List<Item> boneItems;
-  
+
   public BoneBladeItemCleanupTask(List paramList) {
         this.boneItems = paramList;
     }
-  
+
   public void run() {
     this.boneItems.forEach(BoneBladeItemCleanupTask::lambda$run$0);
   }
-  
+
   private static void lambda$run$0(Item paramItem) {
-    try {
-      if (paramItem.isValid())
-        paramItem.remove(); 
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+    if (paramItem.isValid())
+      paramItem.remove(); 
+
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

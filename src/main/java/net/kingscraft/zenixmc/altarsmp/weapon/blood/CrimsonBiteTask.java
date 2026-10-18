@@ -16,22 +16,21 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.vampire.Vampire;
 
 public class CrimsonBiteTask extends BukkitRunnable {
   public final LivingEntity victim;
-  
+
   public final double healthSteal;
-  
+
   public final Player attacker;
-  
+
   public final int durationSeconds;
-  
+
   public final int cooldownSeconds;
-  
-  
-  
+
+
   public CrimsonBiteTask(LivingEntity paramLivingEntity, double paramDouble, Player paramPlayer, int paramInt1, int paramInt2) {
         this.victim = paramLivingEntity;
         this.healthSteal = paramDouble;
@@ -39,7 +38,7 @@ public class CrimsonBiteTask extends BukkitRunnable {
         this.durationSeconds = paramInt1;
         this.cooldownSeconds = paramInt2;
     }
-  
+
   public void run() {
     if (!this.victim.isDead()) {
       NamespacedKey namespacedKey = new NamespacedKey((Plugin) Vampire.plugin, "crimson_bite_" + java.util.UUID.randomUUID());

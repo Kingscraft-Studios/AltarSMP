@@ -29,77 +29,76 @@ import net.kingscraft.zenixmc.altarsmp.vampire.Vampire;
 
 public class CustomItemRegistry {
   public static FileConfiguration messagesConfig;
-  
+
   public static int quickChargeLevel;
-  
+
   public static final Map<String, List<String>> loreCache;
-  
+
   public static ItemStack boneBlade;
-  
+
   public static ItemStack vulcanCrossbow;
-  
+
   public static ItemStack nukeRemote;
-  
+
   public static ItemStack strikerBow;
-  
+
   public static ItemStack bloodlust;
-  
+
   public static ItemStack crazySlots;
-  
+
   public static ItemStack hyperion;
-  
+
   public static ItemStack nightpiercer;
-  
+
   public static ItemStack pureBlade;
-  
+
   public static ItemStack earthGauntlet;
-  
+
   public static ItemStack witheredBone;
-  
+
   public static ItemStack shadowBlade;
-  
+
   public static ItemStack cutlass;
-  
+
   public static ItemStack paladinAxe;
-  
+
   public static ItemStack windweaver;
-  
+
   public static ItemStack paleCannon;
-  
+
   public static ItemStack echo;
-  
+
   public static ItemStack eclipse;
-  
+
   public static ItemStack knightfall;
-  
+
   public static ItemStack wardenHeart;
-  
+
   public static ItemStack weaponHandle;
-  
+
   public static ItemStack vulcanSkull;
-  
+
   public static ItemStack illusionCore;
-  
+
   public static ItemStack hyperionShard;
-  
+
   public static ItemStack vampireShard;
-  
+
   public static ItemStack paleShard;
-  
+
   public static ItemStack copperHelmet;
-  
+
   public static ItemStack copperChestplate;
-  
+
   public static ItemStack copperLeggings;
-  
+
   public static ItemStack copperBoots;
-  
+
   public static ItemStack copperPickaxe;
-  
+
   public static ItemStack contagionSignal;
-  
-  
-  
+
+
   public static void loadMessages() {
     AltarSMP main = AltarSMP.getInstance();
     File file = new File(main.getDataFolder(), "messages.yml");
@@ -124,11 +123,11 @@ public class CustomItemRegistry {
     }
     messagesConfig = (FileConfiguration)YamlConfiguration.loadConfiguration(file);
   }
-  
+
   public static List<String> getLore(String paramString) {
     return loreCache.computeIfAbsent(paramString, paramKey1 -> loadLore(paramKey1));
   }
-  
+
   public static ItemStack getBoneBlade() {
     {
       if (boneBlade != null)
@@ -148,7 +147,7 @@ public class CustomItemRegistry {
     boneBlade = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getVulcanCrossbow() {
     {
       if (vulcanCrossbow != null)
@@ -166,7 +165,7 @@ public class CustomItemRegistry {
     vulcanCrossbow = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getNukeRemote() {
     {
       if (nukeRemote != null)
@@ -183,7 +182,7 @@ public class CustomItemRegistry {
     nukeRemote = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getStrikerBow() {
     {
       if (strikerBow != null)
@@ -201,7 +200,7 @@ public class CustomItemRegistry {
     strikerBow = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getBloodlust(Player paramPlayer, boolean paramBoolean) {
     {
       if (bloodlust != null)
@@ -225,7 +224,7 @@ public class CustomItemRegistry {
     bloodlust = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getFrostScythe() {
     ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     {
@@ -243,7 +242,7 @@ public class CustomItemRegistry {
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
-  
+
   public static ItemStack getIllusionWand() {
     ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemUtility.setConsumableData(itemStack, "IllusionWandChargeDuration");
@@ -259,7 +258,7 @@ public class CustomItemRegistry {
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
-  
+
   public static ItemStack getCrazySlots() {
     {
       if (crazySlots != null)
@@ -276,7 +275,7 @@ public class CustomItemRegistry {
     crazySlots = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getHyperion() {
     {
       if (hyperion != null)
@@ -309,7 +308,7 @@ public class CustomItemRegistry {
     hyperion = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getNightpiercer() {
     {
       if (nightpiercer != null)
@@ -329,7 +328,7 @@ public class CustomItemRegistry {
     nightpiercer = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getPureBlade() {
     {
       if (pureBlade != null)
@@ -348,7 +347,7 @@ public class CustomItemRegistry {
     pureBlade = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getEarthGauntlet() {
     {
       if (earthGauntlet != null)
@@ -368,7 +367,7 @@ public class CustomItemRegistry {
     earthGauntlet = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getWitheredBone() {
     {
       if (witheredBone != null)
@@ -387,7 +386,7 @@ public class CustomItemRegistry {
     witheredBone = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getShadowBlade() {
     {
       if (shadowBlade != null)
@@ -427,7 +426,7 @@ public class CustomItemRegistry {
     shadowBlade = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getCutlass() {
     {
       if (cutlass != null)
@@ -446,7 +445,7 @@ public class CustomItemRegistry {
     cutlass = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getPaladinAxe() {
     {
       if (paladinAxe != null)
@@ -465,7 +464,7 @@ public class CustomItemRegistry {
     paladinAxe = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getWindweaver() {
     {
       if (windweaver != null)
@@ -485,7 +484,7 @@ public class CustomItemRegistry {
     windweaver = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getPaleCannon() {
     {
       if (paleCannon != null)
@@ -503,7 +502,7 @@ public class CustomItemRegistry {
     paleCannon = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getEcho() {
     {
       if (echo != null)
@@ -523,7 +522,7 @@ public class CustomItemRegistry {
     echo = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getEclipse() {
     {
       if (eclipse != null)
@@ -543,7 +542,7 @@ public class CustomItemRegistry {
     eclipse = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getKnightfall(Player paramPlayer, boolean paramBoolean) {
     {
       if (paramPlayer == null)
@@ -585,7 +584,7 @@ public class CustomItemRegistry {
     knightfall = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getWardenHeart() {
     {
       if (wardenHeart != null)
@@ -603,7 +602,7 @@ public class CustomItemRegistry {
     wardenHeart = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getWeaponHandle() {
     {
       if (weaponHandle != null)
@@ -618,7 +617,7 @@ public class CustomItemRegistry {
     weaponHandle = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getVulcanSkull() {
     {
       if (vulcanSkull != null)
@@ -633,7 +632,7 @@ public class CustomItemRegistry {
     vulcanSkull = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getIllusionCore() {
     {
       if (illusionCore != null)
@@ -650,7 +649,7 @@ public class CustomItemRegistry {
     illusionCore = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getHyperionShard() {
     {
       if (hyperionShard != null)
@@ -665,7 +664,7 @@ public class CustomItemRegistry {
     hyperionShard = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getVampireShard() {
     {
       if (vampireShard != null)
@@ -680,7 +679,7 @@ public class CustomItemRegistry {
     vampireShard = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getPaleShard() {
     {
       if (paleShard != null)
@@ -695,7 +694,7 @@ public class CustomItemRegistry {
     paleShard = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getChestplateShard() {
     ItemStack itemStack = new ItemStack(Material.AMETHYST_SHARD);
     ItemMeta itemMeta = itemStack.getItemMeta();
@@ -706,7 +705,7 @@ public class CustomItemRegistry {
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
-  
+
   public static ItemStack getHelmetShard() {
     ItemStack itemStack = new ItemStack(Material.AMETHYST_SHARD);
     ItemMeta itemMeta = itemStack.getItemMeta();
@@ -717,7 +716,7 @@ public class CustomItemRegistry {
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
-  
+
   public static ItemStack getCopperHelmet() {
     {
       if (copperHelmet != null)
@@ -742,7 +741,7 @@ public class CustomItemRegistry {
     copperHelmet = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getCopperChestplate() {
     {
       if (copperChestplate != null)
@@ -766,7 +765,7 @@ public class CustomItemRegistry {
     copperChestplate = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getCopperLeggings() {
     {
       if (copperLeggings != null)
@@ -790,7 +789,7 @@ public class CustomItemRegistry {
     copperLeggings = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getCopperBoots() {
     {
       if (copperBoots != null)
@@ -816,7 +815,7 @@ public class CustomItemRegistry {
     copperBoots = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getCopperPickaxe() {
     {
       if (copperPickaxe != null)
@@ -835,7 +834,7 @@ public class CustomItemRegistry {
     copperPickaxe = itemStack;
     return itemStack;
   }
-  
+
   public static ItemStack getContagionSignal() {
     {
       if (contagionSignal != null)
@@ -849,15 +848,15 @@ public class CustomItemRegistry {
     copperPickaxe = itemStack;
     return itemStack;
   }
-  
+
   public static String replaceKnightfallKills(String paramString1, String paramString2) {
     return paramString2.replace("<kills>", paramString1);
   }
-  
+
   public static List loadLore(String paramString) {
     return messagesConfig.getStringList("weapons." + paramString).stream().map(paramLore1 -> translateLoreColors(paramLore1)).toList();
   }
-  
+
   public static String translateLoreColors(String paramString) {
     return paramString.replace("&", "§");
   }

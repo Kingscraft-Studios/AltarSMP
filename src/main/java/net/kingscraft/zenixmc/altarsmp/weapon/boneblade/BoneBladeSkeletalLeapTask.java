@@ -9,56 +9,45 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BoneBladeSkeletalLeapTask extends BukkitRunnable {
   final int MAX_TICKS = 5;
-  
+
   public int ticks;
-  
+
   public final Player player;
-  
+
   public final double damage;
-  
+
   public BoneBladeSkeletalLeapTask(Player paramPlayer, double paramDouble) {
         this.player = paramPlayer;
         this.damage = paramDouble;
         this.ticks = 0;
     }
-  
+
   public void run() {
-    try {
-      if (this.ticks < 100)
-        try {
-          if (!this.player.isOnGround()) {
-            for (Entity entity : this.player.getLocation().getNearbyEntities(2.0D, 2.0D, 2.0D)) {
-              if (entity instanceof LivingEntity) {
-                LivingEntity livingEntity = (LivingEntity)entity;
-                try {
-                  if (livingEntity.equals(this.player))
-                    continue; 
-                } catch (MatchException matchException) {
-                  throw a(null);
-                } 
-                BoneBladeAbility.spawnBoneParticles(livingEntity.getLocation().clone().add(0.0D, 1.0D, 0.0D), Material.BONE, 15, 2.0D, 15);
-                livingEntity.damage(this.damage);
-                cancel();
-                return;
-              } 
+    if (this.ticks < 100)
+      {
+        if (!this.player.isOnGround()) {
+          for (Entity entity : this.player.getLocation().getNearbyEntities(2.0D, 2.0D, 2.0D)) {
+            if (entity instanceof LivingEntity) {
+              LivingEntity livingEntity = (LivingEntity)entity;
+              if (livingEntity.equals(this.player))
+                continue; 
+
+              BoneBladeAbility.spawnBoneParticles(livingEntity.getLocation().clone().add(0.0D, 1.0D, 0.0D), Material.BONE, 15, 2.0D, 15);
+              livingEntity.damage(this.damage);
+              cancel();
+              return;
             } 
-            this.ticks++;
-            return;
           } 
-          cancel();
+          this.ticks++;
           return;
-        } catch (MatchException matchException) {
-          throw a(null);
-        }  
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+        } 
+        cancel();
+        return;
+      }  
+
     cancel();
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

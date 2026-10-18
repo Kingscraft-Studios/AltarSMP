@@ -66,7 +66,7 @@ class PlayerBossBarUpdater extends BukkitRunnable {
       iterator.remove();
     } 
   }
-  
+
 }
 
 

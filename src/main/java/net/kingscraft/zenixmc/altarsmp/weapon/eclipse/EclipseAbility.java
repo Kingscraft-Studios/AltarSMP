@@ -16,13 +16,13 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.util.FloatingTextEffectUtils;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 public class EclipseAbility implements Listener {
   public AltarSMP plugin;
-  
+
   public static boolean solarExplosion(Player paramPlayer) {
     int i = AltarSMP.getInstance().getConfig().getInt("EclipseExplosionCooldown", 30);
     float f = AltarSMP.getInstance().getConfig().getInt("EclipseExplosionStrength", 2);
@@ -56,7 +56,7 @@ public class EclipseAbility implements Listener {
       player.setInvulnerable(false); 
     return true;
   }
-  
+
   public static boolean solarLeap(Player paramPlayer) {
     int i = AltarSMP.getInstance().getConfig().getInt("EclipseLeapCooldown", 30);
     {
@@ -74,7 +74,7 @@ public class EclipseAbility implements Listener {
     (new SolarLeapParticleTask(paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 2L, 1L);
     return true;
   }
-  
+
   public static boolean moonlitStars(Player paramPlayer) {
     int i = AltarSMP.getInstance().getConfig().getInt("EclipseStarsCooldown", 30);
     int j = AltarSMP.getInstance().getConfig().getInt("EclipseStarsRange", 50);
@@ -109,7 +109,7 @@ public class EclipseAbility implements Listener {
     } 
     return true;
   }
-  
+
   public static boolean moonlitShadows(Player paramPlayer) {
     int i = AltarSMP.getInstance().getConfig().getInt("EclipseTrueInvisDuration", 4);
     int j = AltarSMP.getInstance().getConfig().getInt("EclipseTrueInvisCooldown", 30);

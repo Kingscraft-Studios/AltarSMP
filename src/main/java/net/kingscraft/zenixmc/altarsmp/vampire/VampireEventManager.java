@@ -38,29 +38,28 @@ import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 
 public final class VampireEventManager implements Listener, CommandExecutor, TabCompleter {
   public static final String PALE;
-  
+
   public static final String VAMPIRE;
-  
+
   public static final FileConfiguration config;
 
   public static final double backstabDamage;
-  
+
   public static final boolean allVampiresAndPalerotsInfectHumans;
-  
+
   public static boolean eventEnabled;
-  
+
   public static File vampireFile;
-  
+
   public static YamlConfiguration vampireConfig;
-  
+
   public static final Map<UUID, String> playerTypes;
-  
+
   public static String vampireWinner;
-  
+
   public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764k;
-  
-  
-  
+
+
   public static void loadVampireData() {
     {
       vampireFile = new File(AltarSMP.getInstance().getDataFolder(), "vampire.yml");
@@ -78,7 +77,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
     for (String str : vampireConfig.getKeys(false))
       playerTypes.put(UUID.fromString(str), vampireConfig.getString(str));
   }
-  
+
   public static void saveVampireData() {
     try {
       vampireConfig.save(vampireFile);
@@ -86,14 +85,14 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
       iOException.printStackTrace();
     } 
   }
-  
+
   public static void startSunDamageTask() {
     {
       if (!eventEnabled)
         return; 
     }(new VampireSunAndMoonTask()).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 20L);
   }
-  
+
   public static boolean isExposedToSun(Player paramPlayer) {
     {
       if (paramPlayer.getWorld().getEnvironment() != World.Environment.NORMAL)
@@ -104,10 +103,10 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
     }Location location = paramPlayer.getEyeLocation();
     Vector vector = new Vector(0, 1, 0);
     {
-    
+
     }return (paramPlayer.getWorld().rayTraceBlocks(location, vector, paramPlayer.getWorld().getMaxHeight(), FluidCollisionMode.NEVER) == null);
   }
-  
+
   @EventHandler
   public void onPlayerDeath(PlayerDeathEvent paramPlayerDeathEvent) {
     {
@@ -152,7 +151,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
             }} 
         }} 
     }}
-  
+
   @EventHandler
   public void onEntityDamageByEntity(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Player player;
@@ -184,7 +183,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
       livingEntity.getWorld().playSound(livingEntity.getLocation(), Sound.ENTITY_CREAKING_ATTACK, 1.2F, 1.0F);
     } 
   }
-  
+
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent paramPlayerJoinEvent) {
     Player player = paramPlayerJoinEvent.getPlayer();
@@ -196,7 +195,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
         }}
     getPlayerType(player);
   }
-  
+
   public static void updatePlayerDisplay(Player paramPlayer) {
     Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
     String str1 = "dw_" + paramPlayer.getName();
@@ -227,55 +226,55 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
           } 
         }} 
     }}
-  
+
   public static void setPale(Player paramPlayer) {
     setPlayerType(paramPlayer, "PALE");
     getPlayerType(paramPlayer);
     paramPlayer.sendMessage("§eYou are now a pale rot");
   }
-  
+
   public static void setVampire(Player paramPlayer) {
     setPlayerType(paramPlayer, "VAMPIRE");
     getPlayerType(paramPlayer);
     paramPlayer.sendMessage("§cYou are now a vampire");
   }
-  
+
   public static void setHuman(Player paramPlayer) {
     removePlayerType(paramPlayer);
     getPlayerType(paramPlayer);
     paramPlayer.sendMessage("§aYou are now a human with no special abilities");
   }
-  
+
   public static void setPlayerType(Player paramPlayer, String paramString) {
     UUID uUID = paramPlayer.getUniqueId();
     playerTypes.put(uUID, paramString);
     vampireConfig.set(uUID.toString(), paramString);
     saveVampireData();
   }
-  
+
   public static void removePlayerType(Player paramPlayer) {
     UUID uUID = paramPlayer.getUniqueId();
     playerTypes.remove(uUID);
     vampireConfig.set(uUID.toString(), null);
     saveVampireData();
   }
-  
+
   public static boolean isPale(Player paramPlayer) {
     return "PALE".equals(playerTypes.get(paramPlayer.getUniqueId()));
   }
-  
+
   public static boolean isVampire(Player paramPlayer) {
     return "VAMPIRE".equals(playerTypes.get(paramPlayer.getUniqueId()));
   }
-  
+
   public static boolean isSpecialPlayer(Player paramPlayer) {
     return !isPale(paramPlayer) && !isVampire(paramPlayer);
   }
-  
+
   public static String getPlayerType(Player paramPlayer) {
     return playerTypes.get(paramPlayer.getUniqueId());
   }
-  
+
   public static void endVampireEvent(String paramString) {
     eventEnabled = false;
     config.set("vampire_event_enabled", Boolean.valueOf(false));
@@ -336,7 +335,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
     You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764k = false;
     Bukkit.broadcastMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.BOLD) + "RITUAL COMPLETE");
   }
-  
+
   public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
     if (paramArrayOfString.length == 0) {
       paramCommandSender.sendMessage("§cUsage: /vampire <player> <pale|vampire|human>");
@@ -349,7 +348,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
         {
           if (str1.equalsIgnoreCase("toggle")) {
             {
-            
+
             }{
               eventEnabled = !eventEnabled;
               if (eventEnabled) {
@@ -405,7 +404,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
     }paramCommandSender.sendMessage("§cUsage: /vampire <player> <pale|vampire|human>");
     return true;
   }
-  
+
   public List<String> onTabComplete(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
     if (paramArrayOfString.length == 1) {
       String str = paramArrayOfString[0].toLowerCase();
@@ -431,10 +430,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
     return List.of();
   }
 
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
   static {
     config = AltarSMP.getInstance().getConfig();

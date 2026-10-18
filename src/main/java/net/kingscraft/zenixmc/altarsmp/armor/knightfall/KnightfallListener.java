@@ -33,32 +33,27 @@ import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.core.WorldGuardHook;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 import net.kingscraft.zenixmc.altarsmp.item.ItemUtility;
-import net.kingscraft.zenixmc.altarsmp.task.ChainPullTask;
-import net.kingscraft.zenixmc.altarsmp.task.CloakAutoStartTask;
-import net.kingscraft.zenixmc.altarsmp.task.CloakEndTask;
-import net.kingscraft.zenixmc.altarsmp.task.CloakSpeedTask;
-import net.kingscraft.zenixmc.altarsmp.task.RestoreHookChargesTask;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 import net.kingscraft.zenixmc.altarsmp.weapon.wind.GrapplePullTask;
 import net.kingscraft.zenixmc.altarsmp.weapon.wind.HammerProjectileTask;
 
 public class KnightfallListener implements Listener {
   public final KnightFallKillTracker killTracker;
-  
+
   public final Map<UUID, BukkitRunnable> cloakTasks = new HashMap<>();
-  
+
   public static AltarSMP plugin;
-  
+
   public static int speedAmplifier;
-  
+
   public static HashMap<UUID, Integer> hookCharges;
-  
+
   public static HashMap<UUID, BukkitTask> hookCooldownTasks;
-  
+
   public static final boolean assertionsEnabled;
 
   static {
@@ -68,12 +63,12 @@ public class KnightfallListener implements Listener {
     hookCharges = new HashMap<>();
     hookCooldownTasks = new HashMap<>();
   }
-  
+
   public KnightfallListener(KnightFallKillTracker killTracker) {
     this.killTracker = killTracker;
     (new CloakAutoStartTask(this, killTracker)).runTaskTimer((Plugin) plugin, 0L, 20L);
   }
-  
+
   public static boolean isKnightfall(ItemStack paramItemStack) {
     {
       if (paramItemStack == null)
@@ -89,7 +84,7 @@ public class KnightfallListener implements Listener {
 
     return itemMeta.getPersistentDataContainer().equals(CustomItemRegistry.getKnightfall(null, false).getItemMeta().getPersistentDataContainer());
   }
-  
+
   @EventHandler
   public void onMaceDamage(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Player player;
@@ -124,7 +119,7 @@ public class KnightfallListener implements Listener {
       TrueDamage.apply(livingEntity, i, player, true);
     } 
   }
-  
+
   @EventHandler(priority = EventPriority.LOWEST)
   public void onMaceCooldown(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Entity entity = paramEntityDamageByEntityEvent.getDamager();
@@ -161,7 +156,7 @@ public class KnightfallListener implements Listener {
       player.setCooldown(itemStack, i * 20);
     } 
   }
-  
+
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerDeath(PlayerDeathEvent paramPlayerDeathEvent) {
     Player player = paramPlayerDeathEvent.getPlayer().getKiller();
@@ -182,7 +177,7 @@ public class KnightfallListener implements Listener {
     itemStack.setItemMeta(itemMeta);
     player.getInventory().setItemInMainHand(itemStack);
   }
-  
+
   public static void startCloak(Player paramPlayer, int paramInt) {
     paramPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, paramInt * 20, 1, true, false, false));
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.5F);
@@ -191,7 +186,7 @@ public class KnightfallListener implements Listener {
       player.hidePlayer((Plugin)AltarSMP.getInstance(), paramPlayer); 
     (new CloakEndTask(paramInt, paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   @EventHandler
   public void onCloakChance(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Player player;
@@ -221,13 +216,13 @@ public class KnightfallListener implements Listener {
         }
     }
   }
-  
+
   public void startCloakLoop(Player paramPlayer) {
     CloakSpeedTask clockSpeedTask = new CloakSpeedTask(this, paramPlayer);
     clockSpeedTask.runTaskTimer((Plugin) plugin, 0L, 20L);
     this.cloakTasks.put(paramPlayer.getUniqueId(), clockSpeedTask);
   }
-  
+
   public void stopCloakLoop(Player paramPlayer) {
     BukkitRunnable bukkitRunnable = this.cloakTasks.remove(paramPlayer.getUniqueId());
     {
@@ -235,7 +230,7 @@ public class KnightfallListener implements Listener {
         bukkitRunnable.cancel(); 
     }
   }
-  
+
   public static boolean throwHammer(Player paramPlayer) {
     {
       if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "hammerThrow"))
@@ -263,7 +258,7 @@ public class KnightfallListener implements Listener {
     (new HammerProjectileTask(location, d1, paramPlayer, itemDisplay, vector, d3, world, bool, j, d2)).runTaskTimer((Plugin) plugin, 3L, 1L);
     return true;
   }
-  
+
   public static void chainEntity(LivingEntity paramLivingEntity, Player paramPlayer) {
     {
       if (WorldGuardHook.isBlocked(paramLivingEntity.getLocation()))
@@ -271,13 +266,13 @@ public class KnightfallListener implements Listener {
     }
     (new ChainPullTask(paramLivingEntity, paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void showHookCharges(Player paramPlayer) {
     BossBarManager.removeBar(paramPlayer, "Grappling Hook x1");
     BossBarManager.removeBar(paramPlayer, "Grappling Hook x2");
     BossBarManager.removeBar(paramPlayer, "Grappling Hook x3");
   }
-  
+
   public static boolean useGrapplingHook(Player paramPlayer) {
     int i = AltarSMP.getInstance().getConfig().getInt("grapplingHookCooldown", 10);
     int j = AltarSMP.getInstance().getConfig().getInt("grapplingHookMaxDistance", 50);
@@ -303,7 +298,7 @@ public class KnightfallListener implements Listener {
     launchGrapple(location, paramPlayer, j);
     return true;
   }
-  
+
   public static void launchGrapple(Location paramLocation, Player paramPlayer, int paramInt) {
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1.0F, 2.0F);
     ItemStack itemStack = new ItemStack(ItemUtility.getChainMaterial());
@@ -316,12 +311,12 @@ public class KnightfallListener implements Listener {
     Location location2 = paramPlayer.getLocation().clone().add(0.0D, 1.0D, 0.0D);
     (new GrapplePullTask(paramPlayer, d2, location1, i, itemStack, d1)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void startHookCooldown(Player paramPlayer, int paramInt) {
     BukkitTask bukkitTask = (new RestoreHookChargesTask(paramPlayer, paramInt)).runTaskLater((Plugin)AltarSMP.getInstance(), (paramInt * 20));
     hookCooldownTasks.put(paramPlayer.getUniqueId(), bukkitTask);
   }
-  
+
   public static Location findHookTargetBlock(Player paramPlayer, int paramInt) {
     RayTraceResult rayTraceResult = paramPlayer.getWorld().rayTraceBlocks(paramPlayer.getEyeLocation(), paramPlayer.getEyeLocation().getDirection(), paramInt);
     {

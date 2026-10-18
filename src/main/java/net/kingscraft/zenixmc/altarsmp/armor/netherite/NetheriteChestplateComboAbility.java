@@ -48,42 +48,23 @@ public class NetheriteChestplateComboAbility implements Listener {
 
   public static boolean hasCustomNetheriteChestplate(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getChestplate();
-    try {
-      if (itemStack == null)
-        return false;
-    } catch (MatchException matchException) {
-      throw a(null);
-    }
-    try {
-      if (itemStack.getType() != Material.NETHERITE_CHESTPLATE)
-        return false;
-    } catch (MatchException matchException) {
-      throw a(null);
-    }
-    try {
-      if (!itemStack.hasItemMeta())
-        return false;
-    } catch (MatchException matchException) {
-      throw a(null);
-    }
-    ItemMeta itemMeta = itemStack.getItemMeta();
-    try {
-      if (itemMeta == null)
-        return false;
-    } catch (MatchException matchException) {
-      throw a(null);
-    }
-    try {
-      if (!itemMeta.hasCustomModelData())
-        return false;
-    } catch (MatchException matchException) {
-      throw a(null);
-    }
-    try {
+    if (itemStack == null)
+      return false;
 
-    } catch (MatchException matchException) {
-      throw a(null);
-    }
+    if (itemStack.getType() != Material.NETHERITE_CHESTPLATE)
+      return false;
+
+    if (!itemStack.hasItemMeta())
+      return false;
+
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    if (itemMeta == null)
+      return false;
+
+    if (!itemMeta.hasCustomModelData())
+      return false;
+
+
     return (itemMeta.getCustomModelData() == 1);
   }
 
@@ -93,64 +74,41 @@ public class NetheriteChestplateComboAbility implements Listener {
 
   @EventHandler
   public void onEntityDamageByEntity(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
-    try {
-      if (!(paramEntityDamageByEntityEvent.getDamager() instanceof Player))
-        return;
-    } catch (MatchException matchException) {
-      throw a(null);
-    }
-    try {
-      if (!(paramEntityDamageByEntityEvent.getEntity() instanceof LivingEntity))
-        return;
-    } catch (MatchException matchException) {
-      throw a(null);
-    }
-    try {
-      if (paramEntityDamageByEntityEvent.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK)
-        return;
-    } catch (MatchException matchException) {
-      throw a(null);
-    }
+    if (!(paramEntityDamageByEntityEvent.getDamager() instanceof Player))
+      return;
+
+    if (!(paramEntityDamageByEntityEvent.getEntity() instanceof LivingEntity))
+      return;
+
+    if (paramEntityDamageByEntityEvent.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK)
+      return;
+
     Player player = (Player)paramEntityDamageByEntityEvent.getDamager();
     LivingEntity livingEntity = (LivingEntity)paramEntityDamageByEntityEvent.getEntity();
-    try {
-      if (!hasCustomNetheriteChestplate(player))
-        return;
-    } catch (MatchException matchException) {
-      throw a(null);
-    }
+    if (!hasCustomNetheriteChestplate(player))
+      return;
+
     UUID uUID = player.getUniqueId();
     long l = System.currentTimeMillis();
-    try {
-      if (this.lastAttackTimestamps.containsKey(uUID))
-        try {
-          if (l - ((Long)this.lastAttackTimestamps.get(uUID)).longValue() < 250L)
-            return;
-        } catch (MatchException matchException) {
-          throw a(null);
-        }
-    } catch (MatchException matchException) {
-      throw a(null);
-    }
-    try {
-      this.lastAttackTimestamps.put(uUID, Long.valueOf(l));
-      if (this.activeComboPlayers.contains(uUID))
-        return;
-    } catch (MatchException matchException) {
-      throw a(null);
-    }
-    int i = ((Integer)this.attackComboCounts.getOrDefault(uUID, Integer.valueOf(0))).intValue() + 1;
-    try {
-      this.attackComboCounts.put(uUID, Integer.valueOf(i));
-      if (i >= 7) {
-        triggerLightningCombo(livingEntity.getLocation(), player, livingEntity);
-        this.attackComboCounts.remove(uUID);
-        this.activeComboPlayers.add(uUID);
-        (new NetheriteChestplateComboResetTask(this, uUID)).runTaskLater((Plugin)this.plugin, 5L);
+    if (this.lastAttackTimestamps.containsKey(uUID))
+      {
+        if (l - ((Long)this.lastAttackTimestamps.get(uUID)).longValue() < 250L)
+          return;
       }
-    } catch (MatchException matchException) {
-      throw a(null);
+
+    this.lastAttackTimestamps.put(uUID, Long.valueOf(l));
+    if (this.activeComboPlayers.contains(uUID))
+      return;
+
+    int i = ((Integer)this.attackComboCounts.getOrDefault(uUID, Integer.valueOf(0))).intValue() + 1;
+    this.attackComboCounts.put(uUID, Integer.valueOf(i));
+    if (i >= 7) {
+      triggerLightningCombo(livingEntity.getLocation(), player, livingEntity);
+      this.attackComboCounts.remove(uUID);
+      this.activeComboPlayers.add(uUID);
+      (new NetheriteChestplateComboResetTask(this, uUID)).runTaskLater((Plugin)this.plugin, 5L);
     }
+
   }
 
   public void triggerLightningCombo(Location paramLocation, Player paramPlayer, LivingEntity paramLivingEntity) {
@@ -171,9 +129,6 @@ public class NetheriteChestplateComboAbility implements Listener {
     MAX_DAMAGE = 5.0D;
 }
 
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
 }
 
 

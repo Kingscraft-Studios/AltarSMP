@@ -20,33 +20,32 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 
 public class WindweaverAbility implements Listener {
   public static AltarSMP plugin;
-  
+
   public static HashMap<UUID, Integer> gustChargeLevels;
-  
+
   public static HashMap<UUID, Long> gustChargeStartTimes;
-  
+
   public static HashMap<UUID, BukkitRunnable> chargeTasks;
-  
+
   public static HashMap<UUID, Boolean> isCharging;
-  
+
   public static int DASH_COOLDOWN;
-  
+
   public static int SPEED_BOOST_DURATION;
-  
+
   public static int GUST_COOLDOWN;
-  
+
   public static int GUST_STRENGTH;
-  
-  
-  
+
+
   public WindweaverAbility(AltarSMP paramAltarSMP) {
     plugin = paramAltarSMP;
   }
-  
+
   public static boolean isWindweaverSwordInMainHand(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
     {
@@ -66,10 +65,10 @@ public class WindweaverAbility implements Listener {
       if (!itemMeta.hasCustomModelData())
         return false; 
     }{
-    
+
     }return (itemMeta.getCustomModelData() == 12);
   }
-  
+
   public static boolean isWindweaverSwordInOffHand(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getItemInOffHand();
     {
@@ -89,10 +88,10 @@ public class WindweaverAbility implements Listener {
       if (!itemMeta.hasCustomModelData())
         return false; 
     }{
-    
+
     }return (itemMeta.getCustomModelData() == 12);
   }
-  
+
   @EventHandler
   public void onPlayerToggleSneak(PlayerToggleSneakEvent paramPlayerToggleSneakEvent) {
     Player player = paramPlayerToggleSneakEvent.getPlayer();
@@ -109,7 +108,7 @@ public class WindweaverAbility implements Listener {
             BossBarManager.removeBar(player, "Charging");
           } 
         }}}
-  
+
   public static void activateWindLeap(Player paramPlayer) {
     {
       if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "windleap"))
@@ -127,11 +126,11 @@ public class WindweaverAbility implements Listener {
     paramPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, SPEED_BOOST_DURATION * 20, 3, true, true, true));
     (new WindLeapParticleTask(paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 2L);
   }
-  
+
   public static void spawnWindParticles(Location paramLocation, int paramInt1, Particle paramParticle, Player paramPlayer, int paramInt2) {
     (new WindGustExpansionTask(paramInt1, paramLocation, paramParticle, paramPlayer, paramInt2)).runTaskTimer((Plugin) plugin, 0L, 1L);
   }
-  
+
   public static void activateWindGust(Player paramPlayer) {
     {
       if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "windgust"))
@@ -145,7 +144,7 @@ public class WindweaverAbility implements Listener {
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_WIND_CHARGE_WIND_BURST, 2.0F, 0.8F);
     cancelWindGustCharge(paramPlayer);
   }
-  
+
   public static void startWindGustCharge(Player paramPlayer) {
     UUID uUID = paramPlayer.getUniqueId();
     {
@@ -161,7 +160,7 @@ public class WindweaverAbility implements Listener {
     windGustChargeTask.runTaskTimer((Plugin) plugin, 0L, 1L);
     chargeTasks.put(uUID, windGustChargeTask);
   }
-  
+
   public static void cancelWindGustCharge(Player paramPlayer) {
     UUID uUID = paramPlayer.getUniqueId();
     {

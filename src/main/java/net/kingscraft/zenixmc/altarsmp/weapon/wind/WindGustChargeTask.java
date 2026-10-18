@@ -10,25 +10,24 @@ import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
 
 class WindGustChargeTask extends BukkitRunnable {
   public int chargeTicks;
-  
+
   final int MAX_CHARGE_LEVEL = 7;
-  
+
   final int TICKS_PER_CHARGE_LEVEL = 20;
-  
+
   final int MAX_CHARGE_TICKS = 140;
-  
+
   public final UUID playerId;
-  
+
   public final Player player;
-  
-  
-  
+
+
   public WindGustChargeTask(UUID paramUUID, Player paramPlayer) {
         this.playerId = paramUUID;
         this.player = paramPlayer;
         this.chargeTicks = 0;
     }
-  
+
   public void run() {
     {
       if (!((Boolean) WindweaverAbility.isCharging.getOrDefault(this.playerId, Boolean.valueOf(false))).booleanValue()) {
@@ -57,7 +56,7 @@ class WindGustChargeTask extends BukkitRunnable {
         finishCharging();
       } 
     }}
-  
+
   public void finishCharging() {
     cancel();
     WindweaverAbility.chargeTasks.remove(this.playerId);

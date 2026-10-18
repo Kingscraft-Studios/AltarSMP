@@ -9,7 +9,7 @@ import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 
 class KnightfallItemRestoreTask extends BukkitRunnable {
   public final Player player;
-  
+
   public KnightfallItemRestoreTask(KnightFallKillTracker knightFallKillTracker, Player paramPlayer) {
         this.player = paramPlayer;
     }

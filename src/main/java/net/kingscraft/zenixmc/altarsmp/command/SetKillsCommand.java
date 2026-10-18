@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class SetKillsCommand implements CommandExecutor, TabCompleter {
-  
+
   public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
     int i;
     Player player;
@@ -60,7 +60,7 @@ public class SetKillsCommand implements CommandExecutor, TabCompleter {
     }paramCommandSender.sendMessage("§aKills updated.");
     return true;
   }
-  
+
   @Nullable
   public List<String> onTabComplete(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
     {

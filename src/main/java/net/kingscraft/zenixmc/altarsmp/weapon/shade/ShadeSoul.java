@@ -36,23 +36,23 @@ import net.kingscraft.zenixmc.altarsmp.weapon.wind.CycloneSlashSpinTask;
 
   public class ShadeSoul implements Listener {
   public AltarSMP plugin;
-  
+
   public final Map<UUID, Integer> comboCounters = new HashMap<>();
-  
+
   public final Map<UUID, Long> lastActionTimes = new HashMap<>();
-  
+
   public static int shadeSoulCooldown;
-  
+
   public static int cycloneSlashCooldown;
-  
+
   public static String shadePart;
-  
+
   public static String slashPart;
-  
+
   public ShadeSoul(AltarSMP paramAltarSMP) {
     this.plugin = paramAltarSMP;
   }
-  
+
   public static boolean isHoldingShadeBlade(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
     if (itemStack.getType() != Material.NETHERITE_SWORD)
@@ -68,7 +68,7 @@ import net.kingscraft.zenixmc.altarsmp.weapon.wind.CycloneSlashSpinTask;
 
     return (itemMeta.getCustomModelData() == 7);
   }
-  
+
   @EventHandler
   public void onEntityDamage(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Player player;
@@ -82,7 +82,7 @@ import net.kingscraft.zenixmc.altarsmp.weapon.wind.CycloneSlashSpinTask;
         return;
     spawnComboSlash(player, paramEntityDamageByEntityEvent.getEntity().getLocation().add(0.0D, 1.0D, 0.0D));
   }
-  
+
   public static ItemStack createShadeOrbItem() {
     ItemStack itemStack = new ItemStack(Material.CLAY_BALL);
     ItemMeta itemMeta = itemStack.getItemMeta();
@@ -90,7 +90,7 @@ import net.kingscraft.zenixmc.altarsmp.weapon.wind.CycloneSlashSpinTask;
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
-  
+
   public static ItemStack createSlashItem() {
     ItemStack itemStack = new ItemStack(Material.CLAY_BALL);
     ItemMeta itemMeta = itemStack.getItemMeta();
@@ -98,7 +98,7 @@ import net.kingscraft.zenixmc.altarsmp.weapon.wind.CycloneSlashSpinTask;
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
-  
+
   public static void castShadeSoul(Player paramPlayer) {
     ArrayList arrayList = new ArrayList();
     paramPlayer.getWorld().playSound((Entity)paramPlayer, Sound.ENTITY_WARDEN_SONIC_CHARGE, 1.0F, 1.5F);
@@ -107,11 +107,11 @@ import net.kingscraft.zenixmc.altarsmp.weapon.wind.CycloneSlashSpinTask;
     (new ShadeOrbTeleportTask(arrayList, paramPlayer)).runTaskLater((Plugin)AltarSMP.getInstance(), 22L);
     (new ShadeOrbInterpolateTask(arrayList)).runTaskLater((Plugin)AltarSMP.getInstance(), 38L);
   }
-  
+
   public static void spawnShadeOrbs(Player paramPlayer) {
     (new SlashSwingTask(paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void spawnSlashDisplay(Location paramLocation) {
     paramLocation.add(0.0D, 0.0D, 0.0D);
     World world = paramLocation.getWorld();
@@ -128,7 +128,7 @@ import net.kingscraft.zenixmc.altarsmp.weapon.wind.CycloneSlashSpinTask;
     (new SlashHideTask(itemDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
     (new SlashDespawnTask(itemDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), 22L);
   }
-  
+
   public static void castHolyLance(Player paramPlayer) {
     float f = 7.5F;
     paramPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 25, 9, false, false, true));
@@ -149,11 +149,11 @@ import net.kingscraft.zenixmc.altarsmp.weapon.wind.CycloneSlashSpinTask;
     (new HolyLanceTask(itemDisplay, paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 5L);
     (new CycloneSlashSpinTask(itemDisplay)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void castCycloneSlash(Player paramPlayer) {
     (new CycloneBlockClearTask(paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static List<Block> getBlocksInArea(Player paramPlayer, int paramInt1, int paramInt2) {
     int i = paramInt1 / 2;
     int j = paramInt2 / 2;
@@ -170,7 +170,7 @@ import net.kingscraft.zenixmc.altarsmp.weapon.wind.CycloneSlashSpinTask;
     } 
     return arrayList;
   }
-  
+
   public void spawnSlashParticles(Location paramLocation, double paramDouble, boolean paramBoolean1, boolean paramBoolean2) {
     int b1 = 35;
     double d = 2.2D;
@@ -197,7 +197,7 @@ import net.kingscraft.zenixmc.altarsmp.weapon.wind.CycloneSlashSpinTask;
       paramLocation.getWorld().spawnParticle(Particle.DUST, location, 2, 0.0D, 0.0D, 0.0D, 0.0D, new Particle.DustOptions(Color.WHITE, 1.0F));
     } 
   }
-  
+
   public void spawnComboSlash(Player paramPlayer, Location paramLocation) {
     int i = getComboCount(paramPlayer);
     double d = Math.toRadians(paramPlayer.getLocation().getYaw());
@@ -221,23 +221,23 @@ import net.kingscraft.zenixmc.altarsmp.weapon.wind.CycloneSlashSpinTask;
     }
     incrementCombo(paramPlayer);
   }
-  
+
   public int getComboCount(Player paramPlayer) {
     long l = System.currentTimeMillis();
-    
+
       if (this.lastActionTimes.containsKey(paramPlayer.getUniqueId()))
         if (l - ((Long)this.lastActionTimes.get(paramPlayer.getUniqueId())).longValue() > 2500L)
           this.comboCounters.put(paramPlayer.getUniqueId(), Integer.valueOf(0));
 
     return ((Integer)this.comboCounters.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(0))).intValue();
   }
-  
+
   public void incrementCombo(Player paramPlayer) {
     int i = getComboCount(paramPlayer);
     this.comboCounters.put(paramPlayer.getUniqueId(), Integer.valueOf(i + 1));
     this.lastActionTimes.put(paramPlayer.getUniqueId(), Long.valueOf(System.currentTimeMillis()));
   }
-  
+
   static {
     shadeSoulCooldown = AltarSMP.getInstance().getConfig().getInt("shadeSoulCooldown", 30);
     cycloneSlashCooldown = AltarSMP.getInstance().getConfig().getInt("cycloneSlashCooldown", 60);

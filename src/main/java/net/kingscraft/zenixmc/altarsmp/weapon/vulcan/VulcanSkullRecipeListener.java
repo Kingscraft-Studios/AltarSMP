@@ -37,10 +37,7 @@ public class VulcanSkullRecipeListener implements Listener {
         Bukkit.addRecipe((Recipe)shapedRecipe);
       } 
     }}
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 
 }

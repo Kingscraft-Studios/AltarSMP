@@ -29,9 +29,8 @@ public class LegendaryItemsMenu implements CommandExecutor, Listener {
   static {
     MENU_TITLE = "§c§lʟᴇɢᴇɴᴅᴀʀɪᴇѕ";
   }
-  
-  
-  
+
+
   public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
     if (paramCommandSender instanceof Player) {
       Player player = (Player)paramCommandSender;
@@ -39,7 +38,7 @@ public class LegendaryItemsMenu implements CommandExecutor, Listener {
     } 
     return false;
   }
-  
+
   public static void openLegendaryItemsMenu(Player paramPlayer) {
     Inventory inventory = Bukkit.createInventory(null, 45, MENU_TITLE);
     decorateInventory(inventory);
@@ -64,7 +63,7 @@ public class LegendaryItemsMenu implements CommandExecutor, Listener {
         inventory.setItem(41, createSeasonTwoWeaponsButton());
     }paramPlayer.openInventory(inventory);
   }
-  
+
   public void openIngredientsMenu(Player paramPlayer) {
     Inventory inventory = Bukkit.createInventory(null, 45, "ɪɴɢʀᴇᴅɪᴇɴᴛꜱ");
     decorateInventory(inventory);
@@ -74,7 +73,7 @@ for (CustomItemType customItemType : CustomItemType.values()) {
     inventory.setItem(40, createLegendaryItemsButton());
     paramPlayer.openInventory(inventory);
   }
-  
+
   @EventHandler
   public void onInventoryClick(InventoryClickEvent paramInventoryClickEvent) {
     Player player;
@@ -144,7 +143,7 @@ for (CustomItemType customItemType : CustomItemType.values()) {
       } 
     }paramInventoryClickEvent.setCancelled(true);
   }
-  
+
   public static void decorateInventory(Inventory paramInventory) {
     ItemStack itemStack = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
     ItemMeta itemMeta = itemStack.getItemMeta();
@@ -169,16 +168,16 @@ for (CustomItemType customItemType : CustomItemType.values()) {
     paramInventory.setItem(26, itemStack);
     paramInventory.setItem(35, itemStack);
   }
-  
+
   public static ItemStack createIngredientsButton() {
     ItemStack itemStack = CustomItemRegistry.getVulcanSkull().clone();
     return createMenuButton(itemStack, "§6", "ɪɴɢʀᴇᴅɪᴇɴᴛꜱ");
   }
-  
+
   public static ItemStack createLegendaryItemsButton() {
     return createMenuButton(CustomItemRegistry.getIllusionWand(), "§d", MENU_TITLE);
   }
-  
+
   public static ItemStack createSeasonTwoWeaponsButton() {
     ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
@@ -186,11 +185,11 @@ for (CustomItemType customItemType : CustomItemType.values()) {
     itemStack.setItemMeta(itemMeta);
     return createMenuButton(itemStack, "§d", "ꜱᴇᴀꜱᴏɴ ᴛᴡᴏ ᴡᴇᴀᴘᴏɴꜱ");
   }
-  
+
   public static ItemStack createWeaponSettingsButton() {
     return createMenuButton(new ItemStack(Material.COMPARATOR), "§d", "ᴡᴇᴀᴘᴏɴ ꜱᴇᴛᴛɪɴɢꜱ");
   }
-  
+
   public static ItemStack createMenuButton(ItemStack paramItemStack, String paramString1, String paramString2) {
     ItemMeta itemMeta = paramItemStack.getItemMeta();
     itemMeta.addItemFlags(ItemFlag.values());

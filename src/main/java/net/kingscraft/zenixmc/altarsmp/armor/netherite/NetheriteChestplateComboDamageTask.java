@@ -8,31 +8,23 @@ import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 class NetheriteChestplateComboDamageTask extends BukkitRunnable {
   public final LivingEntity target;
-  
+
   public final Player attacker;
-  
+
   public NetheriteChestplateComboDamageTask(NetheriteChestplateComboAbility netheriteChestplateComboAbility, LivingEntity paramLivingEntity, Player paramPlayer) {
         this.target = paramLivingEntity;
         this.attacker = paramPlayer;
     }
-  
+
   public void run() {
-    try {
-      if (this.target.isValid())
-        try {
-          if (!this.target.isDead())
-            TrueDamage.apply(this.target, NetheriteChestplateComboAbility.MAX_DAMAGE, this.attacker);
-        } catch (MatchException matchException) {
-          throw a(null);
-        }  
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+    if (this.target.isValid())
+      {
+        if (!this.target.isDead())
+          TrueDamage.apply(this.target, NetheriteChestplateComboAbility.MAX_DAMAGE, this.attacker);
+      }  
+
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

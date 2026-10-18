@@ -8,14 +8,14 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class SlashStreakTask extends BukkitRunnable {
   public final Location origin;
-  
+
   public final ItemDisplay display;
-  
+
   public SlashStreakTask(Location paramLocation, ItemDisplay paramItemDisplay) {
         this.origin = paramLocation;
         this.display = paramItemDisplay;
     }
-  
+
   public void run() {
     double d1 = 0;
     Location location1 = this.origin.clone().add(0.0D, 0.0D, 0.0D);

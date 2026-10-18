@@ -14,19 +14,19 @@ import net.kingscraft.zenixmc.altarsmp.util.BlockAreaUtils;
 
 class ScorchingBladeProjectileTask extends BukkitRunnable {
   final int MAX_TICKS = 5;
-  
+
   public int ticks;
-  
+
   public final Set fallingBlocks;
-  
+
   public final Player player;
-  
+
   public ScorchingBladeProjectileTask(ScorchingBladeAbility scorchingBladeAbility, Set paramSet, Player paramPlayer) {
         this.fallingBlocks = paramSet;
         this.player = paramPlayer;
         this.ticks = 0;
     }
-  
+
   public void run() {
     if (this.ticks >= 100) {
       for (FallingBlock fallingBlock : (Iterable<FallingBlock>)(Iterable<?>)this.fallingBlocks)
@@ -41,45 +41,32 @@ class ScorchingBladeProjectileTask extends BukkitRunnable {
       location.getWorld().spawnParticle(Particle.CRIT, location, 5, 0.0D, 0.0D, 0.0D, 0.2D);
       boolean bool1 = location.getNearbyEntities(2.0D, 2.0D, 2.0D).stream().anyMatch(paramEnt2 -> isTargetableEntity(this.player, paramEnt2));
       boolean bool2 = BlockAreaUtils.getBlocksInArea(location, 2, 1).stream().anyMatch(ScorchingBladeProjectileTask::isSolidBlock);
-      try {
-        if (!bool2 && !bool1 && !fallingBlock.isDead())
-          continue; 
-        ScorchingBladeAbility.detonateScorchingBlade(location, this.player);
-        iterator.remove();
-        fallingBlock.remove();
-      } catch (MatchException matchException) {
-        throw a(null);
-      } 
+      if (!bool2 && !bool1 && !fallingBlock.isDead())
+        continue; 
+      ScorchingBladeAbility.detonateScorchingBlade(location, this.player);
+      iterator.remove();
+      fallingBlock.remove();
+
     } 
     this.ticks++;
   }
-  
+
   public static boolean isSolidBlock(Block paramBlock) {
     return paramBlock.getType().isSolid();
   }
-  
+
   public static boolean isTargetableEntity(Player paramPlayer, Entity paramEntity) {
-    try {
-      if (paramEntity instanceof org.bukkit.entity.LivingEntity)
-        try {
-          if (paramEntity != paramPlayer)
-            try {
-              if (!AltarSMP.isTrusted(paramPlayer, paramEntity));
-            } catch (MatchException matchException) {
-              throw a(null);
-            }  
-        } catch (MatchException matchException) {
-          throw a(null);
-        }  
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+    if (paramEntity instanceof org.bukkit.entity.LivingEntity)
+      {
+        if (paramEntity != paramPlayer)
+          {
+            if (!AltarSMP.isTrusted(paramPlayer, paramEntity));
+          }  
+      }  
+
     return false;
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

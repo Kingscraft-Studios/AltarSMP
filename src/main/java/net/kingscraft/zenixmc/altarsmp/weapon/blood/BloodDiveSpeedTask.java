@@ -8,41 +8,31 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BloodDiveSpeedTask extends BukkitRunnable {
   public final Player player;
-  
+
   public final BloodLustAbilityListener abilityListener;
-  
+
   public BloodDiveSpeedTask(BloodLustAbilityListener bloodLustAbilityListener, Player paramPlayer) {
         this.abilityListener = bloodLustAbilityListener;
         this.player = paramPlayer;
     }
-  
+
   public void run() {
-    try {
-      if (this.player.isOnline())
-        try {
-          if (this.abilityListener.killTracker.getKillCount(this.player) >= 1)
-            try {
-              if (BloodLustAbilityListener.isHoldingBloodlust(this.player)) {
-                this.player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, BloodLustAbilityListener.speedLevel, true, true, true));
-                return;
-              } 
-              this.abilityListener.stopBloodDive(this.player);
+    if (this.player.isOnline())
+      {
+        if (this.abilityListener.killTracker.getKillCount(this.player) >= 1)
+          {
+            if (BloodLustAbilityListener.isHoldingBloodlust(this.player)) {
+              this.player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, BloodLustAbilityListener.speedLevel, true, true, true));
               return;
-            } catch (MatchException matchException) {
-              throw a(null);
-            }  
-        } catch (MatchException matchException) {
-          throw a(null);
-        }  
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+            } 
+            this.abilityListener.stopBloodDive(this.player);
+            return;
+          }  
+      }  
+
     this.abilityListener.stopBloodDive(this.player);
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

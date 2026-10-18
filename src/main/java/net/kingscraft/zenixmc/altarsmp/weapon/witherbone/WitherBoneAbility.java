@@ -23,39 +23,36 @@ import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
-import net.kingscraft.zenixmc.altarsmp.task.CleansingBlockAnimationTask;
-import net.kingscraft.zenixmc.altarsmp.task.CleansingBlockEffectTask;
 
 public class WitherBoneAbility implements Listener {
   public static int leapCooldown;
-  
+
   public static String leapCooldownKey;
-  
+
   public static String cleansingCooldownKey;
-  
+
   public static final HashMap<UUID, Integer> remainingLeaps;
-  
+
   public static final int MAX_LEAPS = 3;
-  
+
   public static HashMap<UUID, Integer> cleansingChargeBars;
-  
+
   public static int cleansingRequiredBars;
-  
+
   public static int You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h;
-  
-  
-  
+
+
   public static void startTask() {
     (new WitherBoneChargeBarTask()).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 5L);
   }
-  
+
   public static boolean hasWitheredBoneBlade(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
     return AltarSMP.areSimilar(itemStack, CustomItem.WITHERED_BONE_BLADE.getItem());
   }
-  
+
   @EventHandler(ignoreCancelled = true)
   public void onEntityDamage(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Player player;
@@ -71,7 +68,7 @@ public class WitherBoneAbility implements Listener {
     }int i = ((Integer) cleansingChargeBars.getOrDefault(player.getUniqueId(), Integer.valueOf(0))).intValue();
     cleansingChargeBars.put(player.getUniqueId(), Integer.valueOf(i + You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h));
   }
-  
+
   public static void performLeap(Player paramPlayer) {
     UUID uUID = paramPlayer.getUniqueId();
     int i = ((Integer) remainingLeaps.getOrDefault(uUID, Integer.valueOf(3))).intValue();
@@ -93,11 +90,11 @@ public class WitherBoneAbility implements Listener {
         CooldownManager.setCooldown(paramPlayer.getUniqueId(), leapCooldownKey, leapCooldown);
       } 
     }}
-  
+
   public static void spawnLeapEffects(Player paramPlayer) {
     (new WitherLeapAuraTask(paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void spawnBoneParticle(Location paramLocation) {
     Location location = paramLocation.clone();
     ItemDisplay itemDisplay = (ItemDisplay)paramLocation.getWorld().spawn(location, ItemDisplay.class);
@@ -111,7 +108,7 @@ public class WitherBoneAbility implements Listener {
     Vector vector = new Vector(Math.cos(d1) * d2, 0.0D, Math.sin(d1) * d2);
     (new WitherBoneParticleTask(vector, itemDisplay)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void performCleansing(Player paramPlayer) {
     {
       if (((Integer) cleansingChargeBars.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(0))).intValue() < cleansingRequiredBars) {
@@ -153,7 +150,7 @@ public class WitherBoneAbility implements Listener {
       }} 
     world.playSound(location, Sound.ENTITY_PLAYER_SPLASH, 1.0F, 0.8F);
   }
-  
+
   public static Location findLandingLocation(Location paramLocation, Vector paramVector, World paramWorld) {
     Location location1 = paramLocation.clone();
     Vector vector = paramVector.clone();
@@ -177,10 +174,10 @@ public class WitherBoneAbility implements Listener {
       }} 
     Location location2 = findLandingLocationWithinRange(location1, paramWorld, 30);
     {
-    
+
     }return (location2 != null) ? location2 : location1;
   }
-  
+
   public static Location findSafeLandingLocation(Location paramLocation, World paramWorld) {
     for (int i = (int)paramLocation.getY(); i > paramLocation.getY() - 5.0D; i--) {
       Location location1 = new Location(paramWorld, paramLocation.getX(), i, paramLocation.getZ());
@@ -193,7 +190,7 @@ public class WitherBoneAbility implements Listener {
           }}} 
     return new Location(paramWorld, paramLocation.getX(), (paramLocation.getBlockY() + 1), paramLocation.getZ());
   }
-  
+
   public static Location findLandingLocationWithinRange(Location paramLocation, World paramWorld, int paramInt) {
     for (int i = (int)paramLocation.getY(); i > paramLocation.getY() - paramInt; i--) {
       Location location = new Location(paramWorld, paramLocation.getX(), i, paramLocation.getZ());

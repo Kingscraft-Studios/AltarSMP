@@ -9,17 +9,17 @@ import net.kingscraft.zenixmc.altarsmp.weapon.scorching.ScorchingBladeAbility;
 
 public class HolyLanceDetonationTask extends BukkitRunnable {
   public final Location location;
-  
+
   public final Player player;
-  
+
   public final double radius;
-  
+
   public HolyLanceDetonationTask(Location paramLocation, Player paramPlayer, double paramDouble) {
         this.location = paramLocation;
         this.player = paramPlayer;
         this.radius = paramDouble;
     }
-  
+
   public void run() {
     ScorchingBladeAbility.detonateHolyLance(this.location, this.player);
     ScorchingBladeAbility.spawnHolyLanceVisual(this.location, this.radius);

@@ -31,39 +31,38 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Transformation;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.contagion.ContagionRitualAnnouncementTask;
-import net.kingscraft.zenixmc.altarsmp.contagion.ContagionRitualBootSequenceTask;
-import net.kingscraft.zenixmc.altarsmp.contagion.ContagionRitualCoordinatesAnnouncementTask;
-import net.kingscraft.zenixmc.altarsmp.contagion.ContagionSignalAnimationTask;
-import net.kingscraft.zenixmc.altarsmp.contagion.ContagionSignalItemAnimationTask;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.event.contagion.ContagionRitualAnnouncementTask;
+import net.kingscraft.zenixmc.altarsmp.event.contagion.ContagionRitualBootSequenceTask;
+import net.kingscraft.zenixmc.altarsmp.event.contagion.ContagionRitualCoordinatesAnnouncementTask;
+import net.kingscraft.zenixmc.altarsmp.event.contagion.ContagionSignalAnimationTask;
+import net.kingscraft.zenixmc.altarsmp.event.contagion.ContagionSignalItemAnimationTask;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 import net.kingscraft.zenixmc.altarsmp.item.RecipeIngredient;
 import net.kingscraft.zenixmc.altarsmp.vampire.VampireEventManager;
 
 public class AltarRitualListener implements Listener {
   public final AltarController altarController;
-  
+
   public final Map<UUID, Long> missingIngredientsCooldowns = new HashMap<>();
-  
+
   public static final long MISSING_INGREDIENTS_COOLDOWN = 1000L;
-  
+
   public static Map<UUID, UUID> copperHelmetPlayers;
-  
+
   public static Map<UUID, UUID> copperChestplatePlayers;
-  
+
   private static final double CONTAGION_RITUAL_DURATION = AltarSMP.getInstance().getConfig().getDouble("contagion_ritual_duration", 10.0D);
-  
+
   public static final int CONTAGION_SIGNAL_HEALTH = AltarSMP.getInstance().getConfig().getInt("contagion_signal_health", 50);
-  
+
   public static HashMap<Interaction, Integer> contagionInteractions;
-  
-  
-  
+
+
   public AltarRitualListener(AltarController altarController) {
     this.altarController = altarController;
   }
-  
+
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent paramPlayerInteractEvent) {
     List<RecipeIngredient> list = null;
@@ -150,7 +149,7 @@ public class AltarRitualListener implements Listener {
     this.altarController.sendMissingIngredients(player, list);
     this.missingIngredientsCooldowns.put(uUID, Long.valueOf(l));
   }
-  
+
   public static void startContagionRitual(Location paramLocation, Player paramPlayer) {
     Location location = paramLocation.clone();
     String str1 = VampireEventManager.getPlayerType(paramPlayer);
@@ -184,13 +183,13 @@ public class AltarRitualListener implements Listener {
     String str3 = str1;
     (new ContagionSignalAnimationTask(interaction, bossBar, paramLocation, itemDisplay, textDisplay, i, str3, b2)).runTaskTimer((Plugin)AltarSMP.getInstance(), 140L, 1L);
   }
-  
+
   public static void animateContagionSignal(ItemDisplay paramItemDisplay) {
     Location location = paramItemDisplay.getLocation();
     paramItemDisplay.setTeleportDuration(20);
     (new ContagionSignalItemAnimationTask(paramItemDisplay, location)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   @EventHandler
   public void onEntityDamageByEntity(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Player player;
@@ -224,7 +223,7 @@ public class AltarRitualListener implements Listener {
         interaction.setResponsive(false);
       } 
     }}
-  
+
   public static void startContagionSequence(String paramString, Location paramLocation) {
     for (Player player : Bukkit.getOnlinePlayers()) {
       player.sendMessage(" ");
@@ -236,15 +235,15 @@ public class AltarRitualListener implements Listener {
     (new ContagionRitualCoordinatesAnnouncementTask(paramLocation)).runTaskLater((Plugin)AltarSMP.getInstance(), 80L);
     (new ContagionRitualBootSequenceTask()).runTaskLater((Plugin)AltarSMP.getInstance(), 120L);
   }
-  
+
   public static boolean isCopperHelmetPlayer(Player paramPlayer) {
     return copperHelmetPlayers.containsKey(paramPlayer.getUniqueId());
   }
-  
+
   public static boolean isCopperChestplatePlayer(Player paramPlayer) {
     return copperChestplatePlayers.containsKey(paramPlayer.getUniqueId());
   }
-  
+
   public void consumeIngredients(Player paramPlayer, AltarRecipe altarRecipe) {
     PlayerInventory playerInventory = paramPlayer.getInventory();
     HashMap<Object, Object> hashMap = new HashMap<>();
@@ -272,10 +271,7 @@ public class AltarRitualListener implements Listener {
       }} 
   }
 
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 }
 

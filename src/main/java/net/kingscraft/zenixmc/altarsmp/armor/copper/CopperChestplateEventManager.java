@@ -26,7 +26,7 @@ import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 
 public class CopperChestplateEventManager implements CommandExecutor, Listener {
   protected NamespacedKey chestInteractionKey = new NamespacedKey(AltarSMP.getPlugin(AltarSMP.class), "chestEvent");
-  
+
   public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
     Player player;
     if (paramCommandSender instanceof Player) {
@@ -41,12 +41,12 @@ public class CopperChestplateEventManager implements CommandExecutor, Listener {
     player.sendMessage(String.valueOf(ChatColor.GOLD) + "Use /altar spawn copperchestplate to spawn the altar for copper chestplate");
     return false;
   }
-  
+
   public void startChestplateAnnouncementTask() {
     int i = AltarSMP.getInstance().getConfig().getInt("chestplateEventAnnouncePeriod", 60);
     (new CopperChestplateShardAnnouncementTask(this)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, (i * 20));
   }
-  
+
   public void spawnChestplateShard(Player paramPlayer) {
     Location location = paramPlayer.getEyeLocation();
     Bukkit.broadcastMessage("A " + String.valueOf(ChatColor.of("#B06736")) + "§lChestplate Shard §rhas spawned!\\nLocation: " + ChatColor.of("#B06736").toString() + "§lX: " + location.getBlockX() + " §lY: " + location.getBlockY() + " §lZ: " + location.getBlockZ());
@@ -58,13 +58,13 @@ public class CopperChestplateEventManager implements CommandExecutor, Listener {
     interaction.setInteractionHeight(1.2F);
     interaction.getPersistentDataContainer().set(this.chestInteractionKey, PersistentDataType.STRING, "chest");
   }
-  
+
   public void startLightningStormTask(Location paramLocation) {
     int i = AltarSMP.getInstance().getConfig().getInt("lightningRadius", 50);
     int j = AltarSMP.getInstance().getConfig().getInt("lightningInterval", 5);
     (new CopperChestplateLightningTask(this, paramLocation, i)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, j);
   }
-  
+
   @EventHandler
   public void onShardInteraction(PlayerInteractAtEntityEvent paramPlayerInteractAtEntityEvent) {
     Interaction interaction;
@@ -90,7 +90,7 @@ public class CopperChestplateEventManager implements CommandExecutor, Listener {
         } 
       }} 
   }
-  
+
   public String getWorldDisplayName(World paramWorld) {
     String str = paramWorld.getName();
     int b = -1;
@@ -120,21 +120,18 @@ public class CopperChestplateEventManager implements CommandExecutor, Listener {
       } 
     }return paramWorld.getName();
   }
-  
+
   public boolean isChestplateShard(ItemStack paramItemStack) {
     return AltarSMP.areSimilar(paramItemStack, CustomItemRegistry.getChestplateShard());
   }
-  
+
   public static void spawnCore(ItemDisplay paramItemDisplay) {
     paramItemDisplay.setItemStack(CustomItemRegistry.getChestplateShard());
     paramItemDisplay.setBrightness(new Display.Brightness(15, 15));
     paramItemDisplay.setCustomNameVisible(true);
     paramItemDisplay.setCustomName(String.valueOf(ChatColor.of("#B06736")) + "Chestplate Shard");
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 
 }

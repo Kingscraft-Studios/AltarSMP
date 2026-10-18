@@ -9,39 +9,28 @@ import net.kingscraft.zenixmc.altarsmp.weapon.frostscythe.FrostScytheAbilityList
 
 public class CustomItemRefreshTask extends BukkitRunnable {
   public final Player player;
-  
+
   public CustomItemRefreshTask(AltarSMP paramAltarSMP, Player paramPlayer) {
         this.player = paramPlayer;
     }
-  
+
   public void run() {
     for (int b = 0; b < this.player.getInventory().getSize(); b++) {
       ItemStack itemStack = this.player.getInventory().getItem(b);
-      try {
-        if (itemStack != null)
-          try {
-            if (FrostScytheAbilityListener.isFrostScythe(itemStack)) {
-              this.player.getInventory().setItem(b, CustomItemRegistry.getFrostScythe());
-            } else {
-              try {
-                if (IllusionWandAbility.isIllusionWand(itemStack))
-                  this.player.getInventory().setItem(b, CustomItemRegistry.getIllusionWand());
-              } catch (MatchException matchException) {
-                throw a(null);
-              } 
-            } 
-          } catch (MatchException matchException) {
-            throw a(null);
-          }  
-      } catch (MatchException matchException) {
-        throw a(null);
-      } 
+      if (itemStack != null)
+        {
+          if (FrostScytheAbilityListener.isFrostScythe(itemStack)) {
+            this.player.getInventory().setItem(b, CustomItemRegistry.getFrostScythe());
+          } else {
+            if (IllusionWandAbility.isIllusionWand(itemStack))
+              this.player.getInventory().setItem(b, CustomItemRegistry.getIllusionWand());
+
+          } 
+        }  
+
     } 
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

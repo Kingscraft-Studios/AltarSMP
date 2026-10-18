@@ -40,10 +40,7 @@ import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.task.BurningDamageTask;
-import net.kingscraft.zenixmc.altarsmp.task.ElectricSparkEffectTask;
-import net.kingscraft.zenixmc.altarsmp.task.ElectricSparkRingTask;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.util.CombatEffectUtils;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 import net.kingscraft.zenixmc.altarsmp.weapon.holylance.HolyLanceDetonationTask;
@@ -51,24 +48,23 @@ import net.kingscraft.zenixmc.altarsmp.weapon.holylance.HolyLanceDisplayAnimatio
 
 public class ScorchingBladeAbility implements Listener {
   public static AltarSMP plugin;
-  
+
   public static String SCORCHING_BLADE_COOLDOWN_KEY;
-  
+
   public static String THUNDERSTRIKE_COOLDOWN_KEY;
-  
+
   public static final NamespacedKey FIRE_BLOCK_KEY;
-  
+
   public static final Set<Location> FIRE_BLOCK_LOCATIONS;
-  
+
   public static FileConfiguration config;
-  
-  
-  
+
+
   public ScorchingBladeAbility() {
     plugin = AltarSMP.getInstance();
     Bukkit.getScheduler().runTaskTimer((Plugin) plugin, ScorchingBladeAbility::lambda$new$0, 0L, 20L);
   }
-  
+
   public static boolean isScorchingBladeInMainHand(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
     {
@@ -88,10 +84,10 @@ public class ScorchingBladeAbility implements Listener {
       if (!itemMeta.hasCustomModelData())
         return false; 
     }{
-    
+
     }return (itemMeta.getCustomModelData() == 6);
   }
-  
+
   public static boolean isScorchingBladeInOffHand(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getItemInOffHand();
     {
@@ -111,10 +107,10 @@ public class ScorchingBladeAbility implements Listener {
       if (!itemMeta.hasCustomModelData())
         return false; 
     }{
-    
+
     }return (itemMeta.getCustomModelData() == 6);
   }
-  
+
   @EventHandler
   public void onScorchingBladeDamage(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     {
@@ -127,7 +123,7 @@ public class ScorchingBladeAbility implements Listener {
     }
       CombatEffectUtils.spawnDualParticleRings((LivingEntity)player, Particle.FLAME, Particle.CRIT, Sound.ITEM_TRIDENT_THROW, 0.7F);
   }
-  
+
   public static boolean activateThunderstrike(Player paramPlayer) {
     Location location1 = null;
     RayTraceResult rayTraceResult = paramPlayer.getWorld().rayTraceEntities(paramPlayer.getEyeLocation(), paramPlayer.getEyeLocation().getDirection(), 100.0D, 0.25D, paramEnt -> lambda$activateThunderstrike$1(paramPlayer, paramEnt));
@@ -151,15 +147,15 @@ public class ScorchingBladeAbility implements Listener {
     (new HolyLanceDetonationTask(location2, paramPlayer, d)).runTaskLater((Plugin)AltarSMP.getInstance(), 20L);
     return true;
   }
-  
+
   public static void startThunderstrikeCharge(Player paramPlayer) {
     (new ElectricSparkEffectTask(paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void startHolyLanceDescent(Location paramLocation, double paramDouble) {
     (new ElectricSparkRingTask(paramDouble, paramLocation)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void spawnHolyLanceVisual(Location paramLocation, double paramDouble) {
     float f1 = 30.0F;
     float f2 = (float)paramDouble / 2.0F;
@@ -168,7 +164,7 @@ public class ScorchingBladeAbility implements Listener {
     ItemDisplay itemDisplay = (ItemDisplay)paramLocation.getWorld().spawn(location, ItemDisplay.class, paramDisplay -> lambda$lanceVisual$2(f2, paramDisplay));
     (new HolyLanceDisplayAnimationTask(itemDisplay)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void detonateHolyLance(Location paramLocation, Player paramPlayer) {
     double d1 = AltarSMP.getInstance().getConfig().getDouble("holyLanceDamage", 6.0D);
     double d2 = AltarSMP.getInstance().getConfig().getDouble("holyLanceRadius", 3.0D);
@@ -194,7 +190,7 @@ public class ScorchingBladeAbility implements Listener {
       } 
     } 
   }
-  
+
   public static void activateScorchingBlade(Player paramPlayer) {
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 2.0F, 0.8F);
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.BLOCK_SOUL_SOIL_BREAK, 1.5F, 0.6F);
@@ -204,7 +200,7 @@ public class ScorchingBladeAbility implements Listener {
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "scorchingPending", 10.0D);
     BossBarManager.createBar(paramPlayer, "§6§l!! §e§lSCORCHING §6§l!!", 10, ChatColor.YELLOW, BarColor.YELLOW);
   }
-  
+
   @EventHandler
   public void onLavaFlow(BlockFromToEvent paramBlockFromToEvent) {
     {
@@ -213,7 +209,7 @@ public class ScorchingBladeAbility implements Listener {
           if (paramBlockFromToEvent.getBlock().getType() == Material.LAVA)
             paramBlockFromToEvent.setCancelled(true); 
         }}}
-  
+
   @EventHandler
   public void onPlayerArmSwing(PlayerArmSwingEvent paramPlayerArmSwingEvent) {
     {
@@ -249,7 +245,7 @@ public class ScorchingBladeAbility implements Listener {
     } 
     (new ScorchingBladeProjectileTask(this, hashSet, player)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void applyHallowedFlames(Player paramPlayer, LivingEntity paramLivingEntity) {
     {
       if (AltarSMP.isTrusted(paramPlayer, (Entity)paramLivingEntity))
@@ -264,7 +260,7 @@ public class ScorchingBladeAbility implements Listener {
     paramLivingEntity.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME, paramLivingEntity.getLocation().add(0.0D, 1.0D, 0.0D), 50, 0.5D, 1.0D, 0.5D, 0.1D);
     (new BurningDamageTask(j, paramLivingEntity, i, paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void detonateScorchingBlade(Location paramLocation, Player paramPlayer) {
     Block block = paramLocation.getBlock();
     int b = 0;
@@ -297,7 +293,7 @@ public class ScorchingBladeAbility implements Listener {
       } 
     } 
   }
-  
+
   public static void spawnParticleRing(Location paramLocation, double paramDouble, Particle paramParticle) {
     Vector vector = new Vector(paramDouble, 0.0D, 0.0D);
     int i = 0;
@@ -310,7 +306,7 @@ public class ScorchingBladeAbility implements Listener {
       paramLocation.getWorld().spawnParticle(paramParticle, location, 0, d1, d2, d3, 6.0E-7D);
     } 
   }
-  
+
   private static void lambda$lanceVisual$2(float paramFloat, ItemDisplay paramItemDisplay) {
     ItemStack itemStack = new ItemStack(Material.WHITE_CONCRETE);
     paramItemDisplay.setBrightness(new Display.Brightness(15, 15));
@@ -319,7 +315,7 @@ public class ScorchingBladeAbility implements Listener {
     Transformation transformation = new Transformation(new Vector3f(0.0F, 0.0F, 0.0F), new AxisAngle4f(0.0F, 0.0F, 0.0F, 0.0F), new Vector3f(paramFloat, 15.0F, paramFloat), new AxisAngle4f(0.0F, 0.0F, 0.0F, 0.0F));
     paramItemDisplay.setTransformation(transformation);
   }
-  
+
   private static boolean lambda$activateThunderstrike$1(Player paramPlayer, Entity paramEntity) {
     {
       if (paramEntity instanceof LivingEntity)
@@ -327,7 +323,7 @@ public class ScorchingBladeAbility implements Listener {
           if (!paramEntity.equals(paramPlayer));
         }}return false;
   }
-  
+
   private static void lambda$new$0() {
     for (Player player : Bukkit.getOnlinePlayers()) {
       if (isScorchingBladeInMainHand(player) || isScorchingBladeInOffHand(player)) {
@@ -336,10 +332,7 @@ public class ScorchingBladeAbility implements Listener {
     } 
   }
 
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
   static {
     SCORCHING_BLADE_COOLDOWN_KEY = "hyperion_scorching";

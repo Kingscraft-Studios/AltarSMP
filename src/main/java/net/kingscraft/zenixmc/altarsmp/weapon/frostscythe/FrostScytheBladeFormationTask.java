@@ -10,17 +10,17 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class FrostScytheBladeFormationTask extends BukkitRunnable {
   int animationStep = 1;
-  
+
   public final List bladeDisplays;
-  
+
   public final Player player;
-  
+
   public FrostScytheBladeFormationTask(List paramList, Player paramPlayer) {
         this.bladeDisplays = paramList;
         this.player = paramPlayer;
         this.animationStep = 1;
     }
-  
+
   public void run() {
     ItemDisplay itemDisplay = (ItemDisplay)this.bladeDisplays.get(this.animationStep);
     double d = 1.5D;
@@ -31,37 +31,25 @@ class FrostScytheBladeFormationTask extends BukkitRunnable {
     itemDisplay.setInterpolationDelay(0);
     itemDisplay.setInterpolationDuration(10);
     Transformation transformation = itemDisplay.getTransformation();
-    try {
-      transformation.getTranslation().set((this.animationStep - 1) * 1.5D, d, 0.0D);
-      transformation.getLeftRotation().rotateY((float)Math.toRadians(45.0D));
-      transformation.getLeftRotation().rotateX((float)Math.toRadians(45.0D));
-      itemDisplay.setTransformation(transformation);
-      if (this.animationStep == 1) {
-        this.animationStep++;
-      } else {
-        try {
-          if (this.animationStep == 2) {
-            this.animationStep = 0;
-            return;
-          } 
-        } catch (MatchException matchException) {
-          throw a(null);
-        } 
+    transformation.getTranslation().set((this.animationStep - 1) * 1.5D, d, 0.0D);
+    transformation.getLeftRotation().rotateY((float)Math.toRadians(45.0D));
+    transformation.getLeftRotation().rotateX((float)Math.toRadians(45.0D));
+    itemDisplay.setTransformation(transformation);
+    if (this.animationStep == 1) {
+      this.animationStep++;
+    } else {
+      if (this.animationStep == 2) {
+        this.animationStep = 0;
+        return;
       } 
-    } catch (MatchException matchException) {
-      throw a(null);
+
     } 
-    try {
-      if (this.animationStep == 0)
-        cancel(); 
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+
+    if (this.animationStep == 0)
+      cancel(); 
+
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

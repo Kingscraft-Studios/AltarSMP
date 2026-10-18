@@ -15,21 +15,21 @@ import net.kingscraft.zenixmc.altarsmp.weapon.shade.ShadeSoul;
 
 public class HolyLanceTask extends BukkitRunnable {
   final double UNUSED_LITERAL = 1.5D;
-  
+
   public int ticks;
-  
+
   public final ItemDisplay display;
-  
+
   public final Player player;
-  
+
   private static final String DAMAGE_CONFIG_KEY = "holyLanceDamage";
-  
+
   public HolyLanceTask(ItemDisplay paramItemDisplay, Player paramPlayer) {
         this.display = paramItemDisplay;
         this.player = paramPlayer;
         this.ticks = 0;
     }
-  
+
   public void run() {
     if (this.ticks >= 6.0D) {
       this.display.setInterpolationDelay(0);
@@ -69,7 +69,7 @@ public class HolyLanceTask extends BukkitRunnable {
 
     this.ticks++;
   }
-  
+
 }
 
 /* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e4.class

@@ -37,28 +37,25 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.core.MobAbilityTypeSwitchMappings;
-import net.kingscraft.zenixmc.altarsmp.task.CapturedMobDeathTask;
-import net.kingscraft.zenixmc.altarsmp.task.InventoryUpdateTask;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.mapping.MobAbilityTypeSwitchMappings;
 
 public class IllusionWandAbility implements Listener {
   public AltarSMP plugin;
-  
+
   public static NamespacedKey STORED_MOB_KEY;
-  
+
   public NamespacedKey storedPlayerNameKey;
-  
+
   public static Map<UUID, UUID> disguisedPlayers;
-  
-  
-  
+
+
   public IllusionWandAbility(AltarSMP paramAltarSMP) {
     this.plugin = paramAltarSMP;
     STORED_MOB_KEY = new NamespacedKey((Plugin)paramAltarSMP, "stored_mob");
     this.storedPlayerNameKey = new NamespacedKey((Plugin)paramAltarSMP, "stored_player_name");
   }
-  
+
   public static boolean isIllusionWand(ItemStack paramItemStack) {
     {
       if (paramItemStack.getType() != Material.NETHERITE_SWORD)
@@ -74,10 +71,10 @@ public class IllusionWandAbility implements Listener {
       if (!itemMeta.hasCustomModelData())
         return false; 
     }{
-    
+
     }return (itemMeta.getCustomModelData() == 2);
   }
-  
+
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onPlayerDeath(PlayerDeathEvent paramPlayerDeathEvent) {
     Player player = paramPlayerDeathEvent.getEntity();
@@ -85,10 +82,10 @@ public class IllusionWandAbility implements Listener {
       if (IllusionDisguiseManager.isDisguised(player)) {
         paramPlayerDeathEvent.setCancelled(true);
         IllusionDisguiseManager.revealPlayer(player);
-        (new CapturedMobDeathTask(this, player)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
+        (new CapturedMobDeathTask(player)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
       } 
     }}
-  
+
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onEntityDeath(EntityDeathEvent paramEntityDeathEvent) {
     LivingEntity livingEntity = paramEntityDeathEvent.getEntity();
@@ -119,7 +116,7 @@ public class IllusionWandAbility implements Listener {
       storeCapturedMob(player, itemStack, livingEntity.getType());
     } 
   }
-  
+
   public static void storeCapturedMob(Player paramPlayer, ItemStack paramItemStack, EntityType paramEntityType) {
     ItemMeta itemMeta = paramItemStack.getItemMeta();
     {
@@ -137,7 +134,7 @@ public class IllusionWandAbility implements Listener {
     paramPlayer.sendMessage(String.valueOf(ChatColor.DARK_RED) + "» You captured a " + str3 + str2 + str1);
     paramPlayer.playSound((Entity)paramPlayer, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.2F);
   }
-  
+
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent paramPlayerInteractEvent) {
     Player player = paramPlayerInteractEvent.getPlayer();
@@ -161,7 +158,7 @@ public class IllusionWandAbility implements Listener {
       (new IllusionWandChargeTask(this, player)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
     }
   }
-  
+
   @EventHandler
   public void onPlayerItemConsume(PlayerItemConsumeEvent paramPlayerItemConsumeEvent) {
     Player player = paramPlayerItemConsumeEvent.getPlayer();
@@ -171,7 +168,7 @@ public class IllusionWandAbility implements Listener {
       if (isIllusionWand(paramPlayerItemConsumeEvent.getItem())) {
         {
           paramPlayerItemConsumeEvent.setCancelled(true);
-          (new InventoryUpdateTask(this, player)).runTaskLater((Plugin)AltarSMP.getInstance(), 1L);
+          (new InventoryUpdateTask(player)).runTaskLater((Plugin)AltarSMP.getInstance(), 1L);
           if (IllusionDisguiseManager.isDisguised(player)) {
             player.sendMessage("§cYou are already disguised");
             return;
@@ -194,7 +191,7 @@ public class IllusionWandAbility implements Listener {
         } 
       } 
     }}
-  
+
   public void restoreCapturedMob(Player paramPlayer, PersistentDataContainer paramPersistentDataContainer) {
     if (paramPersistentDataContainer.has(this.storedPlayerNameKey, PersistentDataType.STRING)) {
       String str = (String)paramPersistentDataContainer.get(this.storedPlayerNameKey, PersistentDataType.STRING);
@@ -218,13 +215,13 @@ public class IllusionWandAbility implements Listener {
     itemMeta.getPersistentDataContainer().remove(STORED_MOB_KEY);
     itemStack.setItemMeta(itemMeta);
   }
-  
+
   public static void startAbilityCooldown(Player paramPlayer) {
     int i = AltarSMP.getInstance().getConfig().getInt("mobAbilityCooldown", 30);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "mobAbility", i);
     BossBarManager.createBar(paramPlayer,String.valueOf(ChatColor.RED) + "Illusion Ability", i, ChatColor.YELLOW);
   }
-  
+
   @EventHandler
   public void onEntityDamage(EntityDamageEvent paramEntityDamageEvent) {
     Player player;
@@ -241,7 +238,7 @@ public class IllusionWandAbility implements Listener {
       if (paramEntityDamageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)
         paramEntityDamageEvent.setCancelled(true); 
     }}
-  
+
   public static void useMobAbility(Player paramPlayer, EntityType paramEntityType) {
     if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "mobAbility")) {
       return;
@@ -328,7 +325,7 @@ public class IllusionWandAbility implements Listener {
       startAbilityCooldown(paramPlayer);
     }
   }
-  
+
   public static void createSonicBoomEffect(Player paramPlayer, Location paramLocation, double paramDouble, Vector paramVector) {
     paramPlayer.getWorld().playSound(paramLocation, Sound.ENTITY_WARDEN_SONIC_BOOM, 3.0F, 1.0F);
     double d1 = 0;

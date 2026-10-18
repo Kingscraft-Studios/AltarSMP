@@ -18,19 +18,19 @@ import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 class FrostScytheProjectileTask extends BukkitRunnable {
   public int ticksElapsed;
-  
+
   public Vector movementVector;
-  
+
   final double VERTICAL_OFFSET = 0.0D;
-  
+
   public final Vector initialVelocity;
-  
+
   public final ItemDisplay scytheDisplay;
-  
+
   public final FrostScytheLaunchTask launchTask;
-  
+
   private static final String FROST_DURATION_KEY = "frostDuration";
-  
+
   public FrostScytheProjectileTask(FrostScytheLaunchTask frostScytheLaunchTask, Vector paramVector, ItemDisplay paramItemDisplay) {
         this.launchTask = frostScytheLaunchTask;
         this.initialVelocity = paramVector;
@@ -38,7 +38,7 @@ class FrostScytheProjectileTask extends BukkitRunnable {
         this.ticksElapsed = 0;
         this.movementVector = this.initialVelocity.clone();
     }
-  
+
   public void run() {
     if (this.scytheDisplay.isDead() || this.ticksElapsed++ >= this.launchTask.maxThrowDistance) {
       this.scytheDisplay.getWorld().spawnParticle(Particle.ITEM, this.scytheDisplay.getLocation(), 200, 0.0D, 0.0D, 0.0D, 0.5D, new ItemStack(Material.BLUE_ICE));
@@ -73,7 +73,7 @@ class FrostScytheProjectileTask extends BukkitRunnable {
           TrueDamage.apply(livingEntity, (double)this.launchTask.damage, this.launchTask.player);
           int i = AltarSMP.getInstance().getConfig().getInt(FROST_DURATION_KEY, 10);
           livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, i, 1, false, true, true));
-          new FrostScytheFreezeTask(this, i, livingEntity).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
+          new FrostScytheFreezeTask(i, livingEntity).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
           livingEntity.getWorld().playSound(livingEntity.getLocation(), Sound.BLOCK_GLASS_BREAK, 1.0F, 1.5F);
           livingEntity.getWorld().playSound(livingEntity.getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0F, 1.0F);
           this.scytheDisplay.getWorld().spawnParticle(Particle.ITEM, this.scytheDisplay.getLocation(), 200, 0.0D, 0.0D, 0.0D, 0.5D, new ItemStack(Material.BLUE_ICE));
@@ -99,11 +99,8 @@ class FrostScytheProjectileTask extends BukkitRunnable {
       cancel();
     } 
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
-  
+
+
 }
 
 /* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764da.class

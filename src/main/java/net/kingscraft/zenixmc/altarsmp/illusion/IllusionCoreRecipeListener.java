@@ -15,9 +15,8 @@ import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 
 public class IllusionCoreRecipeListener implements Listener {
   public AltarSMP plugin;
-  
-  
-  
+
+
   public IllusionCoreRecipeListener(AltarSMP paramAltarSMP) {
     this.plugin = paramAltarSMP;
     ConfigurationSection configurationSection = paramAltarSMP.getConfig().getConfigurationSection("IllusionCore");
@@ -39,10 +38,7 @@ public class IllusionCoreRecipeListener implements Listener {
         Bukkit.addRecipe((Recipe)shapedRecipe);
       } 
     }}
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 
 }

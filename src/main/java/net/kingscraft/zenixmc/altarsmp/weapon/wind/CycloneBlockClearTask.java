@@ -10,16 +10,16 @@ import net.kingscraft.zenixmc.altarsmp.weapon.shade.ShadeSoul;
 
 public class CycloneBlockClearTask extends BukkitRunnable {
   final double UNUSED_LITERAL = 2.0D;
-  
+
   public int ticks;
-  
+
   public final Player player;
-  
+
   public CycloneBlockClearTask(Player paramPlayer) {
         this.player = paramPlayer;
         this.ticks = 0;
     }
-  
+
   public void run() {
     if (this.ticks >= 40.0D) {
       cancel();

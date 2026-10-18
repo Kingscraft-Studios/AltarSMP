@@ -12,11 +12,11 @@ import org.bukkit.scheduler.BukkitTask;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightfallListener;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.crazy.CrazySlotsListener;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.event.crazy.CrazySlotsListener;
 
 public class ClearCooldownsCommand implements CommandExecutor {
-  
+
   public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
     {
       if (paramArrayOfString.length == 0) {
@@ -41,7 +41,7 @@ public class ClearCooldownsCommand implements CommandExecutor {
       } 
     }return true;
   }
-  
+
   public static void clearAllCooldowns(Player paramPlayer) {
     {
       CooldownManager.clearExpiries(paramPlayer.getUniqueId());
@@ -52,7 +52,7 @@ public class ClearCooldownsCommand implements CommandExecutor {
     }
     BossBarManager.activeBars.removeIf(paramBar3 -> removeAllCooldowns(paramPlayer, paramBar3));
   }
-  
+
   public static boolean removeAllCooldowns(Player paramPlayer, BossBar paramBossBar) {
     paramBossBar.removePlayer(paramPlayer);
     return true;

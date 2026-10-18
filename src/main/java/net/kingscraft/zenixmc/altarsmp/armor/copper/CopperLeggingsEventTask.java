@@ -12,17 +12,16 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class CopperLeggingsEventTask extends BukkitRunnable {
   public int elapsedTicks;
-  
+
   public double displayRotation;
-  
+
   public final int eventDurationTicks;
-  
+
   public final int announcementIntervalSeconds;
-  
+
   public final CopperLeggingsEventManager eventManager;
-  
-  
-  
+
+
   public CopperLeggingsEventTask(CopperLeggingsEventManager copperLeggingsEventManager, int paramInt1, int paramInt2) {
         this.eventManager = copperLeggingsEventManager;
         this.eventDurationTicks = paramInt1;
@@ -30,7 +29,7 @@ class CopperLeggingsEventTask extends BukkitRunnable {
         this.elapsedTicks = 0;
         this.displayRotation = 0.0;
     }
-  
+
   public void run() {
     {
       if (!AltarSMP.getInstance().getConfig().getBoolean("leggingsActive", false)) {

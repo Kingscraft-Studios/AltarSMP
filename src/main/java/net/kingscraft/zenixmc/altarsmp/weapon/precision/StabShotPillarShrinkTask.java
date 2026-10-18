@@ -7,14 +7,14 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class StabShotPillarShrinkTask extends BukkitRunnable {
   public final ItemDisplay itemDisplay;
-  
+
   public final int verticalScale;
-  
+
   public StabShotPillarShrinkTask(ItemDisplay paramItemDisplay, int paramInt) {
         this.itemDisplay = paramItemDisplay;
         this.verticalScale = paramInt;
     }
-  
+
   public void run() {
     this.itemDisplay.setInterpolationDelay(0);
     this.itemDisplay.setInterpolationDuration(10);

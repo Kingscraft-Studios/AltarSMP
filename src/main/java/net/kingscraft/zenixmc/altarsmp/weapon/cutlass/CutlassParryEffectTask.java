@@ -8,20 +8,20 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 
 class CutlassParryEffectTask extends BukkitRunnable {
   final int DAMAGE_INTERVAL = 2;
-  
+
   public int ticks;
-  
+
   public final CutlassParryLaunchTask parryTask;
-  
+
   public CutlassParryEffectTask(CutlassParryLaunchTask cutlassParryLaunchTask) {
         this.parryTask = cutlassParryLaunchTask;
         this.ticks = 0;
     }
-  
+
   public void run() {
     {
       if (this.ticks < 40) {
@@ -55,10 +55,7 @@ class CutlassParryEffectTask extends BukkitRunnable {
     }this.parryTask.player.getWorld().playSound(this.parryTask.player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.0F, 1.0F);
     cancel();
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 
 }

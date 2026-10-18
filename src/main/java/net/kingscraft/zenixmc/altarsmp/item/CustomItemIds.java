@@ -2,7 +2,7 @@ package net.kingscraft.zenixmc.altarsmp.item;
 
 public class CustomItemIds {
   public static final int[] ID_BY_ITEM = new int[CustomItem.values().length];
-  
+
   static {
     ID_BY_ITEM[CustomItem.KNIGHTFALL.ordinal()] = 1;
     ID_BY_ITEM[CustomItem.NUKE_REMOTE.ordinal()] = 2;

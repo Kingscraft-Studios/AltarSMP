@@ -10,10 +10,6 @@ import org.bukkit.entity.TextDisplay;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Transformation;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.task.FloatingTextParticleAnimationTask;
-import net.kingscraft.zenixmc.altarsmp.task.FloatingTextRemovalTask;
-import net.kingscraft.zenixmc.altarsmp.task.FloatingTextShrinkTask;
-import net.kingscraft.zenixmc.altarsmp.task.FloatingTextSpawnTask;
 
 public class FloatingTextEffectUtils {
   public static void spawnPlayerStarEffect(Player paramPlayer) {
@@ -21,28 +17,25 @@ public class FloatingTextEffectUtils {
     int b = 5;
     spawnAnimatedTextEffect(location, 1, Color.WHITE, Color.WHITE, b, b * 10, 10, b, true, "✦", 40, 10);
   }
-  
+
   public static void spawnAnimatedTextEffect(Location paramLocation, int paramInt1, Color paramColor1, Color paramColor2, double paramDouble, int paramInt2, int paramInt3, int paramInt4, boolean paramBoolean, String paramString, int paramInt5, int paramInt6) {
     (new FloatingTextSpawnTask(paramInt1, paramInt2, paramLocation, paramColor1, paramColor2, paramDouble, paramInt3, paramInt4, paramBoolean, paramString, paramInt5, paramInt6)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void spawnFloatingTextDisplay(Location paramLocation, Color paramColor1, Color paramColor2, double paramDouble1, int paramInt1, double paramDouble2, boolean paramBoolean, String paramString, int paramInt2, int paramInt3) {
     paramLocation.add(0.0D, 0.0D, 0.0D);
     World world = paramLocation.getWorld();
     TextDisplay textDisplay = (TextDisplay)world.spawnEntity(paramLocation, EntityType.TEXT_DISPLAY);
     textDisplay.setText(paramString);
     float f = 2.0F;
-    try {
-      if (paramString.equals(" ")) {
-        textDisplay.setBackgroundColor(paramColor1);
-      } else {
-        f = 4.0F;
-        textDisplay.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
-        textDisplay.setText(ChatFormattingUtils.toHexColorCode(paramColor1) + paramString);
-      } 
-    } catch (MatchException matchException) {
-      throw a(null);
+    if (paramString.equals(" ")) {
+      textDisplay.setBackgroundColor(paramColor1);
+    } else {
+      f = 4.0F;
+      textDisplay.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
+      textDisplay.setText(ChatFormattingUtils.toHexColorCode(paramColor1) + paramString);
     } 
+
     textDisplay.setBillboard(Display.Billboard.CENTER);
     Transformation transformation = textDisplay.getTransformation();
     transformation.getScale().set(4.0F, f, 4.0F);
@@ -54,10 +47,7 @@ public class FloatingTextEffectUtils {
     (new FloatingTextShrinkTask(textDisplay, paramInt2)).runTaskLater((Plugin)AltarSMP.getInstance(), paramInt3);
     (new FloatingTextRemovalTask(textDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), (paramInt3 + paramInt2));
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

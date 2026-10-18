@@ -11,7 +11,7 @@ import org.bukkit.plugin.Plugin;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class FindLegendaryItemDuplicatesCommand implements CommandExecutor {
-  
+
   public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
     if (paramCommandSender instanceof Player) {
       Player player = (Player)paramCommandSender;
@@ -45,7 +45,7 @@ public class FindLegendaryItemDuplicatesCommand implements CommandExecutor {
           }continue label35;
         } 
       } 
-      (new LegendaryItemDuplicateReportTask(this, player, arrayList)).runTaskLater(AltarSMP.getInstance(), 1L);
+      (new LegendaryItemDuplicateReportTask(player, arrayList)).runTaskLater(AltarSMP.getInstance(), 1L);
     } 
     return true;
   }

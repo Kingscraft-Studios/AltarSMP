@@ -8,7 +8,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightfallListener;
-import net.kingscraft.zenixmc.altarsmp.crazy.CrazySlotsListener;
+import net.kingscraft.zenixmc.altarsmp.event.crazy.CrazySlotsListener;
 import net.kingscraft.zenixmc.altarsmp.illusion.IllusionWandAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.blood.BloodLustAbilityListener;
 import net.kingscraft.zenixmc.altarsmp.weapon.boneblade.BoneBladeAbility;

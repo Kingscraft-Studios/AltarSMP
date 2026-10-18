@@ -8,16 +8,16 @@ import net.kingscraft.zenixmc.altarsmp.weapon.shade.ShadeSoul;
 
 public class SlashSwingTask extends BukkitRunnable {
   final int UNUSED_LITERAL = 1;
-  
+
   public int ticks;
-  
+
   public final Player player;
-  
+
   public SlashSwingTask(Player paramPlayer) {
         this.player = paramPlayer;
         this.ticks = 0;
     }
-  
+
   public void run() {
     if (this.ticks >= 20) {
       cancel();

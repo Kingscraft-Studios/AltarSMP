@@ -17,12 +17,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.ability.NukeAbility;
-import net.kingscraft.zenixmc.altarsmp.ability.PaladinEarthAbility;
+import net.kingscraft.zenixmc.altarsmp.ability.nuke.NukeAbility;
+import net.kingscraft.zenixmc.altarsmp.ability.paladin.PaladinEarthAbility;
 import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightfallListener;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.core.WorldGuardHook;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 import net.kingscraft.zenixmc.altarsmp.illusion.IllusionDisguiseManager;
 import net.kingscraft.zenixmc.altarsmp.illusion.IllusionWandAbility;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
@@ -46,8 +46,8 @@ import net.kingscraft.zenixmc.altarsmp.weapon.wind.WindweaverAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.witherbone.WitherBoneAbility;
 
 public class AbilityInputListener implements Listener, CommandExecutor {
-  
-  
+
+
   public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
     if (paramCommandSender instanceof Player) {
       Player player = (Player)paramCommandSender;
@@ -64,7 +64,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
       }} 
     return true;
   }
-  
+
   @EventHandler
   public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent paramPlayerSwapHandItemsEvent) {
     Player player = paramPlayerSwapHandItemsEvent.getPlayer();
@@ -82,7 +82,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
             paramPlayerSwapHandItemsEvent.setCancelled(true); 
         }} 
     }}
-  
+
   public static boolean activateMainHandAbility(Player paramPlayer) {
     {
       if (WorldGuardHook.isBlocked(paramPlayer.getLocation()))
@@ -325,7 +325,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
       } 
     }return false;
   }
-  
+
   public static boolean activateOffhandAbility(Player paramPlayer) {
     {
       if (WorldGuardHook.isBlocked(paramPlayer.getLocation()))
@@ -534,7 +534,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
       } 
     }return false;
   }
-  
+
   public static void activateDayNightAbilityOne(Player paramPlayer) {
     {
       if (paramPlayer.getWorld().isDayTime()) {
@@ -551,7 +551,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
           } 
         }} 
     }}
-  
+
   public static void activateDayNightAbilityTwo(Player paramPlayer) {
     {
       if (paramPlayer.getWorld().isDayTime()) {

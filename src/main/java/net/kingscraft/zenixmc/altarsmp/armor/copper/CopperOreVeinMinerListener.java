@@ -19,59 +19,40 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class CopperOreVeinMinerListener implements Listener {
   public AltarSMP plugin;
-  
+
   public HashMap<UUID, Boolean> veinMinerEnabled = new HashMap<>();
-  
+
   public CopperOreVeinMinerListener(AltarSMP paramAltarSMP) {
     this.plugin = paramAltarSMP;
     startTask();
   }
-  
+
   public static boolean isCopperPickaxe(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
-    try {
-      if (itemStack == null)
-        return false; 
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
-    try {
-      if (itemStack.getType() != Material.NETHERITE_PICKAXE)
-        return false; 
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
-    try {
-      if (!itemStack.hasItemMeta())
-        return false; 
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+    if (itemStack == null)
+      return false; 
+
+    if (itemStack.getType() != Material.NETHERITE_PICKAXE)
+      return false; 
+
+    if (!itemStack.hasItemMeta())
+      return false; 
+
     ItemMeta itemMeta = itemStack.getItemMeta();
-    try {
-      if (itemMeta == null)
-        return false; 
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
-    try {
-      if (!itemMeta.hasCustomModelData())
-        return false; 
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
-    try {
-    
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+    if (itemMeta == null)
+      return false; 
+
+    if (!itemMeta.hasCustomModelData())
+      return false; 
+
+
     return (itemMeta.getCustomModelData() == 1);
   }
-  
+
   public void startTask() {
     (new CopperOreVeinMinerStatusTask(this)).runTaskTimer((Plugin)this.plugin, 0L, 10L);
   }
-  
+
   @EventHandler
   public void handleSwapHandItems(PlayerSwapHandItemsEvent paramPlayerSwapHandItemsEvent) {
     Player player = paramPlayerSwapHandItemsEvent.getPlayer();
@@ -79,25 +60,19 @@ public class CopperOreVeinMinerListener implements Listener {
     if (isCopperPickaxe(player)) {
       paramPlayerSwapHandItemsEvent.setCancelled(true);
       boolean bool = ((Boolean)this.veinMinerEnabled.getOrDefault(uUID, Boolean.valueOf(true))).booleanValue();
-      try {
-      
-      } catch (MatchException matchException) {
-        throw a(null);
-      } 
+
+
       boolean bool1 = !bool ? true : false;
-      try {
-        this.veinMinerEnabled.put(uUID, Boolean.valueOf(bool1));
-        if (bool1) {
-          player.getWorld().playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 1.0F, 2.0F);
-        } else {
-          player.getWorld().playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 1.0F, 2.0F);
-        } 
-      } catch (MatchException matchException) {
-        throw a(null);
+      this.veinMinerEnabled.put(uUID, Boolean.valueOf(bool1));
+      if (bool1) {
+        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 1.0F, 2.0F);
+      } else {
+        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 1.0F, 2.0F);
       } 
+
     } 
   }
-  
+
   @EventHandler
   public void handleBlockBreak(BlockBreakEvent paramBlockBreakEvent) {
     Player player = paramBlockBreakEvent.getPlayer();
@@ -120,45 +95,30 @@ public class CopperOreVeinMinerListener implements Listener {
       } 
     } 
   }
-  
+
   public void breakNearbyBlock(Block paramBlock, Player paramPlayer) {
     Material material = paramBlock.getType();
-    try {
-      if (material == Material.AIR)
-        return; 
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
-    try {
-      if (paramBlock.getType().getHardness() < 0.0F)
-        return; 
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+    if (material == Material.AIR)
+      return; 
+
+    if (paramBlock.getType().getHardness() < 0.0F)
+      return; 
+
     Location location = paramBlock.getLocation().add(0.5D, 0.5D, 0.5D);
-    try {
-      paramBlock.getWorld().spawnParticle(Particle.BLOCK, location, 20, 0.3D, 0.3D, 0.3D, 0.1D, Material.COPPER_ORE.createBlockData());
-      if (material != Material.LAVA) {
-        try {
-          if (material == Material.WATER) {
-            paramBlock.setType(Material.AIR);
-            return;
-          } 
-        } catch (MatchException matchException) {
-          throw a(null);
-        } 
-        paramBlock.breakNaturally(paramPlayer.getInventory().getItemInMainHand());
+    paramBlock.getWorld().spawnParticle(Particle.BLOCK, location, 20, 0.3D, 0.3D, 0.3D, 0.1D, Material.COPPER_ORE.createBlockData());
+    if (material != Material.LAVA) {
+      if (material == Material.WATER) {
+        paramBlock.setType(Material.AIR);
         return;
       } 
-    } catch (MatchException matchException) {
-      throw a(null);
+
+      paramBlock.breakNaturally(paramPlayer.getInventory().getItemInMainHand());
+      return;
     } 
+
     paramBlock.setType(Material.AIR);
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

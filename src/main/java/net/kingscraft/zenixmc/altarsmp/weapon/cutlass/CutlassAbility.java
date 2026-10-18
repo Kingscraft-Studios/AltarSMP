@@ -16,17 +16,17 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.Plugin;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
 import net.kingscraft.zenixmc.altarsmp.util.CombatEffectUtils;
 
 public class CutlassAbility implements Listener {
   public static String cutsCooldownKey;
-  
+
   public static String parryCooldownKey;
-  
+
   public static HashMap<UUID, Integer> parryHits;
-  
+
   @EventHandler
   public void onCutlassDamage(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Player player;
@@ -45,14 +45,14 @@ public class CutlassAbility implements Listener {
     }
       CombatEffectUtils.spawnDualParticleRings((LivingEntity)player, Particle.ELECTRIC_SPARK, Particle.CRIT, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2.0F);
   }
-  
+
   public static boolean isCutlass(Player paramPlayer) {
     {
       if (AltarSMP.areSimilar(paramPlayer.getInventory().getItemInMainHand(), CustomItem.CUTLASS.getItem()))
         return true; 
     }return false;
   }
-  
+
   @EventHandler
   public static void onParryDamage(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     LivingEntity livingEntity;
@@ -83,7 +83,7 @@ public class CutlassAbility implements Listener {
         }} 
     } 
   }
-  
+
   public static void activateParry(Player paramPlayer) {
     int i = AltarSMP.getInstance().getConfig().getInt("CutlassParryCooldown", 30);
     clearParryBars(paramPlayer);
@@ -91,23 +91,23 @@ public class CutlassAbility implements Listener {
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "active_parry", 0.0D);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), parryCooldownKey, i);
   }
-  
+
   public static void clearParryBars(Player paramPlayer) {
     BossBarManager.removeBar(paramPlayer, "!! Parry x3 !!");
     BossBarManager.removeBar(paramPlayer, "!! Parry x2 !!");
     BossBarManager.removeBar(paramPlayer, "!! Parry x1 !!");
   }
-  
+
   public static void startCutlassAttack(Player paramPlayer) {
     int b = 2;
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "cutlassCuts", 1.0D);
     (new CutlassAttackTask(paramPlayer, b)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, b);
   }
-  
+
   public static void startCutlassParry(Player paramPlayer) {
     (new CutlassParryLaunchTask(paramPlayer)).runTaskLater((Plugin)AltarSMP.getInstance(), 10L);
   }
-  
+
   public static LivingEntity findTargetEntity(LivingEntity paramLivingEntity, double paramDouble) {
     LivingEntity livingEntity = null;
     double d = Double.MAX_VALUE;

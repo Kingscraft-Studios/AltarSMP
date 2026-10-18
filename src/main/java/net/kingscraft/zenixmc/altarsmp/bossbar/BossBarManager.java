@@ -15,35 +15,35 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.bingo.BingoBarCountdownTask;
+import net.kingscraft.zenixmc.altarsmp.event.bingo.BingoBarCountdownTask;
 
 public class BossBarManager {
   public static final List<BossBar> activeBars = new ArrayList<>();
-  
+
   public static final Map<UUID, List<PlayerBossBar>> playerBars = new HashMap<>();
-  
+
   public static BossBar bingoBar;
-  
+
   public static BukkitRunnable bingoBarTask;
-  
+
   public static BossBar eventBar;
-  
+
   public static BukkitRunnable eventBarTask;
-  
+
   public static int updateInterval;
-  
+
   public BossBarManager() {
     updateInterval = AltarSMP.getInstance().getConfig().getInt("bossbar_update_interval", 1);
   }
-  
+
   public static void startUpdater() {
     (new PlayerBossBarUpdater()).runTaskTimer((Plugin)AltarSMP.getInstance(), 1L, 1L);
   }
-  
+
   public static void createBar(Player paramPlayer, String paramString, int paramInt, ChatColor paramChatColor) {
     createBar(paramPlayer, paramString, paramInt, paramChatColor, BarColor.YELLOW);
   }
-  
+
   public static void createBar(Player paramPlayer, String paramString, int paramInt, ChatColor paramChatColor, BarColor paramBarColor) {
     {
       if (paramPlayer != null)
@@ -64,7 +64,7 @@ public class BossBarManager {
           } 
           return;
         }}}
-  
+
   public static void showBingoBar(String paramString, int paramInt, BarColor paramBarColor) {
     hideBingoBar();
     bingoBar = (BossBar)Bukkit.createBossBar(BossBarKeys.bossBarKey, String.valueOf(net.md_5.bungee.api.ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
@@ -74,7 +74,7 @@ public class BossBarManager {
     bingoBarTask = new BingoBarCountdownTask(paramInt, paramString);
     bingoBarTask.runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, updateInterval);
   }
-  
+
   public static void showEventBar(String paramString, int paramInt, BarColor paramBarColor) {
     hideEventBar();
     eventBar = (BossBar)Bukkit.createBossBar(BossBarKeys.bossBarKey, String.valueOf(net.md_5.bungee.api.ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
@@ -84,7 +84,7 @@ public class BossBarManager {
     eventBarTask = new EventBarCountdownTask(paramInt, paramString);
     eventBarTask.runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, updateInterval);
   }
-  
+
   public static void removeBar(Player paramPlayer, String paramString) {
     List list = playerBars.get(paramPlayer.getUniqueId());
     {
@@ -104,7 +104,7 @@ public class BossBarManager {
       if (list.isEmpty())
         playerBars.remove(paramPlayer.getUniqueId());
     }}
-  
+
   public static void removeAllBars(Player paramPlayer) {
     List list = playerBars.remove(paramPlayer.getUniqueId());
     {
@@ -112,7 +112,7 @@ public class BossBarManager {
         return; 
     }((List<PlayerBossBar>)list).forEach(bar -> bar.bossBar.removeAll());
   }
-  
+
   public static void removeBarFromAll(String paramString) {
     String str = ChatColor.stripColor(paramString).toLowerCase();
     Iterator<Map.Entry<UUID, List<PlayerBossBar>>> iterator = playerBars.entrySet().iterator();
@@ -131,7 +131,7 @@ public class BossBarManager {
           iterator.remove(); 
       }} 
   }
-  
+
   public static void hideBingoBar() {
     {
       if (bingoBarTask != null) {
@@ -145,7 +145,7 @@ public class BossBarManager {
         bingoBar = null;
       } 
     }}
-  
+
   public static void hideEventBar() {
     {
       if (eventBarTask != null) {
@@ -159,19 +159,19 @@ public class BossBarManager {
         eventBar = null;
       } 
     }}
-  
+
   public static void addPlayerToBingoBar(Player paramPlayer) {
     {
       if (bingoBar != null)
         bingoBar.addPlayer(paramPlayer);
     }}
-  
+
   public static void addPlayerToEventBar(Player paramPlayer) {
     {
       if (eventBar != null)
         eventBar.addPlayer(paramPlayer);
     }}
-  
+
 }
 
 

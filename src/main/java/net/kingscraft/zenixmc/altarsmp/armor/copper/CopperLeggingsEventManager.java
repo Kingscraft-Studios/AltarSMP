@@ -45,17 +45,17 @@ import net.kingscraft.zenixmc.altarsmp.util.TimeUtils;
 
 public class CopperLeggingsEventManager implements Listener, CommandExecutor {
   public final HashMap<UUID, ItemDisplay> playerCoreDisplays = new HashMap<>();
-  
+
   public final HashMap<UUID, Integer> playerHoldingTimes = new HashMap<>();
-  
+
   protected NamespacedKey coreInteractionKey = new NamespacedKey(AltarSMP.getPlugin(AltarSMP.class), "legEvent");
-  
+
   public void startEventCountdown() {
     int i = AltarSMP.getInstance().getConfig().getInt("leggingsEventAnnounceTime", 60);
     int j = AltarSMP.getInstance().getConfig().getInt("leggingsTime", 30) * 60 * 20;
     (new CopperLeggingsEventTask(this, j, i)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public void endLeggingsEvent() {
     UUID uUID = null;
     int i = -1;
@@ -70,7 +70,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     if (uUID != null) {
       Player player = Bukkit.getPlayer(uUID);
       {
-      
+
       }String str1 = (player != null) ? player.getName() : Bukkit.getOfflinePlayer(uUID).getName();
       Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + ChatColor.BOLD.toString() + str1 + "§r has won the event!");
       String str2 = TimeUtils.formatMmSs(i);
@@ -96,12 +96,12 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
       }} 
     this.playerHoldingTimes.clear();
   }
-  
+
   public void spawnPlayerCoreDisplay(Player paramPlayer) {
     ItemDisplay itemDisplay = (ItemDisplay)paramPlayer.getWorld().spawn(paramPlayer.getEyeLocation().clone().add(0.0D, 1.0D, 0.0D), ItemDisplay.class, CopperLeggingsEventManager::lambda$spawnDisplay$0);
     this.playerCoreDisplays.put(paramPlayer.getUniqueId(), itemDisplay);
   }
-  
+
   public void updatePlayerCoreDisplay(Player paramPlayer, double paramDouble) {
     ItemDisplay itemDisplay = this.playerCoreDisplays.get(paramPlayer.getUniqueId());
     {
@@ -118,14 +118,14 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     itemDisplay.teleport(location);
     location.getWorld().spawnParticle(Particle.FLAME, location, 2, 0.5D, 0.3D, 0.5D, 0.0D);
   }
-  
+
   public void removePlayerCoreDisplay(Player paramPlayer) {
     ItemDisplay itemDisplay = this.playerCoreDisplays.remove(paramPlayer.getUniqueId());
     {
       if (itemDisplay != null)
         itemDisplay.remove(); 
     }}
-  
+
   public void cleanupEventEntities() {
     this.playerCoreDisplays.values().forEach(Entity::remove);
     this.playerCoreDisplays.clear();
@@ -142,12 +142,12 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
           player.getInventory().removeItem(new ItemStack[] { itemStack }); 
       }} 
   }
-  
+
   @EventHandler
   public void onServerLoad(ServerLoadEvent paramServerLoadEvent) {
     cleanupEventEntities();
   }
-  
+
   public String getWorldDisplayName(World paramWorld) {
     String str = paramWorld.getName();
     int b = -1;
@@ -177,7 +177,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
       } 
     }return paramWorld.getName();
   }
-  
+
   public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
     Player player;
     if (paramCommandSender instanceof Player) {
@@ -192,7 +192,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     createCopperCoreItem();
     return false;
   }
-  
+
   public void showEventBossBar() {
     int i = AltarSMP.getInstance().getConfig().getInt("leggingsTime", 30) * 60;
     for (Player player : Bukkit.getOnlinePlayers()) {
@@ -200,7 +200,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
       BossBarManager.showEventBar(String.valueOf(ChatColor.of("#B06736")) + "§lEvent Time Remaining:", i, BarColor.PINK);
     } 
   }
-  
+
   public void spawnCopperCore(Player paramPlayer) {
     Location location = paramPlayer.getEyeLocation();
     String str1 = String.valueOf(ChatColor.of("#B06736"));
@@ -218,7 +218,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     interaction.setInteractionHeight(1.2F);
     interaction.getPersistentDataContainer().set(this.coreInteractionKey, PersistentDataType.STRING, "legs");
   }
-  
+
   public static ItemStack createCopperCoreItem() {
     ItemStack itemStack = new ItemStack(Material.HEAVY_CORE);
     ItemMeta itemMeta = itemStack.getItemMeta();
@@ -229,7 +229,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
-  
+
   @EventHandler
   public void onCoreInteraction(PlayerInteractAtEntityEvent paramPlayerInteractAtEntityEvent) {
     Interaction interaction;
@@ -252,7 +252,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
         } 
       }} 
   }
-  
+
   @EventHandler
   public void onCoreStolen(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Player player1;
@@ -279,29 +279,29 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
         } 
       }} 
   }
-  
+
   @EventHandler
   public void onPlayerQuit(PlayerQuitEvent paramPlayerQuitEvent) {
     removePlayerCoreDisplay(paramPlayerQuitEvent.getPlayer());
   }
-  
+
   @EventHandler
   public void onPlayerDeath(PlayerDeathEvent paramPlayerDeathEvent) {
     removePlayerCoreDisplay(paramPlayerDeathEvent.getEntity());
   }
-  
+
   public boolean isCopperCore(ItemStack paramItemStack) {
     if (paramItemStack == null || !paramItemStack.hasItemMeta()) {
       return false;
     }
     return paramItemStack.getType() == Material.HEAVY_CORE && paramItemStack.getItemMeta().getCustomModelData() == 998;
   }
-  
+
   private static void lambda$spawnCore$1(ItemDisplay paramItemDisplay) {
     paramItemDisplay.setItemStack(createCopperCoreItem());
     paramItemDisplay.setBrightness(new Display.Brightness(15, 15));
   }
-  
+
   private static void lambda$spawnDisplay$0(ItemDisplay paramItemDisplay) {
     paramItemDisplay.setItemStack(createCopperCoreItem());
     paramItemDisplay.setBrightness(new Display.Brightness(15, 15));

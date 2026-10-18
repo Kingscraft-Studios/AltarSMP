@@ -12,19 +12,19 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class GrapplePullTask extends BukkitRunnable {
   public int ticks;
-  
+
   public final Player player;
-  
+
   public final double maxTicks;
-  
+
   public final Location hookLocation;
-  
+
   public final int leapStrength;
-  
+
   public final ItemStack chainItem;
-  
+
   public final double pullStrength;
-  
+
   public GrapplePullTask(Player paramPlayer, double paramDouble1, Location paramLocation, int paramInt, ItemStack paramItemStack, double paramDouble2) {
         this.player = paramPlayer;
         this.maxTicks = paramDouble1;
@@ -34,7 +34,7 @@ public class GrapplePullTask extends BukkitRunnable {
         this.pullStrength = paramDouble2;
         this.ticks = 0;
     }
-  
+
   public void run() {
     if (!this.player.isValid() || (double)this.ticks > this.maxTicks) {
       cancel();

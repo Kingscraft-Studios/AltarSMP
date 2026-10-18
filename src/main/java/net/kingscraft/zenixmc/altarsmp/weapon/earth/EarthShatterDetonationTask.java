@@ -12,22 +12,22 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.ability.PaladinEarthAbility;
+import net.kingscraft.zenixmc.altarsmp.ability.paladin.PaladinEarthAbility;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 public class EarthShatterDetonationTask extends BukkitRunnable {
   public final ItemDisplay itemDisplay;
-  
+
   public final Player player;
-  
+
   public final Location impactLocation;
-  
+
   public final int radius;
-  
+
   public final int height;
-  
+
   public final double damage;
-  
+
   public EarthShatterDetonationTask(ItemDisplay paramItemDisplay, Player paramPlayer, Location paramLocation, int paramInt1, int paramInt2, double paramDouble) {
         this.itemDisplay = paramItemDisplay;
         this.player = paramPlayer;
@@ -36,7 +36,7 @@ public class EarthShatterDetonationTask extends BukkitRunnable {
         this.height = paramInt2;
         this.damage = paramDouble;
     }
-  
+
   public void run() {
     this.itemDisplay.getWorld().playSound(this.itemDisplay.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0F, 2.0F);
     this.player.getWorld().playSound(this.itemDisplay.getLocation(), Sound.ITEM_TOTEM_USE, 0.5F, 0.5F);
@@ -46,22 +46,16 @@ public class EarthShatterDetonationTask extends BukkitRunnable {
     for (Entity entity : this.itemDisplay.getNearbyEntities(this.radius, this.radius, this.radius)) {
       if (entity instanceof LivingEntity) {
         LivingEntity livingEntity = (LivingEntity)entity;
-        try {
-          if (entity == this.player)
-            continue; 
-        } catch (MatchException matchException) {
-          throw a(null);
-        } 
+        if (entity == this.player)
+          continue; 
+
         TrueDamage.apply(livingEntity, this.damage, this.player);
         livingEntity.setVelocity(new Vector(0, 1, 0));
       } 
     } 
     (new EarthShatterDisplayShrinkTask(this)).runTaskLater((Plugin)AltarSMP.getInstance(), 20L);
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

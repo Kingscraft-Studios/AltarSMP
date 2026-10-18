@@ -11,9 +11,9 @@ public enum DialogType {
     SINGLE_OPTION, 
     CONFIRMATION, 
     MULTI_ACTION;
-    
+
     public static final DialogType[] ENUM_CONSTANTS;
-    
+
     public static DialogType[] createEnumValues() {
         return new DialogType[] {
                 DialogType.TEXT,
@@ -24,7 +24,7 @@ public enum DialogType {
                 DialogType.MULTI_ACTION
         };
     }
-    
+
     static {
         ENUM_CONSTANTS = createEnumValues();
     }

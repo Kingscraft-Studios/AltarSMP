@@ -7,11 +7,11 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.WorldGuardHook;
+import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 
 public class TrueDamage {
   private static final String TRUE_DAMAGE_ENABLED_KEY = "trueDamage";
-  
+
   public static void apply(LivingEntity paramLivingEntity, double paramDouble, Player paramPlayer) {
     apply(paramLivingEntity, paramDouble, paramPlayer, false);
   }
@@ -49,7 +49,7 @@ public class TrueDamage {
       damageDirect(paramLivingEntity, paramDouble);
     } 
   }
-  
+
   public static void damageDirect(LivingEntity paramLivingEntity, double paramDouble) {
     double d = 0.0D;
     if (paramLivingEntity.hasPotionEffect(PotionEffectType.ABSORPTION)) {
@@ -63,7 +63,7 @@ public class TrueDamage {
     paramLivingEntity.setHealth(Math.max(paramLivingEntity.getHealth() - paramDouble, 0.0D));
     paramLivingEntity.playHurtAnimation(0.0F);
   }
-  
+
 }
 
 /* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a5.class

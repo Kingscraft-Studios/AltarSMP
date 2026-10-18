@@ -14,22 +14,21 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.item.ItemUtility;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 class ShadeOrbRayTask extends BukkitRunnable {
   public final Player player;
-  
+
   public final List orbs;
-  
-  
-  
+
+
   public ShadeOrbRayTask(Player paramPlayer, List paramList) {
         this.player = paramPlayer;
         this.orbs = paramList;
     }
-  
+
   public void run() {
     this.player.getWorld().playSound((Entity)this.player, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 2.0F, 2.0F);
     ItemUtility.spawnFlashParticle(this.player.getLocation());

@@ -9,14 +9,14 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class ShadeOrbTeleportTask extends BukkitRunnable {
   public final List orbs;
-  
+
   public final Player player;
-  
+
   public ShadeOrbTeleportTask(List paramList, Player paramPlayer) {
         this.orbs = paramList;
         this.player = paramPlayer;
     }
-  
+
   public void run() {
     for (ItemDisplay itemDisplay : (Iterable<ItemDisplay>)(Iterable<?>) this.orbs)
       itemDisplay.setTeleportDuration(20); 

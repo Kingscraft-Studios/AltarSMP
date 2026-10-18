@@ -7,11 +7,11 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class ShadeOrbRecoilTask extends BukkitRunnable {
   public final ShadeOrbTeleportTask parent;
-  
+
   public ShadeOrbRecoilTask(ShadeOrbTeleportTask parent) {
         this.parent = parent;
     }
-  
+
   public void run() {
     for (ItemDisplay itemDisplay : (Iterable<ItemDisplay>)(Iterable<?>) this.parent.orbs) {
       double d = (Math.random() - 0.5D) * 4.0D;

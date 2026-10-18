@@ -7,11 +7,11 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class EarthShatterDisplayExpandTask extends BukkitRunnable {
   public final ItemDisplay itemDisplay;
-  
+
   public EarthShatterDisplayExpandTask(ItemDisplay paramItemDisplay) {
         this.itemDisplay = paramItemDisplay;
     }
-  
+
   public void run() {
     this.itemDisplay.setInterpolationDelay(-1);
     this.itemDisplay.setInterpolationDuration(5);

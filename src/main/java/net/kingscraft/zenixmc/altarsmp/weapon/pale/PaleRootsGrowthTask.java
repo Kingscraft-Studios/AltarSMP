@@ -18,29 +18,28 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 import net.kingscraft.zenixmc.altarsmp.weapon.vulcan.VulcanGauntletAbility;
 
 class PaleRootsGrowthTask extends BukkitRunnable {
   public double ROOT_SPACING;
-  
+
   final int durationSeconds = AltarSMP.getInstance().getConfig().getInt("paleRootsDuration", 10);
-  
+
   public int ticks;
-  
+
   public Location lastRootLocation;
-  
+
   public final Player player;
-  
+
   public final List rootDisplays;
-  
+
   public final int maxRoots;
-  
+
   public final int rootDamage;
-  
-  
-  
+
+
   public PaleRootsGrowthTask(Player paramPlayer, List paramList, int paramInt1, int paramInt2) {
         this.player = paramPlayer;
         this.rootDisplays = paramList;
@@ -50,7 +49,7 @@ class PaleRootsGrowthTask extends BukkitRunnable {
         this.ticks = 0;
         this.lastRootLocation = this.player.getLocation().clone().add(this.player.getLocation().getDirection().clone().multiply(0));
     }
-  
+
   public void run() {
     if (this.ticks >= this.durationSeconds * 20) {
       for (ItemDisplay itemDisplay : (Iterable<ItemDisplay>)(Iterable<?>) this.rootDisplays) {
@@ -107,10 +106,7 @@ class PaleRootsGrowthTask extends BukkitRunnable {
     } 
     this.ticks++;
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 
 }

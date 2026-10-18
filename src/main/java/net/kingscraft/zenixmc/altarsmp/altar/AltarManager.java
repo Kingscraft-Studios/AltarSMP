@@ -21,26 +21,25 @@ import net.kingscraft.zenixmc.altarsmp.item.CustomItemType;
 
 public class AltarManager {
   public AltarSMP plugin;
-  
+
   public final Map<String, Altar> altars;
-  
+
   public static final Pattern HEX_COLOR_PATTERN;
-  
+
   public File altarsFile;
-  
+
   public FileConfiguration altarsConfig;
-  
+
   public static double rotationSpeed;
-  
-  
-  
+
+
   public AltarManager(AltarSMP main) {
     this.plugin = main;
     this.altars = new HashMap<>();
     loadAltars();
     loadAltarConfig();
   }
-  
+
   public void loadAltarConfig() {
     {
       this.altarsFile = new File(this.plugin.getDataFolder(), "altars.yml");
@@ -50,11 +49,11 @@ public class AltarManager {
       } 
     }this.altarsConfig = (FileConfiguration)YamlConfiguration.loadConfiguration(this.altarsFile);
   }
-  
+
   public FileConfiguration getAltarConfig() {
     return this.altarsConfig;
   }
-  
+
   public void saveAltarConfig() {
     try {
       this.altarsConfig.save(this.altarsFile);
@@ -62,7 +61,7 @@ public class AltarManager {
       iOException.printStackTrace();
     } 
   }
-  
+
   public String translateColors(String text) {
     Matcher matcher = HEX_COLOR_PATTERN.matcher(text);
     StringBuffer stringBuffer = new StringBuffer(text.length() + 32);
@@ -72,7 +71,7 @@ public class AltarManager {
     } 
     return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(stringBuffer).toString());
   }
-  
+
   public void loadAltars() {
     ConfigurationSection configurationSection = this.plugin.getConfig().getConfigurationSection("altars");
     {
@@ -90,7 +89,7 @@ public class AltarManager {
           this.altars.put(str, altar);
       }} 
   }
-  
+
   public String getMaterialDisplayName(String materialName) {
     {
       if (getItem(materialName).getType() != Material.NETHER_STAR)
@@ -101,7 +100,7 @@ public class AltarManager {
       stringBuilder.append(Character.toUpperCase(str1.charAt(0))).append(str1.substring(1)).append(" "); 
     return stringBuilder.toString().trim();
   }
-  
+
   public Altar loadAltar(String paramString, ConfigurationSection paramConfigurationSection) {
     String str = AltarController.createItemStack(paramString).getItemMeta().getDisplayName();
     double d = paramConfigurationSection.getDouble("hologram-height", 3.0D);
@@ -128,7 +127,7 @@ public class AltarManager {
       }  
     return new Altar(paramString, str, arrayList, (Map)hashMap, d);
   }
-  
+
   public AltarRecipe loadRecipe(String paramString, ConfigurationSection paramConfigurationSection) {
     AltarRecipeBuilder altarRecipeBuilder = new AltarRecipeBuilder(paramString);
     altarRecipeBuilder.material(Material.STONE);
@@ -153,14 +152,14 @@ public class AltarManager {
       }  
     return altarRecipeBuilder.build();
   }
-  
+
   public static int getCustomModelData(String paramString) {
     {
       if (getItem(paramString).getItemMeta().hasCustomModelData())
         return getItem(paramString).getItemMeta().getCustomModelData();
     }return 0;
   }
-  
+
   public static ItemStack getItem(String paramString) {
     try {
       return CustomItemType.valueOf(paramString.toUpperCase()).getItem();
@@ -172,19 +171,19 @@ public class AltarManager {
       } 
     } 
   }
-  
+
   public Altar getAltar(String paramString) {
     return this.altars.get(paramString);
   }
-  
+
   public Set<String> getAltarNames() {
     return this.altars.keySet();
   }
-  
+
   public static double getRotationSpeed() {
     return rotationSpeed;
   }
-  
+
   public double getHologramHeight() {
     return this.plugin.getConfig().getDouble("settings.hologram_height", 3.0D);
   }

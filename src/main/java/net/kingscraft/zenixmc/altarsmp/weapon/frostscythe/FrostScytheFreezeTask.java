@@ -1,38 +1,33 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.frostscythe;
 
+import net.kingscraft.zenixmc.altarsmp.AltarSMP;
+
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class FrostScytheFreezeTask extends BukkitRunnable {
   public int ticksElapsed;
-  
+
   public final int durationSeconds;
-  
+
   public final LivingEntity target;
-  
-  public FrostScytheFreezeTask(FrostScytheProjectileTask frostScytheProjectileTask, int paramInt, LivingEntity paramLivingEntity) {
+
+  public FrostScytheFreezeTask(int paramInt, LivingEntity paramLivingEntity) {
         this.durationSeconds = paramInt;
         this.target = paramLivingEntity;
         this.ticksElapsed = 0;
     }
-  
+
   public void run() {
-    try {
-      if (this.ticksElapsed >= this.durationSeconds * 20) {
-        cancel();
-        return;
-      } 
-    } catch (MatchException matchException) {
-      throw a(null);
+    if (this.ticksElapsed >= this.durationSeconds * 20) {
+      cancel();
+      return;
     } 
+
     this.target.setFreezeTicks(100);
     this.ticksElapsed++;
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

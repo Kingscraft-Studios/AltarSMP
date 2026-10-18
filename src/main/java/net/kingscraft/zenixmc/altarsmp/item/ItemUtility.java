@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class ItemUtility {
-  
-  
+
+
   public static void spawnFlashParticle(Location paramLocation) {
     String str = Bukkit.getMinecraftVersion();
     {
@@ -25,7 +25,7 @@ public class ItemUtility {
         paramLocation.getWorld().spawnParticle(Particle.FLASH, paramLocation, 1, 0.0D, 0.0D, 0.0D, 0.0D);
       } 
     }}
-  
+
   public static Material getChainMaterial() {
     String str = Bukkit.getMinecraftVersion();
     {
@@ -33,7 +33,7 @@ public class ItemUtility {
         return Material.IRON_CHAIN; 
     }return Material.valueOf("CHAIN");
   }
-  
+
   public static void setConsumableData(ItemStack paramItemStack, String paramString) {
     String str = Bukkit.getMinecraftVersion();
     {
@@ -43,10 +43,7 @@ public class ItemUtility {
         paramItemStack.setData(DataComponentTypes.CONSUMABLE, (DataComponentBuilder)Consumable.consumable().consumeSeconds((float)AltarSMP.getInstance().getConfig().getDouble(paramString, 3.0D)).animation(ItemUseAnimation.BOW).hasConsumeParticles(false).sound(Key.key("")));
       } 
     }}
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 
 }

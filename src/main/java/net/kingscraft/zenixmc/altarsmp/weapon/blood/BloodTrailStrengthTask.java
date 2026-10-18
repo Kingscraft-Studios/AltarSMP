@@ -8,41 +8,31 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BloodTrailStrengthTask extends BukkitRunnable {
   public final Player player;
-  
+
   public final BloodLustAbilityListener abilityListener;
-  
+
   public BloodTrailStrengthTask(BloodLustAbilityListener bloodLustAbilityListener, Player paramPlayer) {
         this.abilityListener = bloodLustAbilityListener;
         this.player = paramPlayer;
     }
-  
+
   public void run() {
-    try {
-      if (this.player.isOnline())
-        try {
-          if (this.abilityListener.killTracker.getKillCount(this.player) >= 4)
-            try {
-              if (BloodLustAbilityListener.isHoldingBloodlust(this.player)) {
-                this.player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 200, BloodLustAbilityListener.strengthLevel, true, true, true));
-                return;
-              } 
-              this.abilityListener.stopBloodTrail(this.player);
+    if (this.player.isOnline())
+      {
+        if (this.abilityListener.killTracker.getKillCount(this.player) >= 4)
+          {
+            if (BloodLustAbilityListener.isHoldingBloodlust(this.player)) {
+              this.player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 200, BloodLustAbilityListener.strengthLevel, true, true, true));
               return;
-            } catch (MatchException matchException) {
-              throw a(null);
-            }  
-        } catch (MatchException matchException) {
-          throw a(null);
-        }  
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+            } 
+            this.abilityListener.stopBloodTrail(this.player);
+            return;
+          }  
+      }  
+
     this.abilityListener.stopBloodTrail(this.player);
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

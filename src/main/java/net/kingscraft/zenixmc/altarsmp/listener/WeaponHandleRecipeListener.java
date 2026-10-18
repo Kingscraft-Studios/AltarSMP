@@ -15,7 +15,7 @@ import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 
 public class WeaponHandleRecipeListener implements Listener {
   public AltarSMP plugin;
-  
+
   public WeaponHandleRecipeListener(AltarSMP paramAltarSMP) {
     this.plugin = paramAltarSMP;
     ConfigurationSection configurationSection = paramAltarSMP.getConfig().getConfigurationSection("WeaponHandle");

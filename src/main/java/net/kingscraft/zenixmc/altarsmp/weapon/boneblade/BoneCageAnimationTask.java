@@ -13,17 +13,17 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BoneCageAnimationTask extends BukkitRunnable {
   public int ticks;
-  
+
   public final int durationTicks;
-  
+
   public double rotationAngle;
-  
+
   public final int durationSeconds;
-  
+
   public final List cageDisplays;
-  
+
   public final LivingEntity target;
-  
+
   public BoneCageAnimationTask(int paramInt, List paramList, LivingEntity paramLivingEntity) {
     this.durationSeconds = paramInt;
     this.durationTicks = this.durationSeconds * 20;
@@ -32,19 +32,16 @@ class BoneCageAnimationTask extends BukkitRunnable {
     this.ticks = 0;
     this.rotationAngle = 0.0;
   }
-  
+
   public void run() {
-    try {
-      this.ticks++;
-      if (this.ticks >= this.durationTicks) {
-        ((List<ItemDisplay>)(List<?>)this.cageDisplays).forEach(Entity::remove);
-        BoneBladeAbility.boneCageDisplays.remove(this.target);
-        cancel();
-        return;
-      } 
-    } catch (MatchException matchException) {
-      throw a(null);
+    this.ticks++;
+    if (this.ticks >= this.durationTicks) {
+      ((List<ItemDisplay>)(List<?>)this.cageDisplays).forEach(Entity::remove);
+      BoneBladeAbility.boneCageDisplays.remove(this.target);
+      cancel();
+      return;
     } 
+
     Location location = this.target.getLocation().add(0.0D, 1.0D, 0.0D);
     double d1 = this.ticks / this.durationTicks;
     double d2 = 2.0D * (1.0D - d1);
@@ -66,10 +63,7 @@ class BoneCageAnimationTask extends BukkitRunnable {
     } 
     this.rotationAngle += 0.1D;
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

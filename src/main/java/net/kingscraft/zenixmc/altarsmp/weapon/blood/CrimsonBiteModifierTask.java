@@ -7,15 +7,15 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class CrimsonBiteModifierTask extends BukkitRunnable {
   public final AttributeInstance victimMaxHealth;
-  
+
   public final AttributeModifier victimModifier;
-  
+
   public final AttributeInstance attackerMaxHealth;
-  
+
   public final AttributeModifier attackerModifier;
-  
+
   public final CrimsonBiteTask parent;
-  
+
   public CrimsonBiteModifierTask(CrimsonBiteTask crimsontask, AttributeInstance paramAttributeInstance1, AttributeModifier paramAttributeModifier1, AttributeInstance paramAttributeInstance2, AttributeModifier paramAttributeModifier2) {
         this.parent = crimsontask;
         this.victimMaxHealth = paramAttributeInstance1;
@@ -23,7 +23,7 @@ class CrimsonBiteModifierTask extends BukkitRunnable {
         this.attackerMaxHealth = paramAttributeInstance2;
         this.attackerModifier = paramAttributeModifier2;
     }
-  
+
   public void run() {
     if (!this.parent.victim.isDead())
       this.victimMaxHealth.removeModifier(this.victimModifier);

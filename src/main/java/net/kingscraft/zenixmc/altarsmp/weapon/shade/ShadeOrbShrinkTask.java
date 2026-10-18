@@ -7,11 +7,11 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class ShadeOrbShrinkTask extends BukkitRunnable {
   public final ShadeOrbInterpolateTask parent;
-  
+
   public ShadeOrbShrinkTask(ShadeOrbInterpolateTask parent) {
         this.parent = parent;
     }
-  
+
   public void run() {
     for (ItemDisplay itemDisplay : (Iterable<ItemDisplay>)(Iterable<?>) this.parent.orbs) {
       Transformation transformation = itemDisplay.getTransformation();

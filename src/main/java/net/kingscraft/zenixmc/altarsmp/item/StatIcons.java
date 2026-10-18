@@ -7,23 +7,23 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public final class StatIcons {
   public static Component ICON_COOLDOWN;
-  
+
   public static Component ICON_DAMAGE;
-  
+
   public static Component ICON_DISTANCE;
-  
+
   public static Component ICON_BOLT;
-  
+
   public static Component ICON_SNOWFLAKE;
-  
+
   public static Component ICON_EXPLOSION;
-  
+
   public static Component ICON_TOGGLE;
-  
+
   public static Component ICON_STOPWATCH;
-  
+
   public static Component ICON_PROJECTILE;
-  
+
   static {
     ICON_COOLDOWN = Component.object(ObjectContents.sprite(new NamespacedKey("minecraft", "items"), new NamespacedKey("minecraft", "item/clock_00")));
     ICON_DAMAGE = Component.object(ObjectContents.sprite(new NamespacedKey("minecraft", "items"), new NamespacedKey("minecraft", "item/diamond_sword")));

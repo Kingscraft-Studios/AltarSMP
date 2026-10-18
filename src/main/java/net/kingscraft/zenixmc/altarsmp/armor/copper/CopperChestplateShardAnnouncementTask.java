@@ -10,11 +10,11 @@ import net.kingscraft.zenixmc.altarsmp.altar.AltarRitualListener;
 
 class CopperChestplateShardAnnouncementTask extends BukkitRunnable {
   public final CopperChestplateEventManager eventManager;
-  
+
   public CopperChestplateShardAnnouncementTask(CopperChestplateEventManager copperChestplateEventManager) {
         this.eventManager = copperChestplateEventManager;
     }
-  
+
   public void run() {
     for (Player player : Bukkit.getOnlinePlayers()) {
       {
@@ -34,10 +34,7 @@ class CopperChestplateShardAnnouncementTask extends BukkitRunnable {
       } 
     } 
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 
 }

@@ -12,19 +12,19 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class StabShotChargeTask extends BukkitRunnable {
   public int remainingTicks;
-  
+
   public double currentRadius;
-  
+
   public final Location location;
-  
+
   public final Player player;
-  
+
   public final int radius;
-  
+
   public final ItemDisplay itemDisplay;
-  
+
   public final World world;
-  
+
   public final int verticalRadius;
 
   private static final String WARNING_MESSAGE = "§c§lWARNING: §eSTAB SHOT IMMINENT";
@@ -39,17 +39,14 @@ class StabShotChargeTask extends BukkitRunnable {
         this.remainingTicks = 20;
         this.currentRadius = 0.0;
     }
-  
+
   public void run() {
-    try {
-      if (this.remainingTicks <= 0) {
-        StrikerBowAbility.detonateStabShot(this.location, this.player, this.radius, this.itemDisplay);
-        cancel();
-        return;
-      } 
-    } catch (MatchException matchException) {
-      throw a(null);
+    if (this.remainingTicks <= 0) {
+      StrikerBowAbility.detonateStabShot(this.location, this.player, this.radius, this.itemDisplay);
+      cancel();
+      return;
     } 
+
     for (int b = 0; b < 360; b += 30) {
       for (double d = 0.0D; d < 2.0D; d += 0.2D) {
         double d1 = Math.toRadians((this.remainingTicks + b));
@@ -71,21 +68,15 @@ class StabShotChargeTask extends BukkitRunnable {
       player.getWorld().playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 0.25F, 1.0F);
       player.sendTitle("", WARNING_MESSAGE, 0, 2, 0);
     } 
-    try {
-      if (this.currentRadius != this.radius) {
-        this.currentRadius += 0.5D;
-        return;
-      } 
-    } catch (MatchException matchException) {
-      throw a(null);
+    if (this.currentRadius != this.radius) {
+      this.currentRadius += 0.5D;
+      return;
     } 
+
     this.remainingTicks--;
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
-  
+
+
 }
 
 /* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764f1.class

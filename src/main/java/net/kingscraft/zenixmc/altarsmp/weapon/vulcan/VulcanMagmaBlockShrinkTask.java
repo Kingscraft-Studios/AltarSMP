@@ -8,11 +8,11 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class VulcanMagmaBlockShrinkTask extends BukkitRunnable {
   public final BlockDisplay blockDisplay;
-  
+
   public VulcanMagmaBlockShrinkTask(BlockDisplay paramBlockDisplay) {
         this.blockDisplay = paramBlockDisplay;
     }
-  
+
   public void run() {
     this.blockDisplay.setInterpolationDelay(0);
     this.blockDisplay.setInterpolationDuration(10);

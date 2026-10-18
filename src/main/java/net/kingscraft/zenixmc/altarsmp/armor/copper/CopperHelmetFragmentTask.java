@@ -12,11 +12,11 @@ import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 
 class CopperHelmetFragmentTask extends BukkitRunnable {
   public final CopperHelmetEventManager eventManager;
-  
+
   public CopperHelmetFragmentTask(CopperHelmetEventManager copperHelmetEventManager) {
         this.eventManager = copperHelmetEventManager;
     }
-  
+
   public void run() {
     ArrayList<Player> arrayList = new ArrayList(Bukkit.getOnlinePlayers());
     {
@@ -34,10 +34,7 @@ class CopperHelmetFragmentTask extends BukkitRunnable {
     Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + "§lA Helmet Fragment has spawned!");
     Bukkit.broadcastMessage(String.valueOf(ChatColor.WHITE) + "(" + this.eventManager.eventCounter + "/5)");
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 
 }

@@ -39,19 +39,18 @@ import org.joml.Vector3f;
 import java.util.HashMap;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.WorldGuardHook;
+import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 
 public class BoneBladeAbility implements Listener {
   public static String BONE_CAGE_ABILITY_ID;
-  
+
   public static String SKELETAL_LEAP_ABILITY_ID;
-  
+
   public static final Map<LivingEntity, List<ItemDisplay>> boneCageDisplays;
-  
+
   public static final Map<LivingEntity, Location> boneCageLocations;
-  
-  
-  
+
+
   public static void skeletalLeap(Player paramPlayer) {
     Location location = paramPlayer.getLocation();
     double d1 = AltarSMP.getInstance().getConfig().getDouble("skeletalLeapDistance", 1.5D);
@@ -67,7 +66,7 @@ public class BoneBladeAbility implements Listener {
     int i = AltarSMP.getInstance().getConfig().getInt("skeletalLeapCooldown", 30);
     BossBarManager.createBar(paramPlayer, "Skeletal Leap", i, ChatColor.YELLOW);
   }
-  
+
   public static void spawnBoneParticles(Location paramLocation, Material paramMaterial, int paramInt1, double paramDouble, int paramInt2) {
     paramDouble *= 0.1D;
     World world = paramLocation.getWorld();
@@ -81,7 +80,7 @@ public class BoneBladeAbility implements Listener {
     (new BoneBladeParticleTrailTask(arrayList)).runTaskLater((Plugin)AltarSMP.getInstance(), 5L);
     (new BoneBladeItemCleanupTask(arrayList)).runTaskLater((Plugin)AltarSMP.getInstance(), paramInt2);
   }
-  
+
   public static Vector randomBoneVelocity(double paramDouble) {
     while (true) {
       double d1 = (Math.random() - 0.5D) * 2.0D;
@@ -92,7 +91,7 @@ public class BoneBladeAbility implements Listener {
         return vector.normalize().multiply(paramDouble); 
     } 
   }
-  
+
   public static void boneCage(Player paramPlayer) {
     int i = AltarSMP.getInstance().getConfig().getInt("boneCageLength", 30);
     int j = AltarSMP.getInstance().getConfig().getInt("boneCageStunDuration", 4);
@@ -103,7 +102,7 @@ public class BoneBladeAbility implements Listener {
     BossBarManager.createBar(paramPlayer, "Bone Cage", k, ChatColor.YELLOW);
     (new BoneCageProjectileTask(i, location, vector, paramPlayer, j)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void applyBoneCage(LivingEntity paramLivingEntity, int paramInt) {
     {
       if (WorldGuardHook.isBlocked(paramLivingEntity.getLocation()))
@@ -124,7 +123,7 @@ public class BoneBladeAbility implements Listener {
     } 
     (new BoneCageAnimationTask(paramInt, arrayList, paramLivingEntity)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   @EventHandler
   public void onPlayerDeath(PlayerDeathEvent paramPlayerDeathEvent) {
     Player player = paramPlayerDeathEvent.getEntity();
@@ -137,7 +136,7 @@ public class BoneBladeAbility implements Listener {
       boneCageDisplays.remove(player);
     } 
   }
-  
+
   @EventHandler
   public void onPlayerMove(PlayerMoveEvent paramPlayerMoveEvent) {
     Player player = paramPlayerMoveEvent.getPlayer();
@@ -151,7 +150,7 @@ public class BoneBladeAbility implements Listener {
     location3.setPitch(location2.getPitch());
     paramPlayerMoveEvent.setTo(location3);
   }
-  
+
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent paramPlayerInteractEvent) {
     {
@@ -163,7 +162,7 @@ public class BoneBladeAbility implements Listener {
         return; 
     }paramPlayerInteractEvent.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onPlayerItemConsume(PlayerItemConsumeEvent paramPlayerItemConsumeEvent) {
     {
@@ -175,7 +174,7 @@ public class BoneBladeAbility implements Listener {
         return; 
     }paramPlayerItemConsumeEvent.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onPlayerDropItem(PlayerDropItemEvent paramPlayerDropItemEvent) {
     {
@@ -187,7 +186,7 @@ public class BoneBladeAbility implements Listener {
         return; 
     }paramPlayerDropItemEvent.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onInventoryClick(InventoryClickEvent paramInventoryClickEvent) {
     {
@@ -199,7 +198,7 @@ public class BoneBladeAbility implements Listener {
         return; 
     }paramInventoryClickEvent.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onPlayerInteractEntity(PlayerInteractEntityEvent paramPlayerInteractEntityEvent) {
     {
@@ -211,7 +210,7 @@ public class BoneBladeAbility implements Listener {
         return; 
     }paramPlayerInteractEntityEvent.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onProjectileLaunch(ProjectileLaunchEvent paramProjectileLaunchEvent) {
     LivingEntity livingEntity;
@@ -229,7 +228,7 @@ public class BoneBladeAbility implements Listener {
         return; 
     }paramProjectileLaunchEvent.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onEntityDamageByEntity(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     LivingEntity livingEntity;

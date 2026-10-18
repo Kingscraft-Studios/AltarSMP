@@ -8,41 +8,31 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class DisguiseFollowTask extends BukkitRunnable {
   public final Player player;
-  
+
   public final Entity targetEntity;
-  
+
   public DisguiseFollowTask(Player paramPlayer, Entity paramEntity) {
         this.player = paramPlayer;
         this.targetEntity = paramEntity;
     }
-  
+
   public void run() {
-    try {
-      if (this.player.isOnline())
-        try {
-          if (!this.targetEntity.isDead())
-            try {
-              if (!this.player.isDead()) {
-                this.player.setCooldown(Material.NETHERITE_SWORD, 100);
-                this.targetEntity.teleport((Entity)this.player);
-                return;
-              } 
-            } catch (MatchException matchException) {
-              throw a(null);
-            }  
-        } catch (MatchException matchException) {
-          throw a(null);
-        }  
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+    if (this.player.isOnline())
+      {
+        if (!this.targetEntity.isDead())
+          {
+            if (!this.player.isDead()) {
+              this.player.setCooldown(Material.NETHERITE_SWORD, 100);
+              this.targetEntity.teleport((Entity)this.player);
+              return;
+            } 
+          }  
+      }  
+
     IllusionDisguiseManager.revealPlayer(this.player);
     cancel();
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

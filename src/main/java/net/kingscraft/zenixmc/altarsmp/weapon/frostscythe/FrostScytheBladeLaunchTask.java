@@ -13,17 +13,17 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class FrostScytheBladeLaunchTask extends BukkitRunnable {
   public final List bladeDisplays;
-  
+
   public final int bladeIndex;
-  
+
   public final Player player;
-  
+
   public FrostScytheBladeLaunchTask(List paramList, int paramInt, Player paramPlayer) {
         this.bladeDisplays = paramList;
         this.bladeIndex = paramInt;
         this.player = paramPlayer;
     }
-  
+
   public void run() {
     ItemDisplay itemDisplay = (ItemDisplay)this.bladeDisplays.get(this.bladeIndex);
     itemDisplay.setInterpolationDelay(0);

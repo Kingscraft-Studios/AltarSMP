@@ -13,33 +13,33 @@ import net.kingscraft.zenixmc.altarsmp.item.RecipeIngredient;
 
 public class AltarRecipeBuilder {
   public String name;
-  
+
   public Material material;
-  
+
   public String displayName;
-  
+
   public List<String> lore = new ArrayList<>();
-  
+
   public Map<Enchantment, Integer> enchantments = new HashMap<>();
-  
+
   public int customModelData = 0;
-  
+
   public List<RecipeIngredient> ingredients = new ArrayList<>();
-  
+
   public AltarRecipeBuilder(String paramString) {
     this.name = paramString;
   }
-  
+
   public AltarRecipeBuilder material(Material paramMaterial) {
     this.material = paramMaterial;
     return this;
   }
-  
+
   public AltarRecipeBuilder ingredient(Material paramMaterial, int paramInt1, int paramInt2) {
     this.ingredients.add(new RecipeIngredient(paramMaterial, paramInt1, paramInt2));
     return this;
   }
-  
+
   public AltarRecipe build() {
     ItemStack itemStack = new ItemStack(this.material);
     ItemMeta itemMeta = itemStack.getItemMeta();

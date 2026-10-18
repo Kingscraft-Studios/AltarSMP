@@ -42,25 +42,25 @@ import java.util.HashMap;
 import java.util.HashSet;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.armor.netherite.NetheriteSwordCooldownTask;
-import net.kingscraft.zenixmc.altarsmp.core.EntityTypeSwitchMappings;
+import net.kingscraft.zenixmc.altarsmp.core.mapping.EntityTypeSwitchMappings;
 
 public class IllusionDisguiseManager implements Listener {
   public static final Map<UUID, UUID> disguisedEntityOwners;
-  
+
   public static final Map<UUID, UUID> disguisedPlayerTargets;
-  
+
   public static final Map<UUID, DisguiseEntityTask> activeDisguises;
-  
+
   public static Set<UUID> flyingDisguisePlayers;
-  
+
   public static NamespacedKey DISGUISE_BOSS_BAR_KEY;
-  
+
   public static final NamespacedKey REAL_SKIN_VALUE_KEY;
-  
+
   public static final NamespacedKey REAL_SKIN_SIGNATURE_KEY;
-  
+
   public static final NamespacedKey REAL_OLD_NAME_KEY;
-  
+
   public static void disguisePlayer(Player paramPlayer1, EntityType paramEntityType, Player paramPlayer2) {
     revealPlayer(paramPlayer1);
     Entity entity = null;
@@ -94,7 +94,7 @@ public class IllusionDisguiseManager implements Listener {
       copyMobAttributes(paramPlayer1, paramEntityType);
     } 
   }
-  
+
   public static void copyMobAttributes(Player paramPlayer, EntityType paramEntityType) {
     double d = getMobMaxHealth(paramEntityType);
     UUID uuid = paramPlayer.getUniqueId();
@@ -111,12 +111,12 @@ public class IllusionDisguiseManager implements Listener {
       Bukkit.getScheduler().runTaskLater(AltarSMP.getInstance(), () -> applyFlightBoost(paramPlayer, uuid), 5L);
     }
   }
-  
+
   @EventHandler
   public void onPlayerChangedWorld(PlayerChangedWorldEvent paramPlayerChangedWorldEvent) {
-    (new DisguiseWorldChangeTask(this, paramPlayerChangedWorldEvent)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
+    (new DisguiseWorldChangeTask(paramPlayerChangedWorldEvent)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
   }
-  
+
   @EventHandler
   public void onEntityDamageByEntity(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Player player;
@@ -144,7 +144,7 @@ public class IllusionDisguiseManager implements Listener {
       if (disguiseEntityTask.entity() instanceof LivingEntity)
         ((LivingEntity)disguiseEntityTask.entity()).swingMainHand();
     }}
-  
+
   @EventHandler
   public void onEntityDamage(EntityDamageEvent paramEntityDamageEvent) {
     Entity entity = paramEntityDamageEvent.getEntity();
@@ -167,7 +167,7 @@ public class IllusionDisguiseManager implements Listener {
     }player.damage(paramEntityDamageEvent.getDamage(), paramEntityDamageEvent.getDamageSource());
     paramEntityDamageEvent.setDamage(0.0D);
   }
-  
+
   public static void revealPlayer(Player paramPlayer) {
     DisguiseEntityTask disguiseEntityTask = activeDisguises.remove(paramPlayer.getUniqueId());
     {
@@ -200,7 +200,7 @@ public class IllusionDisguiseManager implements Listener {
         flyingDisguisePlayers.remove(uUID);
       } 
     }}
-  
+
   public static void spawnRevealParticles(Player paramPlayer) {
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.5F);
     double d = 1.5D;
@@ -214,7 +214,7 @@ public class IllusionDisguiseManager implements Listener {
       paramPlayer.getWorld().spawnParticle(Particle.DUST, paramPlayer.getLocation().add(d3, d4 + 1.0D, d5), 1, new Particle.DustOptions(Color.fromRGB(0, 0, 0), 1.0F));
     } 
   }
-  
+
   @EventHandler
   public static void onPlayerJoin(PlayerJoinEvent paramPlayerJoinEvent) {
     Player player = paramPlayerJoinEvent.getPlayer();
@@ -224,18 +224,18 @@ public class IllusionDisguiseManager implements Listener {
           player.hidePlayer((Plugin)AltarSMP.getInstance(), player1); 
       }} 
   }
-  
+
   public static EntityType getDisguisedEntityType(Player paramPlayer) {
     DisguiseEntityTask disguiseEntityTask = activeDisguises.get(paramPlayer.getUniqueId());
     {
-    
+
     }return (disguiseEntityTask == null) ? null : disguiseEntityTask.entity().getType();
   }
-  
+
   public static boolean isDisguised(Player paramPlayer) {
     return activeDisguises.containsKey(paramPlayer.getUniqueId());
   }
-  
+
   public static void disguiseIntoPlayer(Player paramPlayer, String paramString) {
     paramPlayer.setDisplayName(paramString);
     ProfileProperty profileProperty = getTextureProperty(paramPlayer.getPlayerProfile());
@@ -296,7 +296,7 @@ public class IllusionDisguiseManager implements Listener {
         player.showPlayer((Plugin)AltarSMP.getInstance(), paramPlayer);
       } 
   }
-  
+
   public static ProfileProperty getTextureProperty(PlayerProfile paramPlayerProfile) {
     for (ProfileProperty profileProperty : paramPlayerProfile.getProperties()) {
       {
@@ -305,7 +305,7 @@ public class IllusionDisguiseManager implements Listener {
       }} 
     return null;
   }
-  
+
   public static void applyPlayerProfile(Player paramPlayer, String paramString, ProfileProperty paramProfileProperty) {
     PlayerProfile playerProfile = AltarSMP.getInstance().getServer()
             .createProfile(paramPlayer.getUniqueId(), paramString);
@@ -321,14 +321,14 @@ public class IllusionDisguiseManager implements Listener {
       player.showPlayer((Plugin)AltarSMP.getInstance(), paramPlayer);
     } 
   }
-  
+
   @EventHandler
   public void onPlayerRespawn(PlayerRespawnEvent paramPlayerRespawnEvent) {
     Player player = paramPlayerRespawnEvent.getPlayer();
     UUID uuid = player.getUniqueId();
     Bukkit.getScheduler().runTaskLater(AltarSMP.getInstance(), () -> resetPlayerAttributes(player, uuid), 3L);
   }
-  
+
   @EventHandler
   public void onPlayerToggleFlight(PlayerToggleFlightEvent paramPlayerToggleFlightEvent) {
     Player player = paramPlayerToggleFlightEvent.getPlayer();
@@ -346,7 +346,7 @@ public class IllusionDisguiseManager implements Listener {
       player.setVelocity(player.getVelocity().setY(0.5D));
     } 
   }
-  
+
   public static double getMobMaxHealth(EntityType paramEntityType) {
     return switch (EntityTypeSwitchMappings.ENTITY_TYPE_MAPPING[paramEntityType.ordinal()]) {
       case 1, 2, 3 -> 6.0D;
@@ -361,7 +361,7 @@ public class IllusionDisguiseManager implements Listener {
       default -> 20.0D;
     };
   }
-  
+
   public static boolean canMobFly(EntityType paramEntityType) {
     if (paramEntityType != EntityType.BAT) {
       if (paramEntityType != EntityType.PARROT) {
@@ -384,7 +384,7 @@ public class IllusionDisguiseManager implements Listener {
     }
     return true;
   }
-  
+
   public static double getMobScale(EntityType paramEntityType) {
     return switch (EntityTypeSwitchMappings.ENTITY_TYPE_MAPPING[paramEntityType.ordinal()]) {
       case 1, 2, 3 -> 0.5D;
@@ -395,7 +395,7 @@ public class IllusionDisguiseManager implements Listener {
       default -> 1.0D;
     };
   }
-  
+
   public static void resetPlayerAttributes(Player paramPlayer, UUID paramUUID) {
     {
       if (isDisguised(paramPlayer))
@@ -407,7 +407,7 @@ public class IllusionDisguiseManager implements Listener {
     paramPlayer.setFlying(false);
     flyingDisguisePlayers.remove(paramUUID);
   }
-  
+
   public static void completePlayerProfileLookup(PlayerProfile paramPlayerProfile, String paramString, Player paramPlayer) {
     try {
       paramPlayerProfile.complete(true);
@@ -417,7 +417,7 @@ public class IllusionDisguiseManager implements Listener {
     String str = paramPlayerProfile.getName() != null ? paramPlayerProfile.getName() : paramString;
     AltarSMP.getInstance().getServer().getScheduler().runTask(AltarSMP.getInstance(), () -> applyResolvedPlayerProfile(paramPlayer, profileProperty, paramString, str));
   }
-  
+
   public static void applyResolvedPlayerProfile(Player paramPlayer, ProfileProperty paramProfileProperty, String paramString1, String paramString2) {
     {
       if (!paramPlayer.isOnline())
@@ -430,7 +430,7 @@ public class IllusionDisguiseManager implements Listener {
     }
     applyPlayerProfile(paramPlayer, paramString2, paramProfileProperty);
   }
-  
+
   public static void applyFlightBoost(Player paramPlayer, UUID paramUUID) {
     {
       if (paramPlayer.isOnline()) {

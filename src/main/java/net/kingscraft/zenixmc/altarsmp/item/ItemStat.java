@@ -1,12 +1,13 @@
 package net.kingscraft.zenixmc.altarsmp.item;
 
-import net.kyori.adventure.text.Component;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
+import net.kyori.adventure.text.Component;
+
 public interface ItemStat {
-  public Component label();
-  
-  public String key();
+  Component label();
+
+  String key();
 }
 
 

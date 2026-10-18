@@ -83,11 +83,11 @@ public class BloodLustKillTracker {
     this.config.set(uuid.toString() + ".kills", Integer.valueOf(killCount));
     saveDataFile();
   }
-  
+
   public void resetKillCount(Player player) {
     setKillCount(player, 0);
   }
-  
+
   public void saveDataFile() {
     try {
       this.config.save(this.dataFile);
@@ -96,7 +96,7 @@ public class BloodLustKillTracker {
       iOException.printStackTrace();
     } 
   }
-  
+
   public void flush() {
     saveDataFile();
   }

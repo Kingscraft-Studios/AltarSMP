@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.WorldGuardHook;
+import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 class BloodHookProjectileTask extends BukkitRunnable {
@@ -91,9 +91,6 @@ class BloodHookProjectileTask extends BukkitRunnable {
     }
   }
 
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
 }
 
 

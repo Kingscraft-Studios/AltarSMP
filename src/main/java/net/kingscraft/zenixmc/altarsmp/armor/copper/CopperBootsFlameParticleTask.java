@@ -8,35 +8,26 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class CopperBootsFlameParticleTask extends BukkitRunnable {
   public final CopperBootsSpeedAbility ability;
-  
+
   public CopperBootsFlameParticleTask(CopperBootsSpeedAbility copperBootsSpeedAbility) {
         this.ability = copperBootsSpeedAbility;
     }
-  
+
   public void run() {
-    try {
-      if (!this.ability.enableFireResistance)
-        return; 
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+    if (!this.ability.enableFireResistance)
+      return; 
+
     for (Player player : this.ability.copperBootsPlayers) {
       if (player != null) {
-        try {
-          if (!player.isOnline())
-            continue; 
-        } catch (MatchException matchException) {
-          throw a(null);
-        } 
+        if (!player.isOnline())
+          continue; 
+
         Location location = player.getLocation();
         player.getWorld().spawnParticle(Particle.FLAME, location.getX(), location.getY() + 0.2D, location.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
       } 
     } 
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

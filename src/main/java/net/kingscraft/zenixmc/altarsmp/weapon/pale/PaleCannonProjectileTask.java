@@ -13,17 +13,17 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class PaleCannonProjectileTask extends BukkitRunnable {
   public int ticks;
-  
+
   final int MAX_DISTANCE = AltarSMP.getInstance().getConfig().getInt("paleMaxDistance", 500);
-  
+
   public Vector velocity;
-  
+
   final double GRAVITY = AltarSMP.getInstance().getConfig().getDouble("paleGravity", 0.0025D);
-  
+
   public final Vector initialVelocity;
-  
+
   public final ItemDisplay projectileDisplay;
-  
+
   public final Player player;
 
 
@@ -34,7 +34,7 @@ class PaleCannonProjectileTask extends BukkitRunnable {
         this.ticks = 0;
         this.velocity = this.initialVelocity.clone();
     }
-  
+
   public void run() {
     {
       if (!this.projectileDisplay.isDead())
@@ -75,10 +75,7 @@ class PaleCannonProjectileTask extends BukkitRunnable {
     this.projectileDisplay.remove();
     cancel();
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 
 }

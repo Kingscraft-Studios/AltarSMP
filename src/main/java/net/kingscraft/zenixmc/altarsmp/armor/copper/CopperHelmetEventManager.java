@@ -16,7 +16,7 @@ import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 
 public class CopperHelmetEventManager implements CommandExecutor, Listener {
   public int eventCounter = 0;
-  
+
   public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
     Player player;
     if (paramCommandSender instanceof Player) {
@@ -29,7 +29,7 @@ public class CopperHelmetEventManager implements CommandExecutor, Listener {
     player.sendMessage(String.valueOf(ChatColor.GOLD) + "Use /altar spawn copperhelmet to spawn the altar for copper helmet");
     return false;
   }
-  
+
   public void startHelmetEvent() {
     int i = AltarSMP.getInstance().getConfig().getInt("helmetEventAnnouncePeriod", 60);
     int j = AltarSMP.getInstance().getConfig().getInt("helmetEventFragmentGivePeriod", 30);
@@ -37,7 +37,7 @@ public class CopperHelmetEventManager implements CommandExecutor, Listener {
     (new CopperHelmetFragmentTask(this)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, (j * 20));
     (new CopperHelmetFragmentAnnouncementTask(this)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, (i * 20));
   }
-  
+
   public String getWorldDisplayName(World paramWorld) {
     String str = paramWorld.getName();
     int b = -1;
@@ -67,7 +67,7 @@ public class CopperHelmetEventManager implements CommandExecutor, Listener {
       } 
     }return paramWorld.getName();
   }
-  
+
   public boolean isHelmetFragment(ItemStack paramItemStack) {
     return AltarSMP.areSimilar(paramItemStack, CustomItemRegistry.getHelmetShard());
   }

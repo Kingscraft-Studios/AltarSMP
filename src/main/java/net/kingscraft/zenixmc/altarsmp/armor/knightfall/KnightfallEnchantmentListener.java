@@ -13,89 +13,53 @@ import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 
 public class KnightfallEnchantmentListener implements Listener {
   public static boolean areMatchingItems(ItemStack paramItemStack1, ItemStack paramItemStack2) {
-    try {
-      if (paramItemStack1 != null) {
-        try {
-          if (paramItemStack2 == null)
-            return false; 
-        } catch (MatchException matchException) {
-          throw a(null);
-        } 
-      } else {
-        return false;
-      } 
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
-    try {
-      if (paramItemStack1.getType() != paramItemStack2.getType())
+    if (paramItemStack1 != null) {
+      if (paramItemStack2 == null)
         return false; 
-    } catch (MatchException matchException) {
-      throw a(null);
+
+    } else {
+      return false;
     } 
+
+    if (paramItemStack1.getType() != paramItemStack2.getType())
+      return false; 
+
     ItemMeta itemMeta1 = paramItemStack1.getItemMeta();
     ItemMeta itemMeta2 = paramItemStack2.getItemMeta();
-    try {
-      if (itemMeta1 == null)
-        try {
-          if (itemMeta2 == null)
-            return true; 
-        } catch (MatchException matchException) {
-          throw a(null);
-        }  
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
-    try {
-      if (itemMeta1 != null) {
-        try {
-          if (itemMeta2 == null)
-            return false; 
-        } catch (MatchException matchException) {
-          throw a(null);
-        } 
-      } else {
-        return false;
-      } 
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
-    try {
-      if (!paramItemStack1.getItemMeta().getDisplayName().equals(paramItemStack2.getItemMeta().getDisplayName()))
+    if (itemMeta1 == null)
+      {
+        if (itemMeta2 == null)
+          return true; 
+      }  
+
+    if (itemMeta1 != null) {
+      if (itemMeta2 == null)
         return false; 
-    } catch (MatchException matchException) {
-      throw a(null);
+
+    } else {
+      return false;
     } 
-    try {
-      if (itemMeta1.hasCustomModelData())
-        try {
-          if (itemMeta2.hasCustomModelData()) {
-            try {
-            
-            } catch (MatchException matchException) {
-              throw a(null);
-            } 
-            return (itemMeta1.getCustomModelData() == itemMeta2.getCustomModelData());
-          } 
-        } catch (MatchException matchException) {
-          throw a(null);
-        }  
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
-    try {
-      if (!itemMeta1.hasCustomModelData())
-        try {
-          if (!itemMeta2.hasCustomModelData());
-        } catch (MatchException matchException) {
-          throw a(null);
-        }  
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+
+    if (!paramItemStack1.getItemMeta().getDisplayName().equals(paramItemStack2.getItemMeta().getDisplayName()))
+      return false; 
+
+    if (itemMeta1.hasCustomModelData())
+      {
+        if (itemMeta2.hasCustomModelData()) {
+
+
+          return (itemMeta1.getCustomModelData() == itemMeta2.getCustomModelData());
+        } 
+      }  
+
+    if (!itemMeta1.hasCustomModelData())
+      {
+        if (!itemMeta2.hasCustomModelData());
+      }  
+
     return false;
   }
-  
+
   @EventHandler
   public void onEnchantItem(EnchantItemEvent paramEnchantItemEvent) {
     ItemStack itemStack = paramEnchantItemEvent.getItem();
@@ -112,7 +76,7 @@ public class KnightfallEnchantmentListener implements Listener {
       paramEnchantItemEvent.setCancelled(true);
     }
   }
-  
+
   @EventHandler
   public void onPrepareAnvil(PrepareAnvilEvent paramPrepareAnvilEvent) {
     ItemStack itemStack = paramPrepareAnvilEvent.getResult();
@@ -135,10 +99,7 @@ public class KnightfallEnchantmentListener implements Listener {
       paramPrepareAnvilEvent.setResult(itemStack);
     }
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

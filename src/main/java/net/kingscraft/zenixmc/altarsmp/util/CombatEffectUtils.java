@@ -16,15 +16,15 @@ public class CombatEffectUtils implements Listener {
     spawnDualParticleRings(paramLivingEntity, paramParticle, paramObject, null, null, null, paramFloat, false);
     spawnDualParticleRings(paramLivingEntity, paramParticle, paramObject, null, null, null, paramFloat, true);
   }
-  
+
   public static void spawnDualParticleRings(LivingEntity paramLivingEntity, Particle paramParticle1, Particle paramParticle2, Sound paramSound, float paramFloat) {
     spawnDualParticleRings(paramLivingEntity, paramParticle1, null, paramParticle2, null, paramSound, paramFloat);
   }
-  
+
   public static void spawnDualParticleRings(LivingEntity paramLivingEntity, Particle paramParticle1, Object paramObject1, Particle paramParticle2, Object paramObject2, Sound paramSound, float paramFloat) {
     spawnDualParticleRings(paramLivingEntity, paramParticle1, paramObject1, paramParticle2, paramObject2, paramSound, paramFloat, ThreadLocalRandom.current().nextBoolean());
   }
-  
+
   public static void spawnDualParticleRings(LivingEntity paramLivingEntity, Particle paramParticle1, Object paramObject1, Particle paramParticle2, Object paramObject2, Sound paramSound, float paramFloat, boolean paramBoolean) {
     paramLivingEntity.getWorld().playSound(paramLivingEntity.getLocation(), paramSound, 1.0F, paramFloat);
     double d = 1.5D;
@@ -44,19 +44,13 @@ public class CombatEffectUtils implements Listener {
         vector = vector1.clone().multiply(d2).add(vector3.clone().multiply(d3)).add(vector2.clone().multiply(d3));
       } 
       Location location1 = location.clone().add(vector.multiply(d));
-      try {
-        world.spawnParticle(paramParticle1, location1, 1, 0.0D, 0.0D, 0.0D, 0.0D, paramObject1);
-        if (paramParticle2 != null)
-          world.spawnParticle(paramParticle2, location1, 1, 0.0D, 0.0D, 0.0D, 0.0D, paramObject2); 
-      } catch (MatchException matchException) {
-        throw a(null);
-      } 
+      world.spawnParticle(paramParticle1, location1, 1, 0.0D, 0.0D, 0.0D, 0.0D, paramObject1);
+      if (paramParticle2 != null)
+        world.spawnParticle(paramParticle2, location1, 1, 0.0D, 0.0D, 0.0D, 0.0D, paramObject2); 
+
     } 
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

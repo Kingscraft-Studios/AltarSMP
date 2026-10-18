@@ -28,10 +28,9 @@ import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.core.WorldGuardHook;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
-import net.kingscraft.zenixmc.altarsmp.task.OrbitalStrikeProjectileTask;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 import net.kingscraft.zenixmc.altarsmp.weapon.vulcan.VulcanGauntletAbility;
 
@@ -41,7 +40,7 @@ public class StrikerBowAbility implements Listener {
   static {
     activeOrbitalShotPlayers = new HashSet<>();
   }
-  
+
   public static ItemStack createStrikerProjectileItem() {
     ItemStack itemStack = new ItemStack(Material.RED_CONCRETE);
     ItemMeta itemMeta = itemStack.getItemMeta();
@@ -49,7 +48,7 @@ public class StrikerBowAbility implements Listener {
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
-  
+
   @EventHandler
   public void onStrikerBowProjectileHit(ProjectileHitEvent paramProjectileHitEvent) {
     Player player;
@@ -77,7 +76,7 @@ public class StrikerBowAbility implements Listener {
         activateStabShot(player, paramProjectileHitEvent.getEntity().getLocation());
       } 
     }}
-  
+
   public static boolean activateStabShot(Player paramPlayer, Location paramLocation) {
     {
       if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "stabShotCooldown"))
@@ -100,7 +99,7 @@ public class StrikerBowAbility implements Listener {
     (new StabShotChargeTask(paramLocation, paramPlayer, i, itemDisplay, world, j)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
     return true;
   }
-  
+
   public static boolean activateOrbitalShot(Player paramPlayer, Location paramLocation) {
     {
       if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "orbitalShotCooldown"))
@@ -126,7 +125,7 @@ public class StrikerBowAbility implements Listener {
     } 
     return true;
   }
-  
+
   public static void detonateStabShot(Location paramLocation, Player paramPlayer, int paramInt, ItemDisplay paramItemDisplay) {
     Location location;
     double d = AltarSMP.getInstance().getConfig().getDouble("stabShotDamage", 8.0D);
@@ -172,7 +171,7 @@ public class StrikerBowAbility implements Listener {
     } 
     hashSet.clear();
   }
-  
+
   public static void createStabShotShockwave(Location paramLocation) {
     int c = 360;
     double d1 = 0;
@@ -189,7 +188,7 @@ public class StrikerBowAbility implements Listener {
       location.getWorld().spawnParticle(Particle.CLOUD, d4, d5, d6, 0, d7, d8, d9, 6.0E-7D);
     } 
   }
-  
+
   public static void spawnStabShotDebris(Location paramLocation) {
     HashSet<ItemDisplay> hashSet = new HashSet();
     HashMap<Object, Object> hashMap = new HashMap<>();
@@ -206,7 +205,7 @@ public class StrikerBowAbility implements Listener {
       {
         if (b < 50) {
           {
-          
+
           }Material material = (b % 2 == 0) ? material1 : material2;
           if (!material.isItem())
             material = Material.STONE; 

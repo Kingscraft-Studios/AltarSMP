@@ -7,25 +7,19 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class NetheriteChestplateResistanceTask extends BukkitRunnable {
   public final NetheriteChestplateComboAbility ability;
-  
+
   public NetheriteChestplateResistanceTask(NetheriteChestplateComboAbility netheriteChestplateComboAbility) {
         this.ability = netheriteChestplateComboAbility;
     }
-  
+
   public void run() {
     for (Player player : Bukkit.getOnlinePlayers()) {
-      try {
-        if (NetheriteChestplateComboAbility.hasCustomNetheriteChestplate(player))
-          this.ability.applyResistance(player);
-      } catch (MatchException matchException) {
-        throw a(null);
-      } 
+      if (NetheriteChestplateComboAbility.hasCustomNetheriteChestplate(player))
+        this.ability.applyResistance(player);
+
     } 
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

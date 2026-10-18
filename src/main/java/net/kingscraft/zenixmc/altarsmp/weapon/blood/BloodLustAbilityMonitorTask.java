@@ -7,14 +7,14 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BloodLustAbilityMonitorTask extends BukkitRunnable {
   public final BloodLustKillTracker killTracker;
-  
+
   public final BloodLustAbilityListener abilityListener;
-  
+
   public BloodLustAbilityMonitorTask(BloodLustAbilityListener bloodLustAbilityListener, BloodLustKillTracker paramBloodLustKillTracker) {
         this.abilityListener = bloodLustAbilityListener;
         this.killTracker = paramBloodLustKillTracker;
     }
-  
+
   public void run() {
     for (Player player : Bukkit.getOnlinePlayers()) {
       boolean flag = BloodLustAbilityListener.isHoldingBloodlust(player);
@@ -38,10 +38,7 @@ class BloodLustAbilityMonitorTask extends BukkitRunnable {
       } 
     } 
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

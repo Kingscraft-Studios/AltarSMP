@@ -9,43 +9,33 @@ import net.kingscraft.zenixmc.altarsmp.util.FloatingTextEffectUtils;
 
 class SolarLeapParticleTask extends BukkitRunnable {
   public int ticks;
-  
+
   public final Player player;
-  
+
   public SolarLeapParticleTask(Player paramPlayer) {
         this.player = paramPlayer;
         this.ticks = 0;
     }
-  
+
   public void run() {
-    try {
-      if (!this.player.isOnGround())
-        try {
-          if (!this.player.isInWater())
-            try {
-              if (!this.player.isInLava()) {
-                Location location = this.player.getLocation();
-                FloatingTextEffectUtils.spawnAnimatedTextEffect(location, 1, Color.YELLOW, Color.YELLOW, 0.0D, 1, 20, 0, true, "⭐", 10, 20);
-                this.ticks++;
-                return;
-              } 
-              cancel();
+    if (!this.player.isOnGround())
+      {
+        if (!this.player.isInWater())
+          {
+            if (!this.player.isInLava()) {
+              Location location = this.player.getLocation();
+              FloatingTextEffectUtils.spawnAnimatedTextEffect(location, 1, Color.YELLOW, Color.YELLOW, 0.0D, 1, 20, 0, true, "⭐", 10, 20);
+              this.ticks++;
               return;
-            } catch (MatchException matchException) {
-              throw a(null);
-            }  
-        } catch (MatchException matchException) {
-          throw a(null);
-        }  
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+            } 
+            cancel();
+            return;
+          }  
+      }  
+
     cancel();
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

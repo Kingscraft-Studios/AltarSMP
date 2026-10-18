@@ -10,24 +10,23 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class ShadowLeapTask extends BukkitRunnable {
   public double distanceTravelled;
-  
+
   public Location currentLocation;
-  
+
   final double leapSpeed = AltarSMP.getInstance().getConfig().getDouble("ShadowBladeLeapSpeed", 2.0D);
-  
+
   public final Location startLocation;
-  
+
   public final Player player;
-  
-  
-  
+
+
   public ShadowLeapTask(Location paramLocation, Player paramPlayer) {
         this.startLocation = paramLocation;
         this.player = paramPlayer;
         this.distanceTravelled = 0.0;
         this.currentLocation = this.startLocation.clone();
     }
-  
+
   public void run() {
     {
       if (!ShadowBladeAbility.leapLocations.containsKey(this.player.getUniqueId())) {
@@ -69,10 +68,7 @@ class ShadowLeapTask extends BukkitRunnable {
     this.currentLocation.getWorld().spawnParticle(Particle.SQUID_INK, this.currentLocation, 3, 0.1D, 0.1D, 0.1D, 0.01D);
     this.currentLocation.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, this.currentLocation, 2, 0.05D, 0.05D, 0.05D, 0.02D);
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 
 }

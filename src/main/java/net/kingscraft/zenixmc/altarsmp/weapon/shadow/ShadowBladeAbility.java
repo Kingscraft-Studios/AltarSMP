@@ -28,36 +28,35 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.core.WorldGuardHook;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 import net.kingscraft.zenixmc.altarsmp.util.CombatEffectUtils;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 public class ShadowBladeAbility implements Listener {
   public static int leapCooldown;
-  
+
   public static int daggerCooldown;
-  
+
   public static final HashMap<UUID, Location> leapLocations;
-  
+
   public static final HashMap<UUID, BukkitRunnable> leapTasks;
-  
+
   private Map<UUID, Integer> backstabCounts = new HashMap<>();
-  
+
   private Map<UUID, Long> lastBackstabTimes = new HashMap<>();
-  
-  
-  
+
+
   public ShadowBladeAbility() {
     (new ShadowBladePassiveTask(this)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 20L);
   }
-  
+
   public static boolean hasShadowBlade(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
     return AltarSMP.areSimilar(itemStack, CustomItemRegistry.getShadowBlade());
   }
-  
+
   public static void activateShadowLeap(Player paramPlayer) {
     {
       if (leapLocations.containsKey(paramPlayer.getUniqueId()))
@@ -95,7 +94,7 @@ public class ShadowBladeAbility implements Listener {
     leapLocations.put(paramPlayer.getUniqueId(), location.clone());
     shadowLeapTask.runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static void spawnShadowParticles(Player paramPlayer, Location paramLocation) {
     {
       if (paramLocation == null)
@@ -110,7 +109,7 @@ public class ShadowBladeAbility implements Listener {
     } 
     (new ShadowLeapTeleportTask(paramPlayer, paramLocation)).runTaskLater((Plugin)AltarSMP.getInstance(), 5L);
   }
-  
+
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent paramPlayerInteractEvent) {
     Player player = paramPlayerInteractEvent.getPlayer();
@@ -157,11 +156,11 @@ public class ShadowBladeAbility implements Listener {
       paramPlayerInteractEvent.setCancelled(true);
     }
   }
-  
+
   public static void spawnBackstabEffect(Player paramPlayer) {
     CombatEffectUtils.playSoundAndParticleEffect((LivingEntity)paramPlayer, Particle.DUST, new Particle.DustOptions(Color.BLACK, 1.0F), (Sound)null, 1.0F);
   }
-  
+
   public static void activateShadowDaggers(Player paramPlayer) {
     {
       if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "daggers"))
@@ -192,13 +191,13 @@ public class ShadowBladeAbility implements Listener {
         }} 
     } 
   }
-  
+
   public void recordBackstab(Player paramPlayer) {
     int i = getBackstabCount(paramPlayer);
     this.backstabCounts.put(paramPlayer.getUniqueId(), Integer.valueOf(i + 1));
     this.lastBackstabTimes.put(paramPlayer.getUniqueId(), Long.valueOf(System.currentTimeMillis()));
   }
-  
+
   public int getBackstabCount(Player paramPlayer) {
     long l = System.currentTimeMillis();
     {
@@ -208,7 +207,7 @@ public class ShadowBladeAbility implements Listener {
             this.backstabCounts.put(paramPlayer.getUniqueId(), Integer.valueOf(0));
         }}return ((Integer)this.backstabCounts.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(0))).intValue();
   }
-  
+
   @EventHandler
   public void onEntityDamageByEntity(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Player player;
@@ -231,17 +230,17 @@ public class ShadowBladeAbility implements Listener {
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.0F, 0.1F);
       } 
     }}
-  
+
   public static boolean isBackstab(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Entity entity1 = paramEntityDamageByEntityEvent.getEntity();
     Entity entity2 = paramEntityDamageByEntityEvent.getDamager();
     Vector vector1 = entity1.getLocation().getDirection().setY(0).normalize();
     Vector vector2 = entity2.getLocation().toVector().subtract(entity1.getLocation().toVector()).setY(0).normalize();
     {
-    
+
     }return (vector1.dot(vector2) < -0.5D);
   }
-  
+
   public static void performBackstab(Entity paramEntity, Player paramPlayer) {
     {
       if (WorldGuardHook.isBlocked(paramEntity.getLocation()))

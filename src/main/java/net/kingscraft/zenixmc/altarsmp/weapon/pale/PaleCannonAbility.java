@@ -32,23 +32,23 @@ import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 import net.kingscraft.zenixmc.altarsmp.weapon.vulcan.VulcanGauntletAbility;
 
 public class PaleCannonAbility implements Listener {
   public AltarSMP plugin;
-  
+
   public static int COOLDOWN;
 
   static {
     COOLDOWN = AltarSMP.getInstance().getConfig().getInt("palecannonCooldown", 30);
   }
-  
+
   public PaleCannonAbility(AltarSMP paramAltarSMP) {
     this.plugin = paramAltarSMP;
   }
-  
+
   public static boolean isPaleCannon(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
     {
@@ -68,10 +68,10 @@ public class PaleCannonAbility implements Listener {
       if (!itemMeta.hasCustomModelData())
         return false; 
     }{
-    
+
     }return (itemMeta.getCustomModelData() == 2);
   }
-  
+
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent paramPlayerInteractEvent) {
     Player player = paramPlayerInteractEvent.getPlayer();
@@ -116,7 +116,7 @@ public class PaleCannonAbility implements Listener {
     }paramPlayerInteractEvent.setCancelled(true);
     activatePaleCannon(player);
   }
-  
+
   public static ItemStack createPaleRootsItem() {
     ItemStack itemStack = new ItemStack(Material.PALE_OAK_LOG);
     ItemMeta itemMeta = itemStack.getItemMeta();
@@ -124,14 +124,14 @@ public class PaleCannonAbility implements Listener {
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
-  
+
   public static void spawnPaleRoots(Player paramPlayer) {
     ArrayList arrayList = new ArrayList();
     int i = AltarSMP.getInstance().getConfig().getInt("paleRootsCount", 12);
     int j = AltarSMP.getInstance().getConfig().getInt("paleRootsDamage", 3);
     (new PaleRootsGrowthTask(paramPlayer, arrayList, i, j)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public void activatePaleCannon(Player paramPlayer) {
     {
       if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "palecannon"))
@@ -152,7 +152,7 @@ public class PaleCannonAbility implements Listener {
     Vector vector2 = vector1.multiply(d);
     (new PaleCannonProjectileTask(this, vector2, itemDisplay, paramPlayer)).runTaskTimer((Plugin)this.plugin, 0L, 1L);
   }
-  
+
   public static void detonatePaleCannon(Location paramLocation, Player paramPlayer) {
     paramLocation = VulcanGauntletAbility.findSafeExplosionLocation(paramLocation, 3);
     World world = paramLocation.getWorld();

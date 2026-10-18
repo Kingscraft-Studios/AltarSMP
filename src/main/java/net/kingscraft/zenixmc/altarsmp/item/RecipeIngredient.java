@@ -7,29 +7,29 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class RecipeIngredient {
   public final Material material;
-  
+
   public final int amount;
-  
+
   public final int customModelData;
-  
+
   public RecipeIngredient(Material paramMaterial, int paramInt1, int paramInt2) {
     this.material = paramMaterial;
     this.amount = paramInt1;
     this.customModelData = paramInt2;
   }
-  
+
   public Material getMaterial() {
     return this.material;
   }
-  
+
   public int getAmount() {
     return this.amount;
   }
-  
+
   public int getCustomModelData() {
     return this.customModelData;
   }
-  
+
   public boolean hasCustomModelData() {
     return this.customModelData > 0;
   }

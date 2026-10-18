@@ -13,11 +13,11 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class TrustManager {
   private File file = new File(AltarSMP.getInstance().getDataFolder(), a);
-  
+
   public static FileConfiguration config;
-  
+
   private static final String a = "trusts.yml";
-  
+
   public TrustManager() {
     if (!this.file.exists())
       try {
@@ -27,34 +27,34 @@ public class TrustManager {
       }  
     config = (FileConfiguration)YamlConfiguration.loadConfiguration(this.file);
   }
-  
+
   public void reload() {
     config = (FileConfiguration)YamlConfiguration.loadConfiguration(this.file);
   }
-  
+
   public void addTrust(Player paramPlayer1, Player paramPlayer2) {
     Set<String> set = getTrustedPlayers(paramPlayer1);
     set.add(paramPlayer2.getUniqueId().toString());
     config.set(paramPlayer1.getUniqueId().toString(), new ArrayList<>(set));
     save();
   }
-  
+
   public void removeTrust(Player paramPlayer1, Player paramPlayer2) {
     Set<String> set = getTrustedPlayers(paramPlayer1);
     set.remove(paramPlayer2.getUniqueId().toString());
     config.set(paramPlayer1.getUniqueId().toString(), new ArrayList<>(set));
     save();
   }
-  
+
   public static Set<String> getTrustedPlayers(Player paramPlayer) {
     List<? extends String> list = config.getStringList(paramPlayer.getUniqueId().toString());
     return new HashSet<>(list);
   }
-  
+
   public static boolean isTrusted(Player paramPlayer1, Player paramPlayer2) {
     return getTrustedPlayers(paramPlayer1).contains(paramPlayer2.getUniqueId().toString());
   }
-  
+
   public void save() {
     try {
       config.save(this.file);
@@ -62,7 +62,7 @@ public class TrustManager {
       iOException.printStackTrace();
     } 
   }
-  
+
 }
 
 /* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b9.class

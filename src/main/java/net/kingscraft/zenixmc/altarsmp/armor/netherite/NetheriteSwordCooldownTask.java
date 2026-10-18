@@ -7,26 +7,20 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class NetheriteSwordCooldownTask extends BukkitRunnable {
   public final Player player;
-  
+
   public NetheriteSwordCooldownTask(Player paramPlayer) {
         this.player = paramPlayer;
     }
-  
+
   public void run() {
-    try {
-      if (!this.player.isOnline()) {
-        cancel();
-        return;
-      } 
-    } catch (MatchException matchException) {
-      throw a(null);
+    if (!this.player.isOnline()) {
+      cancel();
+      return;
     } 
+
     this.player.setCooldown(Material.NETHERITE_SWORD, 100);
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

@@ -24,15 +24,15 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class CopperLeggingsShockwaveAbility implements Listener {
   public final AltarSMP plugin;
-  
+
   private final Map<UUID, Double> jumpStartHeights = new HashMap<>();
-  
+
   private final Map<UUID, Boolean> You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c = new HashMap<>();
-  
+
   private final Map<UUID, Long> jumpStartTimestamps = new HashMap<>();
-  
+
   public static final boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e;
-  
+
   public static double MAX_FALL_DAMAGE;
 
   static {
@@ -43,7 +43,7 @@ public class CopperLeggingsShockwaveAbility implements Listener {
   public CopperLeggingsShockwaveAbility(AltarSMP paramAltarSMP) {
     this.plugin = paramAltarSMP;
   }
-  
+
   public static boolean hasCustomCopperLeggings(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getLeggings();
     {
@@ -63,10 +63,10 @@ public class CopperLeggingsShockwaveAbility implements Listener {
       if (!itemMeta.hasCustomModelData())
         return false; 
     }{
-    
+
     }return (itemMeta.getCustomModelData() == 1);
   }
-  
+
   @EventHandler
   public void onPlayerMove(PlayerMoveEvent paramPlayerMoveEvent) {
     {
@@ -126,7 +126,7 @@ public class CopperLeggingsShockwaveAbility implements Listener {
         }}
     clearPlayerTracking(uUID);
   }
-  
+
   @EventHandler
   public void onEntityDamage(EntityDamageEvent paramEntityDamageEvent) {
     Player player;
@@ -154,13 +154,13 @@ public class CopperLeggingsShockwaveAbility implements Listener {
     }
     triggerShockwave(player, location, d);
   }
-  
+
   public void clearPlayerTracking(UUID paramUUID) {
     this.jumpStartHeights.remove(paramUUID);
     this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c.remove(paramUUID);
     this.jumpStartTimestamps.remove(paramUUID);
   }
-  
+
   public void triggerShockwave(Player paramPlayer, Location paramLocation, double paramDouble) {
     World world = paramLocation.getWorld();
     if (world == null) {
@@ -218,7 +218,7 @@ public class CopperLeggingsShockwaveAbility implements Listener {
       }
     }
   }
-  
+
   private static void lambda$triggerShockwave$1(double paramDouble, Location paramLocation) {
     for (int i = -((int)paramDouble); i <= paramDouble; i++) {
       for (int b = -1; b <= 1; b++) {
@@ -251,7 +251,7 @@ public class CopperLeggingsShockwaveAbility implements Listener {
       } 
     } 
   }
-  
+
   private static Double lambda$onMove$0(double paramDouble, UUID paramUUID, Double paramDouble1) {
     return Double.valueOf(Math.max(paramDouble1.doubleValue(), paramDouble));
   }

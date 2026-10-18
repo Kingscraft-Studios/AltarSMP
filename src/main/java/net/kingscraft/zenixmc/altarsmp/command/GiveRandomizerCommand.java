@@ -8,13 +8,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.crazy.CrazyRandomizerListener;
+import net.kingscraft.zenixmc.altarsmp.event.crazy.CrazyRandomizerListener;
 
 public class GiveRandomizerCommand implements CommandExecutor {
   private static final String SKIP = "Player not found or not online.";
-  
+
   public GiveRandomizerCommand(CrazyRandomizerListener crazyRandomizerListener) {}
-  
+
   public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
     Player player;
     if (paramArrayOfString.length == 0) {
@@ -22,29 +22,21 @@ public class GiveRandomizerCommand implements CommandExecutor {
     } else {
       player = Bukkit.getPlayer(paramArrayOfString[0]);
     } 
-    try {
-      if (player != null)
-        try {
-          if (player.isOnline()) {
-            player.getInventory().addItem(CrazyRandomizerListener.createCrazyRandomizerItem());
-            return true;
-          } 
-          paramCommandSender.sendMessage(ChatColor.RED + SKIP);
+    if (player != null)
+      {
+        if (player.isOnline()) {
+          player.getInventory().addItem(CrazyRandomizerListener.createCrazyRandomizerItem());
           return true;
-        } catch (MatchException matchException) {
-          throw a(null);
-        }  
-    } catch (MatchException matchException) {
-      throw a(null);
-    } 
+        } 
+        paramCommandSender.sendMessage(ChatColor.RED + SKIP);
+        return true;
+      }  
+
     paramCommandSender.sendMessage(ChatColor.RED + SKIP);
     return true;
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
-  
+
+
 }
 
 /* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764cg.class

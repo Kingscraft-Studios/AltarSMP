@@ -13,23 +13,23 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class FrostScytheBladeProjectileTask extends BukkitRunnable {
   public int ticksElapsed;
-  
+
   public final Location currentLocation;
-  
+
   final double projectileSpeed = 1.5D;
-  
+
   final int maxTravelTicks = 60;
-  
+
   public final Location startLocation;
-  
+
   public final ItemDisplay bladeDisplay;
-  
+
   public final Vector direction;
-  
+
   public final FrostScytheBladeLaunchTask launchTask;
-  
+
   private static final String COMMAND_OF_ICE_DAMAGE_KEY = "commandOfIceDamage";
-  
+
   public FrostScytheBladeProjectileTask(FrostScytheBladeLaunchTask frostScytheBladeLaunchTask, Location paramLocation, ItemDisplay paramItemDisplay, Vector paramVector) {
     this.launchTask = frostScytheBladeLaunchTask;
     this.startLocation = paramLocation;
@@ -38,7 +38,7 @@ class FrostScytheBladeProjectileTask extends BukkitRunnable {
     this.direction = paramVector;
     this.ticksElapsed = 0;
   }
-  
+
   public void run() {
     if (this.bladeDisplay.isDead() || !this.bladeDisplay.isValid()) {
       cancel();
@@ -76,11 +76,8 @@ class FrostScytheBladeProjectileTask extends BukkitRunnable {
     } 
     this.ticksElapsed++;
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
-  
+
+
 }
 
 /* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764dh.class

@@ -1,33 +1,28 @@
 package net.kingscraft.zenixmc.altarsmp.armor.copper;
 
+import net.kingscraft.zenixmc.altarsmp.AltarSMP;
+
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class CopperBootsEffectRefreshTask extends BukkitRunnable {
   public final CopperBootsSpeedAbility ability;
-  
+
   public CopperBootsEffectRefreshTask(CopperBootsSpeedAbility copperBootsSpeedAbility) {
         this.ability = copperBootsSpeedAbility;
     }
-  
+
   public void run() {
     for (Player player : this.ability.copperBootsPlayers) {
       if (player != null) {
-        try {
-          if (!player.isOnline())
-            continue; 
-        } catch (MatchException matchException) {
-          throw a(null);
-        } 
+        if (!player.isOnline())
+          continue; 
+
         this.ability.updatePlayerEffects(player, false);
       } 
     } 
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 }
 
 

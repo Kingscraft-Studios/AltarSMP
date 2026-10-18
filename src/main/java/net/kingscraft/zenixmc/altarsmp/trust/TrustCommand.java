@@ -10,11 +10,11 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class TrustCommand implements CommandExecutor {
   public final TrustManager trustManager;
-  
+
   public TrustCommand(TrustManager trustManager) {
     this.trustManager = trustManager;
   }
-  
+
   public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
     {
       if (!(paramCommandSender instanceof Player)) {

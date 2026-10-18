@@ -10,20 +10,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 
 class ShadowLeapTeleportTask extends BukkitRunnable {
   public final Player player;
-  
+
   public final Location targetLocation;
-  
-  
-  
+
+
   public ShadowLeapTeleportTask(Player paramPlayer, Location paramLocation) {
         this.player = paramPlayer;
         this.targetLocation = paramLocation;
     }
-  
+
   public void run() {
     Vector vector1 = this.player.getVelocity();
     Vector vector2 = this.player.getLocation().getDirection();

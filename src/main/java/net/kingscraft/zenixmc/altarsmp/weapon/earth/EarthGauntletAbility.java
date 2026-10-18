@@ -25,32 +25,30 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.item.ItemUtility;
-import net.kingscraft.zenixmc.altarsmp.task.MudslideParticleTask;
-import net.kingscraft.zenixmc.altarsmp.task.MudslideProjectileTask;
 import net.kingscraft.zenixmc.altarsmp.weapon.meteor.MeteorStrikeLaunchTask;
 import net.kingscraft.zenixmc.altarsmp.weapon.meteor.MeteorStrikePullTask;
 
 public class EarthGauntletAbility implements Listener {
   public static int meteorStrikeCooldown;
-  
+
   public static int mudslideCooldown;
-  
+
   public static String meteorStrikeCooldownKey;
-  
+
   public static String mudslideCooldownKey;
-  
+
   public static final HashMap<UUID, LivingEntity> meteorStrikeTargets;
-  
+
   public static final int meteorUseDuration;
-  
+
   public static final double meteorStrikeKnockback;
-  
+
   public static final int meteorDamage;
-  
+
   public static HashSet<UUID> jumpCancelledPlayers;
-  
+
   public static boolean hasEarthGauntlet(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
     {
@@ -67,10 +65,10 @@ public class EarthGauntletAbility implements Listener {
       if (!itemMeta.hasCustomModelData())
         return false; 
     }{
-    
+
     }return (itemMeta.getCustomModelData() == 8);
   }
-  
+
   @EventHandler
   public static void onEntityDamage(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Player player;
@@ -103,14 +101,14 @@ public class EarthGauntletAbility implements Listener {
       CooldownManager.setCooldown(player.getUniqueId(), meteorStrikeCooldownKey, meteorStrikeCooldown);
     } 
   }
-  
+
   public static void activateMeteorStrike(Player paramPlayer) {
     paramPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 10, 3, false, false, true));
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_BREEZE_INHALE, 1.0F, 1.0F);
     (new MudslideParticleTask(paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
     (new MudslideProjectileTask(paramPlayer)).runTaskLater((Plugin)AltarSMP.getInstance(), 10L);
   }
-  
+
   public static void makeMud(Location paramLocation) {
     Block block = paramLocation.getBlock();
     if (block.getType() == Material.MUD) {
@@ -122,11 +120,11 @@ public class EarthGauntletAbility implements Listener {
       block.setBlockData(blockData);
     }, 40L);
   }
-  
+
   public static void applyMudslide(LivingEntity paramLivingEntity, Player paramPlayer) {
     (new MeteorStrikePullTask(paramLivingEntity, paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   @EventHandler
   public void onPlayerJump(PlayerJumpEvent paramPlayerJumpEvent) {
     Player player = paramPlayerJumpEvent.getPlayer();

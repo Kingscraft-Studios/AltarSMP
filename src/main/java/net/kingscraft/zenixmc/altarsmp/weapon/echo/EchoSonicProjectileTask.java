@@ -10,28 +10,27 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 class EchoSonicProjectileTask extends BukkitRunnable {
   public int ticks;
-  
+
   final int MAX_TICKS = AltarSMP.getInstance().getConfig().getInt("echoSonicThrowMax", 30);
-  
+
   public Vector velocity;
-  
+
   final double GRAVITY = AltarSMP.getInstance().getConfig().getDouble("echoSonicGravity", 0.0D);
-  
+
   public final Vector initialVelocity;
-  
+
   public final ItemDisplay projectileDisplay;
-  
+
   public final Player player;
-  
+
   public final int damage;
-  
-  
-  
+
+
   public EchoSonicProjectileTask(Vector paramVector, ItemDisplay paramItemDisplay, Player paramPlayer, int paramInt) {
         this.initialVelocity = paramVector;
         this.projectileDisplay = paramItemDisplay;
@@ -40,7 +39,7 @@ class EchoSonicProjectileTask extends BukkitRunnable {
         this.ticks = 0;
         this.velocity = this.initialVelocity.clone();
     }
-  
+
   public void run() {
     {
       if (!this.projectileDisplay.isDead())

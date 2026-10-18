@@ -8,11 +8,11 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class ShadeOrbInterpolateTask extends BukkitRunnable {
   public final List orbs;
-  
+
   public ShadeOrbInterpolateTask(List paramList) {
         this.orbs = paramList;
     }
-  
+
   public void run() {
     for (ItemDisplay itemDisplay : (Iterable<ItemDisplay>)(Iterable<?>) this.orbs) {
       itemDisplay.setInterpolationDelay(0);

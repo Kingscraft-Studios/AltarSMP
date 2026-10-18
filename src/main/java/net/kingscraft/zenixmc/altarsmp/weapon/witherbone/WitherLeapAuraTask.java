@@ -11,27 +11,26 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 class WitherLeapAuraTask extends BukkitRunnable {
   public int ticksLived;
-  
+
   public double lastY;
-  
+
   public int boneParticleTicks;
-  
+
   public final Player player;
-  
-  
-  
+
+
   public WitherLeapAuraTask(Player paramPlayer) {
         this.player = paramPlayer;
         this.ticksLived = 0;
         this.lastY = this.player.getLocation().getY();
         this.boneParticleTicks = 0;
     }
-  
+
   public void run() {
     {
       if (this.player.isOnline())
@@ -91,10 +90,7 @@ class WitherLeapAuraTask extends BukkitRunnable {
           return;
         }}cancel();
   }
-  
-  public static MatchException a(MatchException paramMatchException) {
-    return paramMatchException;
-  }
+
 
 
 }

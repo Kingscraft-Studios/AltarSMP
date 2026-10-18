@@ -14,36 +14,36 @@ import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightfallListener;
-import net.kingscraft.zenixmc.altarsmp.core.WorldGuardHook;
+import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 public class HammerProjectileTask extends BukkitRunnable {
   public double distanceTravelled;
-  
+
   public Location currentLocation;
-  
+
   public boolean hit;
-  
+
   public final Location origin;
-  
+
   public final double maxDistance;
-  
+
   public final Player thrower;
-  
+
   public final ItemDisplay display;
-  
+
   public final Vector direction;
-  
+
   public final double speed;
-  
+
   public final World world;
-  
+
   public final boolean stunShield;
-  
+
   public final int shieldStunTicks;
-  
+
   public final double damage;
-  
+
   public HammerProjectileTask(Location paramLocation, double paramDouble1, Player paramPlayer, ItemDisplay paramItemDisplay, Vector paramVector, double paramDouble2, World paramWorld, boolean paramBoolean, int paramInt, double paramDouble3) {
         this.origin = paramLocation;
         this.maxDistance = paramDouble1;
@@ -59,7 +59,7 @@ public class HammerProjectileTask extends BukkitRunnable {
         this.currentLocation = this.origin.clone();
         this.hit = false;
     }
-  
+
   public void run() {
     if (this.distanceTravelled >= this.maxDistance || this.hit || !this.thrower.isOnline()) {
       this.display.remove();

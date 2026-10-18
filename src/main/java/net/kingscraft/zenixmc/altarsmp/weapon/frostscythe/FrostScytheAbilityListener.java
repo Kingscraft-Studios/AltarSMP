@@ -32,32 +32,31 @@ import org.joml.Vector3f;
 import java.util.HashMap;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.crazy.CrazySlotsListener;
+import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.event.crazy.CrazySlotsListener;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 public class FrostScytheAbilityListener implements Listener {
   public static AltarSMP plugin;
-  
+
   public static String ICE_THROW_COOLDOWN_KEY;
-  
+
   public static String SCYTHE_THROW_COOLDOWN_KEY;
-  
+
   public static Map<UUID, Integer> throwCounts;
-  
+
   public static Map<UUID, Long> lastThrowTimestamps;
-  
+
   public static final int ICE_THROW_COOLDOWN = 23;
-  
+
   public static final int SCYTHE_THROW_COOLDOWN = 30;
-  
-  
-  
+
+
   public FrostScytheAbilityListener(AltarSMP paramAltarSMP) {
     plugin = paramAltarSMP;
   }
-  
+
   public static boolean isFrostScythe(ItemStack paramItemStack) {
     {
       if (paramItemStack.getType() != Material.NETHERITE_SWORD)
@@ -73,10 +72,10 @@ public class FrostScytheAbilityListener implements Listener {
       if (!itemMeta.hasCustomModelData())
         return false; 
     }{
-    
+
     }return (itemMeta.getCustomModelData() == 4);
   }
-  
+
   @EventHandler
   public void onEntityDamageByEntity(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     {
@@ -89,7 +88,7 @@ public class FrostScytheAbilityListener implements Listener {
     }
     throwScythe(player, paramEntityDamageByEntityEvent.getEntity().getLocation().add(0.0D, 1.0D, 0.0D));
   }
-  
+
   @EventHandler
   public void onPlayerItemConsume(PlayerItemConsumeEvent paramPlayerItemConsumeEvent) {
     {
@@ -104,7 +103,7 @@ public class FrostScytheAbilityListener implements Listener {
         } 
       } 
     }}
-  
+
   public static void spawnIceSpiralParticles(Location paramLocation, double paramDouble, boolean paramBoolean1, boolean paramBoolean2) {
     int b1 = 35;
     double d = 2.2D;
@@ -124,7 +123,7 @@ public class FrostScytheAbilityListener implements Listener {
         double d5 = (d1 - 0.5D) * d;
         d2 = Math.cos(paramDouble) * d5;
         {
-        
+
         }d3 = paramBoolean1 ? ((1.0D - d1) * d * 0.8D) : ((d1 - 1.0D) * d * 0.8D);
         d4 = Math.sin(paramDouble) * d5;
       } 
@@ -133,7 +132,7 @@ public class FrostScytheAbilityListener implements Listener {
       paramLocation.getWorld().spawnParticle(Particle.BLOCK, location, 3, 0.08D, 0.08D, 0.08D, 0.0D, Material.ICE.createBlockData());
     } 
   }
-  
+
   public static void throwScythe(Player paramPlayer, Location paramLocation) {
     int i = getThrowCount(paramPlayer);
     double d = Math.toRadians(paramPlayer.getLocation().getYaw());
@@ -159,7 +158,7 @@ public class FrostScytheAbilityListener implements Listener {
     }
     getThrowCount(paramPlayer);
   }
-  
+
   public static int getThrowCount(Player paramPlayer) {
     long l = System.currentTimeMillis();
     {
@@ -169,13 +168,13 @@ public class FrostScytheAbilityListener implements Listener {
             throwCounts.put(paramPlayer.getUniqueId(), Integer.valueOf(0));
         }}return ((Integer) throwCounts.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(0))).intValue();
   }
-  
+
   public static void incrementThrowCount(Player paramPlayer) {
     int i = getThrowCount(paramPlayer);
     throwCounts.put(paramPlayer.getUniqueId(), Integer.valueOf(i + 1));
     lastThrowTimestamps.put(paramPlayer.getUniqueId(), Long.valueOf(System.currentTimeMillis()));
   }
-  
+
   public static void launchScythe(Player paramPlayer) {
     {
       if (!AltarSMP.getInstance().getConfig().getBoolean("holdForThrowFrostScythe", true)) {
@@ -188,11 +187,11 @@ public class FrostScytheAbilityListener implements Listener {
     boolean bool = AltarSMP.getInstance().getConfig().getBoolean("scytheThrowReturnScythe", true);
     (new FrostScytheLaunchTask(paramPlayer, bool, d, i, j)).runTaskLater((Plugin)AltarSMP.getInstance(), 20L);
   }
-  
+
   public static void animateScythe(Player paramPlayer, ItemDisplay paramItemDisplay, double paramDouble) {
     (new FrostScytheReturnTask(paramPlayer, paramItemDisplay, paramDouble)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
   }
-  
+
   public static Boolean hasEmptyInventorySlot(Player paramPlayer) {
     PlayerInventory playerInventory = paramPlayer.getInventory();
     int b = 0;
@@ -208,7 +207,7 @@ public class FrostScytheAbilityListener implements Listener {
       }return Boolean.valueOf(false);
     } 
   }
-  
+
   public static void handleScytheReturn(Player paramPlayer, ItemDisplay paramItemDisplay) {
     {
       if (!paramPlayer.getWorld().equals(paramItemDisplay.getWorld()))
@@ -225,7 +224,7 @@ public class FrostScytheAbilityListener implements Listener {
         returnScytheToPlayer(paramPlayer, paramItemDisplay);
       } 
     }}
-  
+
   public static void returnScytheToPlayer(Player paramPlayer, ItemDisplay paramItemDisplay) {
     {
       if (hasEmptyInventorySlot(paramPlayer).booleanValue()) {
@@ -240,7 +239,7 @@ public class FrostScytheAbilityListener implements Listener {
         }BukkitTask bukkitTask = (new FrostScytheReturnAnimationTask(paramPlayer, paramItemDisplay)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
       } 
     }}
-  
+
   public static void activateCommandOfIce(Player paramPlayer) {
     ArrayList<ItemDisplay> arrayList = new ArrayList();
     Location location = paramPlayer.getLocation();
@@ -264,7 +263,7 @@ public class FrostScytheAbilityListener implements Listener {
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.BLOCK_TRIAL_SPAWNER_ABOUT_TO_SPAWN_ITEM, 1.0F, 2.0F);
     (new FrostScytheBladeChargingTask(arrayList, paramPlayer)).runTaskTimer((Plugin) plugin, 0L, 1L);
   }
-  
+
   public static void scheduleIceBladeLaunches(List<ItemDisplay> paramList, Player paramPlayer) {
     int[] arrayOfInt = { 0, 2, 1 };
     for (int b = 0; b < arrayOfInt.length; b++) {
@@ -273,7 +272,7 @@ public class FrostScytheAbilityListener implements Listener {
       (new FrostScytheBladeLaunchTask(paramList, i, paramPlayer)).runTaskLater((Plugin) plugin, j);
     } 
   }
-  
+
   public static void createIceExplosion(Location paramLocation, Player paramPlayer) {
     paramLocation.getWorld().spawnParticle(Particle.SNOWFLAKE, paramLocation, 30, 1.0D, 1.0D, 1.0D, 0.1D);
     paramLocation.getWorld().spawnParticle(Particle.CLOUD, paramLocation, 20, 1.0D, 1.0D, 1.0D, 0.05D);
