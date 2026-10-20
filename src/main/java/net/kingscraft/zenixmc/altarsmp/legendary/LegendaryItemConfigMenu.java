@@ -28,6 +28,7 @@ import net.kingscraft.zenixmc.altarsmp.menu.DialogBuilder;
 
 public class LegendaryItemConfigMenu implements Listener {
   public static String MENU_TITLE;
+  public static String SEASON_TWO_TITLE;
 
   private static LegendaryItemConfigMenu instance;
 
@@ -44,7 +45,7 @@ public class LegendaryItemConfigMenu implements Listener {
   }
 
   public static void openConfigMenu(Player paramPlayer) {
-    Inventory inventory = Bukkit.createInventory(null, 54, MENU_TITLE);
+    Inventory inventory = Bukkit.createInventory(null, 45, MENU_TITLE);
     ItemStack itemStack = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setDisplayName(" ");
@@ -55,47 +56,87 @@ public class LegendaryItemConfigMenu implements Listener {
         inventory.setItem(b, itemStack);
         b++;
       } 
-    }b = 45;
+    }b = 2;
     {
-      while (b < 54) {
+      while (b < 7) {
+        inventory.setItem(b, null);
+        b++;
+      } 
+    }b = 36;
+    {
+      while (b < 45) {
         inventory.setItem(b, itemStack);
         b++;
       } 
-    }inventory.setItem(49, LegendaryItemsMenu.createLegendaryItemsButton());
+    }inventory.setItem(9, itemStack);
+    inventory.setItem(18, itemStack);
+    inventory.setItem(27, itemStack);
+    inventory.setItem(17, itemStack);
+    inventory.setItem(26, itemStack);
+    inventory.setItem(35, itemStack);
+    inventory.setItem(41, LegendaryItemsMenu.createSeasonTwoWeaponsButton());
+    inventory.setItem(40, LegendaryItemsMenu.createLegendaryItemsButton());
     for (CustomItem customItem : CustomItem.values()) {
+      if (customItem.isSeasonTwo()) {
+        continue;
+      }
       inventory.addItem(new ItemStack[] { customItem.getItem() });
     } 
     paramPlayer.openInventory(inventory);
   }
 
+  public static void openSeasonTwoConfigMenu(Player paramPlayer) {
+    Inventory inventory = Bukkit.createInventory(null, 45, SEASON_TWO_TITLE);
+    LegendaryItemsMenu.decorateInventory(inventory);
+    for (CustomItem customItem : CustomItem.values()) {
+      if (!customItem.isSeasonTwo()) {
+        continue;
+      }
+      inventory.addItem(new ItemStack[] { customItem.getItem() });
+    } 
+    inventory.setItem(40, LegendaryItemsMenu.createWeaponSettingsButton());
+    paramPlayer.openInventory(inventory);
+  }
+
   @EventHandler
   public void onMenuClick(InventoryClickEvent paramInventoryClickEvent) {
-    Player player;
-    {
-      if (!paramInventoryClickEvent.getView().getTitle().equals(MENU_TITLE))
-        return; 
-    }{
-      if (paramInventoryClickEvent.getClickedInventory() != paramInventoryClickEvent.getView().getTopInventory())
-        return; 
-    }ItemStack itemStack = paramInventoryClickEvent.getCurrentItem();
+    String title = paramInventoryClickEvent.getView().getTitle();
+    boolean isMain = title.equals(MENU_TITLE);
+    boolean isSeasonTwo = title.equals(SEASON_TWO_TITLE);
+    if (!isMain && !isSeasonTwo) {
+      return;
+    }
+    if (paramInventoryClickEvent.getClickedInventory() != paramInventoryClickEvent.getView().getTopInventory()) {
+      return;
+    }
+    ItemStack itemStack = paramInventoryClickEvent.getCurrentItem();
     CustomItem customItem = CustomItem.fromItem(itemStack);
     HumanEntity humanEntity = paramInventoryClickEvent.getWhoClicked();
-    if (humanEntity instanceof Player) {
-      player = (Player)humanEntity;
-    } else {
+    if (!(humanEntity instanceof Player player)) {
       return;
-    } 
-    {
-      player.playSound((Entity)player, Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
-      paramInventoryClickEvent.setCancelled(true);
-      if (paramInventoryClickEvent.getSlot() == 49) {
+    }
+    player.playSound((Entity)player, Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
+    paramInventoryClickEvent.setCancelled(true);
+    if (itemStack != null && itemStack.getType() == Material.GRAY_STAINED_GLASS_PANE) {
+      return;
+    }
+    if (isMain) {
+      if (paramInventoryClickEvent.getSlot() == 40) {
         LegendaryItemsMenu.openLegendaryItemsMenu(player);
         return;
-      } 
-    }{
-      if (customItem == null)
-        return; 
-    }player.showDialog((DialogLike) buildWeaponDialog(customItem));
+      }
+      if (paramInventoryClickEvent.getSlot() == 41) {
+        openSeasonTwoConfigMenu(player);
+        return;
+      }
+    } else if (paramInventoryClickEvent.getSlot() == 40) {
+      openConfigMenu(player);
+      return;
+    }
+    if (customItem == null) {
+      return;
+    }
+    player.showDialog((DialogLike) buildWeaponDialog(customItem));
   }
 
   public Dialog buildWeaponDialog(CustomItem customItem) {
@@ -196,6 +237,7 @@ public class LegendaryItemConfigMenu implements Listener {
 
   static {
     MENU_TITLE = "§cʟᴇɢᴇɴᴅᴀʀɪᴇꜱ ᴄᴏɴꜰɪɢ";
+    SEASON_TWO_TITLE = "§5ꜱᴇᴀꜱᴏɴ ᴛᴡᴏ ᴄᴏɴꜰɪɢ";
   }
 
 }

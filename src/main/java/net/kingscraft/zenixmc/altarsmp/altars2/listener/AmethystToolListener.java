@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -17,6 +18,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -56,19 +58,12 @@ public final class AmethystToolListener implements Listener {
       makeToolUnbreakable(tool);
       Block origin = event.getBlock();
       if (!isValidBlock(origin.getType(), toolType)) {
-         if (toolType == ToolType.PICKAXE) {
-            event.setCancelled(true);
-            event.setDropItems(false);
-            playBreakEffects(origin);
-            breakBlockAndDrop(origin, tool, event.getPlayer().getInventory(), true);
-         } else {
-            playBreakEffects(origin);
-         }
          return;
       }
 
       event.setCancelled(true);
       event.setDropItems(false);
+      boolean smelt = toolType == ToolType.PICKAXE && !hasSilkTouch(tool);
       int limit = toolType == ToolType.AXE ? MAX_AXE_BLOCKS : MAX_PICKAXE_BLOCKS;
       final List<Block> connected = findConnectedBlocks(origin, toolType, limit);
       if (connected.isEmpty()) {
@@ -88,7 +83,7 @@ public final class AmethystToolListener implements Listener {
                      Block block = connected.get(this.index++);
                      if (isValidBlock(block.getType(), toolType)) {
                         playBreakEffects(block);
-                        breakBlockAndDrop(block, current, event.getPlayer().getInventory(), toolType == ToolType.PICKAXE);
+                        breakBlockAndDrop(block, current, event.getPlayer().getInventory(), smelt);
                      }
                   }
                } else {
@@ -105,6 +100,14 @@ public final class AmethystToolListener implements Listener {
             cancel();
          }
       }.runTaskTimer(this.plugin, 0L, 1L);
+   }
+
+   private boolean hasSilkTouch(ItemStack itemStack) {
+      if (itemStack == null) {
+         return false;
+      }
+      ItemMeta itemMeta = itemStack.getItemMeta();
+      return itemMeta != null && itemMeta.hasEnchant(Enchantment.SILK_TOUCH);
    }
 
    private ToolType getToolType(ItemStack itemStack) {
@@ -192,11 +195,18 @@ public final class AmethystToolListener implements Listener {
          return itemStack;
       }
       String name = itemStack.getType().name().toUpperCase(Locale.ROOT);
-      boolean smeltable = name.endsWith("_ORE") || itemStack.getType() == Material.ANCIENT_DEBRIS;
+      boolean smeltable = name.endsWith("_ORE") || name.startsWith("RAW_") || itemStack.getType() == Material.ANCIENT_DEBRIS;
       if (!smeltable) {
          return itemStack;
       }
       for (Recipe recipe : Bukkit.getRecipesFor(itemStack)) {
+         if (recipe instanceof CookingRecipe<?> cookingRecipe && cookingRecipe.getInputChoice().test(itemStack)) {
+            return createSmeltedItem(cookingRecipe, itemStack);
+         }
+      }
+      Iterator<Recipe> iterator = Bukkit.recipeIterator();
+      while (iterator.hasNext()) {
+         Recipe recipe = iterator.next();
          if (recipe instanceof CookingRecipe<?> cookingRecipe && cookingRecipe.getInputChoice().test(itemStack)) {
             return createSmeltedItem(cookingRecipe, itemStack);
          }

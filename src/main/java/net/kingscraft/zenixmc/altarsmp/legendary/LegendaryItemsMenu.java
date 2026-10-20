@@ -141,24 +141,13 @@ for (CustomItemType customItemType : CustomItemType.values()) {
             {
               if (paramInventoryClickEvent.getWhoClicked().isOp()) {
                 {
-                  if (paramInventoryClickEvent.getCurrentItem().getType() == Material.GRAY_STAINED_GLASS_PANE) {
-                    paramInventoryClickEvent.setCancelled(true);
-                    return;
-                  } 
+                  if (paramInventoryClickEvent.getCurrentItem().getType() == Material.GRAY_STAINED_GLASS_PANE)
+                    paramInventoryClickEvent.setCancelled(true); 
                 }{
                   if (paramInventoryClickEvent.getSlot() == 40) {
                     paramInventoryClickEvent.setCancelled(true);
                     openLegendaryItemsMenu(player);
                     player.playSound(player, Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
-                    return;
-                  } 
-                }{
-                  CustomItem seasonTwoItem = CustomItem.fromItem(paramInventoryClickEvent.getCurrentItem());
-                  if (seasonTwoItem != null && seasonTwoItem.isSeasonTwo()) {
-                    paramInventoryClickEvent.setCancelled(true);
-                    LegendaryItemConfigMenu.showConfigDialog(player, seasonTwoItem);
-                    player.playSound(player, Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
-                    return;
                   } 
                 }return;
               } 

@@ -19,23 +19,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Transformation;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.command.GiveRandomizerCommand;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
 
 public class CrazyRandomizerListener implements Listener {
-
-  public CrazyRandomizerListener() {
-    AltarSMP.getInstance().getCommand("giverandomizer").setExecutor(new GiveRandomizerCommand(this));
-  }
 
   public static ItemStack createCrazyRandomizerItem() {
     ItemStack itemStack = new ItemStack(Material.CLAY_BALL);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setCustomModelData(Integer.valueOf(4));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.GOLD) + ChatColor.BOLD.toString() + "Crazy Randomizer");
+    itemMeta.setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "Crazy Randomizer");
     itemMeta.setUnbreakable(true);
     ArrayList<String> arrayList = new ArrayList();
-    arrayList.add(String.valueOf(ChatColor.GRAY) + "Right-Click to get a random legendary!");
+    arrayList.add(ChatColor.GRAY + "Right-Click to get a random legendary!");
     itemMeta.setLore(arrayList);
     itemStack.setItemMeta(itemMeta);
     return itemStack;

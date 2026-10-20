@@ -1186,16 +1186,447 @@ public enum CustomItem {
                         )
                      ),
 
-   TIDEBREAKER(CustomItemRegistry.getTidebreaker(), true, 2.25D),
-   ANCIENTBLADE(CustomItemRegistry.getAncientBlade(), true, 2.25D) {
+   TIDEBREAKER(
+                        CustomItemRegistry.getTidebreaker(),
+                        true,
+                        2.25D,
+                        stat(
+                           StatIcons.ICON_COOLDOWN
+                              .append(Component.text(" Stormcall Cooldown")),
+                           "tidebreaker.stormcall_cooldown",
+                           1.0F,
+                           300.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_SNOWFLAKE
+                              .append(Component.text(" Stormcall Duration")),
+                           "tidebreaker.stormcall_duration",
+                           1.0F,
+                           60.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DISTANCE
+                              .append(Component.text(" Stormcall Radius")),
+                           "tidebreaker.stormcall_radius",
+                           1.0F,
+                           30.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DAMAGE
+                              .append(Component.text(" Stormcall Damage")),
+                           "tidebreaker.stormcall_damage",
+                           1.0F,
+                           50.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_STOPWATCH
+                              .append(Component.text(" Stormcall Interval")),
+                           "tidebreaker.stormcall_interval",
+                           1.0F,
+                           100.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_BOLT
+                              .append(Component.text(" Stormcall Trident Gravity")),
+                           "tidebreaker.stormcall_trident_gravity",
+                           0.0F,
+                           10.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_BOLT
+                              .append(Component.text(" Stormcall Throw Strength")),
+                           "tidebreaker.stormcall_throw_strength",
+                           1.0F,
+                           10.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DISTANCE
+                              .append(Component.text(" Stormcall Throw Max")),
+                           "tidebreaker.stormcall_throw_max",
+                           1.0F,
+                           200.0F
+                        ),
+                        stat(Component.empty(), "empty", 1.0F, 1.0F),
+                        stat(
+                           StatIcons.ICON_EXPLOSION
+                              .append(Component.text(" Rising Tide Knockback")),
+                           "tidebreaker.rising_tide_kb",
+                           1.0F,
+                           20.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DISTANCE
+                              .append(Component.text(" Rising Tide Radius")),
+                           "tidebreaker.rising_tide_radius",
+                           1.0F,
+                           30.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_COOLDOWN
+                              .append(Component.text(" Rising Tide Cooldown")),
+                           "tidebreaker.rising_tide_cooldown",
+                           1.0F,
+                           300.0F
+                        )
+                     ),
+   ANCIENTBLADE(
+                        CustomItemRegistry.getAncientBlade(),
+                        true,
+                        2.25D,
+                        stat(
+                           StatIcons.ICON_COOLDOWN
+                              .append(Component.text(" Unyielding Darkness Cooldown")),
+                           "ancientblade.unyielding_darkness_cooldown",
+                           1.0F,
+                           600.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DISTANCE
+                              .append(Component.text(" Unyielding Visual Radius")),
+                           "ancientblade.unyielding_visual_radius",
+                           1.0F,
+                           30.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DISTANCE
+                              .append(Component.text(" Unyielding Damage Radius")),
+                           "ancientblade.unyielding_damage_radius",
+                           1.0F,
+                           30.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DAMAGE
+                              .append(Component.text(" Unyielding Power")),
+                           "ancientblade.unyielding_power",
+                           0.0F,
+                           20.0F
+                        ),
+                        stat(Component.empty(), "empty", 1.0F, 1.0F),
+                        stat(
+                           StatIcons.ICON_COOLDOWN
+                              .append(Component.text(" Presence Cooldown")),
+                           "ancientblade.presence_cooldown",
+                           1.0F,
+                           300.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_SNOWFLAKE
+                              .append(Component.text(" Presence Duration")),
+                           "ancientblade.presence_duration",
+                           1.0F,
+                           120.0F
+                        ),
+                        stat(Component.empty(), "empty", 1.0F, 1.0F),
+                        stat(
+                           StatIcons.ICON_COOLDOWN
+                              .append(Component.text(" Echo Location Cooldown")),
+                           "ancientblade.echo_location_cooldown",
+                           1.0F,
+                           300.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DISTANCE
+                              .append(Component.text(" Echo Location Radius")),
+                           "ancientblade.echo_location_radius",
+                           1.0F,
+                           100.0F
+                        ),
+                        stat(Component.empty(), "empty", 1.0F, 1.0F),
+                        stat(
+                           StatIcons.ICON_BOLT
+                              .append(Component.text(" Strength Passive Amplifier")),
+                           "ancientblade.strength_passive_amplifier",
+                           0.0F,
+                           10.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_BOLT
+                              .append(Component.text(" Speed Passive Amplifier")),
+                           "ancientblade.speed_passive_amplifier",
+                           0.0F,
+                           10.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_BOLT
+                              .append(Component.text(" Speed Passive Sculk Amplifier")),
+                           "ancientblade.speed_passive_standonsculk_amplifier",
+                           0.0F,
+                           10.0F
+                        )
+                     ) {
       @Override
       public ItemStack getItem(Player paramPlayer) {
          return CustomItemRegistry.getAncientBlade(paramPlayer);
       }
    },
-   WITHERSYMBIOTE(CustomItemRegistry.getWitherSymbiote(), true, 2.25D),
-   OMEN(CustomItemRegistry.getOmen(), true, 2.5D),
-   DRAGONREND(CustomItemRegistry.getDragonrend(), true, 2.25D);
+   WITHERSYMBIOTE(
+                        CustomItemRegistry.getWitherSymbiote(),
+                        true,
+                        2.25D,
+                        stat(
+                           StatIcons.ICON_COOLDOWN
+                              .append(Component.text(" Infection Cooldown")),
+                           "withersymbiote.infection_cooldown",
+                           1.0F,
+                           300.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_STOPWATCH
+                              .append(Component.text(" Infection Timeout Detonate")),
+                           "withersymbiote.infection_time_before_timeout_detonate",
+                           1.0F,
+                           200.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_STOPWATCH
+                              .append(Component.text(" Infection Delay")),
+                           "withersymbiote.infection_delay",
+                           1.0F,
+                           100.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DAMAGE
+                              .append(Component.text(" Infection Detonate Damage")),
+                           "withersymbiote.infection_detonate_damage",
+                           1.0F,
+                           50.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_SNOWFLAKE
+                              .append(Component.text(" Infection Time To Infect")),
+                           "withersymbiote.infection_time_to_infect",
+                           1.0F,
+                           60.0F
+                        ),
+                        stat(Component.empty(), "empty", 1.0F, 1.0F),
+                        stat(
+                           StatIcons.ICON_COOLDOWN
+                              .append(Component.text(" Rampage Cooldown")),
+                           "withersymbiote.rampage_cooldown",
+                           1.0F,
+                           600.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DAMAGE
+                              .append(Component.text(" Rampage Max Bars")),
+                           "withersymbiote.rampage_max_bars",
+                           1.0F,
+                           200.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DAMAGE
+                              .append(Component.text(" Rampage Start Bars")),
+                           "withersymbiote.rampage_start_bars",
+                           0.0F,
+                           200.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DAMAGE
+                              .append(Component.text(" Rampage Bars Gained From Hit")),
+                           "withersymbiote.rampage_bars_gained_from_hit",
+                           1.0F,
+                           50.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_STOPWATCH
+                              .append(Component.text(" Rampage Bar Lose Interval")),
+                           "withersymbiote.rampage_bar_lose_interval",
+                           1.0F,
+                           100.0F
+                        ),
+                        steppedStat(
+                           StatIcons.ICON_BOLT
+                              .append(Component.text(" Rampage Speed Multiplier")),
+                           "withersymbiote.rampage_speed_multiplier",
+                           0.1F,
+                           10.0F,
+                           0.1F
+                        ),
+                        stat(
+                           StatIcons.ICON_SNOWFLAKE
+                              .append(Component.text(" Rampage Lifesteal HP")),
+                           "withersymbiote.rampage_lifesteal_hp",
+                           0.0F,
+                           20.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_SNOWFLAKE
+                              .append(Component.text(" Rampage Extra Health")),
+                           "withersymbiote.rampage_extra_health",
+                           0.0F,
+                           40.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_SNOWFLAKE
+                              .append(Component.text(" Rampage Hunger Amplifier")),
+                           "withersymbiote.rampage_hunger_amp",
+                           -1.0F,
+                           5.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_SNOWFLAKE
+                              .append(Component.text(" Rampage Negatives Duration")),
+                           "withersymbiote.rampage_negatives_duration",
+                           0.0F,
+                           60.0F
+                        )
+                     ),
+   OMEN(
+                        CustomItemRegistry.getOmen(),
+                        true,
+                        2.5D,
+                        stat(
+                           StatIcons.ICON_STOPWATCH
+                              .append(Component.text(" Vault Omen Length")),
+                           "omen.vault_omen_length",
+                           1.0F,
+                           200.0F
+                        ),
+                        steppedStat(
+                           StatIcons.ICON_BOLT
+                              .append(Component.text(" Vault Omen Gravity")),
+                           "omen.vault_omen_gravity",
+                           0.0F,
+                           1.0F,
+                           0.01F
+                        ),
+                        stat(
+                           StatIcons.ICON_DISTANCE
+                              .append(Component.text(" Vault Omen Radius")),
+                           "omen.vault_omen_radius",
+                           1.0F,
+                           30.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_SNOWFLAKE
+                              .append(Component.text(" Vault Omen Duration")),
+                           "omen.vault_omen_duration",
+                           1.0F,
+                           60.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_COOLDOWN
+                              .append(Component.text(" Vault Omen Cooldown")),
+                           "omen.vault_omen_cooldown",
+                           1.0F,
+                           300.0F
+                        ),
+                        stat(Component.empty(), "empty", 1.0F, 1.0F),
+                        stat(
+                           StatIcons.ICON_SNOWFLAKE
+                              .append(Component.text(" Ominous Conjuring Duration")),
+                           "omen.ominous_conjuring_duration",
+                           1.0F,
+                           60.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_COOLDOWN
+                              .append(Component.text(" Ominous Conjuring Cooldown")),
+                           "omen.ominous_conjuring_cooldown",
+                           1.0F,
+                           300.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_STOPWATCH
+                              .append(Component.text(" Ominous Conjuring Length")),
+                           "omen.ominous_conjuring_length",
+                           1.0F,
+                           200.0F
+                        ),
+                        steppedStat(
+                           StatIcons.ICON_BOLT
+                              .append(Component.text(" Ominous Conjuring Gravity")),
+                           "omen.ominous_conjuring_gravity",
+                           0.0F,
+                           1.0F,
+                           0.01F
+                        ),
+                        stat(
+                           StatIcons.ICON_DAMAGE
+                              .append(Component.text(" Ominous Conjuring Damage")),
+                           "omen.ominous_conjuring_damage",
+                           1.0F,
+                           50.0F
+                        ),
+                        steppedStat(
+                           StatIcons.ICON_BOLT
+                              .append(Component.text(" Ominous Conjuring Speed Duration")),
+                           "omen.ominous_conjuring_speed_duration",
+                           0.0F,
+                           10.0F,
+                           0.1F
+                        ),
+                        steppedStat(
+                           StatIcons.ICON_STOPWATCH
+                              .append(Component.text(" Ominous Conjuring Attack Cooldown")),
+                           "omen.ominous_conjuring_attack_cooldown",
+                           0.0F,
+                           10.0F,
+                           0.1F
+                        )
+                     ),
+   DRAGONREND(
+                        CustomItemRegistry.getDragonrend(),
+                        true,
+                        2.25D,
+                        stat(
+                           StatIcons.ICON_SNOWFLAKE
+                              .append(Component.text(" Infinite Void Duration")),
+                           "dragonrend.infinite_void_duration",
+                           1.0F,
+                           60.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_BOLT
+                              .append(Component.text(" Infinite Void Slowness Strength")),
+                           "dragonrend.infinite_void_slownewess_strength",
+                           0.0F,
+                           20.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DISTANCE
+                              .append(Component.text(" Infinite Void Radius")),
+                           "dragonrend.infinite_void_radius",
+                           1.0F,
+                           30.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_COOLDOWN
+                              .append(Component.text(" Infinite Void Cooldown")),
+                           "dragonrend.infinite_void_cooldown",
+                           1.0F,
+                           600.0F
+                        ),
+                        stat(Component.empty(), "empty", 1.0F, 1.0F),
+                        stat(
+                           StatIcons.ICON_COOLDOWN
+                              .append(Component.text(" Hypersonic Slash Cooldown")),
+                           "dragonrend.hypersonic_slash_cooldown",
+                           1.0F,
+                           300.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DAMAGE
+                              .append(Component.text(" Hypersonic Slash Damage")),
+                           "dragonrend.hypersonic-slash_damage",
+                           1.0F,
+                           50.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_SNOWFLAKE
+                              .append(Component.text(" Hypersonic Slash Duration")),
+                           "dragonrend.hypersonic_slash_duration",
+                           1.0F,
+                           60.0F
+                        ),
+                        stat(
+                           StatIcons.ICON_DISTANCE
+                              .append(Component.text(" Hypersonic Slash Range")),
+                           "dragonrend.hypersonic_slash_range",
+                           1.0F,
+                           100.0F
+                        )
+                     );
 
    public final ItemStack itemStack;
    public final List<ItemStat> stats;
