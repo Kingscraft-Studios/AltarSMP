@@ -39,9 +39,3 @@ class FrostScytheBladeLaunchTask extends BukkitRunnable {
     (new FrostScytheBladeProjectileTask(this, location1, itemDisplay, vector)).runTaskTimer((Plugin) FrostScytheAbilityListener.plugin, 0L, 1L);
   }
 }
-
-
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764dg.class
- * Java compiler version: 21 (65.0)
- * JD-Core Version:       1.1.3
- */

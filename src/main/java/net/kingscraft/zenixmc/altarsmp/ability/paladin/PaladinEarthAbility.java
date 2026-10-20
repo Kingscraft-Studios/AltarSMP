@@ -62,10 +62,7 @@ public class PaladinEarthAbility implements Listener {
 
   public static HashMap<UUID, Integer> absorptionDamage;
 
-  public static final boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h;
-
   static {
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h = !PaladinEarthAbility.class.desiredAssertionStatus();
     EARTH_SHATTER_COOLDOWN = AltarSMP.getInstance().getConfig().getInt("paladinEarthShatterCooldown", 45);
     STALWART_ABSORPTION_COOLDOWN = AltarSMP.getInstance().getConfig().getInt("paladinStalwartAbsorptionCooldown", 45);
     STALWART_ABSORPTION_DURATION = AltarSMP.getInstance().getConfig().getInt("paladinStalwartAbsorptionDuration", 5);
@@ -126,11 +123,8 @@ public class PaladinEarthAbility implements Listener {
         return false;
       } 
     }{
-      if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h)
-        {
-          if (rayTraceResult.getHitBlock() == null)
-            throw new AssertionError(); 
-        }}Location location = rayTraceResult.getHitBlock().getLocation().add(0.0D, 1.0D, 0.0D);
+      assert rayTraceResult.getHitBlock() != null;
+    }Location location = rayTraceResult.getHitBlock().getLocation().add(0.0D, 1.0D, 0.0D);
     int b = 10;
     {
       if (WorldGuardHook.isBlocked(location))
@@ -201,9 +195,3 @@ public class PaladinEarthAbility implements Listener {
 
 
 }
-
-
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764al.class
- * Java compiler version: 21 (65.0)
- * JD-Core Version:       1.1.3
- */

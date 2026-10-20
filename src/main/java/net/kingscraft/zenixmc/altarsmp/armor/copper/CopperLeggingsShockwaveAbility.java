@@ -27,16 +27,16 @@ public class CopperLeggingsShockwaveAbility implements Listener {
 
   private final Map<UUID, Double> jumpStartHeights = new HashMap<>();
 
-  private final Map<UUID, Boolean> You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c = new HashMap<>();
+  private final Map<UUID, Boolean> shockwaveFlags = new HashMap<>();
 
   private final Map<UUID, Long> jumpStartTimestamps = new HashMap<>();
 
-  public static final boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e;
+  public static final boolean abilityDisabled;
 
   public static double MAX_FALL_DAMAGE;
 
   static {
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e = false;
+    abilityDisabled = false;
     MAX_FALL_DAMAGE = AltarSMP.getInstance().getConfig().getDouble("copperLeggingsMaxDamage", 30.0D);
   }
 
@@ -70,7 +70,7 @@ public class CopperLeggingsShockwaveAbility implements Listener {
   @EventHandler
   public void onPlayerMove(PlayerMoveEvent paramPlayerMoveEvent) {
     {
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e)
+      if (abilityDisabled)
         return; 
     }Player player = paramPlayerMoveEvent.getPlayer();
     UUID uUID = player.getUniqueId();
@@ -131,7 +131,7 @@ public class CopperLeggingsShockwaveAbility implements Listener {
   public void onEntityDamage(EntityDamageEvent paramEntityDamageEvent) {
     Player player;
     {
-      if (You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764e)
+      if (abilityDisabled)
         return; 
     }Entity entity = paramEntityDamageEvent.getEntity();
     if (entity instanceof Player) {
@@ -157,7 +157,7 @@ public class CopperLeggingsShockwaveAbility implements Listener {
 
   public void clearPlayerTracking(UUID paramUUID) {
     this.jumpStartHeights.remove(paramUUID);
-    this.You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764c.remove(paramUUID);
+    this.shockwaveFlags.remove(paramUUID);
     this.jumpStartTimestamps.remove(paramUUID);
   }
 
@@ -257,9 +257,3 @@ public class CopperLeggingsShockwaveAbility implements Listener {
   }
 
 }
-
-
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a0.class
- * Java compiler version: 21 (65.0)
- * JD-Core Version:       1.1.3
- */

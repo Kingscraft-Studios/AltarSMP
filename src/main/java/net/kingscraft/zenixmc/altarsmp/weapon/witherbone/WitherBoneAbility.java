@@ -41,7 +41,7 @@ public class WitherBoneAbility implements Listener {
 
   public static int cleansingRequiredBars;
 
-  public static int You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h;
+  public static int cleansingBarsPerCharge;
 
 
   public static void startTask() {
@@ -66,7 +66,7 @@ public class WitherBoneAbility implements Listener {
       if (!hasWitheredBoneBlade(player))
         return; 
     }int i = ((Integer) cleansingChargeBars.getOrDefault(player.getUniqueId(), Integer.valueOf(0))).intValue();
-    cleansingChargeBars.put(player.getUniqueId(), Integer.valueOf(i + You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h));
+    cleansingChargeBars.put(player.getUniqueId(), Integer.valueOf(i + cleansingBarsPerCharge));
   }
 
   public static void performLeap(Player paramPlayer) {
@@ -208,13 +208,7 @@ public class WitherBoneAbility implements Listener {
     remainingLeaps = new HashMap<>();
     cleansingChargeBars = new HashMap<>();
     cleansingRequiredBars = 48;
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764h = 2;
+    cleansingBarsPerCharge = 2;
   }
 
 }
-
-
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764ap.class
- * Java compiler version: 21 (65.0)
- * JD-Core Version:       1.1.3
- */

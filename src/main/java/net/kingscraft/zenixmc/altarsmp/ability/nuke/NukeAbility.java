@@ -17,12 +17,6 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 public class NukeAbility implements Listener {
-  public static final boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a;
-
-  static {
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a = !NukeAbility.class.desiredAssertionStatus();
-  }
-
 
   public static boolean activateNuke(Player paramPlayer) {
     int i = AltarSMP.getInstance().getConfig().getInt("nukeRadius", 100);
@@ -35,11 +29,8 @@ public class NukeAbility implements Listener {
         return false;
       } 
     }{
-      if (!You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764a)
-        {
-          if (rayTraceResult.getHitBlock() == null)
-            throw new AssertionError(); 
-        }}Location location = rayTraceResult.getHitBlock().getLocation().add(0.0D, 1.0D, 0.0D);
+      assert rayTraceResult.getHitBlock() != null;
+    }Location location = rayTraceResult.getHitBlock().getLocation().add(0.0D, 1.0D, 0.0D);
     World world = location.getWorld();
     String str1 = String.valueOf(location.getBlock().getX());
     String str2 = String.valueOf(location.getBlock().getY());
@@ -89,9 +80,3 @@ public class NukeAbility implements Listener {
   }
 
 }
-
-
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764av.class
- * Java compiler version: 21 (65.0)
- * JD-Core Version:       1.1.3
- */

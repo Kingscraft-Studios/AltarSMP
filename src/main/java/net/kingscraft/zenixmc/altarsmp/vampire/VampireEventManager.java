@@ -57,7 +57,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
 
   public static String vampireWinner;
 
-  public static boolean You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764k;
+  public static boolean bloodMoonAnnounced;
 
 
   public static void loadVampireData() {
@@ -332,7 +332,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
         } 
       }} 
     saveVampireData();
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764k = false;
+    bloodMoonAnnounced = false;
     Bukkit.broadcastMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.BOLD) + "RITUAL COMPLETE");
   }
 
@@ -439,15 +439,9 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
     eventEnabled = config.getBoolean("vampire_event_enabled", false);
     playerTypes = new HashMap<>();
     vampireWinner = config.getString("vampire_winner", null);
-    You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764k = false;
+    bloodMoonAnnounced = false;
     PALE = "PALE";
     VAMPIRE = "VAMPIRE";
   }
 
 }
-
-
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764bj.class
- * Java compiler version: 21 (65.0)
- * JD-Core Version:       1.1.3
- */
