@@ -40,6 +40,11 @@ public class AltarRecipeBuilder {
     return this;
   }
 
+  public AltarRecipeBuilder ingredient(Material paramMaterial, int paramInt1, int paramInt2, String itemModel) {
+    this.ingredients.add(new RecipeIngredient(paramMaterial, paramInt1, paramInt2, itemModel));
+    return this;
+  }
+
   public AltarRecipe build() {
     ItemStack itemStack = new ItemStack(this.material);
     ItemMeta itemMeta = itemStack.getItemMeta();

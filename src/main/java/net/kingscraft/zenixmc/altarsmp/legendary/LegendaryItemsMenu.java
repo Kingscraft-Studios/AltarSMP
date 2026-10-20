@@ -26,8 +26,11 @@ import net.kingscraft.zenixmc.altarsmp.item.CustomItemType;
 public class LegendaryItemsMenu implements CommandExecutor, Listener {
   public static String MENU_TITLE;
 
+  public static String SEASON_TWO_TITLE;
+
   static {
     MENU_TITLE = "§c§lʟᴇɢᴇɴᴅᴀʀɪᴇѕ";
+    SEASON_TWO_TITLE = "§5§lꜱᴇᴀꜱᴏɴ ᴛᴡᴏ ᴡᴇᴀᴘᴏɴꜱ";
   }
 
 
@@ -50,6 +53,9 @@ public class LegendaryItemsMenu implements CommandExecutor, Listener {
       } 
     }for (CustomItem customItem : CustomItem.values()) {
       {
+        if (customItem.isSeasonTwo()) {
+          continue;
+        } 
         if (customItem == CustomItem.KNIGHTFALL) {
           inventory.addItem(CustomItemRegistry.getKnightfall(paramPlayer, false));
         } else {
@@ -59,9 +65,21 @@ public class LegendaryItemsMenu implements CommandExecutor, Listener {
     {
       inventory.setItem(39, createWeaponSettingsButton());
       inventory.setItem(40, createIngredientsButton());
-      if (Bukkit.getPluginManager().getPlugin("AltarS2") != null)
-        inventory.setItem(41, createSeasonTwoWeaponsButton());
+      inventory.setItem(41, createSeasonTwoWeaponsButton());
     }paramPlayer.openInventory(inventory);
+  }
+
+  public static void openSeasonTwoWeaponsMenu(Player paramPlayer) {
+    Inventory inventory = Bukkit.createInventory(null, 45, SEASON_TWO_TITLE);
+    decorateInventory(inventory);
+    for (net.kingscraft.zenixmc.altarsmp.item.CustomItem weapon : net.kingscraft.zenixmc.altarsmp.item.CustomItem.values()) {
+      if (!weapon.isSeasonTwo()) {
+        continue;
+      }
+      inventory.addItem(weapon.getItem(paramPlayer));
+    }
+    inventory.setItem(40, createLegendaryItemsButton());
+    paramPlayer.openInventory(inventory);
   }
 
   public void openIngredientsMenu(Player paramPlayer) {
@@ -103,11 +121,8 @@ for (CustomItemType customItemType : CustomItemType.values()) {
               } else {
                 {
                   if (paramInventoryClickEvent.getSlot() == 41) {
-                    {
-                      paramInventoryClickEvent.setCancelled(true);
-                      if (Bukkit.getPluginManager().getPlugin("AltarS2") == null)
-                        return; 
-                    }player.performCommand("altars2:legendaries");
+                    paramInventoryClickEvent.setCancelled(true);
+                    openSeasonTwoWeaponsMenu(player);
                     player.playSound(player, Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
                   } else {
                     {
@@ -122,22 +137,51 @@ for (CustomItemType customItemType : CustomItemType.values()) {
           } 
         }} else {
         {
-          if (paramInventoryClickEvent.getView().getTitle().equalsIgnoreCase("ɪɴɢʀᴇᴅɪᴇɴᴛꜱ")) {
+          if (paramInventoryClickEvent.getView().getTitle().equalsIgnoreCase(SEASON_TWO_TITLE)) {
             {
               if (paramInventoryClickEvent.getWhoClicked().isOp()) {
                 {
-                  if (paramInventoryClickEvent.getCurrentItem().getType() == Material.GRAY_STAINED_GLASS_PANE)
-                    paramInventoryClickEvent.setCancelled(true); 
+                  if (paramInventoryClickEvent.getCurrentItem().getType() == Material.GRAY_STAINED_GLASS_PANE) {
+                    paramInventoryClickEvent.setCancelled(true);
+                    return;
+                  } 
                 }{
                   if (paramInventoryClickEvent.getSlot() == 40) {
                     paramInventoryClickEvent.setCancelled(true);
                     openLegendaryItemsMenu(player);
                     player.playSound(player, Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
+                    return;
+                  } 
+                }{
+                  CustomItem seasonTwoItem = CustomItem.fromItem(paramInventoryClickEvent.getCurrentItem());
+                  if (seasonTwoItem != null && seasonTwoItem.isSeasonTwo()) {
+                    paramInventoryClickEvent.setCancelled(true);
+                    LegendaryItemConfigMenu.showConfigDialog(player, seasonTwoItem);
+                    player.playSound(player, Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
+                    return;
                   } 
                 }return;
               } 
             }} else {
-            return;
+            {
+              if (paramInventoryClickEvent.getView().getTitle().equalsIgnoreCase("ɪɴɢʀᴇᴅɪᴇɴᴛꜱ")) {
+                {
+                  if (paramInventoryClickEvent.getWhoClicked().isOp()) {
+                    {
+                      if (paramInventoryClickEvent.getCurrentItem().getType() == Material.GRAY_STAINED_GLASS_PANE)
+                        paramInventoryClickEvent.setCancelled(true); 
+                    }{
+                      if (paramInventoryClickEvent.getSlot() == 40) {
+                        paramInventoryClickEvent.setCancelled(true);
+                        openLegendaryItemsMenu(player);
+                        player.playSound(player, Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
+                      } 
+                    }return;
+                  } 
+                }} else {
+                return;
+              } 
+            }paramInventoryClickEvent.setCancelled(true);
           } 
         }paramInventoryClickEvent.setCancelled(true);
       } 

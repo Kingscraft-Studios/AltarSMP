@@ -12,10 +12,17 @@ public class RecipeIngredient {
 
   public final int customModelData;
 
+  public final String itemModel;
+
   public RecipeIngredient(Material paramMaterial, int paramInt1, int paramInt2) {
+    this(paramMaterial, paramInt1, paramInt2, null);
+  }
+
+  public RecipeIngredient(Material paramMaterial, int paramInt1, int paramInt2, String itemModel) {
     this.material = paramMaterial;
     this.amount = paramInt1;
     this.customModelData = paramInt2;
+    this.itemModel = itemModel;
   }
 
   public Material getMaterial() {
@@ -34,23 +41,36 @@ public class RecipeIngredient {
     return this.customModelData > 0;
   }
 
+  public String getItemModel() {
+    return this.itemModel;
+  }
+
+  public boolean hasItemModel() {
+    return this.itemModel != null;
+  }
+
   public boolean matches(ItemStack item) {
     if (item == null || item.getType() != material)
       return false;
 
-    if (!hasCustomModelData())
-      return true;
-
     ItemMeta meta = item.getItemMeta();
 
-    return meta != null
-            && meta.hasCustomModelData()
-            && meta.getCustomModelData() == customModelData;
+    if (hasItemModel()) {
+      if (meta == null || !meta.hasItemModel())
+        return false;
+
+      if (!itemModel.equals(meta.getItemModel().toString()))
+        return false;
+    }
+
+    if (hasCustomModelData()) {
+      if (meta == null || !meta.hasCustomModelData())
+        return false;
+
+      if (meta.getCustomModelData() != customModelData)
+        return false;
+    }
+
+    return true;
   }
 }
-
-
-/* Location:              /home/kingscrafts/Documents/AltarSMP.jar!/pl/You_are_an_idiot_ha_ha_ha_ha_ha_ha_ha_ha8654395799992919999999vdsgjhfvs239764b4.class
- * Java compiler version: 21 (65.0)
- * JD-Core Version:       1.1.3
- */

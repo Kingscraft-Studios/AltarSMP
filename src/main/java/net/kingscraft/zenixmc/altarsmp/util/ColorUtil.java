@@ -96,7 +96,31 @@ public class ColorUtil {
     return toMinecraftHexColor(stringBuilder.toString());
   }
 
+  public static String gradient(String text, String fromHex, String toHex) {
+    int from = parseGradientHex(fromHex);
+    int to = parseGradientHex(toHex);
+    int denominator = Math.max(text.length() - 1, 1);
+    StringBuilder builder = new StringBuilder(text.length() * 8);
+    for (int i = 0; i < text.length(); i++) {
+      double progress = i / (double) denominator;
+      int red = gradientChannel((from >> 16) & 0xFF, (to >> 16) & 0xFF, progress);
+      int green = gradientChannel((from >> 8) & 0xFF, (to >> 8) & 0xFF, progress);
+      int blue = gradientChannel(from & 0xFF, to & 0xFF, progress);
+      builder.append(net.md_5.bungee.api.ChatColor.of(String.format("#%02x%02x%02x", red, green, blue)));
+      builder.append(net.md_5.bungee.api.ChatColor.BOLD);
+      builder.append(text.charAt(i));
+    }
+    return builder.toString();
+  }
 
+  private static int gradientChannel(int from, int to, double progress) {
+    return (int)Math.round(from + (to - from) * progress);
+  }
+
+  private static int parseGradientHex(String hex) {
+    String value = hex.startsWith("#") ? hex.substring(1) : hex;
+    return Integer.parseInt(value, 16);
+  }
 }
 
 

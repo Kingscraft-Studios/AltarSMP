@@ -2,7 +2,7 @@ name: AltarSMP
 version: ${project.version}
 main: net.kingscraft.zenixmc.altarsmp.AltarSMP
 api-version: '1.21'
-authors: [Doomwen, Solstate]
+authors: [Kingscraft-Studios]
 softdepend: [WorldGuard]
 permissions:
   altar.admin:
@@ -36,15 +36,7 @@ commands:
     description: "Trust"
   untrust:
     description: "Untrust"
-  giveselector:
-    permission: op
   setkills:
     permission: op
-  giverandomizer:
-    permission: op
-  dtest:
-    permission: op
-  credits:
-    description: "Credits"
   vampire:
     permission: op

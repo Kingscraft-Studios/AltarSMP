@@ -112,7 +112,12 @@ public class CrazySlotsListener implements Listener {
             var1, false
          ),
          CustomItemRegistry.getEcho(),
-         CustomItemRegistry.getEclipse()
+         CustomItemRegistry.getEclipse(),
+         net.kingscraft.zenixmc.altarsmp.item.CustomItem.TIDEBREAKER.getItem(),
+         net.kingscraft.zenixmc.altarsmp.item.CustomItem.ANCIENTBLADE.getItem(),
+         net.kingscraft.zenixmc.altarsmp.item.CustomItem.WITHERSYMBIOTE.getItem(),
+         net.kingscraft.zenixmc.altarsmp.item.CustomItem.OMEN.getItem(),
+         net.kingscraft.zenixmc.altarsmp.item.CustomItem.DRAGONREND.getItem()
       );
       ItemStack var4 = ((ItemStack)var3.get(ThreadLocalRandom.current().nextInt(var3.size()))).clone();
       ItemMeta var5 = var4.getItemMeta();

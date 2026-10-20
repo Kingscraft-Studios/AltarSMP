@@ -14,7 +14,7 @@ contagion_signal_health: 50
 vampire_winner: null
 
 
-drop_heads: true # if you have AltarS2 this will be automatically disabled to avoid dropping 2 heads at once
+drop_heads: true # drop player heads on death when killed by another player
 give_dropped_head_to_killer: false # false means drop
 worldguard_support: false
 nimlot: false # dont touch this
@@ -34,7 +34,13 @@ copperLeggingsMaxDamage: 30
 copperChestplateDamage: 5
 copperHelmetStrengthAmplifier: 1
 
-WardenHeartDropChance: 25 # if you have AltarS2 this will be automatically disabled to avoid dropping 2 hearts at once
+killSystem: true # the levels for ancient blade, if off it will always have all the abilities
+
+sharpness: 7 # The sharpness level all mythicals have
+
+WardenHeartDropChance: 100 # chance (0-100) for a Warden to drop a Warden Heart
+DragonHeartDropChance: 100 # chance (0-100) for the Ender Dragon to drop a Dragon Heart
+FragmentOfTheSeaDropChance: 100 # chance (0-100) for an Elder Guardian to drop a Fragment of the Sea
 reset_hearts_on_relog: true
 tnt: true
 announce_destroying_legendaries: true
@@ -61,6 +67,11 @@ weapons_that_can_be_obtained_from_rolling: # crazy slots and reroller and select
   - PALE_CANNON
   - ECHO
   - KNIGHTFALL
+  - TIDEBREAKER
+  - ANCIENTBLADE
+  - WITHERSYMBIOTE
+  - OMEN
+  - DRAGONREND
 
 # ██████╗░███████╗░█████╗░██╗██████╗░███████╗░██████╗
 # ██╔══██╗██╔════╝██╔══██╗██║██╔══██╗██╔════╝██╔════╝
@@ -102,6 +113,71 @@ IllusionCore:
     A: ANCIENT_DEBRIS
 
 
+
+
+# ---- SEASON 2 RECIPES ----
+strength:
+  enabled: true
+  type: shapeless
+  ingredients:
+    - GUNPOWDER
+    - POTION
+
+harness:
+  enabled: true
+  type: shaped
+  shape:
+    - LLL
+    - GNG
+    - '   '
+  ingredients:
+    N: NETHERITE_SCRAP
+    L: LEATHER
+    G: GLASS
+
+soul_in_a_bottle:
+  enabled: true
+  type: shaped
+  shape:
+    - WSW
+    - SRS
+    - WGW
+  ingredients:
+    S: SCULK_CATALYST
+    R: RECOVERY_COMPASS
+    W: WITHER_SKELETON_SKULL
+    G: GLASS_BOTTLE
+
+firework:
+  enabled: true
+  type: shapeless
+  ingredients:
+    - GUNPOWDER
+
+amethyst_pickaxe:
+  enabled: true
+  type: shaped
+  shape:
+    - ADA
+    - NSN
+    - ' S '
+  ingredients:
+    D: DIAMOND_BLOCK
+    A: AMETHYST_BLOCK
+    N: NETHERITE_SCRAP
+    S: STICK
+
+amethyst_axe:
+  enabled: true
+  type: shaped
+  shape:
+    - AAD
+    - 'AS '
+    - ' S '
+  ingredients:
+    D: DIAMOND_BLOCK
+    A: AMETHYST_BLOCK
+    S: STICK
 
 #██████╗░░█████╗░██╗░░░░░███████╗  ░██████╗░██╗░░░██╗███╗░░██╗
 #██╔══██╗██╔══██╗██║░░░░░██╔════╝  ██╔════╝░██║░░░██║████╗░██║
@@ -931,7 +1007,234 @@ altars:
           - material: PALE_OAK_LOG
             amount: 16
 
+  DRAGONREND:
+    hologram-height: 3.5
+    recipes:
+      DRAGONREND:
+        ingredients:
+          - material: AMETHYST_CLUSTER
+            amount: 32
+          - material: ENDER_EYE
+            amount: 64
+          - material: CRYING_OBSIDIAN
+            amount: 32
+          - material: DRAGON_HEART
+            amount: 1
+          - material: NETHERITE_INGOT
+            amount: 3
+          - material: TRIAL_KEY
+            amount: 16
+          - material: WEAPON_HANDLE
+            amount: 1
+          - material: HEAVY_CORE
+            amount: 1
+          - material: PLAYER_HEAD
+            amount: 3
+
+  TIDEBREAKER:
+    hologram-height: 3.5
+    recipes:
+      TIDEBREAKER:
+        ingredients:
+          - material: HEART_OF_THE_SEA
+            amount: 1
+          - material: PRISMARINE_CRYSTALS
+            amount: 64
+          - material: LIGHTNING_ROD
+            amount: 16
+          - material: DIAMOND_BLOCK
+            amount: 48
+          - material: NAUTILUS_SHELL
+            amount: 4
+          - material: PLAYER_HEAD
+            amount: 3
+          - material: TRIDENT
+            amount: 1
+
+  ANCIENTBLADE:
+    hologram-height: 3.25
+    recipes:
+      ANCIENTBLADE:
+        ingredients:
+          - material: SCULK_SHRIEKER
+            amount: 64
+          - material: DIAMOND_BLOCK
+            amount: 32
+          - material: ECHO_SHARD
+            amount: 32
+          - material: MUSIC_DISC_5
+            amount: 1
+          - material: WARDEN_HEART
+            amount: 3
+          - material: PLAYER_HEAD
+            amount: 3
+
+  OMEN:
+    hologram-height: 4
+    recipes:
+      OMEN:
+        ingredients:
+          - material: OMINOUS_TRIAL_KEY
+            amount: 8
+          - material: BREEZE_ROD
+            amount: 64
+          - material: COPPER_BLOCK
+            amount: 64
+          - material: SOUL_TORCH
+            amount: 10
+          - material: TRIAL_KEY
+            amount: 16
+          - material: WEAPON_HANDLE
+            amount: 1
+          - material: HEAVY_CORE
+            amount: 1
+          - material: PLAYER_HEAD
+            amount: 3
+
+  WITHERSYMBIOTE:
+    hologram-height: 3.25
+    recipes:
+      WITHERSYMBIOTE:
+        ingredients:
+          - material: WITHER_ROSE
+            amount: 16
+          - material: BLAZE_ROD
+            amount: 64
+          - material: GHAST_TEAR
+            amount: 16
+          - material: DRIED_GHAST
+            amount: 10
+          - material: NETHERITE_INGOT
+            amount: 2
+          - material: NETHER_STAR
+            amount: 1
+          - material: SOUL_IN_A_BOTTLE
+            amount: 1
+          - material: PLAYER_HEAD
+            amount: 3
+
 
 bingoActive: false
 leggingsActive: false
+
 lightningFine: false
+
+# ░██████╗░███╗░░░███╗███████╗███╗░░██╗
+# ██╔═══██╗████╗░████║██╔════╝████╗░██║
+# ██║░░░██║██╔████╔██║█████╗░░██╔██╗██║
+# ██║░░░██║██║╚██╔╝██║██╔══╝░░██║╚████║
+# ╚██████╔╝██║░╚═╝░██║███████╗██║░╚███║
+# ░╚═════╝░╚═╝░░░░░╚═╝╚══════╝╚═╝░░╚══╝
+# OMEN ABILITIES (values in ticks unless noted)
+
+omen:
+  vault_omen_length: 30
+  vault_omen_gravity: 0.02
+  vault_omen_radius: 3
+  vault_omen_duration: 7
+  vault_omen_cooldown: 35
+
+  ominous_conjuring_duration: 10
+  ominous_conjuring_cooldown: 50
+  ominous_conjuring_length: 12
+  ominous_conjuring_gravity: 0.02
+  ominous_conjuring_damage: 4
+  ominous_conjuring_speed_duration: 1.1
+  ominous_conjuring_attack_cooldown: 0.5
+
+
+# ░█████╗░███╗░░██╗░█████╗░██╗███████╗███╗░░██╗████████╗░██████╗░██╗░░░░░░█████╗░██████╗░███████╗
+# ██╔══██╗████╗░██║██╔══██╗██║██╔════╝████╗░██║╚══██╔══╝░██╔══██╗██║░░░░░██╔══██╗██╔══██╗██╔════╝
+# ███████║██╔██╗██║██║░░╚═╝██║█████╗░░██╔██╗██║░░░██║░░░░██████╦╝██║░░░░░███████║██║░░██║█████╗░░
+# ██╔══██║██║╚████║██║░░██╗██║██╔══╝░░██║╚████║░░░██║░░░░██╔══██╗██║░░░░░██╔══██║██║░░██║██╔══╝░░
+# ██║░░██║██║░╚███║╚█████╔╝██║███████╗██║░╚███║░░░██║░░░░██████╦╝███████╗██║░░██║██████╔╝███████╗
+# ╚═╝░░╚═╝╚═╝░░╚══╝░╚════╝░╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░░╚═════╝░╚══════╝╚═╝░░╚═╝╚═════╝░╚══════╝
+# ANCIENT BLADE ABILITIES (values in ticks unless noted)
+
+ancientblade:
+  unyielding_darkness_cooldown: 60
+  unyielding_visual_radius: 6
+  unyielding_damage_radius: 2
+  unyielding_power: 2
+
+  presence_cooldown: 45
+  presence_duration: 10
+
+  echo_location_cooldown: 3
+  echo_location_radius: 24
+
+  strength_passive_amplifier: 1
+  speed_passive_amplifier: 0
+  speed_passive_standonsculk_amplifier: 1
+
+
+# ████████╗██╗██████╗░███████╗██████╗░██████╗░███████╗░█████╗░██╗░░██╗███████╗██████╗░
+# ╚══██╔══╝██║██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝██╔══██╗██║░██╔╝██╔════╝██╔══██╗
+# ░░░██║░░░██║██║░░██║█████╗░░██████╦╝██████╔╝█████╗░░███████║█████═╝░█████╗░░██████╔╝
+# ░░░██║░░░██║██║░░██║██╔══╝░░██╔══██╗██╔══██╗██╔══╝░░██╔══██║██╔═██╗░██╔══╝░░██╔══██╗
+# ░░░██║░░░██║██████╔╝███████╗██████╦╝██║░░██║███████╗██║░░██║██║░╚██╗███████╗██║░░██║
+# ░░░╚═╝░░░╚═╝╚═════╝░╚══════╝╚═════╝░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝
+# TIDEBREAKER ABILITIES (values in ticks unless noted)
+
+tidebreaker:
+  stormcall_cooldown: 40
+  stormcall_duration: 10
+  stormcall_radius: 6
+  stormcall_damage: 2
+  stormcall_interval: 10 # in ticks not seconds
+  stormcall_trident_gravity: 0
+  stormcall_throw_strength: 2
+  stormcall_throw_max: 30
+
+  rising_tide_kb: 5
+  rising_tide_radius: 6
+  rising_tide_cooldown: 50
+
+
+# ██████╗░██████╗░░█████╗░░██████╗░░██████╗░███╗░░██╗██████╗░███████╗███╗░░██╗██████╗░
+# ██╔══██╗██╔══██╗██╔══██╗██╔════╝░██╔═══██╗████╗░██║██╔══██╗██╔════╝████╗░██║██╔══██╗
+# ██║░░██║██████╔╝███████║██║░░██╗░██║░░░██║██╔██╗██║██████╔╝█████╗░░██╔██╗██║██║░░██║
+# ██║░░██║██╔══██╗██╔══██║██║░░╚██╗██║░░░██║██║╚████║██╔══██╗██╔══╝░░██║╚████║██║░░██║
+# ██████╔╝██║░░██║██║░░██║╚██████╔╝╚██████╔╝██║░╚███║██║░░██║███████╗██║░╚███║██████╔╝
+# ╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝░╚═════╝░░╚═════╝░╚═╝░░╚══╝╚═╝░░╚═╝╚══════╝╚═╝░░╚══╝╚═════╝░
+# DRAGONREND ABILITIES (values in ticks unless noted)
+
+dragonrend:
+  infinite_void_duration: 10
+  infinite_void_slownewess_strength: 14 # sets their tickrate to 20 - <strength>, or if you don't have packet events gives them slowness, Mining Fatigue and Feather Falling with this as the amplifier
+  infinite_void_radius: 6
+  infinite_void_cooldown: 60
+
+  hypersonic_slash_cooldown: 40
+  hypersonic-slash_damage: 5
+  hypersonic_slash_duration: 5
+  hypersonic_slash_range: 16
+
+
+# ██╗░░░░░░░██╗██╗████████╗██╗░░██╗███████╗██████╗░░██████╗██╗░░░██╗███╗░░░███╗██████╗░██╗░██████╗░████████╗███████╗
+# ██║░░██╗░░██║██║╚══██╔══╝██║░░██║██╔════╝██╔══██╗██╔════╝╚██╗░██╔╝████╗░████║██╔══██╗██║██╔═══██╗╚══██╔══╝██╔════╝
+# ╚██╗████╗██╔╝██║░░░██║░░░███████║█████╗░░██████╔╝╚█████╗░░╚████╔╝░██╔████╔██║██████╦╝██║██║░░░██║░░░██║░░░█████╗░░
+# ░████╔═████║░██║░░░██║░░░██╔══██║██╔══╝░░██╔══██╗░╚═══██╗░░╚██╔╝░░██║╚██╔╝██║██╔══██╗██║██║░░░██║░░░██║░░░██╔══╝░░
+# ░╚██╔╝░╚██╔╝░██║░░░██║░░░██║░░██║███████╗██║░░██║██████╔╝░░░██║░░░██║░╚═╝░██║██████╦╝██║╚██████╔╝░░░██║░░░███████╗
+# ░░╚═╝░░░╚═╝░░╚═╝░░░╚═╝░░░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚═╝░░░░░╚═╝╚═════╝░╚═╝░╚═════╝░░░░╚═╝░░░╚══════╝
+# WITHERSYMBIOTE ABILITIES (values in ticks unless noted)
+
+withersymbiote:
+  infection_cooldown: 40
+  infection_time_before_timeout_detonate: 20
+  infection_delay: 1
+  infection_detonate_damage: 6
+  infection_time_to_infect: 10 # the time you have to hit a player after using the ability
+
+  rampage_cooldown: 120
+  rampage_max_bars: 50
+  rampage_start_bars: 25
+  rampage_bars_gained_from_hit: 5
+  rampage_bar_lose_interval: 5 # in ticks, 5 means it loses 4 bars per second, to calculate how many bars will be lost per second do 20/5
+  rampage_speed_multiplier: 1.5
+  rampage_lifesteal_hp: 1
+  rampage_extra_health: 6
+  rampage_hunger_amp: 1 # set to -1 to disable
+  rampage_negatives_duration: 5 # set to 0 to disable
+
+

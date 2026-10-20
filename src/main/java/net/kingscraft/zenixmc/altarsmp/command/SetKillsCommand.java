@@ -18,7 +18,7 @@ public class SetKillsCommand implements CommandExecutor, TabCompleter {
     Player player;
     {
       if (paramArrayOfString.length < 2) {
-        paramCommandSender.sendMessage("§c/setkills <bloodlust/knightfall> <num> <player>");
+        paramCommandSender.sendMessage("§c/setkills <bloodlust/knightfall/ancientblade> <num> <player>");
         return true;
       } 
     }String str = paramArrayOfString[0];
@@ -53,9 +53,14 @@ public class SetKillsCommand implements CommandExecutor, TabCompleter {
           if (str.equalsIgnoreCase("knightfall")) {
             (AltarSMP.getInstance()).knightFallKillTracker.setKillCount(player, i);
           } else {
-            paramCommandSender.sendMessage("§c/setkills <bloodlust/knightfall> <num> <player>");
-            return true;
-          } 
+            {
+              if (str.equalsIgnoreCase("ancientblade")) {
+                net.kingscraft.zenixmc.altarsmp.altars2.Altars2.getKillTracker().setKillCount(player, i);
+              } else {
+                paramCommandSender.sendMessage("§c/setkills <bloodlust/knightfall/ancientblade> <num> <player>");
+                return true;
+              } 
+            }} 
         }} 
     }paramCommandSender.sendMessage("§aKills updated.");
     return true;
@@ -71,7 +76,7 @@ public class SetKillsCommand implements CommandExecutor, TabCompleter {
         return List.of("2", "4", "6", "8", "10"); 
     }{
       if (paramArrayOfString.length == 1)
-        return List.of("bloodlust", "knightfall"); 
+        return List.of("bloodlust", "knightfall", "ancientblade"); 
     }return List.of();
   }
 

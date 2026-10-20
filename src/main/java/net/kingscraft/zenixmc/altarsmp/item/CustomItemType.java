@@ -67,6 +67,48 @@ public enum CustomItemType {
         public ItemStack getItem() {
             return CustomItemType.CONTAGION_ITEM;
         }
+    },
+    DRAGON_HEART("DRAGON_HEART", 10) {
+        @Override
+        public ItemStack getItem() {
+            return CustomItemType.DRAGON_HEART_ITEM;
+        }
+    },
+    SOUL_IN_A_BOTTLE("SOUL_IN_A_BOTTLE", 11) {
+        @Override
+        public ItemStack getItem() {
+            return CustomItemType.SOUL_IN_A_BOTTLE_ITEM;
+        }
+    },
+    FRAGMENT_OF_THE_SEA("FRAGMENT_OF_THE_SEA", 12) {
+        @Override
+        public ItemStack getItem() {
+            return CustomItemType.FRAGMENT_OF_THE_SEA_ITEM;
+        }
+    },
+    NETHERITE_HARNESS("NETHERITE_HARNESS", 13) {
+        @Override
+        public ItemStack getItem() {
+            return CustomItemType.NETHERITE_HARNESS_ITEM;
+        }
+    },
+    AMETHYST_AXE("AMETHYST_AXE", 14) {
+        @Override
+        public ItemStack getItem() {
+            return CustomItemType.AMETHYST_AXE_ITEM;
+        }
+    },
+    AMETHYST_PICKAXE("AMETHYST_PICKAXE", 15) {
+        @Override
+        public ItemStack getItem() {
+            return CustomItemType.AMETHYST_PICKAXE_ITEM;
+        }
+    },
+    VOID_CLOCK("VOID_CLOCK", 16) {
+        @Override
+        public ItemStack getItem() {
+            return CustomItemType.VOID_CLOCK_ITEM;
+        }
     };
 
     public static final ItemStack VULCAN_SKULL_ITEM;
@@ -79,6 +121,13 @@ public enum CustomItemType {
     public static final ItemStack CHESTPLATE_SHARD_ITEM;
     public static final ItemStack HELMET_SHARD_ITEM;
     public static final ItemStack CONTAGION_ITEM;
+    public static final ItemStack DRAGON_HEART_ITEM;
+    public static final ItemStack SOUL_IN_A_BOTTLE_ITEM;
+    public static final ItemStack FRAGMENT_OF_THE_SEA_ITEM;
+    public static final ItemStack NETHERITE_HARNESS_ITEM;
+    public static final ItemStack AMETHYST_AXE_ITEM;
+    public static final ItemStack AMETHYST_PICKAXE_ITEM;
+    public static final ItemStack VOID_CLOCK_ITEM;
     public static final CustomItemType[] VALUES_CACHE;
 
     public abstract ItemStack getItem();
@@ -111,5 +160,12 @@ public enum CustomItemType {
         CHESTPLATE_SHARD_ITEM = CustomItemRegistry.getChestplateShard();
         HELMET_SHARD_ITEM = CustomItemRegistry.getHelmetShard();
         CONTAGION_ITEM = CustomItemRegistry.getContagionSignal();
+        DRAGON_HEART_ITEM = CustomItemRegistry.getDragonHeart();
+        SOUL_IN_A_BOTTLE_ITEM = CustomItemRegistry.getSoulInABottle();
+        FRAGMENT_OF_THE_SEA_ITEM = CustomItemRegistry.getFragmentOfTheSea();
+        NETHERITE_HARNESS_ITEM = CustomItemRegistry.getNetheriteHarness();
+        AMETHYST_AXE_ITEM = CustomItemRegistry.getAmethystAxe();
+        AMETHYST_PICKAXE_ITEM = CustomItemRegistry.getAmethystPickaxe();
+        VOID_CLOCK_ITEM = CustomItemRegistry.getVoidClock();
     }
 }

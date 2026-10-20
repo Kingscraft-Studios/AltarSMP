@@ -2,7 +2,6 @@ package net.kingscraft.zenixmc.altarsmp.illusion;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Bukkit;
@@ -46,8 +45,6 @@ public class IllusionWandAbility implements Listener {
   public static NamespacedKey STORED_MOB_KEY;
 
   public NamespacedKey storedPlayerNameKey;
-
-  public static Map<UUID, UUID> disguisedPlayers;
 
 
   public IllusionWandAbility(AltarSMP paramAltarSMP) {
@@ -232,7 +229,7 @@ public class IllusionWandAbility implements Listener {
       return;
     } 
     {
-      if (!disguisedPlayers.containsKey(player.getUniqueId()))
+      if (!IllusionDisguiseManager.isDisguised(player))
         return; 
     }{
       if (paramEntityDamageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)

@@ -98,6 +98,16 @@ public class CustomItemRegistry {
 
   public static ItemStack contagionSignal;
 
+  public static ItemStack tidebreaker;
+
+  public static ItemStack ancientBlade;
+
+  public static ItemStack witherSymbiote;
+
+  public static ItemStack omen;
+
+  public static ItemStack dragonrend;
+
 
   public static void loadMessages() {
     AltarSMP main = AltarSMP.getInstance();
@@ -853,6 +863,125 @@ public class CustomItemRegistry {
     return paramString2.replace("<kills>", paramString1);
   }
 
+  public static ItemStack getTidebreaker() {
+    if (tidebreaker != null)
+      return tidebreaker;
+    tidebreaker = buildSeasonTwoLegendary(Material.NETHERITE_SWORD, "Tidebreaker", "#55ffff", "#00aaee", "altar:item/tidebreaker", "minecraft:tidebreaker", "tidebreaker");
+    return tidebreaker;
+  }
+
+  public static ItemStack getAncientBlade() {
+    return getAncientBlade(null);
+  }
+
+  public static ItemStack getAncientBlade(Player paramPlayer) {
+    ItemStack itemStack = buildSeasonTwoLegendary(Material.NETHERITE_SWORD, "Ancient Blade", "#55ffff", "#005555", "altar:item/ancientblade", "minecraft:ancient", "ancient_blade");
+    int kills = 0;
+    if (paramPlayer != null && net.kingscraft.zenixmc.altarsmp.altars2.Altars2.isEnabled())
+      kills = net.kingscraft.zenixmc.altarsmp.altars2.Altars2.getKillTracker().getKillCount(paramPlayer);
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    if (itemMeta == null)
+      return itemStack;
+    List<String> lore = itemMeta.getLore();
+    if (lore != null) {
+      List<String> updated = new ArrayList<>(lore);
+      for (int i = 0; i < updated.size(); i++)
+        updated.set(i, updated.get(i).replace("<kills>", String.valueOf(kills)));
+      itemMeta.setLore(updated);
+    }
+    itemStack.setItemMeta(itemMeta);
+    return itemStack;
+  }
+
+  public static ItemStack getWitherSymbiote() {
+    if (witherSymbiote != null)
+      return witherSymbiote;
+    witherSymbiote = buildSeasonTwoLegendary(Material.NETHERITE_SWORD, "Wither Symbiote", "#555555", "#111111", "altar:item/withersymbiote", null, "wither_symbiote");
+    return witherSymbiote;
+  }
+
+  public static ItemStack getOmen() {
+    if (omen != null)
+      return omen;
+    omen = buildSeasonTwoLegendary(Material.NETHERITE_SPEAR, "Omen", "#55ffaa", "#00aa55", "altar:item/omen", "minecraft:omen", "omen");
+    return omen;
+  }
+
+  public static ItemStack getDragonrend() {
+    if (dragonrend != null)
+      return dragonrend;
+    dragonrend = buildSeasonTwoLegendary(Material.NETHERITE_SWORD, "Dragonrend", "#ff55ff", "#aa00aa", "altar:item/dragonrend", "minecraft:dragon", "dragonrend");
+    return dragonrend;
+  }
+
+  private static ItemStack buildSeasonTwoLegendary(Material material, String displayName, String fromHex, String toHex, String itemModel, String tooltipStyle, String loreKey) {
+    ItemStack itemStack = new ItemStack(material);
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    if (itemMeta == null)
+      return itemStack;
+    itemMeta.setDisplayName(ColorUtil.gradient(displayName, fromHex, toHex));
+    itemMeta.setLore(getLore(loreKey));
+    int sharpness = AltarSMP.getInstance().getConfig().getInt("sharpness", 7);
+    itemMeta.addEnchant(Enchantment.SHARPNESS, sharpness, true);
+    itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
+    itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
+    itemMeta.setUnbreakable(true);
+    itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+    itemMeta.setItemModel(NamespacedKey.fromString(itemModel));
+    if (tooltipStyle != null)
+      itemMeta.setTooltipStyle(NamespacedKey.fromString(tooltipStyle));
+    itemStack.setItemMeta(itemMeta);
+    return itemStack;
+  }
+
+  public static ItemStack getDragonHeart() {
+    return buildSeasonTwoItem(Material.CLAY_BALL, "Dragon Heart", "#580085", "#92058F", "altar:item/dragon");
+  }
+
+  public static ItemStack getSoulInABottle() {
+    return buildSeasonTwoItem(Material.CLAY_BALL, "Soul in a Bottle", "#10B1C8", "#0F6199", "altar:item/soul");
+  }
+
+  public static ItemStack getFragmentOfTheSea() {
+    return buildSeasonTwoItem(Material.PRISMARINE_SHARD, "Fragment of the Sea", "#10B1C8", "#0F6199", null);
+  }
+
+  public static ItemStack getNetheriteHarness() {
+    return buildSeasonTwoItem(Material.PURPLE_HARNESS, "§0§lNetherite Harness", null, null, null);
+  }
+
+  public static ItemStack getAmethystAxe() {
+    return buildSeasonTwoItem(Material.NETHERITE_AXE, "Amethyst Axe", "#E087FF", "#E087FF", "custom:amethyst_axe", true);
+  }
+
+  public static ItemStack getAmethystPickaxe() {
+    return buildSeasonTwoItem(Material.NETHERITE_PICKAXE, "Amethyst Pickaxe", "#E087FF", "#E087FF", "custom:amethyst_pickaxe", true);
+  }
+
+  public static ItemStack getVoidClock() {
+    return buildSeasonTwoItem(Material.CLAY_BALL, "Void Clock", "#55ffff", "#555555", "altar:item/void1");
+  }
+
+  private static ItemStack buildSeasonTwoItem(Material material, String displayName, String fromHex, String toHex, String itemModel) {
+    return buildSeasonTwoItem(material, displayName, fromHex, toHex, itemModel, false);
+  }
+
+  private static ItemStack buildSeasonTwoItem(Material material, String displayName, String fromHex, String toHex, String itemModel, boolean unbreakable) {
+    ItemStack itemStack = new ItemStack(material);
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    if (itemMeta == null)
+      return itemStack;
+    itemMeta.setDisplayName(fromHex == null || toHex == null ? displayName : ColorUtil.gradient(displayName, fromHex, toHex));
+    if (itemModel != null)
+      itemMeta.setItemModel(NamespacedKey.fromString(itemModel));
+    if (unbreakable) {
+      itemMeta.setUnbreakable(true);
+      itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+    }
+    itemStack.setItemMeta(itemMeta);
+    return itemStack;
+  }
+
   public static List loadLore(String paramString) {
     return messagesConfig.getStringList("weapons." + paramString).stream().map(paramLore1 -> translateLoreColors(paramLore1)).toList();
   }
@@ -896,6 +1025,11 @@ public class CustomItemRegistry {
     copperBoots = null;
     copperPickaxe = null;
     contagionSignal = null;
+    tidebreaker = null;
+    ancientBlade = null;
+    witherSymbiote = null;
+    omen = null;
+    dragonrend = null;
   }
 
 }

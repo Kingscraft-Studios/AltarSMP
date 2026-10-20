@@ -22,7 +22,7 @@ public class ItemUtility {
       if (Integer.parseInt(str.split("\\.")[2]) >= 9) {
         paramLocation.getWorld().spawnParticle(Particle.FLASH, paramLocation, 1, 0.0D, 0.0D, 0.0D, 0.0D, Color.WHITE);
       } else {
-        paramLocation.getWorld().spawnParticle(Particle.FLASH, paramLocation, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+        paramLocation.getWorld().spawnParticle(Particle.FLASH, paramLocation, 1, 0.0D, 0.0D, 0.0D, 0.0D, Color.WHITE);
       } 
     }}
 

@@ -1184,11 +1184,23 @@ public enum CustomItem {
                            1.0F,
                            60.0F
                         )
-                     );
+                     ),
 
+   TIDEBREAKER(CustomItemRegistry.getTidebreaker(), true, 2.25D),
+   ANCIENTBLADE(CustomItemRegistry.getAncientBlade(), true, 2.25D) {
+      @Override
+      public ItemStack getItem(Player paramPlayer) {
+         return CustomItemRegistry.getAncientBlade(paramPlayer);
+      }
+   },
+   WITHERSYMBIOTE(CustomItemRegistry.getWitherSymbiote(), true, 2.25D),
+   OMEN(CustomItemRegistry.getOmen(), true, 2.5D),
+   DRAGONREND(CustomItemRegistry.getDragonrend(), true, 2.25D);
 
    public final ItemStack itemStack;
    public final List<ItemStat> stats;
+   public final boolean seasonTwo;
+   public final double displayScale;
    public static final CustomItem[] VALUES;
 
    public static RangedStat stat(Component var0, String var1, float var2, float var3) {
@@ -1204,12 +1216,34 @@ public enum CustomItem {
    }
 
    CustomItem(ItemStack var3, ItemStat... var4) {
+      this(var3, false, 1.75D, var4);
+   }
+
+   CustomItem(ItemStack var3, boolean var5, double var6, ItemStat... var8) {
       this.itemStack = var3;
-      this.stats = List.of(var4);
+      this.stats = List.of(var8);
+      this.seasonTwo = var5;
+      this.displayScale = var6;
    }
 
    public ItemStack getItem() {
       return this.itemStack;
+   }
+
+   public ItemStack getItem(Player paramPlayer) {
+      return this.itemStack;
+   }
+
+   public boolean isSeasonTwo() {
+      return this.seasonTwo;
+   }
+
+   public double getDisplayScale() {
+      return this.displayScale;
+   }
+
+   public double getDisplayOffsetY() {
+      return 1.0D;
    }
 
    public List<ItemStat> getStats() {
@@ -1291,7 +1325,12 @@ public enum CustomItem {
          ECHO,
          CRAZY_SLOTS,
          KNIGHTFALL,
-         NUKE_REMOTE
+         NUKE_REMOTE,
+         TIDEBREAKER,
+         ANCIENTBLADE,
+         WITHERSYMBIOTE,
+         OMEN,
+         DRAGONREND
       };
    }
    static {

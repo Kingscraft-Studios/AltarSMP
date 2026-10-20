@@ -121,7 +121,7 @@ public class NetheriteChestplateComboAbility implements Listener {
       Location location = new Location(paramLocation.getWorld(), d2, paramLocation.getY(), d3);
       paramLocation.getWorld().strikeLightningEffect(location);
     }
-    (new NetheriteChestplateComboDamageTask(this, paramLivingEntity, paramPlayer)).runTaskLater((Plugin)this.plugin, 1L);
+    (new NetheriteChestplateComboDamageTask(this, paramLivingEntity, paramPlayer)).runTaskLater(this.plugin, 1L);
   }
 
   static {

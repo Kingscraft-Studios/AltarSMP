@@ -219,6 +219,11 @@ public class AltarController implements Listener {
           case 17 -> 1.85D;
           case 18 -> 2.1D;
           case 19 -> 2.3D;
+          case 20 -> 2.9D;
+          case 21 -> 2.25D;
+          case 22 -> 2.9D;
+          case 23 -> 2.8D;
+          case 24 -> 2.25D;
           default -> 1.75D;
         };
     } catch (IllegalArgumentException illegalArgumentException) {

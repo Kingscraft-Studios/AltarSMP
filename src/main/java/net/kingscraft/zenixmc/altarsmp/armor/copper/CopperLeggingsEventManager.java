@@ -24,6 +24,7 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -60,9 +61,9 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     UUID uUID = null;
     int i = -1;
     for (Map.Entry<UUID, Integer> entry : this.playerHoldingTimes.entrySet()) {
-      if (((Integer)entry.getValue()).intValue() > i) {
-        i = ((Integer)entry.getValue()).intValue();
-        uUID = (UUID)entry.getKey();
+      if (entry.getValue().intValue() > i) {
+        i = entry.getValue().intValue();
+        uUID = entry.getKey();
       } 
     } 
     AltarSMP.getInstance().getConfig().set("leggingsActive", Boolean.valueOf(false));
@@ -72,7 +73,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
       {
 
       }String str1 = (player != null) ? player.getName() : Bukkit.getOfflinePlayer(uUID).getName();
-      Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + ChatColor.BOLD.toString() + str1 + "§r has won the event!");
+      Bukkit.broadcastMessage(ChatColor.of("#B06736") + ChatColor.BOLD.toString() + str1 + "§r has won the event!");
       String str2 = TimeUtils.formatMmSs(i);
       String str3 = String.valueOf(ChatColor.of("#B06736"));
       {
@@ -80,8 +81,8 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
         if (player != null && player.isOnline()) {
           ItemStack itemStack1 = player.getInventory().getLeggings();
           player.getInventory().setLeggings(CustomItemRegistry.getCopperLeggings());
-          player.getInventory().addItem(new ItemStack[] { itemStack1 });
-          player.sendMessage(String.valueOf(ChatColor.of("#B06736")) + ChatColor.BOLD.toString() + "You have received the Copper Leggings!");
+          player.getInventory().addItem(itemStack1);
+          player.sendMessage(ChatColor.of("#B06736") + ChatColor.BOLD.toString() + "You have received the Copper Leggings!");
           ItemStack itemStack2 = null;
           for (ItemStack itemStack : player.getInventory().getContents()) {
             if (isCopperCore(itemStack)) {
@@ -91,14 +92,14 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
           } 
           {
             if (itemStack2 != null)
-              player.getInventory().removeItem(new ItemStack[] { itemStack2 }); 
+              player.getInventory().removeItem(itemStack2);
           }} 
       }} 
     this.playerHoldingTimes.clear();
   }
 
   public void spawnPlayerCoreDisplay(Player paramPlayer) {
-    ItemDisplay itemDisplay = (ItemDisplay)paramPlayer.getWorld().spawn(paramPlayer.getEyeLocation().clone().add(0.0D, 1.0D, 0.0D), ItemDisplay.class, CopperLeggingsEventManager::lambda$spawnDisplay$0);
+    ItemDisplay itemDisplay = paramPlayer.getWorld().spawn(paramPlayer.getEyeLocation().clone().add(0.0D, 1.0D, 0.0D), ItemDisplay.class, CopperLeggingsEventManager::lambda$spawnDisplay$0);
     this.playerCoreDisplays.put(paramPlayer.getUniqueId(), itemDisplay);
   }
 
@@ -139,7 +140,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
       } 
       {
         if (itemStack != null)
-          player.getInventory().removeItem(new ItemStack[] { itemStack }); 
+          player.getInventory().removeItem(itemStack);
       }} 
   }
 
@@ -208,7 +209,6 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     int j = location.getBlockY();
     int i = location.getBlockZ();
     String str2 = ChatColor.of("#B06736").toString();
-    String str3 = String.valueOf(ChatColor.of("#B06736"));
     Bukkit.broadcastMessage("A " + String.valueOf(ChatColor.of("#B06736")) + "§lCopper Infused Heavy Core §rhas spawned!\\nLocation: " + str2 + "§lX: " + k + " §lY: " + j + " §lZ: " + i + " §rPunch players to steal the core! Whoever holds it longest receives the " + String.valueOf(ChatColor.of("#B06736")) + "§lCopper Leggings§r!");
     location.setYaw(0.0F);
     location.setPitch(0.0F);
@@ -222,10 +222,10 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
   public static ItemStack createCopperCoreItem() {
     ItemStack itemStack = new ItemStack(Material.HEAVY_CORE);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(998));
+    itemMeta.setCustomModelData(998);
     itemMeta.addEnchant(Enchantment.BREACH, 1, true);
-    itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
-    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + "Copper Infused Heavy Core");
+    itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+    itemMeta.setDisplayName(ChatColor.of("#B06736") + "Copper Infused Heavy Core");
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
@@ -242,8 +242,8 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     {
       if (!"legs".equals(paramPlayerInteractAtEntityEvent.getRightClicked().getPersistentDataContainer().get(this.coreInteractionKey, PersistentDataType.STRING)))
         return; 
-    }paramPlayerInteractAtEntityEvent.getPlayer().getInventory().addItem(new ItemStack[] { createCopperCoreItem() });
-    Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + "§lALERT! §r" + paramPlayerInteractAtEntityEvent.getPlayer().getName() + " has picked up the Copper Infused Heavy Core!");
+    }paramPlayerInteractAtEntityEvent.getPlayer().getInventory().addItem(createCopperCoreItem());
+    Bukkit.broadcastMessage(ChatColor.of("#B06736") + "§lALERT! §r" + paramPlayerInteractAtEntityEvent.getPlayer().getName() + " has picked up the Copper Infused Heavy Core!");
     for (Entity entity1 : paramPlayerInteractAtEntityEvent.getRightClicked().getNearbyEntities(2.0D, 2.0D, 2.0D)) {
       {
         if (entity1 instanceof ItemDisplay) {
@@ -272,12 +272,20 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     for (ItemStack itemStack : player2.getInventory().getContents()) {
       {
         if (isCopperCore(itemStack)) {
-          player2.getInventory().removeItem(new ItemStack[] { itemStack });
-          player1.getInventory().addItem(new ItemStack[] { createCopperCoreItem() });
-          Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + "§lALERT! §r" + player1.getName() + " stole the core!");
+          player2.getInventory().removeItem(itemStack);
+          player1.getInventory().addItem(createCopperCoreItem());
+          Bukkit.broadcastMessage(ChatColor.of("#B06736") + "§lALERT! §r" + player1.getName() + " stole the core!");
           break;
         } 
       }} 
+  }
+
+  @EventHandler
+  public void onCopperCorePlace(BlockPlaceEvent event) {
+    ItemStack itemStack = event.getItemInHand();
+    if (isCopperCore(itemStack)) {
+      event.setCancelled(true);
+    }
   }
 
   @EventHandler

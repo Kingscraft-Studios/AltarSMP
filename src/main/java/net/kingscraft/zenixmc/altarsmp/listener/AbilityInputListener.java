@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
+import net.kingscraft.zenixmc.altarsmp.altars2.ability.Altars2AbilityDispatcher;
 import net.kingscraft.zenixmc.altarsmp.ability.nuke.NukeAbility;
 import net.kingscraft.zenixmc.altarsmp.ability.paladin.PaladinEarthAbility;
 import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightfallListener;
@@ -99,6 +100,12 @@ public class AbilityInputListener implements Listener, CommandExecutor {
             return false;
           } 
         }}{
+      if (Altars2AbilityDispatcher.dispatchMainHand(paramPlayer)) {
+        paramPlayer.swingMainHand();
+        paramPlayer.updateInventory();
+        return true;
+      } 
+    }{
       if (AltarSMP.areSimilar(itemStack, CustomItemRegistry.getIllusionWand())) {
         {
           if (IllusionDisguiseManager.isDisguised(paramPlayer))
@@ -340,7 +347,14 @@ public class AbilityInputListener implements Listener, CommandExecutor {
             paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
             return false;
           } 
-        }}ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
+        }}    ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
+    {
+      if (Altars2AbilityDispatcher.dispatchOffhand(paramPlayer)) {
+        paramPlayer.swingMainHand();
+        paramPlayer.updateInventory();
+        return true;
+      } 
+    }
     {
       if (AltarSMP.areSimilar(itemStack, CustomItemRegistry.getCutlass())) {
         {

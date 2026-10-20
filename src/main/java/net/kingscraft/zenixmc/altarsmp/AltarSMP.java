@@ -3,22 +3,17 @@ package net.kingscraft.zenixmc.altarsmp;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HexFormat;
 import java.util.Objects;
+import java.util.UUID;
+
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.ClickEvent.Action;
-import net.kyori.adventure.text.event.ClickEvent.Payload;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,11 +45,9 @@ import net.kingscraft.zenixmc.altarsmp.command.ClearCooldownsCommand;
 import net.kingscraft.zenixmc.altarsmp.command.OffhandAbilityCommand;
 import net.kingscraft.zenixmc.altarsmp.command.SetKillsCommand;
 import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.core.update.UpdateChecker;
 import net.kingscraft.zenixmc.altarsmp.event.bingo.BingoEventManager;
 import net.kingscraft.zenixmc.altarsmp.event.crazy.CrazyRandomizerListener;
 import net.kingscraft.zenixmc.altarsmp.event.crazy.CrazySelectorMenuListener;
-import net.kingscraft.zenixmc.altarsmp.event.crazy.GiveCrazySelectorCommand;
 import net.kingscraft.zenixmc.altarsmp.illusion.IllusionCoreRecipeListener;
 import net.kingscraft.zenixmc.altarsmp.illusion.IllusionDisguiseManager;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRefreshTask;
@@ -64,6 +57,7 @@ import net.kingscraft.zenixmc.altarsmp.legendary.LegendaryItemConfigMenu;
 import net.kingscraft.zenixmc.altarsmp.legendary.LegendaryItemsMenu;
 import net.kingscraft.zenixmc.altarsmp.listener.MobDropListener;
 import net.kingscraft.zenixmc.altarsmp.listener.PluginEnableListener;
+import net.kingscraft.zenixmc.altarsmp.listener.SeasonTwoRecipeListener;
 import net.kingscraft.zenixmc.altarsmp.listener.WeaponHandleRecipeListener;
 import net.kingscraft.zenixmc.altarsmp.trust.TrustCommand;
 import net.kingscraft.zenixmc.altarsmp.trust.TrustManager;
@@ -117,6 +111,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       this.knightFallKillTracker = new KnightFallKillTracker(this);
       this.altarConfigManager = new AltarManager(this);
       this.altarController = new AltarController(this);
+      net.kingscraft.zenixmc.altarsmp.altars2.Altars2.bootstrap(this);
 
       Bukkit.getPluginManager().registerEvents(new MobDropListener(this), this);
       Bukkit.getPluginManager().registerEvents(new AltarRitualListener(this.altarController), this);
@@ -124,6 +119,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       Bukkit.getPluginManager().registerEvents(new WeaponHandleRecipeListener(this), this);
       Bukkit.getPluginManager().registerEvents(new VulcanSkullRecipeListener(this), this);
       Bukkit.getPluginManager().registerEvents(new IllusionCoreRecipeListener(this), this);
+      Bukkit.getPluginManager().registerEvents(new SeasonTwoRecipeListener(this), this);
 
       this.getCommand("cooldown").setExecutor(new ClearCooldownsCommand());
 
@@ -172,11 +168,11 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       Bukkit.getPluginManager().registerEvents(new CrazySelectorMenuListener(), this);
       Bukkit.getPluginManager().registerEvents(new LegendaryItemConfigMenu(), this);
       Bukkit.getPluginManager().registerEvents(new CopperOreVeinMinerListener(this), this);
+      Bukkit.getPluginManager().registerEvents(new net.kingscraft.zenixmc.altarsmp.altars2.listener.AmethystToolListener(this), this);
       Bukkit.getPluginManager().registerEvents(this.altarController, this);
       Bukkit.getPluginManager().registerEvents(new EchoAbility(), this);
       Bukkit.getPluginManager().registerEvents(new StrikerBowAbility(), this);
       Bukkit.getPluginManager().registerEvents(new PaleCannonAbility(this), this);
-      Bukkit.getPluginManager().registerEvents(new UpdateChecker(), this);
 
       VampireEventManager var6 = new VampireEventManager();
       Bukkit.getPluginManager().registerEvents(var6, this);
@@ -194,10 +190,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       WitherBoneAbility.startTask();
 
       this.getCommand("controls").setExecutor(new OffhandAbilityCommand(this));
-      this.getCommand("giveselector").setExecutor(new GiveCrazySelectorCommand(this));
-      Objects.requireNonNull(this.getCommand("dtest")).setExecutor(AltarSMP::lambda$onEnable$0);
       this.getCommand("checklegendary").setExecutor(new FindLegendaryItemDuplicatesCommand());
-      Objects.requireNonNull(this.getCommand("credits")).setExecutor(AltarSMP::lambda$onEnable$1);
 
       this.registerTrust();
 
@@ -227,7 +220,18 @@ public final class AltarSMP extends JavaPlugin implements Listener {
             } else if (var2.hasItemModel() && !Objects.equals(var2.getItemModel(), var3.getItemModel())) {
                return false;
             } else {
-               return var2.hasCustomModelData() != var3.hasCustomModelData() ? false : var2.getCustomModelData() == var3.getCustomModelData();
+               boolean hasCmdA = var2.hasCustomModelData();
+               boolean hasCmdB = var3.hasCustomModelData();
+               if (hasCmdA != hasCmdB) {
+                  return false;
+               }
+               if (hasCmdA) {
+                  return var2.getCustomModelData() == var3.getCustomModelData();
+               }
+               if (var2.hasItemModel()) {
+                  return true;
+               }
+               return Objects.equals(var2.getDisplayName(), var3.getDisplayName());
             }
          } else {
             return false;
@@ -238,19 +242,30 @@ public final class AltarSMP extends JavaPlugin implements Listener {
    }
 
    @EventHandler
-   public void join(PlayerJoinEvent var1) {
-      Player var2 = var1.getPlayer();
+   public void join(PlayerJoinEvent event) {
+      Player player = event.getPlayer();
       if (getInstance().getConfig().getBoolean("reset_hearts_on_relog", true)) {
-         var2.setMaxHealth(20.0);
-         AttributeInstance var3 = var2.getAttribute(Attribute.MAX_HEALTH);
+         player.setMaxHealth(20.0);
+         AttributeInstance var3 = player.getAttribute(Attribute.MAX_HEALTH);
          var3.setBaseValue(20.0);
       }
 
-      new CustomItemRefreshTask(this, var2).runTaskLater(getInstance(), 20L);
+      new CustomItemRefreshTask(this, player).runTaskLater(getInstance(), 20L);
+
+      String PACK_URL = "https://download.mc-packs.net/pack/6854d1e3ba2be9c4a08c774a1058a749746c9ea0.zip";
+      byte[] PACK_SHA1 = HexFormat.of().parseHex("6854d1e3ba2be9c4a08c774a1058a749746c9ea0");
+      UUID PACK_UUID = UUID.fromString("fec0911a-8d2c-46fc-b277-c1cbbfe1dad3");
+      String PACK_PROMPT = "§aThis Server Requires a Custom Resource Pack for Optimal Experience";
+
+      // Merged Resource Pack
+      player.addResourcePack(PACK_UUID, PACK_URL, PACK_SHA1, PACK_PROMPT, true);
+
    }
 
    @Override
    public void onDisable() {
+      net.kingscraft.zenixmc.altarsmp.altars2.Altars2.shutdown();
+
       if (this.bloodLustKillTracker != null) {
          this.bloodLustKillTracker.flush();
       }
@@ -360,43 +375,6 @@ public final class AltarSMP extends JavaPlugin implements Listener {
          );
       }
    }
-
-   private static boolean lambda$onEnable$1(CommandSender var0, Command var1, String var2, String[] var3) {
-      if (var0 instanceof Player var4) {
-         var4.getWorld().playSound(var4.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
-      }
-
-      Component var6 = Component.text("§ePurchase ").clickEvent(ClickEvent.clickEvent(Action.OPEN_URL, Payload.string("https://mc-shop-plugins.tebex.io")))
-         .decorate(TextDecoration.UNDERLINED);
-      Component var5 = Component.text("§7| §bDownload Pack ").clickEvent(ClickEvent.clickEvent(Action.OPEN_URL, Payload.string("https://modrinth.com/resourcepack/altar-smp-texture-pack")))
-         .decorate(TextDecoration.UNDERLINED);
-      var0.sendMessage(var6.append(var5));
-      var0.sendMessage("§8---------------------");
-      var0.sendMessage("§7Plugin by §5.Doomwen");
-      var0.sendMessage("§7Models by §8ilyduckzy");
-      return true;
-   }
-
-   private static boolean lambda$onEnable$0(CommandSender var0, Command var1, String var2, String[] var3) {
-      if (var0 instanceof Player var4) {
-         if (IllusionDisguiseManager.isDisguised(
-            var4
-         )) {
-            IllusionDisguiseManager.revealPlayer(
-               var4
-            );
-            return true;
-         }
-
-         IllusionDisguiseManager.disguisePlayer(
-            var4, EntityType.ZOMBIE, null
-         );
-      }
-
-      return true;
-   }
-
-   // $VF: Irreducible bytecode was duplicated to produce valid code
 
 
 }

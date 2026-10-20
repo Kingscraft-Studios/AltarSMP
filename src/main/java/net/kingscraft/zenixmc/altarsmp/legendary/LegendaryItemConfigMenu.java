@@ -29,10 +29,22 @@ import net.kingscraft.zenixmc.altarsmp.menu.DialogBuilder;
 public class LegendaryItemConfigMenu implements Listener {
   public static String MENU_TITLE;
 
+  private static LegendaryItemConfigMenu instance;
+
   FileConfiguration config = AltarSMP.getInstance().getConfig();
 
+  public LegendaryItemConfigMenu() {
+    instance = this;
+  }
+
+  public static void showConfigDialog(Player paramPlayer, CustomItem paramCustomItem) {
+    if (instance != null && paramCustomItem != null) {
+      paramPlayer.showDialog((DialogLike) instance.buildWeaponDialog(paramCustomItem));
+    }
+  }
+
   public static void openConfigMenu(Player paramPlayer) {
-    Inventory inventory = Bukkit.createInventory(null, 45, MENU_TITLE);
+    Inventory inventory = Bukkit.createInventory(null, 54, MENU_TITLE);
     ItemStack itemStack = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setDisplayName(" ");
@@ -43,25 +55,13 @@ public class LegendaryItemConfigMenu implements Listener {
         inventory.setItem(b, itemStack);
         b++;
       } 
-    }b = 2;
+    }b = 45;
     {
-      while (b < 7) {
-        inventory.setItem(b, null);
-        b++;
-      } 
-    }b = 36;
-    {
-      while (b < 45) {
+      while (b < 54) {
         inventory.setItem(b, itemStack);
         b++;
       } 
-    }inventory.setItem(9, itemStack);
-    inventory.setItem(18, itemStack);
-    inventory.setItem(27, itemStack);
-    inventory.setItem(17, itemStack);
-    inventory.setItem(26, itemStack);
-    inventory.setItem(35, itemStack);
-    inventory.setItem(40, LegendaryItemsMenu.createLegendaryItemsButton());
+    }inventory.setItem(49, LegendaryItemsMenu.createLegendaryItemsButton());
     for (CustomItem customItem : CustomItem.values()) {
       inventory.addItem(new ItemStack[] { customItem.getItem() });
     } 
@@ -88,7 +88,7 @@ public class LegendaryItemConfigMenu implements Listener {
     {
       player.playSound((Entity)player, Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
       paramInventoryClickEvent.setCancelled(true);
-      if (paramInventoryClickEvent.getSlot() == 40) {
+      if (paramInventoryClickEvent.getSlot() == 49) {
         LegendaryItemsMenu.openLegendaryItemsMenu(player);
         return;
       } 

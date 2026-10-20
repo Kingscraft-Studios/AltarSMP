@@ -15,6 +15,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemType;
@@ -141,13 +142,17 @@ public class AltarManager {
             if (str == null)
               continue; 
           }Material material = Material.getMaterial(str.toUpperCase());
+          ItemStack referenceItem = getItem(str);
           if (material == null)
-            material = getItem(str).getType();
+            material = referenceItem.getType();
+          ItemMeta referenceMeta = referenceItem.getItemMeta();
+          int customModelData = referenceMeta != null && referenceMeta.hasCustomModelData() ? referenceMeta.getCustomModelData() : 0;
+          String itemModel = referenceMeta != null && referenceMeta.hasItemModel() ? referenceMeta.getItemModel().toString() : null;
           int bool = 0;
           {
             bool = map1.containsKey("amount") ? ((Integer)map1.get("amount")).intValue() : 1;
-          }int i = getCustomModelData(str.toUpperCase());
-          altarRecipeBuilder.ingredient(material, bool, i);
+          }
+          altarRecipeBuilder.ingredient(material, bool, customModelData, itemModel);
         } 
       }  
     return altarRecipeBuilder.build();

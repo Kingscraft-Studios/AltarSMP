@@ -23,5 +23,10 @@ public class CustomItemIds {
     ID_BY_ITEM[CustomItem.PURE_BLADE.ordinal()] = 17;
     ID_BY_ITEM[CustomItem.WINDWEAVER.ordinal()] = 18;
     ID_BY_ITEM[CustomItem.WITHERED_BONE_BLADE.ordinal()] = 19;
+    ID_BY_ITEM[CustomItem.TIDEBREAKER.ordinal()] = 20;
+    ID_BY_ITEM[CustomItem.ANCIENTBLADE.ordinal()] = 21;
+    ID_BY_ITEM[CustomItem.WITHERSYMBIOTE.ordinal()] = 22;
+    ID_BY_ITEM[CustomItem.OMEN.ordinal()] = 23;
+    ID_BY_ITEM[CustomItem.DRAGONREND.ordinal()] = 24;
   } 
 }
