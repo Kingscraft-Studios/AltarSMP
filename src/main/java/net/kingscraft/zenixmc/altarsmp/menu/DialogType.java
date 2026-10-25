@@ -1,6 +1,3 @@
-// 
-// 
-
 package net.kingscraft.zenixmc.altarsmp.menu;
 
 public enum DialogType {

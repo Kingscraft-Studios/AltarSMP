@@ -1,17 +1,16 @@
 package net.kingscraft.zenixmc.altarsmp.ability.nuke;
 
 import java.util.HashSet;
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.RayTraceResult;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
@@ -35,48 +34,48 @@ public class NukeAbility implements Listener {
     String str1 = String.valueOf(location.getBlock().getX());
     String str2 = String.valueOf(location.getBlock().getY());
     String str3 = String.valueOf(location.getBlock().getZ());
-    HashSet hashSet = new HashSet();
-    (new NukeCountdownTask(j, location, paramPlayer, i, hashSet, world, k, str1, str2, str3)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 20L);
+    HashSet<UUID> hashSet = new HashSet<>();
+    (new NukeCountdownTask(j, location, paramPlayer, i, hashSet, world, k, str1, str2, str3)).runTaskTimer(AltarSMP.getInstance(), 0L, 20L);
     return true;
   }
 
+  // TODO: TOO MUCH LAG Server Can Crash
   public static void detonateNuke(Location paramLocation, Player paramPlayer, int paramInt) {
     double d = AltarSMP.getInstance().getConfig().getDouble("nukeDamage", 100.0D);
-    for (int i = -paramInt; i <= paramInt; i++) {
-      int j = -paramInt;
-      while (j <= paramInt) {
-        int k = -paramInt;
-        while (true) {
-          {
-            if (k <= paramInt) {
-              if (i * i + j * j + k * k <= paramInt * paramInt) {
-                Location location = paramLocation.clone().add(i, j, k);
-                Block block = location.getBlock();
-                {
-                  if (!block.getType().isAir())
-                    {
-                      if (block.getType().getHardness() != -1.0F)
-                        block.setType(Material.AIR); 
-                    }}} 
-              k++;
-              continue;
-            } 
-          }j++;
-        } 
-      } 
-    } 
-    for (Player player : paramLocation.getNearbyPlayers(paramInt)) {
-      {
-        player.spawnParticle(Particle.EXPLOSION, player.getLocation(), 1);
-        player.playSound((Entity)player, Sound.ENTITY_GENERIC_EXPLODE, 1.0F, 1.0F);
-        if (paramPlayer == player)
-          continue; 
-      }{
-        if (AltarSMP.isTrusted(paramPlayer, (Entity)player))
-          continue; 
-      }
-        TrueDamage.apply((LivingEntity)player, d, paramPlayer);
-    } 
-  }
 
+    for (int i = -paramInt; i <= paramInt; i++) {
+      for (int j = -paramInt; j <= paramInt; j++) {
+        for (int k = -paramInt; k <= paramInt; k++) {
+
+          if (i * i + j * j + k * k > paramInt * paramInt) {
+            continue;
+          }
+
+          Location location = paramLocation.clone().add(i, j, k);
+          Block block = location.getBlock();
+
+          if (!block.getType().isAir()
+                  && block.getType().getHardness() != -1.0F) {
+            block.setType(Material.AIR);
+          }
+        }
+      }
+    }
+
+    for (Player player : paramLocation.getNearbyPlayers(paramInt)) {
+      player.spawnParticle(Particle.EXPLOSION, player.getLocation(), 1);
+
+      player.playSound(player, Sound.ENTITY_GENERIC_EXPLODE, 1.0F, 1.0F);
+
+      if (paramPlayer == player) {
+        continue;
+      }
+
+      if (AltarSMP.isTrusted(paramPlayer, player)) {
+        continue;
+      }
+
+      TrueDamage.apply(player, d, paramPlayer);
+    }
+  }
 }

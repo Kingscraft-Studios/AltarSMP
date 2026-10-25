@@ -30,7 +30,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -49,8 +48,8 @@ public class IllusionWandAbility implements Listener {
 
   public IllusionWandAbility(AltarSMP paramAltarSMP) {
     this.plugin = paramAltarSMP;
-    STORED_MOB_KEY = new NamespacedKey((Plugin)paramAltarSMP, "stored_mob");
-    this.storedPlayerNameKey = new NamespacedKey((Plugin)paramAltarSMP, "stored_player_name");
+    STORED_MOB_KEY = new NamespacedKey(paramAltarSMP, "stored_mob");
+    this.storedPlayerNameKey = new NamespacedKey(paramAltarSMP, "stored_player_name");
   }
 
   public static boolean isIllusionWand(ItemStack paramItemStack) {
@@ -79,7 +78,7 @@ public class IllusionWandAbility implements Listener {
       if (IllusionDisguiseManager.isDisguised(player)) {
         paramPlayerDeathEvent.setCancelled(true);
         IllusionDisguiseManager.revealPlayer(player);
-        (new CapturedMobDeathTask(player)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
+        (new CapturedMobDeathTask(player)).runTaskLater(AltarSMP.getInstance(), 2L);
       } 
     }}
 
@@ -94,9 +93,8 @@ public class IllusionWandAbility implements Listener {
     {
       if (!isIllusionWand(itemStack))
         return; 
-    }if (livingEntity instanceof Player) {
-      Player player1 = (Player)livingEntity;
-      ItemMeta itemMeta = itemStack.getItemMeta();
+    }if (livingEntity instanceof Player player1) {
+          ItemMeta itemMeta = itemStack.getItemMeta();
       {
         if (itemMeta == null)
           return; 
@@ -107,7 +105,7 @@ public class IllusionWandAbility implements Listener {
       String str1 = player1.getName();
       String str2 = ChatColor.UNDERLINE.toString();
       String str3 = String.valueOf(ChatColor.RED);
-      player.sendMessage(String.valueOf(ChatColor.DARK_RED) + "» You captured " + str3 + str2 + str1);
+      player.sendMessage(ChatColor.DARK_RED + "» You captured " + str3 + str2 + str1);
       player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.5F);
     } else {
       storeCapturedMob(player, itemStack, livingEntity.getType());
@@ -128,8 +126,8 @@ public class IllusionWandAbility implements Listener {
     String str1 = paramEntityType.name();
     String str2 = ChatColor.UNDERLINE.toString();
     String str3 = String.valueOf(ChatColor.RED);
-    paramPlayer.sendMessage(String.valueOf(ChatColor.DARK_RED) + "» You captured a " + str3 + str2 + str1);
-    paramPlayer.playSound((Entity)paramPlayer, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.2F);
+    paramPlayer.sendMessage(ChatColor.DARK_RED + "» You captured a " + str3 + str2 + str1);
+    paramPlayer.playSound(paramPlayer, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.2F);
   }
 
   @EventHandler
@@ -152,7 +150,7 @@ public class IllusionWandAbility implements Listener {
       if (IllusionDisguiseManager.isDisguised(player)) {
         return;
       }
-      (new IllusionWandChargeTask(this, player)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
+      (new IllusionWandChargeTask(player)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
     }
   }
 
@@ -165,14 +163,14 @@ public class IllusionWandAbility implements Listener {
       if (isIllusionWand(paramPlayerItemConsumeEvent.getItem())) {
         {
           paramPlayerItemConsumeEvent.setCancelled(true);
-          (new InventoryUpdateTask(player)).runTaskLater((Plugin)AltarSMP.getInstance(), 1L);
+          (new InventoryUpdateTask(player)).runTaskLater(AltarSMP.getInstance(), 1L);
           if (IllusionDisguiseManager.isDisguised(player)) {
             player.sendMessage("§cYou are already disguised");
             return;
           } 
         }boolean bool = AltarSMP.getInstance().getConfig().getBoolean("IllusionWandRandomMob", false);
         if (bool) {
-          ArrayList<EntityType> arrayList = new ArrayList();
+          ArrayList<EntityType> arrayList = new ArrayList<>();
           for (String str : AltarSMP.getInstance().getConfig().getStringList("randomMobs")) {
             try {
               arrayList.add(EntityType.valueOf(str.toUpperCase()));
@@ -182,7 +180,7 @@ public class IllusionWandAbility implements Listener {
           } 
           int i = ThreadLocalRandom.current().nextInt(0, arrayList.size());
           EntityType entityType = arrayList.get(i);
-          IllusionDisguiseManager.disguisePlayer(player, entityType, (Player)null);
+          IllusionDisguiseManager.disguisePlayer(player, entityType, null);
         } else {
           restoreCapturedMob(player, persistentDataContainer);
         } 
@@ -191,7 +189,7 @@ public class IllusionWandAbility implements Listener {
 
   public void restoreCapturedMob(Player paramPlayer, PersistentDataContainer paramPersistentDataContainer) {
     if (paramPersistentDataContainer.has(this.storedPlayerNameKey, PersistentDataType.STRING)) {
-      String str = (String)paramPersistentDataContainer.get(this.storedPlayerNameKey, PersistentDataType.STRING);
+      String str = paramPersistentDataContainer.get(this.storedPlayerNameKey, PersistentDataType.STRING);
       {
         if (str == null)
           return; 
@@ -202,9 +200,9 @@ public class IllusionWandAbility implements Listener {
       }
       IllusionDisguiseManager.disguisePlayer(paramPlayer, EntityType.PLAYER, player);
     } else if (paramPersistentDataContainer.has(STORED_MOB_KEY, PersistentDataType.STRING)) {
-      String str = (String)paramPersistentDataContainer.get(STORED_MOB_KEY, PersistentDataType.STRING);
+      String str = paramPersistentDataContainer.get(STORED_MOB_KEY, PersistentDataType.STRING);
       EntityType entityType = EntityType.valueOf(str);
-      IllusionDisguiseManager.disguisePlayer(paramPlayer, entityType, (Player)null);
+      IllusionDisguiseManager.disguisePlayer(paramPlayer, entityType, null);
     } 
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
     ItemMeta itemMeta = itemStack.getItemMeta();
@@ -216,7 +214,7 @@ public class IllusionWandAbility implements Listener {
   public static void startAbilityCooldown(Player paramPlayer) {
     int i = AltarSMP.getInstance().getConfig().getInt("mobAbilityCooldown", 30);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "mobAbility", i);
-    BossBarManager.createBar(paramPlayer,String.valueOf(ChatColor.RED) + "Illusion Ability", i, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, ChatColor.RED + "Illusion Ability", i, ChatColor.YELLOW);
   }
 
   @EventHandler
@@ -262,14 +260,14 @@ public class IllusionWandAbility implements Listener {
         break;
       }
       case 3: {
-        Fireball fireball = (Fireball)paramPlayer.launchProjectile(Fireball.class);
+        Fireball fireball = paramPlayer.launchProjectile(Fireball.class);
         fireball.setVelocity(paramPlayer.getLocation().getDirection().multiply(AltarSMP.getInstance().getConfig().getDouble("IllusionBlazeFireballStrength", 2.0D)));
         paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1.0F, 1.0F);
         break;
       }
       case 4: {
         for (int i = -1; i <= 1; i++) {
-          WitherSkull witherSkull = (WitherSkull)paramPlayer.launchProjectile(WitherSkull.class);
+          WitherSkull witherSkull = paramPlayer.launchProjectile(WitherSkull.class);
           witherSkull.setYield(2.0F);
           witherSkull.setVelocity(paramPlayer.getLocation().getDirection().rotateAroundY(Math.toRadians(i * 15)).multiply(2));
         }
@@ -309,7 +307,7 @@ public class IllusionWandAbility implements Listener {
         break;
       }
       case 8: {
-        Fireball fireball2 = (Fireball)paramPlayer.launchProjectile(Fireball.class);
+        Fireball fireball2 = paramPlayer.launchProjectile(Fireball.class);
         fireball2.setYield(3.0F);
         paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1.0F, 1.0F);
         break;
@@ -325,21 +323,20 @@ public class IllusionWandAbility implements Listener {
 
   public static void createSonicBoomEffect(Player paramPlayer, Location paramLocation, double paramDouble, Vector paramVector) {
     paramPlayer.getWorld().playSound(paramLocation, Sound.ENTITY_WARDEN_SONIC_BOOM, 3.0F, 1.0F);
-    double d1 = 0;
+    double d1;
     for (d1 = 0.0D; d1 <= paramDouble; d1 += 0.3D) {
       Location location = paramLocation.clone().add(paramVector.clone().multiply(d1));
       paramPlayer.getWorld().spawnParticle(Particle.SONIC_BOOM, location, 1, 0.0D, 0.0D, 0.0D, 0.0D);
     } 
-    HashSet<UUID> hashSet = new HashSet();
-    double d2 = 0;
+    HashSet<UUID> hashSet = new HashSet<>();
+    double d2;
     for (d2 = 0.0D; d2 <= paramDouble; d2 += 0.5D) {
       Location location = paramLocation.clone().add(paramVector.clone().multiply(d2));
       for (Entity entity : location.getWorld().getNearbyEntities(location, 1.0D, 1.0D, 1.0D)) {
         {
-          if (entity instanceof LivingEntity)
+          if (entity instanceof LivingEntity livingEntity)
             {
               if (entity != paramPlayer && !hashSet.contains(entity.getUniqueId())) {
-                LivingEntity livingEntity = (LivingEntity)entity;
                 hashSet.add(entity.getUniqueId());
                 livingEntity.setHealth(Math.max(0.0D, livingEntity.getHealth() - 10.0D));
                 Vector vector = paramVector.clone().multiply(1.5D);

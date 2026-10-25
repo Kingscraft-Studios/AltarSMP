@@ -1669,14 +1669,6 @@ public enum CustomItem {
       return this.seasonTwo;
    }
 
-   public double getDisplayScale() {
-      return this.displayScale;
-   }
-
-   public double getDisplayOffsetY() {
-      return 1.0D;
-   }
-
    public List<ItemStat> getStats() {
       return this.stats;
    }

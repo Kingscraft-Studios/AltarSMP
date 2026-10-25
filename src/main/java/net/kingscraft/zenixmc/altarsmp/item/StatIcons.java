@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.item;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import net.kyori.adventure.text.object.ObjectContents;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public final class StatIcons {
   public static Component ICON_COOLDOWN;

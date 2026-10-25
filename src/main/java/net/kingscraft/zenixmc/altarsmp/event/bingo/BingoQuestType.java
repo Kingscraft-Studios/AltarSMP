@@ -8,7 +8,7 @@ import org.bukkit.Material;
 
 enum BingoQuestType {
     AMETHYST(Material.AMETHYST_SHARD, "Amethyst Collector", "Gather 24 amethyst shards from geodes.", BingoQuestCategory.COLLECT, Material.AMETHYST_SHARD, 24),
-    SLAYER(Material.IRON_SWORD, "Slayer", "Kill a non teammate player.", BingoQuestCategory.KILL, (Material)null, 1),
+    SLAYER(Material.IRON_SWORD, "Slayer", "Kill a non teammate player.", BingoQuestCategory.KILL, null, 1),
     COPPER(Material.WAXED_CUT_COPPER_STAIRS, "Copper Enthusiast", "Craft or collect 32 Waxed Cut Copper Stairs.", BingoQuestCategory.COLLECT, Material.WAXED_CUT_COPPER_STAIRS, 32),
     OBSIDIAN(Material.OBSIDIAN, "Obsidian Hoarder", "Collect 32 obsidian.", BingoQuestCategory.COLLECT, Material.OBSIDIAN, 32),
     SEA(Material.HEART_OF_THE_SEA, "Sea Explorer", "Find 1 Heart of the Sea.", BingoQuestCategory.COLLECT, Material.HEART_OF_THE_SEA, 1),
@@ -25,7 +25,7 @@ enum BingoQuestType {
     BLACKSTONE(Material.BLACKSTONE, "Blackstone Miner", "Collect 64 blackstone.", BingoQuestCategory.COLLECT, Material.BLACKSTONE, 64),
     COAL(Material.COAL_BLOCK, "Coal Block Crafter", "Craft or collect 4 coal blocks.", BingoQuestCategory.COLLECT, Material.COAL_BLOCK, 4),
     NAUTILUS(Material.NAUTILUS_SHELL, "Nautilus Hunter", "Find 4 nautilus shells.", BingoQuestCategory.COLLECT, Material.NAUTILUS_SHELL, 4),
-    DISC(Material.MUSIC_DISC_CAT, "Disc Lover", "Find 2 music discs.", BingoQuestCategory.COLLECT, (Material)null, 2, BingoQuestType::lambda$static$0),
+    DISC(Material.MUSIC_DISC_CAT, "Disc Lover", "Find 2 music discs.", BingoQuestCategory.COLLECT, null, 2, BingoQuestType::lambda$static$0),
     MOSS(Material.MOSS_BLOCK, "Moss Collector", "Collect 48 moss blocks.", BingoQuestCategory.COLLECT, Material.MOSS_BLOCK, 48),
     HONEY(Material.HONEY_BLOCK, "Honey Worker", "Obtain 4 honey blocks.", BingoQuestCategory.COLLECT, Material.HONEY_BLOCK, 4),
     PURPUR(Material.PURPUR_BLOCK, "Purpur Builder", "Collect 32 purpur blocks.", BingoQuestCategory.COLLECT, Material.PURPUR_BLOCK, 32),
@@ -57,14 +57,14 @@ enum BingoQuestType {
     public final BingoQuestCompletionCondition completionCondition;
     public static final BingoQuestType[] VALUES;
 
-    private BingoQuestType(final Material displayMaterial, final String displayName, final String description,
-                           final BingoQuestCategory questType, final Material targetMaterial, final int amount) {
+    BingoQuestType(final Material displayMaterial, final String displayName, final String description,
+                   final BingoQuestCategory questType, final Material targetMaterial, final int amount) {
         this(displayMaterial, displayName, description, questType, targetMaterial, amount, null);
     }
 
-    private BingoQuestType(final Material displayMaterial, final String displayName, final String description,
-                           final BingoQuestCategory questType, final Material targetMaterial, final int amount,
-                           final BingoQuestCompletionCondition completionCondition) {
+    BingoQuestType(final Material displayMaterial, final String displayName, final String description,
+                   final BingoQuestCategory questType, final Material targetMaterial, final int amount,
+                   final BingoQuestCompletionCondition completionCondition) {
         this.displayMaterial = displayMaterial;
         this.displayName = displayName;
         this.description = description;
@@ -75,10 +75,7 @@ enum BingoQuestType {
     }
 
     private static boolean lambda$static$0(final Player player, final BingoQuestType bingoQuestType) {
-        if (BingoEventManager.countMusicDiscs(player) >= bingoQuestType.requiredAmount) {
-            return true;
-        }
-        return false;
+        return BingoEventManager.countMusicDiscs(player) >= bingoQuestType.requiredAmount;
     }
 
     public static BingoQuestType[] createValuesArray() {

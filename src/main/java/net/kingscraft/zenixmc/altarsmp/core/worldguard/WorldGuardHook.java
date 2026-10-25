@@ -15,7 +15,7 @@ public class WorldGuardHook {
           if (WORLDGUARD_SUPPORT)
             try {
               Class<?> clazz = Class.forName("net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardPvpHandler");
-              return ((Boolean)clazz.getMethod("isPvpDenied", new Class[] { Location.class }).invoke(null, new Object[] { paramLocation })).booleanValue();
+              return (Boolean) clazz.getMethod("isPvpDenied", new Class[]{Location.class}).invoke(null, new Object[]{paramLocation});
             } catch (ClassNotFoundException classNotFoundException) {
               return false;
             } catch (Throwable throwable) {

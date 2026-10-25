@@ -6,7 +6,7 @@
 
     <groupId>net.kingscraft.zenixmc.altarsmp</groupId>
     <artifactId>AltarSMP</artifactId>
-    <version>1.2</version>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
 
     <name>AltarSMP</name>

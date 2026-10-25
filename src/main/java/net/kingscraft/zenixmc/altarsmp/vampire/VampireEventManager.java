@@ -27,7 +27,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -35,6 +34,7 @@ import org.bukkit.util.Vector;
 import java.util.HashMap;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
+import org.jetbrains.annotations.NotNull;
 
 public final class VampireEventManager implements Listener, CommandExecutor, TabCompleter {
   public static final String PALE;
@@ -90,7 +90,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
     {
       if (!eventEnabled)
         return; 
-    }(new VampireSunAndMoonTask()).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 20L);
+    }(new VampireSunAndMoonTask()).runTaskTimer(AltarSMP.getInstance(), 0L, 20L);
   }
 
   public static boolean isExposedToSun(Player paramPlayer) {
@@ -178,8 +178,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
     Vector vector2 = player.getLocation().toVector().subtract(livingEntity.getLocation().toVector()).normalize();
     double d = vector1.dot(vector2);
     if (d < -0.5D) {
-      double d1 = backstabDamage;
-      paramEntityDamageByEntityEvent.setDamage(paramEntityDamageByEntityEvent.getDamage() + d1);
+      paramEntityDamageByEntityEvent.setDamage(paramEntityDamageByEntityEvent.getDamage() + backstabDamage);
       livingEntity.getWorld().playSound(livingEntity.getLocation(), Sound.ENTITY_CREAKING_ATTACK, 1.2F, 1.0F);
     } 
   }
@@ -277,7 +276,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
 
   public static void endVampireEvent(String paramString) {
     eventEnabled = false;
-    config.set("vampire_event_enabled", Boolean.valueOf(false));
+    config.set("vampire_event_enabled", Boolean.FALSE);
     String str1 = null;
     String str2 = paramString.toLowerCase();
     int b = -1;
@@ -317,7 +316,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
       setPlayerType(player, str1);
       getPlayerType(player);
     } 
-    for (UUID uUID : (Iterable<UUID>)(Iterable<?>)new ArrayList(playerTypes.keySet())) {
+    for (UUID uUID : new ArrayList<>(playerTypes.keySet())) {
       {
         if (Bukkit.getPlayer(uUID) == null) {
           {
@@ -333,10 +332,10 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
       }} 
     saveVampireData();
     bloodMoonAnnounced = false;
-    Bukkit.broadcastMessage(String.valueOf(ChatColor.RED) + String.valueOf(ChatColor.BOLD) + "RITUAL COMPLETE");
+    Bukkit.broadcastMessage(ChatColor.RED + String.valueOf(ChatColor.BOLD) + "RITUAL COMPLETE");
   }
 
-  public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
+  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, String[] paramArrayOfString) {
     if (paramArrayOfString.length == 0) {
       paramCommandSender.sendMessage("§cUsage: /vampire <player> <pale|vampire|human>");
       return true;
@@ -357,7 +356,7 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
                 paramCommandSender.sendMessage("§cVampire Event disabled.");
               } 
             }
-            config.set("vampire_event_enabled", Boolean.valueOf(eventEnabled));
+            config.set("vampire_event_enabled", eventEnabled);
             AltarSMP.getInstance().saveConfig();
             return true;
           } 
@@ -405,10 +404,10 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
     return true;
   }
 
-  public List<String> onTabComplete(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
+  public List<String> onTabComplete(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, String[] paramArrayOfString) {
     if (paramArrayOfString.length == 1) {
       String str = paramArrayOfString[0].toLowerCase();
-      ArrayList<String> arrayList = new ArrayList();
+      ArrayList<String> arrayList = new ArrayList<>();
       for (Player player : Bukkit.getOnlinePlayers()) {
         {
           if (player.getName().toLowerCase().startsWith(str))
@@ -419,8 +418,8 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
     } 
     if (paramArrayOfString.length == 2) {
       String str = paramArrayOfString[1].toLowerCase();
-      ArrayList<String> arrayList = new ArrayList();
-      for (String str1 : List.<String>of("pale", "vampire", "human")) {
+      ArrayList<String> arrayList = new ArrayList<>();
+      for (String str1 : List.of("pale", "vampire", "human")) {
         {
           if (str1.startsWith(str))
             arrayList.add(str1); 

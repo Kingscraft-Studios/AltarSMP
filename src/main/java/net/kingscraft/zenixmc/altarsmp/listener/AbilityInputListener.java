@@ -7,14 +7,12 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.altars2.ability.Altars2AbilityDispatcher;
@@ -49,10 +47,9 @@ import net.kingscraft.zenixmc.altarsmp.weapon.witherbone.WitherBoneAbility;
 public class AbilityInputListener implements Listener, CommandExecutor {
 
 
-  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
-    if (paramCommandSender instanceof Player) {
-      Player player = (Player)paramCommandSender;
-      {
+  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, String @NotNull [] paramArrayOfString) {
+    if (paramCommandSender instanceof Player player) {
+        {
         if (paramCommand.getName().equals("ability1")) {
           activateMainHandAbility(player);
           return true;
@@ -152,9 +149,9 @@ public class AbilityInputListener implements Listener, CommandExecutor {
                 paramPlayer.updateInventory();
                 BossBarManager.createBar(paramPlayer, "Meteor Strike", EarthGauntletAbility.meteorUseDuration, ChatColor.GREEN);
                 CooldownManager.setCooldown(paramPlayer.getUniqueId(), "used_meteor", EarthGauntletAbility.meteorUseDuration);
-                paramPlayer.getWorld().playSound((Entity)paramPlayer, Sound.ENTITY_EVOKER_PREPARE_ATTACK, 1.0F, 1.0F);
+                paramPlayer.getWorld().playSound(paramPlayer, Sound.ENTITY_EVOKER_PREPARE_ATTACK, 1.0F, 1.0F);
                 paramPlayer.getWorld().spawnParticle(Particle.WITCH, paramPlayer.getLocation().clone().add(0.0D, 1.0D, 0.0D), 120, 0.2D, 0.5D, 0.2D, 0.1D);
-                (new MeteorStrikeCooldownTask(paramPlayer)).runTaskLater((Plugin)AltarSMP.getInstance(), EarthGauntletAbility.meteorUseDuration * 20L - 1L);
+                (new MeteorStrikeCooldownTask(paramPlayer)).runTaskLater(AltarSMP.getInstance(), EarthGauntletAbility.meteorUseDuration * 20L - 1L);
                 return true;
               } 
               return true;
@@ -366,7 +363,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
                 paramPlayer.updateInventory();
                 BossBarManager.createBar(paramPlayer, "§6§l!! §e§lParry x3 §6§l!!", k, ChatColor.YELLOW, BarColor.RED);
                 CooldownManager.setCooldown(paramPlayer.getUniqueId(), "active_parry", k);
-                (new CutlassParryActivationTask(paramPlayer)).runTaskLater((Plugin)AltarSMP.getInstance(), 20L * k - 1L);
+                (new CutlassParryActivationTask(paramPlayer)).runTaskLater(AltarSMP.getInstance(), 20L * k - 1L);
                 return true;
               } 
               return true;
@@ -423,7 +420,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
     }{
       if (AltarSMP.areSimilar(itemStack, CustomItemRegistry.getWindweaver())) {
         {
-          if (((Boolean) WindweaverAbility.isCharging.getOrDefault(paramPlayer.getUniqueId(), Boolean.valueOf(false))).booleanValue()) {
+          if (WindweaverAbility.isCharging.getOrDefault(paramPlayer.getUniqueId(), Boolean.FALSE)) {
             WindweaverAbility.activateWindGust(paramPlayer);
           } else {
             WindweaverAbility.startWindGustCharge(paramPlayer);

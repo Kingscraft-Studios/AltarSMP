@@ -45,12 +45,11 @@ public class MobDropListener implements Listener {
                String var10001 = String.valueOf(ChatColor.GOLD);
                String var10002 = String.valueOf(ChatColor.YELLOW);
                String var9 = var3.getName();
-               String var10 = var10002;
-               var8.add(var10001 + "Killed by " + var10 + var9);
+               var8.add(var10001 + "Killed by " + var10002 + var9);
                var7.setLore(var8);
                var6.setItemMeta(var7);
                if (AltarSMP.getInstance().getConfig().getBoolean("give_dropped_head_to_killer", true)) {
-                  var3.getInventory().addItem(new ItemStack[]{var6});
+                  var3.getInventory().addItem(var6);
                } else {
                   var11.dropItemNaturally(var5, var6);
                }

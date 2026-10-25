@@ -14,7 +14,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
@@ -38,12 +37,12 @@ public class NetheriteChestplateComboAbility implements Listener {
   public NetheriteChestplateComboAbility(AltarSMP paramAltarSMP) {
     this.plugin = paramAltarSMP;
     MAX_DAMAGE = AltarSMP.getInstance().getConfig().getDouble(DAMAGE_CONFIG_KEY, 5.0D);
-    Bukkit.getPluginManager().registerEvents(this, (Plugin)paramAltarSMP);
+    Bukkit.getPluginManager().registerEvents(this, paramAltarSMP);
     startComboTask();
   }
 
   public void startComboTask() {
-    this.comboTask = (new NetheriteChestplateResistanceTask(this)).runTaskTimer((Plugin)this.plugin, 0L, 20L);
+    this.comboTask = (new NetheriteChestplateResistanceTask(this)).runTaskTimer(this.plugin, 0L, 20L);
   }
 
   public static boolean hasCustomNetheriteChestplate(Player paramPlayer) {
@@ -74,17 +73,15 @@ public class NetheriteChestplateComboAbility implements Listener {
 
   @EventHandler
   public void onEntityDamageByEntity(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
-    if (!(paramEntityDamageByEntityEvent.getDamager() instanceof Player))
+    if (!(paramEntityDamageByEntityEvent.getDamager() instanceof Player player))
       return;
 
-    if (!(paramEntityDamageByEntityEvent.getEntity() instanceof LivingEntity))
+    if (!(paramEntityDamageByEntityEvent.getEntity() instanceof LivingEntity livingEntity))
       return;
 
     if (paramEntityDamageByEntityEvent.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK)
       return;
 
-    Player player = (Player)paramEntityDamageByEntityEvent.getDamager();
-    LivingEntity livingEntity = (LivingEntity)paramEntityDamageByEntityEvent.getEntity();
     if (!hasCustomNetheriteChestplate(player))
       return;
 
@@ -92,21 +89,21 @@ public class NetheriteChestplateComboAbility implements Listener {
     long l = System.currentTimeMillis();
     if (this.lastAttackTimestamps.containsKey(uUID))
       {
-        if (l - ((Long)this.lastAttackTimestamps.get(uUID)).longValue() < 250L)
+        if (l - this.lastAttackTimestamps.get(uUID) < 250L)
           return;
       }
 
-    this.lastAttackTimestamps.put(uUID, Long.valueOf(l));
+    this.lastAttackTimestamps.put(uUID, l);
     if (this.activeComboPlayers.contains(uUID))
       return;
 
-    int i = ((Integer)this.attackComboCounts.getOrDefault(uUID, Integer.valueOf(0))).intValue() + 1;
-    this.attackComboCounts.put(uUID, Integer.valueOf(i));
+    int i = this.attackComboCounts.getOrDefault(uUID, 0) + 1;
+    this.attackComboCounts.put(uUID, i);
     if (i >= 7) {
       triggerLightningCombo(livingEntity.getLocation(), player, livingEntity);
       this.attackComboCounts.remove(uUID);
       this.activeComboPlayers.add(uUID);
-      (new NetheriteChestplateComboResetTask(this, uUID)).runTaskLater((Plugin)this.plugin, 5L);
+      (new NetheriteChestplateComboResetTask(this, uUID)).runTaskLater(this.plugin, 5L);
     }
 
   }
@@ -121,7 +118,7 @@ public class NetheriteChestplateComboAbility implements Listener {
       Location location = new Location(paramLocation.getWorld(), d2, paramLocation.getY(), d3);
       paramLocation.getWorld().strikeLightningEffect(location);
     }
-    (new NetheriteChestplateComboDamageTask(this, paramLivingEntity, paramPlayer)).runTaskLater(this.plugin, 1L);
+    (new NetheriteChestplateComboDamageTask(paramLivingEntity, paramPlayer)).runTaskLater(this.plugin, 1L);
   }
 
   static {

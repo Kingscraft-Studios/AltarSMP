@@ -9,10 +9,8 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
 
 class NukeCountdownTask extends BukkitRunnable {
@@ -26,7 +24,7 @@ class NukeCountdownTask extends BukkitRunnable {
 
   public final int radius;
 
-  public final Set playersInRadius;
+  public final Set<UUID> playersInRadius;
 
   public final World world;
 
@@ -39,7 +37,7 @@ class NukeCountdownTask extends BukkitRunnable {
   public final String centerX;
 
 
-  public NukeCountdownTask(int paramInt1, Location paramLocation, Player paramPlayer, int paramInt2, Set paramSet, World paramWorld, int paramInt3, String paramString1, String paramString2, String paramString3) {
+  public NukeCountdownTask(int paramInt1, Location paramLocation, Player paramPlayer, int paramInt2, Set<UUID> paramSet, World paramWorld, int paramInt3, String paramString1, String paramString2, String paramString3) {
         this.initialDuration = paramInt1;
         this.location = paramLocation;
         this.player = paramPlayer;
@@ -56,7 +54,7 @@ class NukeCountdownTask extends BukkitRunnable {
   public void run() {
     if (this.remainingTicks <= 0) {
       NukeAbility.detonateNuke(this.location, this.player, this.radius);
-      for (UUID uUID : (Iterable<UUID>)(Iterable<?>)this.playersInRadius) {
+      for (UUID uUID : this.playersInRadius) {
         Player player = Bukkit.getPlayer(uUID);
         {
           if (player != null)
@@ -78,7 +76,7 @@ class NukeCountdownTask extends BukkitRunnable {
     for (Player player : this.world.getPlayers()) {
       {
 
-      }boolean bool = (player.getLocation().distanceSquared(this.location) <= (this.radius * this.radius)) ? true : false;
+      }boolean bool = player.getLocation().distanceSquared(this.location) <= (this.radius * this.radius);
       {
         if (bool)
           {
@@ -96,12 +94,9 @@ class NukeCountdownTask extends BukkitRunnable {
           }}} 
     if (this.remainingTicks % this.messageInterval == 0)
       for (Player player : this.world.getPlayers()) {
-        player.playSound((Entity)player, Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1.0F, 0.7F);
+        player.playSound(player, Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1.0F, 0.7F);
         player.sendMessage(" ");
-        String str1 = this.centerX;
-        String str2 = this.centerY;
-        String str3 = this.centerZ;
-        player.sendMessage("§cArea §e[" + str3 + " " + str2 + " " + str1 + "]");
+        player.sendMessage("§cArea §e[" + this.centerZ + " " + this.centerY + " " + this.centerX + "]");
         player.sendMessage("§cwill be §4NUKED §cin §e" + this.remainingTicks + " seconds");
         player.sendMessage(" ");
       }  

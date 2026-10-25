@@ -4,7 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class DisguiseFollowTask extends BukkitRunnable {
   public final Player player;
@@ -23,7 +22,7 @@ class DisguiseFollowTask extends BukkitRunnable {
           {
             if (!this.player.isDead()) {
               this.player.setCooldown(Material.NETHERITE_SWORD, 100);
-              this.targetEntity.teleport((Entity)this.player);
+              this.targetEntity.teleport(this.player);
               return;
             } 
           }  

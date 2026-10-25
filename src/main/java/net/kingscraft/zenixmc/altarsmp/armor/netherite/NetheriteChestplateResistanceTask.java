@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.armor.netherite;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class NetheriteChestplateResistanceTask extends BukkitRunnable {
   public final NetheriteChestplateComboAbility ability;

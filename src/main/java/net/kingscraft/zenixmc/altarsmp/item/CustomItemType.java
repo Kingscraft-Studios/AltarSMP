@@ -7,103 +7,103 @@ import org.bukkit.inventory.ItemStack;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public enum CustomItemType {
-    WARDEN_HEART("WARDEN_HEART", 0) {
+    WARDEN_HEART() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.WARDEN_HEART_ITEM;
         }
     },
-    WEAPON_HANDLE("WEAPON_HANDLE", 1) {
+    WEAPON_HANDLE() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.WEAPON_HANDLE_ITEM;
         }
     },
-    VULCAN_SKULL("VULCAN_SKULL", 2) {
+    VULCAN_SKULL() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.VULCAN_SKULL_ITEM;
         }
     },
-    ILLUSION_CORE("ILLUSION_CORE", 3) {
+    ILLUSION_CORE() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.ILLUSION_CORE_ITEM;
         }
     },
-    HYPERION_SHARD("HYPERION_SHARD", 4) {
+    HYPERION_SHARD() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.HYPERION_SHARD_ITEM;
         }
     },
-    VAMPIRE_SHARD("VAMPIRE_SHARD", 5) {
+    VAMPIRE_SHARD() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.VAMPIRE_SHARD_ITEM;
         }
     },
-    PALE_SHARD("PALE_SHARD", 6) {
+    PALE_SHARD() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.PALE_SHARD_ITEM;
         }
     },
-    CHESTPLATE_SHARD("CHESTPLATE_SHARD", 7) {
+    CHESTPLATE_SHARD() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.CHESTPLATE_SHARD_ITEM;
         }
     },
-    HELMET_SHARD("HELMET_SHARD", 8) {
+    HELMET_SHARD() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.HELMET_SHARD_ITEM;
         }
     },
-    CONTAGION("CONTAGION", 9) {
+    CONTAGION() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.CONTAGION_ITEM;
         }
     },
-    DRAGON_HEART("DRAGON_HEART", 10) {
+    DRAGON_HEART() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.DRAGON_HEART_ITEM;
         }
     },
-    SOUL_IN_A_BOTTLE("SOUL_IN_A_BOTTLE", 11) {
+    SOUL_IN_A_BOTTLE() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.SOUL_IN_A_BOTTLE_ITEM;
         }
     },
-    FRAGMENT_OF_THE_SEA("FRAGMENT_OF_THE_SEA", 12) {
+    FRAGMENT_OF_THE_SEA() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.FRAGMENT_OF_THE_SEA_ITEM;
         }
     },
-    NETHERITE_HARNESS("NETHERITE_HARNESS", 13) {
+    NETHERITE_HARNESS() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.NETHERITE_HARNESS_ITEM;
         }
     },
-    AMETHYST_AXE("AMETHYST_AXE", 14) {
+    AMETHYST_AXE() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.AMETHYST_AXE_ITEM;
         }
     },
-    AMETHYST_PICKAXE("AMETHYST_PICKAXE", 15) {
+    AMETHYST_PICKAXE() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.AMETHYST_PICKAXE_ITEM;
         }
     },
-    VOID_CLOCK("VOID_CLOCK", 16) {
+    VOID_CLOCK() {
         @Override
         public ItemStack getItem() {
             return CustomItemType.VOID_CLOCK_ITEM;
@@ -130,9 +130,6 @@ public enum CustomItemType {
     public static final CustomItemType[] VALUES_CACHE;
 
     public abstract ItemStack getItem();
-
-    private CustomItemType(final String name, final int ordinal) {
-    }
 
     public boolean isItem(final ItemStack itemStack) {
         return AltarSMP.areSimilar(this.getItem(), itemStack);

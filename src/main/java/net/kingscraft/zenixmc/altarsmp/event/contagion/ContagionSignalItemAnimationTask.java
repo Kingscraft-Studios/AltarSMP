@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.event.contagion;
 import org.bukkit.Location;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class ContagionSignalItemAnimationTask extends BukkitRunnable {
   public int ticksLived;

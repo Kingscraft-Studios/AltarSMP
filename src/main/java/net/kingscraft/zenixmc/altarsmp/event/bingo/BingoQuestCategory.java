@@ -1,6 +1,3 @@
-// 
-// 
-
 package net.kingscraft.zenixmc.altarsmp.event.bingo;
 
 enum BingoQuestCategory {

@@ -3,14 +3,13 @@ package net.kingscraft.zenixmc.altarsmp.item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.illusion.IllusionWandAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.frostscythe.FrostScytheAbilityListener;
 
 public class CustomItemRefreshTask extends BukkitRunnable {
   public final Player player;
 
-  public CustomItemRefreshTask(AltarSMP paramAltarSMP, Player paramPlayer) {
+  public CustomItemRefreshTask(Player paramPlayer) {
         this.player = paramPlayer;
     }
 

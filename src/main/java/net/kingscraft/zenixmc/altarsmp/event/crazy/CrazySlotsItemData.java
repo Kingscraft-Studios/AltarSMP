@@ -1,10 +1,8 @@
 package net.kingscraft.zenixmc.altarsmp.event.crazy;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import org.bukkit.inventory.ItemStack;
 
-class CrazySlotsItemData {
+public class CrazySlotsItemData {
   public final String itemId;
 
   public final ItemStack itemStack;

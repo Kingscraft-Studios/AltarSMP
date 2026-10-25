@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.bossbar;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import org.bukkit.boss.BossBar;
 
 public class PlayerBossBar {

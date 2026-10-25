@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.util;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class FloatingTextShrinkTask extends BukkitRunnable {
   public final TextDisplay textDisplay;

@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.armor.netherite;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import java.util.UUID;
 import org.bukkit.scheduler.BukkitRunnable;
 

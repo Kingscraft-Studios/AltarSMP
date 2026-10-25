@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.item.RecipeIngredient;
 
 public class AltarRecipeBuilder {
@@ -35,14 +34,8 @@ public class AltarRecipeBuilder {
     return this;
   }
 
-  public AltarRecipeBuilder ingredient(Material paramMaterial, int paramInt1, int paramInt2) {
-    this.ingredients.add(new RecipeIngredient(paramMaterial, paramInt1, paramInt2));
-    return this;
-  }
-
-  public AltarRecipeBuilder ingredient(Material paramMaterial, int paramInt1, int paramInt2, String itemModel) {
+  public void ingredient(Material paramMaterial, int paramInt1, int paramInt2, String itemModel) {
     this.ingredients.add(new RecipeIngredient(paramMaterial, paramInt1, paramInt2, itemModel));
-    return this;
   }
 
   public AltarRecipe build() {
@@ -56,13 +49,13 @@ public class AltarRecipeBuilder {
         itemMeta.setLore(this.lore);
 
       if (this.customModelData > 0)
-        itemMeta.setCustomModelData(Integer.valueOf(this.customModelData));
+        itemMeta.setCustomModelData(this.customModelData);
 
       itemStack.setItemMeta(itemMeta);
     }
 
     for (Map.Entry<Enchantment, Integer> entry : this.enchantments.entrySet())
-      itemStack.addUnsafeEnchantment((Enchantment)entry.getKey(), ((Integer)entry.getValue()).intValue()); 
+      itemStack.addUnsafeEnchantment(entry.getKey(), entry.getValue());
     return new AltarRecipe(this.name, itemStack, this.ingredients);
   }
 }

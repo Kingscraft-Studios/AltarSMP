@@ -8,7 +8,6 @@ import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Listener;
 import org.bukkit.util.Vector;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class CombatEffectUtils implements Listener {
   public static void playSoundAndParticleEffect(LivingEntity paramLivingEntity, Particle paramParticle, Object paramObject, Sound paramSound, float paramFloat) {

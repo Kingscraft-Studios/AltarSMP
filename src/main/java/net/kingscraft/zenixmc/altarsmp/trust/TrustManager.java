@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class TrustManager {
-  private File file = new File(AltarSMP.getInstance().getDataFolder(), a);
+  private final File file = new File(AltarSMP.getInstance().getDataFolder(), a);
 
   public static FileConfiguration config;
 
@@ -25,11 +25,7 @@ public class TrustManager {
       } catch (IOException iOException) {
         iOException.printStackTrace();
       }  
-    config = (FileConfiguration)YamlConfiguration.loadConfiguration(this.file);
-  }
-
-  public void reload() {
-    config = (FileConfiguration)YamlConfiguration.loadConfiguration(this.file);
+    config = YamlConfiguration.loadConfiguration(this.file);
   }
 
   public void addTrust(Player paramPlayer1, Player paramPlayer2) {

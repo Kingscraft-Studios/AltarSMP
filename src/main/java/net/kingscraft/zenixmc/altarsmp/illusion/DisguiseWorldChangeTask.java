@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.illusion;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 

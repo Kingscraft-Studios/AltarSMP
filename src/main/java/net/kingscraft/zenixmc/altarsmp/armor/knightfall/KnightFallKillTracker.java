@@ -26,6 +26,6 @@ public class KnightFallKillTracker extends KillTracker {
       return;
     }
     super.setKillCount(player, killCount);
-    new KnightfallItemRestoreTask(this, player).runTaskLater(this.plugin, 1L);
+    new KnightfallItemRestoreTask(player).runTaskLater(this.plugin, 1L);
   }
 }

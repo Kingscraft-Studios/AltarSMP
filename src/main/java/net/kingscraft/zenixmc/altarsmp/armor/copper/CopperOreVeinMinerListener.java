@@ -14,7 +14,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class CopperOreVeinMinerListener implements Listener {
@@ -29,11 +28,9 @@ public class CopperOreVeinMinerListener implements Listener {
 
   public static boolean isCopperPickaxe(Player paramPlayer) {
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
-    if (itemStack == null)
-      return false; 
 
     if (itemStack.getType() != Material.NETHERITE_PICKAXE)
-      return false; 
+      return false;
 
     if (!itemStack.hasItemMeta())
       return false; 
@@ -50,7 +47,7 @@ public class CopperOreVeinMinerListener implements Listener {
   }
 
   public void startTask() {
-    (new CopperOreVeinMinerStatusTask(this)).runTaskTimer((Plugin)this.plugin, 0L, 10L);
+    (new CopperOreVeinMinerStatusTask(this)).runTaskTimer(this.plugin, 0L, 10L);
   }
 
   @EventHandler
@@ -59,11 +56,11 @@ public class CopperOreVeinMinerListener implements Listener {
     UUID uUID = player.getUniqueId();
     if (isCopperPickaxe(player)) {
       paramPlayerSwapHandItemsEvent.setCancelled(true);
-      boolean bool = ((Boolean)this.veinMinerEnabled.getOrDefault(uUID, Boolean.valueOf(true))).booleanValue();
+      boolean bool = this.veinMinerEnabled.getOrDefault(uUID, Boolean.TRUE);
 
 
-      boolean bool1 = !bool ? true : false;
-      this.veinMinerEnabled.put(uUID, Boolean.valueOf(bool1));
+      boolean bool1 = !bool;
+      this.veinMinerEnabled.put(uUID, bool1);
       if (bool1) {
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 1.0F, 2.0F);
       } else {
@@ -80,13 +77,13 @@ public class CopperOreVeinMinerListener implements Listener {
     Location location = block.getLocation();
     if (isCopperPickaxe(player)) {
       UUID uUID = player.getUniqueId();
-      boolean bool = ((Boolean)this.veinMinerEnabled.getOrDefault(uUID, Boolean.valueOf(true))).booleanValue();
+      boolean bool = this.veinMinerEnabled.getOrDefault(uUID, Boolean.TRUE);
       if (bool) {
         for (int b = -1; b <= 1; b++) {
           for (int b1 = -1; b1 <= 1; b1++) {
             for (int b2 = -1; b2 <= 1; b2++) {
               if (b != 0 && b1 != 0 && b2 != 0) {
-                Block block1 = location.clone().add((double)b, (double)b1, (double)b2).getBlock();
+                Block block1 = location.clone().add(b, b1, b2).getBlock();
                 this.breakNearbyBlock(block1, player);
               } 
             } 

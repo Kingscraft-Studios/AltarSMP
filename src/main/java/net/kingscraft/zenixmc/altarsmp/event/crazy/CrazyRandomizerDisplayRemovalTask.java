@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.event.crazy;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 

@@ -14,7 +14,7 @@ class IllusionWandChargeTask extends BukkitRunnable {
 
   private static final String CHARGE_DURATION_CONFIG_KEY = "IllusionWandChargeDuration";
 
-  public IllusionWandChargeTask(IllusionWandAbility illusionWandAbility, Player paramPlayer) {
+  public IllusionWandChargeTask(Player paramPlayer) {
         this.player = paramPlayer;
         this.chargeTicks = 0;
     }

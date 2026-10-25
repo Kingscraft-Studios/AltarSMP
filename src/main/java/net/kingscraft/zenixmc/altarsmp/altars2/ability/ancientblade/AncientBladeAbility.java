@@ -68,14 +68,14 @@ public final class AncientBladeAbility {
   private AncientBladeAbility() {
   }
 
-  public static boolean echolocation(Player player) {
+  public static void echolocation(Player player) {
     if (Altars2.killLevel(player) < 1) {
-      return true;
+      return;
     }
     UUID id = player.getUniqueId();
     if (CooldownManager.isOnCooldown(id, ECHO_COOLDOWN_KEY)) {
       denySound(player);
-      return true;
+      return;
     }
     double radius = configDouble("echo_location_radius", 24.0);
     double radiusSquared = radius * radius;
@@ -94,7 +94,6 @@ public final class AncientBladeAbility {
     if (found) {
       swirlParticles(player);
     }
-    return true;
   }
 
   public static boolean presence(Player player) {
@@ -282,7 +281,7 @@ public final class AncientBladeAbility {
     world.playSound(origin, Sound.ENTITY_WARDEN_SONIC_BOOM, 0.8F, 0.7F);
     recoil(player, heading);
     grantFallProtection(player, 9000L);
-    BlockDisplay display = (BlockDisplay) world.spawn(origin, BlockDisplay.class);
+    BlockDisplay display = world.spawn(origin, BlockDisplay.class);
     display.setBlock(Material.SCULK_CATALYST.createBlockData());
     display.setTransformation(spinTransformation(0));
     display.setPersistent(false);
@@ -356,12 +355,12 @@ public final class AncientBladeAbility {
     world.spawnParticle(Particle.BLOCK, ground, 80, 0.65, 0.45, 0.65, 0.22, Material.SCULK_CATALYST.createBlockData());
     world.spawnParticle(Particle.BLOCK, ground, 55, 0.55, 0.35, 0.55, 0.18, Material.SCULK.createBlockData());
     world.playSound(impact, Sound.BLOCK_SCULK_SHRIEKER_SHRIEK, 1.25F, 0.8F);
-    spreadSculk(world, ground, caster);
+    spreadSculk(world, ground);
     burstDamage(world, ground.clone().add(0.0, 0.55, 0.0), caster);
     spawnTendrils(impact, caster);
   }
 
-  private static void spreadSculk(World world, Location ground, Player caster) {
+  private static void spreadSculk(World world, Location ground) {
     if (WorldGuardHook.isBlocked(ground)) {
       return;
     }
@@ -679,7 +678,7 @@ public final class AncientBladeAbility {
   private static void sculkWave(World world, Location center) {
     for (int i = 0; i < 16; i++) {
       double angle = Math.random() * Math.PI * 2.0;
-      double distance = Math.random() * 1.0;
+      double distance = Math.random();
       Location point = center.clone().add(Math.cos(angle) * distance, 0.0, Math.sin(angle) * distance);
       world.spawnParticle(Particle.BLOCK, point, 2, 0.04, 0.0, 0.04, 0.03, Material.SCULK.createBlockData());
       world.spawnParticle(Particle.SOUL, point.clone().add(0.0, 0.05, 0.0), 1, 0.04, 0.0, 0.04, 0.01);
@@ -704,8 +703,8 @@ public final class AncientBladeAbility {
     Vector direction = delta.normalize();
     RayTraceResult blocks = world.rayTraceBlocks(from, direction, length, FluidCollisionMode.NEVER, true);
     RayTraceResult entities = world.rayTraceEntities(from, direction, length, 0.85, entity -> entity instanceof LivingEntity living && !living.equals(caster));
-    Location blockHit = blocks != null && blocks.getHitPosition() != null ? blocks.getHitPosition().toLocation(world).add(0.0, 0.08, 0.0) : null;
-    Location entityHit = entities != null && entities.getHitPosition() != null ? entities.getHitPosition().toLocation(world).add(0.0, 0.08, 0.0) : null;
+    Location blockHit = blocks != null ? blocks.getHitPosition().toLocation(world).add(0.0, 0.08, 0.0) : null;
+    Location entityHit = entities != null ? entities.getHitPosition().toLocation(world).add(0.0, 0.08, 0.0) : null;
     if (blockHit == null) {
       return entityHit;
     }

@@ -7,6 +7,8 @@ import java.util.HexFormat;
 import java.util.Objects;
 import java.util.UUID;
 
+import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightFallKillTracker;
+import net.kingscraft.zenixmc.altarsmp.core.tracker.KillTracker;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -35,7 +37,6 @@ import net.kingscraft.zenixmc.altarsmp.armor.copper.CopperHelmetEventManager;
 import net.kingscraft.zenixmc.altarsmp.armor.copper.CopperLeggingsEventManager;
 import net.kingscraft.zenixmc.altarsmp.armor.copper.CopperLeggingsShockwaveAbility;
 import net.kingscraft.zenixmc.altarsmp.armor.copper.CopperOreVeinMinerListener;
-import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightFallKillTracker;
 import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightfallEnchantmentListener;
 import net.kingscraft.zenixmc.altarsmp.armor.netherite.NetheriteChestplateComboAbility;
 import net.kingscraft.zenixmc.altarsmp.armor.netherite.NetheriteHelmetAbilityListener;
@@ -62,7 +63,6 @@ import net.kingscraft.zenixmc.altarsmp.trust.TrustCommand;
 import net.kingscraft.zenixmc.altarsmp.trust.TrustManager;
 import net.kingscraft.zenixmc.altarsmp.vampire.Vampire;
 import net.kingscraft.zenixmc.altarsmp.vampire.VampireEventManager;
-import net.kingscraft.zenixmc.altarsmp.weapon.blood.BloodLustKillTracker;
 import net.kingscraft.zenixmc.altarsmp.weapon.cutlass.CutlassAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.earth.EarthGauntletAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.echo.EchoAbility;
@@ -76,7 +76,7 @@ import net.kingscraft.zenixmc.altarsmp.weapon.wind.WindweaverAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.witherbone.WitherBoneAbility;
 
 public final class AltarSMP extends JavaPlugin implements Listener {
-   public BloodLustKillTracker bloodLustKillTracker;
+   public KillTracker bloodLustKillTracker;
    public KnightFallKillTracker knightFallKillTracker;
    public AltarManager altarConfigManager;
    public AltarController altarController;
@@ -106,7 +106,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       }
 
       CustomItemRegistry.loadMessages();
-      this.bloodLustKillTracker = new BloodLustKillTracker(this);
+      this.bloodLustKillTracker = new KillTracker(this, "bloodlustkills.yml");
       this.knightFallKillTracker = new KnightFallKillTracker(this);
       this.altarConfigManager = new AltarManager(this);
       this.altarController = new AltarController(this);
@@ -249,7 +249,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
          var3.setBaseValue(20.0);
       }
 
-      new CustomItemRefreshTask(this, player).runTaskLater(getInstance(), 20L);
+      new CustomItemRefreshTask(player).runTaskLater(getInstance(), 20L);
 
       String PACK_URL = "https://download.mc-packs.net/pack/6854d1e3ba2be9c4a08c774a1058a749746c9ea0.zip";
       byte[] PACK_SHA1 = HexFormat.of().parseHex("6854d1e3ba2be9c4a08c774a1058a749746c9ea0");
@@ -298,11 +298,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
    }
 
    public static boolean isTrusted(Player var0, Entity var1) {
-      return var1 instanceof Player var2
-         ? TrustManager.isTrusted(
-            var0, var2
-         )
-         : false;
+      return var1 instanceof Player var2 && TrustManager.isTrusted(var0, var2);
    }
 
    public AltarManager getConfigManager() {
@@ -311,35 +307,34 @@ public final class AltarSMP extends JavaPlugin implements Listener {
 
    @EventHandler
    public void death(ItemDespawnEvent var1) {
-      if (var1.getEntity() instanceof Item var2) {
-         ItemStack var4 = var2.getItemStack();
-         if (!var4.hasItemMeta()) {
-            return;
-         }
+       Item var2 = var1.getEntity();
+       ItemStack var4 = var2.getItemStack();
+       if (!var4.hasItemMeta()) {
+          return;
+       }
 
-         if (!var4.getItemMeta().hasCustomModelData()) {
-            return;
-         }
+       if (!var4.getItemMeta().hasCustomModelData()) {
+          return;
+       }
 
-         if (!var4.getItemMeta().isUnbreakable()) {
-            return;
-         }
+       if (!var4.getItemMeta().isUnbreakable()) {
+          return;
+       }
 
-         if (!getInstance().getConfig().getBoolean("announce_destroying_legendaries", true)) {
-            return;
-         }
+       if (!getInstance().getConfig().getBoolean("announce_destroying_legendaries", true)) {
+          return;
+       }
 
-         if (CooldownManager.isOnCooldown(
-            var2.getUniqueId(), "wait_a_bit"
-         )) {
-            return;
-         }
+       if (CooldownManager.isOnCooldown(
+          var2.getUniqueId(), "wait_a_bit"
+       )) {
+          return;
+       }
 
-         Bukkit.broadcastMessage(var4.getItemMeta().getDisplayName() + " §4§lHas been destroyed!");
-         CooldownManager.setCooldown(
-            var2.getUniqueId(), "wait_a_bit", 1.0
-         );
-      }
+       Bukkit.broadcastMessage(var4.getItemMeta().getDisplayName() + " §4§lHas been destroyed!");
+       CooldownManager.setCooldown(
+          var2.getUniqueId(), "wait_a_bit", 1.0
+       );
    }
 
    @EventHandler

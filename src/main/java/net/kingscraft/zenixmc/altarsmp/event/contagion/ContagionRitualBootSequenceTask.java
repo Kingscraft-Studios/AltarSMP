@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.event.contagion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class ContagionRitualBootSequenceTask extends BukkitRunnable {
 

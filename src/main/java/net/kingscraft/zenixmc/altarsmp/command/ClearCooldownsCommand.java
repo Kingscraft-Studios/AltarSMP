@@ -8,25 +8,23 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightfallListener;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
 import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.event.crazy.CrazySlotsListener;
+import org.jspecify.annotations.NonNull;
 
 public class ClearCooldownsCommand implements CommandExecutor {
 
-  public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
+  public boolean onCommand(@NonNull CommandSender paramCommandSender, @NonNull Command paramCommand, @NonNull String paramString, String[] paramArrayOfString) {
     {
       if (paramArrayOfString.length == 0) {
-        if (paramCommandSender instanceof Player) {
-          Player player1 = (Player)paramCommandSender;
+        if (paramCommandSender instanceof Player player1) {
           clearAllCooldowns(player1);
-          player1.sendMessage(String.valueOf(ChatColor.GREEN) + "Your cooldowns have been cleared!");
+          player1.sendMessage(ChatColor.GREEN + "Your cooldowns have been cleared!");
           player1.setCooldown(Material.CROSSBOW, 1);
         } else {
-          paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + "Only players can clear their own cooldowns.");
+          paramCommandSender.sendMessage(ChatColor.RED + "Only players can clear their own cooldowns.");
         } 
         return true;
       } 
@@ -35,9 +33,9 @@ public class ClearCooldownsCommand implements CommandExecutor {
       if (player != null && player.isOnline()) {
         clearAllCooldowns(player);
         player.setCooldown(Material.CROSSBOW, 1);
-        paramCommandSender.sendMessage(String.valueOf(ChatColor.GREEN) + "Cooldowns cleared for " + player.getName() + "!");
+        paramCommandSender.sendMessage(ChatColor.GREEN + "Cooldowns cleared for " + player.getName() + "!");
       } else {
-        paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + "Player '" + paramArrayOfString[0] + "' not found or not online.");
+        paramCommandSender.sendMessage(ChatColor.RED + "Player '" + paramArrayOfString[0] + "' not found or not online.");
       } 
     }return true;
   }
@@ -46,9 +44,9 @@ public class ClearCooldownsCommand implements CommandExecutor {
     {
       CooldownManager.clearExpiries(paramPlayer.getUniqueId());
       CrazySlotsListener.clearCrazySlots(paramPlayer);
-      KnightfallListener.hookCharges.put(paramPlayer.getUniqueId(), Integer.valueOf(0));
+      KnightfallListener.hookCharges.put(paramPlayer.getUniqueId(), 0);
       if (KnightfallListener.hookCooldownTasks.get(paramPlayer.getUniqueId()) != null)
-        ((BukkitTask) KnightfallListener.hookCooldownTasks.get(paramPlayer.getUniqueId())).cancel();
+        KnightfallListener.hookCooldownTasks.get(paramPlayer.getUniqueId()).cancel();
     }
     BossBarManager.activeBars.removeIf(paramBar3 -> removeAllCooldowns(paramPlayer, paramBar3));
   }

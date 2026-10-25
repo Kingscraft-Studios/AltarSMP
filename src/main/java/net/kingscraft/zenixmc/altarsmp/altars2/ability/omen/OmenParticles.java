@@ -140,13 +140,13 @@ final class OmenParticles {
     }
   }
 
-  static void ambientEndRod(World world, Location center, double radius, double height, int count) {
-    for (int i = 0; i < count; i++) {
+  static void ambientEndRod(World world, Location center) {
+    for (int i = 0; i < 200; i++) {
       double angle = Math.random() * Math.PI * 2.0;
-      double distance = Math.random() * radius;
+      double distance = Math.random() * 20.0;
       double x = Math.cos(angle) * distance;
       double z = Math.sin(angle) * distance;
-      double y = Math.random() * height;
+      double y = Math.random() * 20.0;
       world.spawnParticle(Particle.END_ROD, center.clone().add(x, y, z), 1, 0.0, 0.0, 0.0, 0.0);
     }
   }

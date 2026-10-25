@@ -7,7 +7,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
@@ -16,7 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Transformation;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
@@ -26,10 +24,10 @@ public class CrazyRandomizerListener implements Listener {
   public static ItemStack createCrazyRandomizerItem() {
     ItemStack itemStack = new ItemStack(Material.CLAY_BALL);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(4));
+    itemMeta.setCustomModelData(4);
     itemMeta.setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "Crazy Randomizer");
     itemMeta.setUnbreakable(true);
-    ArrayList<String> arrayList = new ArrayList();
+    ArrayList<String> arrayList = new ArrayList<>();
     arrayList.add(ChatColor.GRAY + "Right-Click to get a random legendary!");
     itemMeta.setLore(arrayList);
     itemStack.setItemMeta(itemMeta);
@@ -62,7 +60,7 @@ public class CrazyRandomizerListener implements Listener {
     int i = paramList.size();
     double d = 2.0D;
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.0F, 1.0F);
-    ArrayList<ItemDisplay> arrayList = new ArrayList();
+    ArrayList<ItemDisplay> arrayList = new ArrayList<>();
     for (int b = 0; b < i; b++) {
       double d1 = Math.toRadians(360.0D / i * b);
       double d2 = d * Math.cos(d1);
@@ -72,14 +70,14 @@ public class CrazyRandomizerListener implements Listener {
       Transformation transformation = itemDisplay.getTransformation();
       transformation.getTranslation().set((float)d2, 0.0F, (float)d3);
       itemDisplay.setTransformation(transformation);
-      paramPlayer.addPassenger((Entity)itemDisplay);
+      paramPlayer.addPassenger(itemDisplay);
       itemDisplay.setRotation(0.0F, 0.0F);
       arrayList.add(itemDisplay);
     } 
     Random random = new Random();
     int j = random.nextInt(i);
     World world = paramPlayer.getWorld();
-    (new CrazyRandomizerAnimationTask(arrayList, paramPlayer, world, paramList, j)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new CrazyRandomizerAnimationTask(arrayList, paramPlayer, world, paramList, j)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void shrinkItemDisplay(ItemDisplay paramItemDisplay) {
@@ -88,7 +86,7 @@ public class CrazyRandomizerListener implements Listener {
     Transformation transformation = paramItemDisplay.getTransformation();
     transformation.getScale().set(0.0F, 0.0F, 0.0F);
     paramItemDisplay.setTransformation(transformation);
-    (new CrazyRandomizerDisplayRemovalTask(paramItemDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), 20L);
+    (new CrazyRandomizerDisplayRemovalTask(paramItemDisplay)).runTaskLater(AltarSMP.getInstance(), 20L);
   }
 
 

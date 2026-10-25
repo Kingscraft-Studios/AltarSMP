@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.armor.netherite;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class NetheriteHelmetEffectTask extends BukkitRunnable {
   public final NetheriteHelmetAbilityListener helmetAbilityListener;

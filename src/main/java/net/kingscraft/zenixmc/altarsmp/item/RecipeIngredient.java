@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.item;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class RecipeIngredient {
   public final Material material;
@@ -41,10 +40,6 @@ public class RecipeIngredient {
     return this.customModelData > 0;
   }
 
-  public String getItemModel() {
-    return this.itemModel;
-  }
-
   public boolean hasItemModel() {
     return this.itemModel != null;
   }
@@ -67,8 +62,7 @@ public class RecipeIngredient {
       if (meta == null || !meta.hasCustomModelData())
         return false;
 
-      if (meta.getCustomModelData() != customModelData)
-        return false;
+      return meta.getCustomModelData() == customModelData;
     }
 
     return true;

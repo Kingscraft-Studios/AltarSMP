@@ -1,4 +1,4 @@
-# AltarSMP: Seasons
+# AltarSMP: Full Experience
 
 A Paper plugin that combines **Season 1** and **Season 2** AltarSMP content into a single
 installable package — custom abilities, equipment, altars, events, and a bundled resource
@@ -15,16 +15,34 @@ pack all wired through one configuration.
 - **Custom textures, 3D models & sounds** — delivered through an embedded resource pack.
 - **Immersive gameplay systems** — events, kill tracking, trust relationships, and more.
 - **Configurable** — gameplay values exposed through `config.yml`.
-- **Performance-focused** — async-safe tasks, re-entrancy guards, and sorted/BFS routines for bulk operations.
+- **Performance-focused** — async-safe tasks, re-entrance guards, and sorted/BFS routines for bulk operations.
 - **Built-in resource pack** — no separate download, hosting, or server config required.
+
+### Bugs
+
+- AltarManager; Contains Bugs Related to Map<here>
+- Check Proper KnightFallKillTracker Usage from KillTracker Ensure we are Using KnightFallKillTracker NOT KillTracker for KnightFall Weapon
+- AncientBladeAbility.java method "presence", "unyieldingDarkness" always returns true
+- TidebreakerAbility.java method "stormcall", "risingTide" always returns true
+- WitherSymbioteAbility.java method "infection", "rampage"
+- CopperBootsSpeedAbility.java method "hasCustomNetheriteBoots" always returns false
+- CopperLeggingsEventManager.java check why startEventCooldown method isnt being called
+- KnightfallListener.java method startCloak isnt being called why?
+- NetheriteHelmetAbilityListener.java method stopEffectTask isnt being called why?
+- BossBarManager.java method removeBarFromAll, addPlayerToEventBar isnt being called why?
+- CustomItemRegistry.java Review Warnings
+- LegendaryItemConfigMenu method showConfigDialog not being called why?
+- VampireEventManager.java method updatePlayerDisplay not being called why?
+
+- Next: weapon/* folder check for Bugs
 
 ## Requirements
 
-| Component | Version |
-|-----------|---------|
+| Component | Version                            |
+|-----------|------------------------------------|
 | Server    | Paper 1.21.11 (or compatible fork) |
-| Java      | 21 |
-| Build     | Maven 3.9+ (compile only) |
+| Java      | 21                                 |
+| Build     | Maven 3.9+ (compile only)          |
 
 `WorldEdit` / `WorldGuard` are optional soft dependencies and are only needed for region-aware behavior.
 
@@ -56,20 +74,20 @@ expressed in ticks unless noted otherwise.
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `/altar` | Altar management and administration |
-| `/legendaries` | Open the legendary items menu |
-| `/controls` | View available ability controls |
-| `/cooldown` | Check remaining cooldowns |
-| `/ability1` | Trigger the main-hand ability |
-| `/ability2` | Trigger the off-hand ability |
-| `/trust`, `/untrust` | Manage player trust relationships |
-| `/bingo`, `/startbingo` | Bingo event control |
-| `/startleggingsevent`, `/starthelmetevent`, `/startchestplateevent` | Armor events |
-| `/vampire` | Vampire event control |
-| `/setkills` | Set a player's kill count |
-| `/checklegendary` | Inspect legendary ownership |
+| Command                                                             | Description                         |
+|---------------------------------------------------------------------|-------------------------------------|
+| `/altar`                                                            | Altar management and administration |
+| `/legendaries`                                                      | Open the legendary items menu       |
+| `/controls`                                                         | View available ability controls     |
+| `/cooldown`                                                         | Check remaining cooldowns           |
+| `/ability1`                                                         | Trigger the main-hand ability       |
+| `/ability2`                                                         | Trigger the off-hand ability        |
+| `/trust`, `/untrust`                                                | Manage player trust relationships   |
+| `/bingo`, `/startbingo`                                             | Bingo event control                 |
+| `/startleggingsevent`, `/starthelmetevent`, `/startchestplateevent` | Armor events                        |
+| `/vampire`                                                          | Vampire event control               |
+| `/setkills`                                                         | Set a player's kill count           |
+| `/checklegendary`                                                   | Inspect legendary ownership         |
 
 ## Project Layout
 

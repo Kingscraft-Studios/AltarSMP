@@ -7,22 +7,21 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class CrazyRandomizerAnimationTask extends BukkitRunnable {
   public int ticksRemaining;
 
-  public final List itemDisplays;
+  public final List<ItemDisplay> itemDisplays;
 
   public final Player player;
 
   public final World originalWorld;
 
-  public final List randomizerItems;
+  public final List<ItemStack> randomizerItems;
 
   public final int selectedItemIndex;
 
-  public CrazyRandomizerAnimationTask(List paramList1, Player paramPlayer, World paramWorld, List paramList2, int paramInt) {
+  public CrazyRandomizerAnimationTask(List<ItemDisplay> paramList1, Player paramPlayer, World paramWorld, List<ItemStack> paramList2, int paramInt) {
         this.itemDisplays = paramList1;
         this.player = paramPlayer;
         this.originalWorld = paramWorld;
@@ -33,10 +32,10 @@ class CrazyRandomizerAnimationTask extends BukkitRunnable {
 
   public void run() {
     if (this.ticksRemaining < 0) {
-      for (ItemDisplay itemDisplay : (Iterable<ItemDisplay>)(Iterable<?>) this.itemDisplays)
+      for (ItemDisplay itemDisplay : this.itemDisplays)
         CrazyRandomizerListener.shrinkItemDisplay(itemDisplay);
       if (this.player.getWorld() == this.originalWorld) {
-        this.player.getInventory().addItem(new ItemStack[] { (ItemStack)this.randomizerItems.get(this.selectedItemIndex) });
+        this.player.getInventory().addItem(this.randomizerItems.get(this.selectedItemIndex));
         this.player.getWorld().playSound(this.player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0F, 1.0F);
         this.player.getWorld().playSound(this.player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
       } 
@@ -44,7 +43,7 @@ class CrazyRandomizerAnimationTask extends BukkitRunnable {
       cancel();
       return;
     } 
-    for (ItemDisplay itemDisplay : (Iterable<ItemDisplay>)(Iterable<?>) this.itemDisplays) {
+    for (ItemDisplay itemDisplay : this.itemDisplays) {
       itemDisplay.setTeleportDuration(2);
       itemDisplay.setRotation((this.ticksRemaining * 10), 0.0F);
     } 

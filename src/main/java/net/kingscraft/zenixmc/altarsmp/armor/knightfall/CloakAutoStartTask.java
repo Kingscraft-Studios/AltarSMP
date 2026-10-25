@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.armor.knightfall;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class CloakAutoStartTask extends BukkitRunnable {
   public final KnightFallKillTracker killTracker;

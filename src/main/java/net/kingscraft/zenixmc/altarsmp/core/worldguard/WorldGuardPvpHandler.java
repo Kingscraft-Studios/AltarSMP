@@ -3,14 +3,12 @@ package net.kingscraft.zenixmc.altarsmp.core.worldguard;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Location;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class WorldGuardPvpHandler {
   public static boolean isPvpDenied(Location paramLocation) {
@@ -19,7 +17,7 @@ public class WorldGuardPvpHandler {
     RegionQuery regionQuery = regionContainer.createQuery();
     ApplicableRegionSet applicableRegionSet = regionQuery.getApplicableRegions(location);
     for (ProtectedRegion protectedRegion : applicableRegionSet) {
-      StateFlag.State state = (StateFlag.State)protectedRegion.getFlag((Flag)Flags.PVP);
+      StateFlag.State state = protectedRegion.getFlag(Flags.PVP);
       if (state == StateFlag.State.DENY)
         return true;
     } 

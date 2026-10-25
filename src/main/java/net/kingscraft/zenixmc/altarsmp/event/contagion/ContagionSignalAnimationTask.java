@@ -4,13 +4,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.boss.BossBar;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.altar.AltarRitualListener;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 import net.kingscraft.zenixmc.altarsmp.vampire.VampireEventManager;
@@ -52,11 +50,11 @@ public class ContagionSignalAnimationTask extends BukkitRunnable {
 
   public void run() {
     if (this.ticksLived == 0) {
-      AltarRitualListener.contagionInteractions.put(this.interaction, Integer.valueOf(AltarRitualListener.CONTAGION_SIGNAL_HEALTH));
+      AltarRitualListener.contagionInteractions.put(this.interaction, AltarRitualListener.CONTAGION_SIGNAL_HEALTH);
       this.interaction.setResponsive(true);
       for (Player player : Bukkit.getOnlinePlayers()) {
         this.bossBar.addPlayer(player);
-        player.playSound((Entity)player, Sound.ENTITY_WITHER_SPAWN, 1.0F, 1.0F);
+        player.playSound(player, Sound.ENTITY_WITHER_SPAWN, 1.0F, 1.0F);
       } 
     } 
     {
@@ -78,15 +76,16 @@ public class ContagionSignalAnimationTask extends BukkitRunnable {
         cancel();
         return;
       } 
-    }String str = "";
-    int i = ((Integer) AltarRitualListener.contagionInteractions.get(this.interaction)).intValue();
+    }
+      StringBuilder str = new StringBuilder();
+    int i = AltarRitualListener.contagionInteractions.get(this.interaction);
     int j = AltarRitualListener.CONTAGION_SIGNAL_HEALTH - i;
-    int b = 0;
+    int b;
 for (b = 0; b < i; b++)
-      str = str + "§a|";
+      str.append("§a|");
     for (b = 0; b < j; b++)
-      str = str + "§7|";
-    this.textDisplay.setText(str);
+      str.append("§7|");
+    this.textDisplay.setText(str.toString());
     this.bossBar.setProgress(1.0D - (double)this.ticksLived / (double)this.duration);
     this.ticksLived++;
     this.signalHealth += this.healthDecrement;

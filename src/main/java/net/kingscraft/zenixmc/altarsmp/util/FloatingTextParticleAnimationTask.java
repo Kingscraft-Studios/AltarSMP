@@ -6,7 +6,6 @@ import org.bukkit.entity.TextDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class FloatingTextParticleAnimationTask extends BukkitRunnable {
   public final Location origin;

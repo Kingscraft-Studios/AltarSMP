@@ -5,7 +5,6 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class CopperOreVeinMinerStatusTask extends BukkitRunnable {
   public final CopperOreVeinMinerListener veinMinerListener;
@@ -18,13 +17,13 @@ class CopperOreVeinMinerStatusTask extends BukkitRunnable {
     for (Player player : Bukkit.getOnlinePlayers()) {
       if (CopperOreVeinMinerListener.isCopperPickaxe(player)) {
         UUID uUID = player.getUniqueId();
-        boolean bool = ((Boolean)this.veinMinerListener.veinMinerEnabled.getOrDefault(uUID, Boolean.valueOf(true))).booleanValue();
+        boolean bool = this.veinMinerListener.veinMinerEnabled.getOrDefault(uUID, Boolean.TRUE);
         {
           if (bool) {
-            player.sendActionBar(String.valueOf(ChatColor.GOLD) + "3x3 Mining: " + String.valueOf(ChatColor.GREEN) + "Enabled");
+            player.sendActionBar(ChatColor.GOLD + "3x3 Mining: " + ChatColor.GREEN + "Enabled");
             continue;
           } 
-        }player.sendActionBar(String.valueOf(ChatColor.GOLD) + "3x3 Mining: " + String.valueOf(ChatColor.RED) + "Disabled");
+        }player.sendActionBar(ChatColor.GOLD + "3x3 Mining: " + ChatColor.RED + "Disabled");
       } 
     } 
   }

@@ -5,7 +5,6 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class AltarInstance {
   public final String type;
@@ -15,8 +14,6 @@ public class AltarInstance {
   public ItemDisplay itemDisplay;
 
   public final List<TextDisplay> holograms;
-
-  private static final String a = "STRUCTURE_BLOCK";
 
   public AltarInstance(String paramString, Location paramLocation) {
     this.type = paramString;
@@ -40,10 +37,6 @@ public class AltarInstance {
     this.itemDisplay = paramItemDisplay;
   }
 
-  public List<TextDisplay> getHolograms() {
-    return this.holograms;
-  }
-
   public void addHologram(TextDisplay paramTextDisplay) {
     this.holograms.add(paramTextDisplay);
   }
@@ -60,20 +53,12 @@ public class AltarInstance {
     this.holograms.clear();
   }
 
-  public boolean isStructureBlock() {
-    return this.location.getBlock().getType().toString().contains(a);
-  }
-
   public void removeItemDisplay() {
     if (this.itemDisplay != null)
         if (!this.itemDisplay.isDead()) {
             this.itemDisplay.remove();
             this.itemDisplay = null;
-          }
-  }
-
-  public boolean hasItemDisplay() {
-    return this.itemDisplay != null && !this.itemDisplay.isDead();
+        }
   }
 
 }

@@ -453,7 +453,7 @@ public final class WitherSymbioteAbility {
 
   private static String buildBars(int bars, int max) {
     double fraction = max <= 0 ? 0.0D : bars / (double)max;
-    int scaled = Math.max(0, Math.min(40, (int)Math.round(fraction * 40.0D)));
+    int scaled = Math.clamp((int) Math.round(fraction * 40.0D), 0, 40);
     String color;
     if (fraction > 0.6D) {
       color = String.valueOf(ChatColor.GREEN);
@@ -466,18 +466,16 @@ public final class WitherSymbioteAbility {
     }
     int first = Math.min(scaled, 20);
     int second = Math.max(0, scaled - 20);
-    StringBuilder builder = new StringBuilder();
-    builder.append(color);
-    builder.append("|".repeat(first));
-    builder.append(ChatColor.DARK_GRAY);
-    builder.append("|".repeat(20 - first));
-    builder.append(ChatColor.GRAY);
-    builder.append("|");
-    builder.append(color);
-    builder.append("|".repeat(second));
-    builder.append(ChatColor.DARK_GRAY);
-    builder.append("|".repeat(20 - second));
-    return builder.toString();
+      return color +
+              "|".repeat(first) +
+              ChatColor.DARK_GRAY +
+              "|".repeat(20 - first) +
+              ChatColor.GRAY +
+              "|" +
+              color +
+              "|".repeat(second) +
+              ChatColor.DARK_GRAY +
+              "|".repeat(20 - second);
   }
 
   private static void breakWebs(Player player) {

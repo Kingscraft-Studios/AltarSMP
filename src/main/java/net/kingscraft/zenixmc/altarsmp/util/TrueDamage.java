@@ -22,10 +22,9 @@ public class TrueDamage {
       return; 
     if (WorldGuardHook.isBlocked(paramLivingEntity.getLocation()) || WorldGuardHook.isBlocked(paramPlayer.getLocation()))
       return; 
-    if (paramLivingEntity instanceof Player) {
-      Player player = (Player)paramLivingEntity;
-      if (!paramBoolean && player.isBlocking())
-        return; 
+    if (paramLivingEntity instanceof Player player) {
+        if (!paramBoolean && player.isBlocking())
+          return;
       if (player.getGameMode() == GameMode.SPECTATOR || player.getGameMode() == GameMode.CREATIVE)
         return; 
       if (AltarSMP.isTrusted(paramPlayer, player))
@@ -51,7 +50,7 @@ public class TrueDamage {
   }
 
   public static void damageDirect(LivingEntity paramLivingEntity, double paramDouble) {
-    double d = 0.0D;
+    double d;
     if (paramLivingEntity.hasPotionEffect(PotionEffectType.ABSORPTION)) {
       d = paramLivingEntity.getAbsorptionAmount();
       paramLivingEntity.setAbsorptionAmount(Math.max(d - paramDouble, 0.0D));

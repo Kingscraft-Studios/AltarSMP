@@ -35,7 +35,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -57,7 +56,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
 
   public boolean isBingoRunning = false;
 
-  private static final String BINGO_BOARD_TITLE =String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + "Bingo Board";
+  private static final String BINGO_BOARD_TITLE = ChatColor.of("#B06736") + String.valueOf(ChatColor.BOLD) + "Bingo Board";
 
   private static final int[] BINGO_SLOT_INDICES = new int[] {0,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,28,29,30,31,32,33,34,36,37,38,39,40,41,42,43};
 
@@ -68,10 +67,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
     this.plugin = paramAltarSMP;
     if ((BingoQuestType.values()).length != 40)
       throw new IllegalStateException("Bingo must have exactly 40 quests."); 
-    {
-      if (BINGO_SLOT_INDICES.length != 40)
-        throw new IllegalStateException("Bingo must have exactly 40 quest slots."); 
-    }}
+    }
 
   public static boolean isMusicDisc(ItemStack paramItemStack) {
     {
@@ -89,7 +85,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
     return i;
   }
 
-  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
+  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String @NotNull [] paramArrayOfString) {
     Player player;
     if (paramCommandSender instanceof Player) {
       player = (Player)paramCommandSender;
@@ -100,7 +96,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
       if (paramCommand.getName().equalsIgnoreCase("startbingo")) {
         {
           if (this.isBingoRunning) {
-            paramCommandSender.sendMessage(String.valueOf(ChatColor.RED) + "Bingo is already running.");
+            paramCommandSender.sendMessage(ChatColor.RED + "Bingo is already running.");
             return true;
           } 
         }
@@ -111,7 +107,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
       if (paramCommand.getName().equalsIgnoreCase("bingo")) {
         {
           if (!this.isBingoRunning) {
-            player.sendMessage(String.valueOf(ChatColor.RED) + "Bingo event did not start yet.");
+            player.sendMessage(ChatColor.RED + "Bingo event did not start yet.");
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
             return true;
           } 
@@ -131,7 +127,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
     }this.isBingoRunning = true;
     int i = AltarSMP.getInstance().getConfig().getInt("bingoTime", 60) * 60;
     this.remainingTimeTicks = i * 20;
-    AltarSMP.getInstance().getConfig().set("bingoActive", Boolean.valueOf(true));
+    AltarSMP.getInstance().getConfig().set("bingoActive", Boolean.TRUE);
     AltarSMP.getInstance().saveConfig();
     this.playerCompletedQuests.clear();
     for (Player player : Bukkit.getOnlinePlayers()) {
@@ -141,12 +137,12 @@ public class BingoEventManager implements CommandExecutor, Listener {
     BossBarManager.showBingoBar("Bingo Time Remaining:", i, BarColor.PURPLE);
     updateBingoScoreboards();
     this.countdownTask = new BingoEventCountdownTask(this);
-    this.countdownTask.runTaskTimer((Plugin)this.plugin, 20L, 20L);
+    this.countdownTask.runTaskTimer(this.plugin, 20L, 20L);
   }
 
   public void stopBingoEvent() {
     this.isBingoRunning = false;
-    AltarSMP.getInstance().getConfig().set("bingoActive", Boolean.valueOf(false));
+    AltarSMP.getInstance().getConfig().set("bingoActive", Boolean.FALSE);
     AltarSMP.getInstance().saveConfig();
     for (Player player : Bukkit.getOnlinePlayers())
       player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard()); 
@@ -167,7 +163,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
       if (getCompletedQuestCount(paramPlayer) < (BingoQuestType.values()).length)
         return; 
     }{
-      Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + "Bingo Event" + String.valueOf(ChatColor.RESET) + " was automatically finished because " + String.valueOf(ChatColor.WHITE) + paramPlayer.getName() + String.valueOf(ChatColor.GRAY) + " completed all 40/40 quests.");
+      Bukkit.broadcastMessage(ChatColor.of("#B06736") + "Bingo Event" + ChatColor.RESET + " was automatically finished because " + ChatColor.WHITE + paramPlayer.getName() + ChatColor.GRAY + " completed all 40/40 quests.");
       if (this.countdownTask != null) {
         this.countdownTask.cancel();
         this.countdownTask = null;
@@ -189,7 +185,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
                 bool = true;
                 String str1 = bingoQuestType.displayName;
                 String str2 = String.valueOf(ChatColor.WHITE);
-                paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + "Completed bingo objective: " + str2 + str1);
+                paramPlayer.sendMessage(ChatColor.GREEN + "Completed bingo objective: " + str2 + str1);
                 paramPlayer.playSound(paramPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.8F, 1.2F);
               } 
             } else {
@@ -208,7 +204,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
                         bool = true;
                         String str1 = bingoQuestType.displayName;
                         String str2 = String.valueOf(ChatColor.WHITE);
-                        paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + "Completed bingo objective: " + str2 + str1);
+                        paramPlayer.sendMessage(ChatColor.GREEN + "Completed bingo objective: " + str2 + str1);
                         paramPlayer.playSound(paramPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.8F, 1.2F);
                       } 
                     } 
@@ -222,7 +218,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
     }}
 
   public void openBingoBoard(Player paramPlayer) {
-    Inventory inventory = Bukkit.createInventory(null, 54,String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + "Bingo Board");
+    Inventory inventory = Bukkit.createInventory(null, 54, ChatColor.of("#B06736") + String.valueOf(ChatColor.BOLD) + "Bingo Board");
     ItemStack itemStack = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setDisplayName(" ");
@@ -235,7 +231,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
       } 
     }
     BingoQuestType[] bingoQuestTypes = BingoQuestType.values();
-    Set set = this.playerCompletedQuests.getOrDefault(paramPlayer.getUniqueId(), EnumSet.noneOf(BingoQuestType.class));
+    Set<BingoQuestType> set = this.playerCompletedQuests.getOrDefault(paramPlayer.getUniqueId(), EnumSet.noneOf(BingoQuestType.class));
     for (int b2 = 0; b2 < bingoQuestTypes.length; b2++) {
       BingoQuestType bingoQuestType = bingoQuestTypes[b2];
       boolean bool = set.contains(bingoQuestType);
@@ -245,12 +241,12 @@ public class BingoEventManager implements CommandExecutor, Listener {
       ItemMeta itemMeta1 = itemStack1.getItemMeta();
       {
         if (bool) {
-          itemMeta1.setDisplayName(String.valueOf(ChatColor.GREEN) + bingoQuestType.displayName);
-          itemMeta1.setLore(List.of(String.valueOf(ChatColor.WHITE) + bingoQuestType.description, String.valueOf(ChatColor.GRAY) + "Requirement completed.", " ", String.valueOf(ChatColor.GREEN) + "✔ Completed"));
+          itemMeta1.setDisplayName(ChatColor.GREEN + bingoQuestType.displayName);
+          itemMeta1.setLore(List.of(ChatColor.WHITE + bingoQuestType.description, ChatColor.GRAY + "Requirement completed.", " ", ChatColor.GREEN + "✔ Completed"));
         } else {
-          itemMeta1.setDisplayName(String.valueOf(ChatColor.GOLD) + bingoQuestType.displayName);
-          itemMeta1.setLore(List.of(String.valueOf(ChatColor.WHITE) + bingoQuestType.description, String.valueOf(ChatColor.GRAY) + "Required amount: " + bingoQuestType.requiredAmount, " ", String.valueOf(ChatColor.RED) + "✘ Not Completed"));
-        } 
+          itemMeta1.setDisplayName(ChatColor.GOLD + bingoQuestType.displayName);
+          itemMeta1.setLore(List.of(ChatColor.WHITE + bingoQuestType.description, ChatColor.GRAY + "Required amount: " + bingoQuestType.requiredAmount, " ", ChatColor.RED + "✘ Not Completed"));
+        }
       }itemStack1.setItemMeta(itemMeta1);
       inventory.setItem(BINGO_SLOT_INDICES[b2], itemStack1);
     } 
@@ -266,16 +262,16 @@ public class BingoEventManager implements CommandExecutor, Listener {
     } 
     for (Player player : Bukkit.getOnlinePlayers()) {
       Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-      Objective objective = scoreboard.registerNewObjective("bingo", "dummy",String.valueOf(ChatColor.of("#B06736")) + "Bingo Progress");
+      Objective objective = scoreboard.registerNewObjective("bingo", "dummy", ChatColor.of("#B06736") + "Bingo Progress");
       objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-      List list = (List)Bukkit.getOnlinePlayers().stream().sorted(Comparator.comparingInt((Player paramPlayer1) -> this.getCompletedQuestCount(paramPlayer1)).reversed().thenComparing(Player::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
+      List<Player> list = Bukkit.getOnlinePlayers().stream().sorted(Comparator.comparingInt(this::getCompletedQuestCount).reversed().thenComparing(Player::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
       int b1 = 15;
       int b2 = 1;
-      for (Player player1 : (Iterable<Player>)(Iterable<?>)list) {
+      for (Player player1 : list) {
         {
           if (b2 > 10)
             break; 
-        }String str1 = ChatColor.values()[Math.min(b2, (ChatColor.values()).length - 1)].toString() + String.valueOf(ChatColor.RESET);
+        }String str1 = ChatColor.values()[Math.min(b2, (ChatColor.values()).length - 1)].toString() + ChatColor.RESET;
         Team team = scoreboard.registerNewTeam("t" + b2);
         team.addEntry(str1);
         int i = getCompletedQuestCount(player1);
@@ -283,7 +279,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
         String str3 = String.valueOf(ChatColor.WHITE);
         int b = b2;
         team.setPrefix(truncateString(String.valueOf(ChatColor.GOLD) + b + ". " + str3 + str2, 16));
-        team.setSuffix(truncateString(String.valueOf(ChatColor.GRAY) + " " + i + "/40", 16));
+        team.setSuffix(truncateString(ChatColor.GRAY + " " + i + "/40", 16));
         objective.getScore(str1).setScore(b1--);
         b2++;
       } 
@@ -292,7 +288,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
   }
 
   public int getCompletedQuestCount(Player paramPlayer) {
-    return ((Set)this.playerCompletedQuests.getOrDefault(paramPlayer.getUniqueId(), Collections.emptySet())).size();
+    return this.playerCompletedQuests.getOrDefault(paramPlayer.getUniqueId(), Collections.emptySet()).size();
   }
 
   public String truncateString(String paramString, int paramInt) {
@@ -303,21 +299,21 @@ public class BingoEventManager implements CommandExecutor, Listener {
 
   public void giveBingoCard(Player paramPlayer) {
     ItemStack itemStack = createBingoCard();
-    boolean bool = Arrays.<ItemStack>stream(paramPlayer.getInventory().getContents()).filter(Objects::nonNull).anyMatch(paramItem -> lambda$giveCard$1(itemStack, paramItem));
+    boolean bool = Arrays.stream(paramPlayer.getInventory().getContents()).filter(Objects::nonNull).anyMatch(paramItem -> lambda$giveCard$1(itemStack, paramItem));
     {
       if (!bool)
-        paramPlayer.getInventory().addItem(new ItemStack[] { itemStack }); 
+        paramPlayer.getInventory().addItem(itemStack);
     }}
 
   public ItemStack createBingoCard() {
     ItemStack itemStack = new ItemStack(Material.BOOK);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.addEnchant(Enchantment.UNBREAKING, 1, true);
-    itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
-    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + "Bingo Card");
-    ArrayList<String> arrayList = new ArrayList();
+    itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+    itemMeta.setDisplayName(ChatColor.of("#B06736") + String.valueOf(ChatColor.BOLD) + "Bingo Card");
+    ArrayList<String> arrayList = new ArrayList<>();
     arrayList.add(" ");
-    arrayList.add(String.valueOf(ChatColor.WHITE) + "RIGHT CLICK " + String.valueOf(ChatColor.GRAY) + "to open your Bingo Board");
+    arrayList.add(ChatColor.WHITE + "RIGHT CLICK " + ChatColor.GRAY + "to open your Bingo Board");
     itemMeta.setLore(arrayList);
     itemStack.setItemMeta(itemMeta);
     return itemStack;
@@ -341,15 +337,13 @@ public class BingoEventManager implements CommandExecutor, Listener {
       if (paramPlayerInteractEvent.getAction() == Action.RIGHT_CLICK_AIR || paramPlayerInteractEvent.getAction() == Action.RIGHT_CLICK_BLOCK) {
         ItemStack itemStack = paramPlayerInteractEvent.getPlayer().getInventory().getItemInMainHand();
         {
-          if (itemStack != null)
-            {
-              if (itemStack.getType() != Material.AIR)
-                {
-                  if (itemStack.isSimilar(createBingoCard())) {
-                    paramPlayerInteractEvent.setCancelled(true);
-                    openBingoBoard(paramPlayerInteractEvent.getPlayer());
-                  } 
-                }}}} 
+            if (itemStack.getType() != Material.AIR) {
+                if (itemStack.isSimilar(createBingoCard())) {
+                  paramPlayerInteractEvent.setCancelled(true);
+                  openBingoBoard(paramPlayerInteractEvent.getPlayer());
+                }
+            }
+        }}
     }}
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -375,7 +369,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
     }set.add(BingoQuestType.SLAYER);
     String str1 = BingoQuestType.SLAYER.displayName;
     String str2 = String.valueOf(ChatColor.WHITE);
-    player2.sendMessage(String.valueOf(ChatColor.GREEN) + "Completed bingo objective: " + str2 + str1);
+    player2.sendMessage(ChatColor.GREEN + "Completed bingo objective: " + str2 + str1);
     player2.playSound(player2.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.8F, 1.2F);
     updateBingoScoreboards();
     countMusicDiscs(player2);
@@ -400,7 +394,7 @@ public class BingoEventManager implements CommandExecutor, Listener {
       if (!this.isBingoRunning)
         return; 
     }paramPlayerQuitEvent.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-    Bukkit.getScheduler().runTaskLater((Plugin)this.plugin, (Runnable)this::updateBingoScoreboards, 1L);
+    Bukkit.getScheduler().runTaskLater(this.plugin, this::updateBingoScoreboards, 1L);
   }
 
   private static Set lambda$death$2(UUID paramUUID) {

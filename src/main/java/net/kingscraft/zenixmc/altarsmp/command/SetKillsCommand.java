@@ -10,10 +10,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
+import org.jspecify.annotations.NonNull;
 
 public class SetKillsCommand implements CommandExecutor, TabCompleter {
 
-  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
+  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String @NonNull [] paramArrayOfString) {
     int i;
     Player player;
     {
@@ -67,7 +68,7 @@ public class SetKillsCommand implements CommandExecutor, TabCompleter {
   }
 
   @Nullable
-  public List<String> onTabComplete(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
+  public List<String> onTabComplete(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String @NonNull [] paramArrayOfString) {
     {
       if (paramArrayOfString.length == 3)
         return null; 
@@ -76,7 +77,7 @@ public class SetKillsCommand implements CommandExecutor, TabCompleter {
         return List.of("2", "4", "6", "8", "10"); 
     }{
       if (paramArrayOfString.length == 1)
-        return List.of("bloodlust", "knightfall", "ancientblade"); 
+        return List.of("bloodlust", "knightfall", "ancientblade");
     }return List.of();
   }
 

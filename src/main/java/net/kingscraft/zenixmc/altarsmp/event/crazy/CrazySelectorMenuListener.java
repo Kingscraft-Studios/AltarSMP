@@ -6,7 +6,6 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -18,7 +17,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.illusion.IllusionWandAbility;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
@@ -29,11 +27,11 @@ public class CrazySelectorMenuListener implements Listener {
   public static ItemStack createCrazySelectorItem() {
     ItemStack itemStack = new ItemStack(Material.CLAY_BALL);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(4));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.GOLD) + ChatColor.BOLD.toString() + "Crazy Selector");
+    itemMeta.setCustomModelData(4);
+    itemMeta.setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "Crazy Selector");
     itemMeta.setUnbreakable(true);
-    ArrayList<String> arrayList = new ArrayList();
-    arrayList.add(String.valueOf(ChatColor.GRAY) + "Right-Click to select a legendary!");
+    ArrayList<String> arrayList = new ArrayList<>();
+    arrayList.add(ChatColor.GRAY + "Right-Click to select a legendary!");
     itemMeta.setLore(arrayList);
     itemStack.setItemMeta(itemMeta);
     return itemStack;
@@ -54,14 +52,15 @@ public class CrazySelectorMenuListener implements Listener {
   @EventHandler
   public void onMenuClose(InventoryCloseEvent paramInventoryCloseEvent) {
     HumanEntity humanEntity = paramInventoryCloseEvent.getPlayer();
-    if (humanEntity instanceof Player) {
-      Player player = (Player)humanEntity;
+    if (humanEntity instanceof Player player) {
       {
         if (paramInventoryCloseEvent.getView().getTitle().equals(MENU_TITLE))
           {
             if (CooldownManager.isOnCooldown(player.getUniqueId(), "open"))
               player.getInventory().addItem(createCrazySelectorItem());
-          }}} 
+          }
+      }
+    }
   }
 
   public void openLegendarySelectionMenu(Player paramPlayer) {
@@ -76,8 +75,7 @@ public class CrazySelectorMenuListener implements Listener {
   @EventHandler
   public void onMenuClick(InventoryClickEvent paramInventoryClickEvent) {
     HumanEntity humanEntity = paramInventoryClickEvent.getWhoClicked();
-    if (humanEntity instanceof Player) {
-      Player player = (Player)humanEntity;
+    if (humanEntity instanceof Player player) {
       {
         if (paramInventoryClickEvent.getView().getTitle().equals(MENU_TITLE)) {
           {

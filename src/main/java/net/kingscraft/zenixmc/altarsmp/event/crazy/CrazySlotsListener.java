@@ -91,7 +91,7 @@ public class CrazySlotsListener implements Listener {
    }
 
    public ItemStack createRandomCrazySlotsItem(Player var1, String var2) {
-      List var3 = Arrays.asList(
+      List<ItemStack> var3 = Arrays.asList(
          CustomItemRegistry.getBoneBlade(),
          CustomItemRegistry.getVulcanCrossbow(),
          CustomItemRegistry.getBloodlust(
@@ -119,7 +119,7 @@ public class CrazySlotsListener implements Listener {
          net.kingscraft.zenixmc.altarsmp.item.CustomItem.OMEN.getItem(),
          net.kingscraft.zenixmc.altarsmp.item.CustomItem.DRAGONREND.getItem()
       );
-      ItemStack var4 = ((ItemStack)var3.get(ThreadLocalRandom.current().nextInt(var3.size()))).clone();
+      ItemStack var4 = var3.get(ThreadLocalRandom.current().nextInt(var3.size())).clone();
       ItemMeta var5 = var4.getItemMeta();
       if (var5 != null) {
          NamespacedKey var6 = new NamespacedKey(this.plugin, "crazy_slots_item");
@@ -153,9 +153,8 @@ public class CrazySlotsListener implements Listener {
    }
 
    public static List<ItemStack> getPlayerItems(Player var0) {
-      List var1 = new ArrayList();
-      PlayerInventory var2 = var0.getInventory();
-      var1.addAll(Arrays.asList(var2.getContents()));
+       PlayerInventory var2 = var0.getInventory();
+       List<ItemStack> var1 = new ArrayList<>(Arrays.asList(var2.getContents()));
       var1.add(var2.getItemInOffHand());
       var1.add(var0.getItemOnCursor());
       var1.addAll(Arrays.asList(var2.getArmorContents()));
@@ -181,7 +180,7 @@ public class CrazySlotsListener implements Listener {
          return false;
       }
 
-      String var4 = (String)var2.getPersistentDataContainer().get(var3, PersistentDataType.STRING);
+      String var4 = var2.getPersistentDataContainer().get(var3, PersistentDataType.STRING);
       return var1.equals(var4);
    }
 
@@ -242,10 +241,9 @@ public class CrazySlotsListener implements Listener {
 
    @EventHandler
    public void onInventoryClick(InventoryClickEvent var1) {
-      if (!(var1.getWhoClicked() instanceof Player)) {
+      if (!(var1.getWhoClicked() instanceof Player var2)) {
          return;
       }
-      Player var2 = (Player)var1.getWhoClicked();
       UUID var3 = var2.getUniqueId();
       if (!activeCrazySlots.containsKey(var3)) {
          return;
@@ -313,7 +311,7 @@ public class CrazySlotsListener implements Listener {
       }
 
       CrazySlotsItemData var4 = activeCrazySlots.remove(var3);
-      List var5 = new ArrayList();
+      List<ItemStack> var5 = new ArrayList<>();
 
       for (ItemStack var7 : var1.getDrops()) {
          if (isCrazySlotsItem(var7, var4.itemId)) {

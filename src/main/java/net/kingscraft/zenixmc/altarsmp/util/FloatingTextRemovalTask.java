@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.util;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 

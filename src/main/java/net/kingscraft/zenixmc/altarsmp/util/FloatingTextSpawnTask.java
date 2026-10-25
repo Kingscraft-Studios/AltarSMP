@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.util;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class FloatingTextSpawnTask extends BukkitRunnable {
   public int ticksElapsed;

@@ -97,8 +97,8 @@ public class CopperLeggingsShockwaveAbility implements Listener {
           if (player.getVelocity().getY() > 0.8D)
             {
               if (!player.isOnGround()) {
-                this.jumpStartHeights.put(uUID, Double.valueOf(d));
-                this.jumpStartTimestamps.put(uUID, Long.valueOf(System.currentTimeMillis()));
+                this.jumpStartHeights.put(uUID, d);
+                this.jumpStartTimestamps.put(uUID, System.currentTimeMillis());
               } 
             }}return;
       } 
@@ -106,12 +106,12 @@ public class CopperLeggingsShockwaveAbility implements Listener {
     {
       if (long_ != null)
         {
-          if (System.currentTimeMillis() - long_.longValue() <= 10000L) {
+          if (System.currentTimeMillis() - long_ <= 10000L) {
             {
-              this.jumpStartHeights.compute(uUID, (paramK, paramV) -> lambda$onMove$0(d, paramK, paramV));
+              this.jumpStartHeights.compute(uUID, (paramK, paramV) -> lambda$onMove$0(d, paramV));
               if (!player.isOnGround())
                 return; 
-            }double d1 = ((Double)this.jumpStartHeights.get(uUID)).doubleValue();
+            }double d1 = this.jumpStartHeights.get(uUID);
             clearPlayerTracking(uUID);
             double d2 = d1 - d;
             {
@@ -193,9 +193,8 @@ public class CopperLeggingsShockwaveAbility implements Listener {
     }
     Collection<? extends Entity> collection = world.getNearbyEntities(paramLocation, d2, d2, d2);
     for (Entity entity : collection) {
-      if (entity instanceof LivingEntity) {
-        LivingEntity livingEntity = (LivingEntity) entity;
-        if (entity.equals(paramPlayer)) {
+      if (entity instanceof LivingEntity livingEntity) {
+          if (entity.equals(paramPlayer)) {
           continue;
         }
         if (paramLocation.getWorld() != livingEntity.getWorld()) {
@@ -252,8 +251,8 @@ public class CopperLeggingsShockwaveAbility implements Listener {
     } 
   }
 
-  private static Double lambda$onMove$0(double paramDouble, UUID paramUUID, Double paramDouble1) {
-    return Double.valueOf(Math.max(paramDouble1.doubleValue(), paramDouble));
+  private static Double lambda$onMove$0(double paramDouble, Double paramDouble1) {
+    return Math.max(paramDouble1, paramDouble);
   }
 
 }

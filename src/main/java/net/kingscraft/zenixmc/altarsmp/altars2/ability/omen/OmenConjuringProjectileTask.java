@@ -39,7 +39,7 @@ class OmenConjuringProjectileTask extends BukkitRunnable {
     }
     Location from = current.clone();
     Location to = current.clone().add(step);
-    LivingEntity directHit = OmenAbility.traceEntities(world, caster, from, to, OmenAbility.PROJECTILE_HIT_RADIUS);
+    LivingEntity directHit = OmenAbility.traceEntities(world, caster, from, to);
     Location hitCenter = directHit == null ? null : directHit.getLocation().add(0.0, directHit.getHeight() * 0.55, 0.0);
     Location blockHit = null;
     if (hitCenter == null) {

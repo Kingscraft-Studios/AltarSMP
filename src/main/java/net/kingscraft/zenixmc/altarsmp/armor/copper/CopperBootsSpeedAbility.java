@@ -18,7 +18,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
@@ -66,11 +65,11 @@ public class CopperBootsSpeedAbility implements Listener {
   }
 
   public void startGroundCheckTask() {
-    this.groundCheckTask = (new CopperBootsFlameParticleTask(this)).runTaskTimer((Plugin)this.plugin, 0L, 1L);
+    this.groundCheckTask = (new CopperBootsFlameParticleTask(this)).runTaskTimer(this.plugin, 0L, 1L);
   }
 
   public void startEffectRefreshTask() {
-    this.effectRefreshTask = (new CopperBootsEffectRefreshTask(this)).runTaskTimer((Plugin)this.plugin, 0L, 10L);
+    this.effectRefreshTask = (new CopperBootsEffectRefreshTask(this)).runTaskTimer(this.plugin, 0L, 10L);
   }
 
   @EventHandler
@@ -88,10 +87,8 @@ public class CopperBootsSpeedAbility implements Listener {
 
   @EventHandler
   public void onPlayerMove(PlayerMoveEvent paramPlayerMoveEvent) {
-    if (paramPlayerMoveEvent.getTo() == null)
-      return; 
 
-    if (paramPlayerMoveEvent.getFrom().getBlockX() == paramPlayerMoveEvent.getTo().getBlockX())
+      if (paramPlayerMoveEvent.getFrom().getBlockX() == paramPlayerMoveEvent.getTo().getBlockX())
       {
         if (paramPlayerMoveEvent.getFrom().getBlockY() == paramPlayerMoveEvent.getTo().getBlockY())
           {
@@ -111,7 +108,7 @@ public class CopperBootsSpeedAbility implements Listener {
   public void updateCopperBootsStatus(Player paramPlayer) {
     if (hasCustomNetheriteBoots(paramPlayer)) {
       this.copperBootsPlayers.add(paramPlayer);
-      this.previousGroundStates.putIfAbsent(paramPlayer, Boolean.valueOf(isStandingOnCopper(paramPlayer)));
+      this.previousGroundStates.putIfAbsent(paramPlayer, isStandingOnCopper(paramPlayer));
     } else {
       this.copperBootsPlayers.remove(paramPlayer);
       this.previousGroundStates.remove(paramPlayer);
@@ -124,7 +121,7 @@ public class CopperBootsSpeedAbility implements Listener {
       return; 
 
     boolean bool1 = isStandingOnCopper(paramPlayer);
-    boolean bool2 = ((Boolean)this.previousGroundStates.getOrDefault(paramPlayer, Boolean.valueOf(false))).booleanValue();
+    boolean bool2 = this.previousGroundStates.getOrDefault(paramPlayer, Boolean.FALSE);
     if (paramBoolean)
       {
         if (bool1 == bool2) {
@@ -133,7 +130,7 @@ public class CopperBootsSpeedAbility implements Listener {
         } 
       }  
 
-    this.previousGroundStates.put(paramPlayer, Boolean.valueOf(bool1));
+    this.previousGroundStates.put(paramPlayer, bool1);
     applyImmediateSpeedEffects(paramPlayer, bool1);
   }
 
@@ -191,7 +188,7 @@ public class CopperBootsSpeedAbility implements Listener {
       {
         if (itemMeta.hasCustomModelData())
           {
-            if (itemMeta.getCustomModelData() == 1);
+            itemMeta.getCustomModelData();
           }  
       }  
 

@@ -28,7 +28,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Transformation;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
@@ -45,8 +44,6 @@ public class AltarRitualListener implements Listener {
   public final AltarController altarController;
 
   public final Map<UUID, Long> missingIngredientsCooldowns = new HashMap<>();
-
-  public static final long MISSING_INGREDIENTS_COOLDOWN = 1000L;
 
   public static Map<UUID, UUID> copperHelmetPlayers;
 
@@ -104,7 +101,7 @@ public class AltarRitualListener implements Listener {
         return; 
     }    Iterator<AltarRecipe> iterator = altar.getRecipe().values().iterator();
     if (!iterator.hasNext()) {
-      player.sendMessage(String.valueOf(ChatColor.RED) + "No valid recipe found!");
+      player.sendMessage(ChatColor.RED + "No valid recipe found!");
       return;
     }
     while (iterator.hasNext()) {
@@ -114,9 +111,9 @@ public class AltarRitualListener implements Listener {
         consumeIngredients(player, altarRecipe);
         ItemStack itemStack1 = AltarController.createItemStack(altarInstance.getType());
         {
-          player.getInventory().addItem(new ItemStack[] { itemStack1 });
+          player.getInventory().addItem(itemStack1);
           if (altarInstance.getType().equalsIgnoreCase("crazyslots"))
-            player.getInventory().addItem(new ItemStack[] { new ItemStack(Material.DRAGON_EGG) });
+            player.getInventory().addItem(new ItemStack(Material.DRAGON_EGG));
         }{
           if (altarInstance.getType().equalsIgnoreCase("copperhelmet"))
             copperHelmetPlayers.put(player.getUniqueId(), player.getUniqueId());
@@ -136,9 +133,9 @@ public class AltarRitualListener implements Listener {
       {
         if (long_ != null) {
           {
-            if (l - long_.longValue() >= 1000L) {
+            if (l - long_ >= 1000L) {
               this.altarController.sendMissingIngredients(player, list);
-              this.missingIngredientsCooldowns.put(uUID, Long.valueOf(l));
+              this.missingIngredientsCooldowns.put(uUID, l);
               return;
             }
           }
@@ -147,7 +144,7 @@ public class AltarRitualListener implements Listener {
       }
     }
     this.altarController.sendMissingIngredients(player, list);
-    this.missingIngredientsCooldowns.put(uUID, Long.valueOf(l));
+    this.missingIngredientsCooldowns.put(uUID, l);
   }
 
   public static void startContagionRitual(Location paramLocation, Player paramPlayer) {
@@ -165,10 +162,7 @@ public class AltarRitualListener implements Listener {
     animateContagionSignal(itemDisplay);
     TextDisplay textDisplay = (TextDisplay)world.spawnEntity(location.clone().add(0.0D, 2.5D, 0.0D), EntityType.TEXT_DISPLAY);
     textDisplay.setBillboard(Display.Billboard.CENTER);
-    String str2 = "";
-    for (int b1 = 0; b1 < CONTAGION_SIGNAL_HEALTH; b1++)
-      str2 = str2 + "§a|";
-    textDisplay.setText(str2);
+    textDisplay.setText("§a|".repeat(Math.max(0, CONTAGION_SIGNAL_HEALTH)));
     Transformation transformation2 = textDisplay.getTransformation();
     transformation2.getTranslation().set(0.0F, 0.0F, 0.0F);
     textDisplay.setTransformation(transformation2);
@@ -178,16 +172,16 @@ public class AltarRitualListener implements Listener {
     interaction.setResponsive(false);
     int i = (int)(CONTAGION_RITUAL_DURATION * 60.0D * 20.0D);
     startContagionSequence(str1, paramLocation);
-    BossBar bossBar = Bukkit.createBossBar("§a§kaa §f" + str1 + " §aCONTAGION RITUAL §a§kaa", BarColor.PINK, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
+    BossBar bossBar = Bukkit.createBossBar("§a§kaa §f" + str1 + " §aCONTAGION RITUAL §a§kaa", BarColor.PINK, BarStyle.SOLID);
     int b2 = 5;
     String str3 = str1;
-    (new ContagionSignalAnimationTask(interaction, bossBar, paramLocation, itemDisplay, textDisplay, i, str3, b2)).runTaskTimer((Plugin)AltarSMP.getInstance(), 140L, 1L);
+    (new ContagionSignalAnimationTask(interaction, bossBar, paramLocation, itemDisplay, textDisplay, i, str3, b2)).runTaskTimer(AltarSMP.getInstance(), 140L, 1L);
   }
 
   public static void animateContagionSignal(ItemDisplay paramItemDisplay) {
     Location location = paramItemDisplay.getLocation();
     paramItemDisplay.setTeleportDuration(20);
-    (new ContagionSignalItemAnimationTask(paramItemDisplay, location)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new ContagionSignalItemAnimationTask(paramItemDisplay, location)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   @EventHandler
@@ -214,10 +208,10 @@ public class AltarRitualListener implements Listener {
         return; 
     }
       CooldownManager.setCooldown(player.getUniqueId(), "contagion_hit", 0.5D);
-    int i = ((Integer) contagionInteractions.merge(interaction, Integer.valueOf(-1), Integer::sum)).intValue();
+    int i = contagionInteractions.merge(interaction, -1, Integer::sum);
     {
-      player.playSound((Entity)player, Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0F, 1.0F);
-      player.playSound((Entity)player, Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
+      player.playSound(player, Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0F, 1.0F);
+      player.playSound(player, Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
       if (i <= 0) {
         contagionInteractions.remove(interaction);
         interaction.setResponsive(false);
@@ -231,9 +225,9 @@ public class AltarRitualListener implements Listener {
       player.sendMessage("§eBEGINNING BOOT SEQUENCE...");
       player.sendMessage(" ");
     } 
-    (new ContagionRitualAnnouncementTask(paramString)).runTaskLater((Plugin)AltarSMP.getInstance(), 40L);
-    (new ContagionRitualCoordinatesAnnouncementTask(paramLocation)).runTaskLater((Plugin)AltarSMP.getInstance(), 80L);
-    (new ContagionRitualBootSequenceTask()).runTaskLater((Plugin)AltarSMP.getInstance(), 120L);
+    (new ContagionRitualAnnouncementTask(paramString)).runTaskLater(AltarSMP.getInstance(), 40L);
+    (new ContagionRitualCoordinatesAnnouncementTask(paramLocation)).runTaskLater(AltarSMP.getInstance(), 80L);
+    (new ContagionRitualBootSequenceTask()).runTaskLater(AltarSMP.getInstance(), 120L);
   }
 
   public static boolean isCopperHelmetPlayer(Player paramPlayer) {
@@ -247,23 +241,23 @@ public class AltarRitualListener implements Listener {
   public void consumeIngredients(Player paramPlayer, AltarRecipe altarRecipe) {
     PlayerInventory playerInventory = paramPlayer.getInventory();
     HashMap<Object, Object> hashMap = new HashMap<>();
-    for (RecipeIngredient recipeIngredient : altarRecipe.getIngredients())
-      hashMap.put(recipeIngredient, Integer.valueOf(recipeIngredient.getAmount()));
+    for (RecipeIngredient recipeIngredient : altarRecipe.ingredients())
+      hashMap.put(recipeIngredient, recipeIngredient.getAmount());
     for (int b = 0; b < playerInventory.getSize(); b++) {
       ItemStack itemStack = playerInventory.getItem(b);
       {
         if (itemStack != null)
           for (Map.Entry<Object, Object> entry : hashMap.entrySet()) {
             {
-              if (((Integer)entry.getValue()).intValue() <= 0)
+              if ((Integer) entry.getValue() <= 0)
                 continue; 
             }
             RecipeIngredient recipeIngredient = (RecipeIngredient)entry.getKey();
             if (recipeIngredient.matches(itemStack)) {
-              int i = Math.min(((Integer)entry.getValue()).intValue(), itemStack.getAmount());
+              int i = Math.min((Integer) entry.getValue(), itemStack.getAmount());
               {
                 itemStack.setAmount(itemStack.getAmount() - i);
-                hashMap.put(recipeIngredient, Integer.valueOf(((Integer)entry.getValue()).intValue() - i));
+                hashMap.put(recipeIngredient, (Integer) entry.getValue() - i);
                 if (itemStack.getAmount() <= 0)
                   playerInventory.setItem(b, null); 
               }} 

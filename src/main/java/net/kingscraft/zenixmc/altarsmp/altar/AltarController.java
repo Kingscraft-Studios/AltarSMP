@@ -27,7 +27,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Transformation;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
@@ -38,7 +37,7 @@ import net.kingscraft.zenixmc.altarsmp.item.RecipeIngredient;
 public class AltarController implements Listener {
   public AltarSMP plugin;
 
-  public final NamespacedKey altartypeKey;
+  public final NamespacedKey altarTypeKey;
 
   public final Map<Location, AltarInstance> altars = new HashMap<>();
 
@@ -47,13 +46,13 @@ public class AltarController implements Listener {
 
   public AltarController(AltarSMP paramAltarSMP) {
     this.plugin = paramAltarSMP;
-    this.altartypeKey = new NamespacedKey((Plugin)paramAltarSMP, "altar_type");
-    this.altarUsedKey = new NamespacedKey((Plugin)paramAltarSMP, "altar_used");
+    this.altarTypeKey = new NamespacedKey(paramAltarSMP, "altar_type");
+    this.altarUsedKey = new NamespacedKey(paramAltarSMP, "altar_used");
     startUpdateTask();
   }
 
   public List<AltarInstance> getAltarsByType(String paramString) {
-    ArrayList<AltarInstance> arrayList = new ArrayList();
+    ArrayList<AltarInstance> arrayList = new ArrayList<>();
     for (AltarInstance altarInstance : this.altars.values()) {
       {
         if (altarInstance.getType().equalsIgnoreCase(paramString))
@@ -70,7 +69,7 @@ public class AltarController implements Listener {
     } else {
       return false;
     } 
-    return ((Boolean)structure.getPersistentDataContainer().getOrDefault(this.altarUsedKey, PersistentDataType.BOOLEAN, Boolean.valueOf(false))).booleanValue();
+    return structure.getPersistentDataContainer().getOrDefault(this.altarUsedKey, PersistentDataType.BOOLEAN, Boolean.FALSE);
   }
 
   public void setAltarUsed(Location paramLocation, boolean paramBoolean) {
@@ -81,13 +80,13 @@ public class AltarController implements Listener {
     } else {
       return;
     } 
-    structure.getPersistentDataContainer().set(this.altarUsedKey, PersistentDataType.BOOLEAN, Boolean.valueOf(paramBoolean));
+    structure.getPersistentDataContainer().set(this.altarUsedKey, PersistentDataType.BOOLEAN, paramBoolean);
     structure.update();
   }
 
   public List<RecipeIngredient> getMissingIngredients(Player paramPlayer, AltarRecipe altarRecipe) {
-    ArrayList<RecipeIngredient> arrayList = new ArrayList();
-    for (RecipeIngredient recipeIngredient : altarRecipe.getIngredients()) {
+    ArrayList<RecipeIngredient> arrayList = new ArrayList<>();
+    for (RecipeIngredient recipeIngredient : altarRecipe.ingredients()) {
       int i = recipeIngredient.getAmount();
       int j = 0;
       for (ItemStack itemStack : paramPlayer.getInventory().getContents()) {
@@ -105,7 +104,7 @@ public class AltarController implements Listener {
   public static ItemStack createCustomModelItem(Material paramMaterial, int paramInt) {
     ItemStack itemStack = new ItemStack(paramMaterial);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(paramInt));
+    itemMeta.setCustomModelData(paramInt);
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
@@ -121,11 +120,14 @@ public class AltarController implements Listener {
               {
                 if (!str.isEmpty())
                   stringBuilder.append(Character.toUpperCase(str.charAt(0))).append(str.substring(1)).append(" "); 
-              }} 
+              }
+            }
             return stringBuilder.toString().trim();
           } 
           return paramString;
-        }}return paramString;
+        }
+    }
+    return null;
   }
 
   public void sendMissingIngredients(Player paramPlayer, List<RecipeIngredient> paramList) {
@@ -156,13 +158,12 @@ public class AltarController implements Listener {
     String str1 = paramItemStack.getItemMeta().getDisplayName();
     String str3 = ChatColor.BOLD.toString();
     String str4 = String.valueOf(ChatColor.GOLD);
-    String str5 = str1;
     String str6 = ChatColor.BOLD.toString();
     String str7 = ChatColor.BOLD.toString();
     String str8 = String.valueOf(ChatColor.GOLD);
     String str9 = paramPlayer.getName();
     String str10 = ChatColor.BOLD.toString();
-    String str2 = String.valueOf(ChatColor.WHITE) + str3 + str9 + str4 + str6 + " has crafted the " + str7 + str5 + str8 + str10 + "!";
+    String str2 = ChatColor.WHITE + str3 + str9 + str4 + str6 + " has crafted the " + str7 + str1 + str8 + str10 + "!";
     Bukkit.broadcastMessage(str2);
     for (Player player : Bukkit.getOnlinePlayers())
       player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0F, 1.0F); 
@@ -188,10 +189,8 @@ public class AltarController implements Listener {
 
   public double getItemDisplayOffsetY(String paramString) {
     try {
-      switch (CustomItemIds.ID_BY_ITEM[CustomItem.valueOf(paramString.toUpperCase()).ordinal()]) {
-
-      }
-      return 1.0D;
+        CustomItem.valueOf(paramString.toUpperCase());
+        return 1.0D;
     } catch (IllegalArgumentException illegalArgumentException) {
       return 1.0D;
     } 
@@ -200,49 +199,20 @@ public class AltarController implements Listener {
   public double getItemDisplayScale(String paramString) {
     try {
       return switch (CustomItemIds.ID_BY_ITEM[CustomItem.valueOf(paramString.toUpperCase()).ordinal()]) {
-          case 1 -> 2.75D;
-          case 2 -> 2.0D;
-          case 3 -> 1.75D;
-          case 4 -> 2.3D;
-          case 5 -> 2.25D;
-          case 6 -> 2.75D;
-          case 7 -> 2.25D;
-          case 8 -> 2.0D;
-          case 9 -> 2.0D;
-          case 10 -> 2.5D;
-          case 11 -> 2.75D;
-          case 12 -> 2.0D;
-          case 13 -> 2.0D;
-          case 14 -> 2.0D;
-          case 15 -> 2.0D;
-          case 16 -> 2.5D;
+          case 1, 6, 11 -> 2.75D;
+          case 2, 8, 9, 12, 13, 14, 15 -> 2.0D;
+          case 4, 19 -> 2.3D;
+          case 5, 7, 21, 24 -> 2.25D;
+          case 10, 16 -> 2.5D;
           case 17 -> 1.85D;
           case 18 -> 2.1D;
-          case 19 -> 2.3D;
-          case 20 -> 2.9D;
-          case 21 -> 2.25D;
-          case 22 -> 2.9D;
+          case 20, 22 -> 2.9D;
           case 23 -> 2.8D;
-          case 24 -> 2.25D;
           default -> 1.75D;
         };
     } catch (IllegalArgumentException illegalArgumentException) {
       return 1.75D;
     } 
-  }
-
-  public void removeAltarEntities(Location paramLocation) {
-    AltarInstance altarInstance = this.altars.get(paramLocation);
-    {
-      if (altarInstance == null)
-        return; 
-    }
-
-    {
-      setAltarUsed(paramLocation, false);
-      if (!altarInstance.hasItemDisplay())
-        spawnItemDisplay(altarInstance, paramLocation, altarInstance.getType());
-    }
   }
 
   public boolean createAltar(Location paramLocation, String paramString) {
@@ -260,15 +230,15 @@ public class AltarController implements Listener {
       return false;
     } 
     structure.setUsageMode(UsageMode.LOAD);
-    structure.getPersistentDataContainer().set(this.altartypeKey, PersistentDataType.STRING, paramString);
+    structure.getPersistentDataContainer().set(this.altarTypeKey, PersistentDataType.STRING, paramString);
     structure.update();
-    block.getChunk().addPluginChunkTicket((Plugin)this.plugin);
+    block.getChunk().addPluginChunkTicket(this.plugin);
     AltarInstance altarInstance = new AltarInstance(paramString, paramLocation);
     {
       if (!isAltarUsed(paramLocation))
         spawnItemDisplay(altarInstance, paramLocation, paramString);
     }
-    spawnHologram(altarInstance, paramLocation, paramString, altar.getIngredientDisplay());
+    spawnHologram(altarInstance, paramLocation, paramString, altar.ingredientDisplay());
     this.altars.put(paramLocation, altarInstance);
     saveAltar(paramLocation, paramString);
     return true;
@@ -315,9 +285,8 @@ public class AltarController implements Listener {
     }
     altarInstance.removeAllEntities();
     BlockState blockState = paramLocation.getBlock().getState();
-    if (blockState instanceof Structure) {
-      Structure structure = (Structure)blockState;
-      structure.getPersistentDataContainer().remove(this.altartypeKey);
+    if (blockState instanceof Structure structure) {
+      structure.getPersistentDataContainer().remove(this.altarTypeKey);
       structure.update();
     } 
     deleteAltarFromConfig(paramLocation);
@@ -333,33 +302,33 @@ public class AltarController implements Listener {
     double d1 = getItemDisplayScale(paramString);
     double d2 = getItemDisplayOffsetY(paramString);
     Location location = paramLocation.clone().add(0.5D, d1, 0.5D);
-    ItemDisplay itemDisplay = (ItemDisplay)paramLocation.getWorld().spawn(location, ItemDisplay.class, display -> configureItemDisplay(paramString, d2, display));
+    ItemDisplay itemDisplay = paramLocation.getWorld().spawn(location, ItemDisplay.class, display -> configureItemDisplay(paramString, d2, display));
     altarInstance.setItemDisplay(itemDisplay);
   }
 
   public void spawnHologram(AltarInstance altarInstance, Location paramLocation, String paramString, List<String> paramList) {
     Altar bs = this.plugin.getConfigManager().getAltar(paramString);
-    double d = (bs != null && bs.getHologramHeight() > 0.0D) ? bs.getHologramHeight() : this.plugin.getConfigManager().getHologramHeight();
+    double d = (bs != null && bs.hologramHeight() > 0.0D) ? bs.hologramHeight() : this.plugin.getConfigManager().getHologramHeight();
     World world = paramLocation.getWorld();
     for (int i = 0; i < paramList.size(); i++) {
       String str = paramList.get(paramList.size() - 1 - i);
       Location location = paramLocation.clone().add(0.5D, d + i * 0.25D, 0.5D);
-      TextDisplay textDisplay = (TextDisplay)world.spawn(location, TextDisplay.class, display -> configureHologram(str, display));
+      TextDisplay textDisplay = world.spawn(location, TextDisplay.class, display -> configureHologram(str, display));
       altarInstance.addHologram(textDisplay);
     }
   }
 
   public void startUpdateTask() {
-    (new ItemDisplayRotationTask(this)).runTaskTimer((Plugin)this.plugin, 0L, 1L);
+    (new ItemDisplayRotationTask(this)).runTaskTimer(this.plugin, 0L, 1L);
   }
 
   public void saveAltar(Location paramLocation, String paramString) {
     FileConfiguration fileConfiguration = this.plugin.getConfigManager().getAltarConfig();
     String str = paramLocation.getWorld().getName() + "_" + paramLocation.getBlockX() + "_" + paramLocation.getBlockY() + "_" + paramLocation.getBlockZ();
     fileConfiguration.set("altars." + str + ".world", paramLocation.getWorld().getName());
-    fileConfiguration.set("altars." + str + ".x", Double.valueOf(paramLocation.getX()));
-    fileConfiguration.set("altars." + str + ".y", Double.valueOf(paramLocation.getY()));
-    fileConfiguration.set("altars." + str + ".z", Double.valueOf(paramLocation.getZ()));
+    fileConfiguration.set("altars." + str + ".x", paramLocation.getX());
+    fileConfiguration.set("altars." + str + ".y", paramLocation.getY());
+    fileConfiguration.set("altars." + str + ".z", paramLocation.getZ());
     fileConfiguration.set("altars." + str + ".type", paramString);
     this.plugin.getConfigManager().saveAltarConfig();
   }

@@ -12,7 +12,6 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.event.bingo.BingoBarCountdownTask;
@@ -37,7 +36,7 @@ public class BossBarManager {
   }
 
   public static void startUpdater() {
-    (new PlayerBossBarUpdater()).runTaskTimer((Plugin)AltarSMP.getInstance(), 1L, 1L);
+    (new PlayerBossBarUpdater()).runTaskTimer(AltarSMP.getInstance(), 1L, 1L);
   }
 
   public static void createBar(Player paramPlayer, String paramString, int paramInt, ChatColor paramChatColor) {
@@ -50,7 +49,7 @@ public class BossBarManager {
         {
           if (paramPlayer.isOnline()) {
             removeBar(paramPlayer, paramString);
-            BossBar bossBar = Bukkit.createBossBar(String.valueOf(paramChatColor) + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
+            BossBar bossBar = Bukkit.createBossBar(paramChatColor + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID);
             bossBar.addPlayer(paramPlayer);
             bossBar.setProgress(1.0D);
             PlayerBossBar playerBossBar = new PlayerBossBar();
@@ -59,34 +58,32 @@ public class BossBarManager {
             playerBossBar.durationMillis = paramInt * 1000L;
             playerBossBar.expiryTime = System.currentTimeMillis() + playerBossBar.durationMillis;
             activeBars.add(bossBar);
-            ((List<PlayerBossBar>) playerBars.computeIfAbsent(paramPlayer.getUniqueId(), uuid -> new ArrayList<>())).add(playerBossBar);
-            return;
-          } 
-          return;
+            playerBars.computeIfAbsent(paramPlayer.getUniqueId(), uuid -> new ArrayList<>()).add(playerBossBar);
+          }
         }}}
 
   public static void showBingoBar(String paramString, int paramInt, BarColor paramBarColor) {
     hideBingoBar();
-    bingoBar = (BossBar)Bukkit.createBossBar(BossBarKeys.bossBarKey, String.valueOf(net.md_5.bungee.api.ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
+    bingoBar = Bukkit.createBossBar(BossBarKeys.bossBarKey, net.md_5.bungee.api.ChatColor.of("#B06736") + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID);
     bingoBar.setProgress(1.0D);
     for (Player player : Bukkit.getOnlinePlayers())
       bingoBar.addPlayer(player);
     bingoBarTask = new BingoBarCountdownTask(paramInt, paramString);
-    bingoBarTask.runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, updateInterval);
+    bingoBarTask.runTaskTimer(AltarSMP.getInstance(), 0L, updateInterval);
   }
 
   public static void showEventBar(String paramString, int paramInt, BarColor paramBarColor) {
     hideEventBar();
-    eventBar = (BossBar)Bukkit.createBossBar(BossBarKeys.bossBarKey, String.valueOf(net.md_5.bungee.api.ChatColor.of("#B06736")) + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
+    eventBar = Bukkit.createBossBar(BossBarKeys.bossBarKey, net.md_5.bungee.api.ChatColor.of("#B06736") + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID);
     eventBar.setProgress(1.0D);
     for (Player player : Bukkit.getOnlinePlayers())
       eventBar.addPlayer(player);
     eventBarTask = new EventBarCountdownTask(paramInt, paramString);
-    eventBarTask.runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, updateInterval);
+    eventBarTask.runTaskTimer(AltarSMP.getInstance(), 0L, updateInterval);
   }
 
   public static void removeBar(Player paramPlayer, String paramString) {
-    List list = playerBars.get(paramPlayer.getUniqueId());
+    List<PlayerBossBar> list = playerBars.get(paramPlayer.getUniqueId());
     {
       if (list == null)
         return; 
@@ -106,21 +103,22 @@ public class BossBarManager {
     }}
 
   public static void removeAllBars(Player paramPlayer) {
-    List list = playerBars.remove(paramPlayer.getUniqueId());
+    List<PlayerBossBar> list = playerBars.remove(paramPlayer.getUniqueId());
     {
       if (list == null)
         return; 
-    }((List<PlayerBossBar>)list).forEach(bar -> bar.bossBar.removeAll());
+    }
+      list.forEach(bar -> bar.bossBar.removeAll());
   }
 
   public static void removeBarFromAll(String paramString) {
     String str = ChatColor.stripColor(paramString).toLowerCase();
     Iterator<Map.Entry<UUID, List<PlayerBossBar>>> iterator = playerBars.entrySet().iterator();
     while (iterator.hasNext()) {
-      Map.Entry entry = iterator.next();
-      List list = (List)entry.getValue();
+      Map.Entry<UUID, List<PlayerBossBar>> entry = iterator.next();
+      List<PlayerBossBar> list = entry.getValue();
       {
-        ((List<PlayerBossBar>)list).removeIf(bar -> {
+        list.removeIf(bar -> {
               if (ChatColor.stripColor(bar.title).toLowerCase().equals(str)) {
                 bar.bossBar.removeAll();
                 return true;

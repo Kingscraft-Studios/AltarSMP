@@ -19,7 +19,6 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;
 import org.bukkit.entity.Player;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class DialogBuilder {
   public final DialogType dialogType;
@@ -81,7 +80,7 @@ public class DialogBuilder {
     for (int i = 0; i < lower.length(); i++) {
       char c = lower.charAt(i);
       boolean valid = (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_';
-      builder.append(valid && !(i == 0 && (c >= '0' && c <= '9')) ? c : '_');
+      builder.append(valid && !(i == 0 && c <= '9') ? c : '_');
     }
     String result = builder.toString();
     return result.isEmpty() ? "input" : result;
@@ -117,7 +116,7 @@ public class DialogBuilder {
   }
 
   public DialogBuilder title(String paramString) {
-    this.title = (Component)Component.text(paramString);
+    this.title = Component.text(paramString);
     return this;
   }
 
@@ -127,7 +126,7 @@ public class DialogBuilder {
   }
 
   public DialogBuilder description(String paramString) {
-    this.description = (Component)Component.text(paramString);
+    this.description = Component.text(paramString);
     return this;
   }
 
@@ -137,7 +136,7 @@ public class DialogBuilder {
   }
 
   public DialogBuilder body(String paramString) {
-    this.body = (Component)Component.text(paramString);
+    this.body = Component.text(paramString);
     return this;
   }
 
@@ -194,16 +193,15 @@ public class DialogBuilder {
   }
 
   public DialogBuilder addOption(String paramString1, String paramString2) {
-    return addOption(paramString1, (Component)Component.text(paramString2));
+    return addOption(paramString1, Component.text(paramString2));
   }
 
-  public DialogBuilder addActionButton(Component paramComponent, Consumer<Player> paramConsumer) {
+  public void addActionButton(Component paramComponent, Consumer<Player> paramConsumer) {
     this.actionButtons.add(createActionButton(paramComponent, paramConsumer));
-    return this;
   }
 
-  public DialogBuilder addActionButton(String paramString, Consumer<Player> paramConsumer) {
-    return addActionButton((Component)Component.text(paramString), paramConsumer);
+  public void addActionButton(String paramString, Consumer<Player> paramConsumer) {
+    addActionButton(Component.text(paramString), paramConsumer);
   }
 
   public DialogBuilder onTextSubmit(BiConsumer<Player, String> paramBiConsumer) {
@@ -237,24 +235,18 @@ public class DialogBuilder {
   }
 
   public Dialog build() {
-    switch (this.dialogType.ordinal()) {
-      case 0:
-        return Dialog.create(this::buildTextDialog);
-      case 1:
-        return Dialog.create(this::buildNumberDialog);
-      case 2:
-        return Dialog.create(this::buildBooleanDialog);
-      case 3:
-        return Dialog.create(this::buildSingleOptionDialog);
-      case 4:
-        return Dialog.create(this::buildConfirmationDialog);
-      case 5: {
-        List list = new ArrayList(this.actionButtons);
-        return Dialog.create(f -> buildMultiActionDialog(list, f));
-      }
-      default:
-        throw new MatchException(null, (Throwable)null);
-    }
+      return switch (this.dialogType.ordinal()) {
+          case 0 -> Dialog.create(this::buildTextDialog);
+          case 1 -> Dialog.create(this::buildNumberDialog);
+          case 2 -> Dialog.create(this::buildBooleanDialog);
+          case 3 -> Dialog.create(this::buildSingleOptionDialog);
+          case 4 -> Dialog.create(this::buildConfirmationDialog);
+          case 5 -> {
+              List<ActionButton> list = new ArrayList<>(this.actionButtons);
+              yield Dialog.create(f -> buildMultiActionDialog(list, f));
+          }
+          default -> throw new MatchException(null, null);
+      };
   }
 
   public void show(Player paramPlayer) {
@@ -262,14 +254,14 @@ public class DialogBuilder {
   }
 
   public ActionButton createConfirmButton(BiConsumer<DialogResponseView, Player> paramBiConsumer) {
-    return ActionButton.create((Component)Component.text("Confirm"), null, 100, (DialogAction)DialogAction.customClick((paramResp1, paramAud1) -> handleConfirmButtonClick(paramBiConsumer, paramResp1, paramAud1), (ClickCallback.Options)ClickCallback.Options.builder().uses(1).build()));
+    return ActionButton.create(Component.text("Confirm"), null, 100, DialogAction.customClick((paramResp1, paramAud1) -> handleConfirmButtonClick(paramBiConsumer, paramResp1, paramAud1), ClickCallback.Options.builder().uses(1).build()));
   }
 
   public ActionButton createActionButton(Component paramComponent, Consumer<Player> paramConsumer) {
-    return ActionButton.create(paramComponent, null, 200, (DialogAction)DialogAction.customClick((paramResp2, paramAud2) -> handleActionButtonClick(paramConsumer, paramResp2, paramAud2), (ClickCallback.Options)ClickCallback.Options.builder().uses(1).build()));
+    return ActionButton.create(paramComponent, null, 200, DialogAction.customClick((paramResp2, paramAud2) -> handleActionButtonClick(paramConsumer, paramAud2), ClickCallback.Options.builder().uses(1).build()));
   }
 
-  public static void handleActionButtonClick(Consumer<Player> paramConsumer, DialogResponseView paramDialogResponseView, Audience paramAudience) {
+  public static void handleActionButtonClick(Consumer<Player> paramConsumer, Audience paramAudience) {
     Player player;
     if (paramAudience instanceof Player) {
       player = (Player)paramAudience;
@@ -289,28 +281,28 @@ public class DialogBuilder {
     paramBiConsumer.accept(paramDialogResponseView, player);
   }
 
-  public void buildMultiActionDialog(List paramList, RegistryBuilderFactory paramRegistryBuilderFactory) {
-    ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).build()).type((io.papermc.paper.registry.data.dialog.type.DialogType) io.papermc.paper.registry.data.dialog.type.DialogType.multiAction(paramList).columns(1).build());
+  public void buildMultiActionDialog(List<ActionButton> paramList, RegistryBuilderFactory paramRegistryBuilderFactory) {
+    ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).build()).type(io.papermc.paper.registry.data.dialog.type.DialogType.multiAction(paramList).columns(1).build());
   }
 
   public void buildConfirmationDialog(RegistryBuilderFactory paramRegistryBuilderFactory) {
-    ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).body(List.of(DialogBody.plainMessage(this.body))).build()).type((io.papermc.paper.registry.data.dialog.type.DialogType) io.papermc.paper.registry.data.dialog.type.DialogType.confirmation(createActionButton((Component)Component.text("Confirm"), this::handleConfirm), createActionButton((Component)Component.text("Cancel"), this::handleCancel)));
+    ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).body(List.of(DialogBody.plainMessage(this.body))).build()).type(io.papermc.paper.registry.data.dialog.type.DialogType.confirmation(createActionButton(Component.text("Confirm"), this::handleConfirm), createActionButton(Component.text("Cancel"), this::handleCancel)));
   }
 
   public void handleCancel(Player paramPlayer) {
     {
       if (this.onConfirmationSubmit != null)
-        this.onConfirmationSubmit.accept(paramPlayer, Boolean.valueOf(false));
+        this.onConfirmationSubmit.accept(paramPlayer, Boolean.FALSE);
     }}
 
   public void handleConfirm(Player paramPlayer) {
     {
       if (this.onConfirmationSubmit != null)
-        this.onConfirmationSubmit.accept(paramPlayer, Boolean.valueOf(true));
+        this.onConfirmationSubmit.accept(paramPlayer, Boolean.TRUE);
     }}
 
   public void buildSingleOptionDialog(RegistryBuilderFactory paramRegistryBuilderFactory) {
-    ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).inputs(List.of(DialogInput.singleOption(this.inputName, this.description, this.options).build())).build()).type((io.papermc.paper.registry.data.dialog.type.DialogType) io.papermc.paper.registry.data.dialog.type.DialogType.notice(createConfirmButton(this::handleOptionSubmit)));
+    ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).inputs(List.of(DialogInput.singleOption(this.inputName, this.description, this.options).build())).build()).type(io.papermc.paper.registry.data.dialog.type.DialogType.notice(createConfirmButton(this::handleOptionSubmit)));
   }
 
   public void handleOptionSubmit(DialogResponseView paramDialogResponseView, Player paramPlayer) {
@@ -320,7 +312,7 @@ public class DialogBuilder {
     }}
 
   public void buildBooleanDialog(RegistryBuilderFactory paramRegistryBuilderFactory) {
-    ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).inputs(List.of(DialogInput.bool(this.inputName, this.description).initial(this.initialBoolean).build())).build()).type((io.papermc.paper.registry.data.dialog.type.DialogType) io.papermc.paper.registry.data.dialog.type.DialogType.notice(createConfirmButton(this::handleBooleanSubmit)));
+    ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).inputs(List.of(DialogInput.bool(this.inputName, this.description).initial(this.initialBoolean).build())).build()).type(io.papermc.paper.registry.data.dialog.type.DialogType.notice(createConfirmButton(this::handleBooleanSubmit)));
   }
 
   public void handleBooleanSubmit(DialogResponseView paramDialogResponseView, Player paramPlayer) {
@@ -333,7 +325,7 @@ public class DialogBuilder {
     {
       {
 
-      }}((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).inputs(List.of(this.useTextInput ? DialogInput.text(this.inputName, this.description).initial(String.valueOf(this.useFloatInput ? this.initialNumber : (int)this.initialNumber)).build() : DialogInput.numberRange(this.inputName, this.description, this.minimumNumber, this.maximumNumber).initial(Float.valueOf(Math.clamp(this.initialNumber, this.minimumNumber, this.maximumNumber))).step(Float.valueOf(this.numberStep)).width(500).build())).build()).type((io.papermc.paper.registry.data.dialog.type.DialogType) io.papermc.paper.registry.data.dialog.type.DialogType.notice(createConfirmButton(this::handleNumberSubmit)));
+      }}((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).inputs(List.of(this.useTextInput ? DialogInput.text(this.inputName, this.description).initial(String.valueOf(this.useFloatInput ? this.initialNumber : (int)this.initialNumber)).build() : DialogInput.numberRange(this.inputName, this.description, this.minimumNumber, this.maximumNumber).initial(Float.valueOf(Math.clamp(this.initialNumber, this.minimumNumber, this.maximumNumber))).step(Float.valueOf(this.numberStep)).width(500).build())).build()).type(io.papermc.paper.registry.data.dialog.type.DialogType.notice(createConfirmButton(this::handleNumberSubmit)));
   }
 
   public void handleNumberSubmit(DialogResponseView paramDialogResponseView, Player paramPlayer) {
@@ -344,14 +336,14 @@ public class DialogBuilder {
             {
 
             }float f = this.useTextInput ? Float.parseFloat(paramDialogResponseView.getText(this.inputName).trim()) : paramDialogResponseView.getFloat(this.inputName).floatValue();
-            this.onFloatSubmit.accept(paramPlayer, Float.valueOf(f));
+            this.onFloatSubmit.accept(paramPlayer, f);
           } catch (NumberFormatException numberFormatException) {} 
       } else if (this.onIntegerSubmit != null) {
         try {
           {
 
           }int i = this.useTextInput ? Integer.parseInt(paramDialogResponseView.getText(this.inputName).trim()) : Math.round(paramDialogResponseView.getFloat(this.inputName).floatValue());
-          this.onIntegerSubmit.accept(paramPlayer, Integer.valueOf(i));
+          this.onIntegerSubmit.accept(paramPlayer, i);
         } catch (NumberFormatException numberFormatException) {}
       } 
     }}

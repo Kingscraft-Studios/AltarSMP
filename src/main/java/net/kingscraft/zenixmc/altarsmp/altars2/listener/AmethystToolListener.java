@@ -254,6 +254,6 @@ public final class AmethystToolListener implements Listener {
 
    private enum ToolType {
       AXE,
-      PICKAXE;
+      PICKAXE
    }
 }

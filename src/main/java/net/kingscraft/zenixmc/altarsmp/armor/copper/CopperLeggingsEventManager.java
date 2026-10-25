@@ -34,7 +34,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
@@ -43,6 +42,7 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 import net.kingscraft.zenixmc.altarsmp.util.TimeUtils;
+import org.jspecify.annotations.NonNull;
 
 public class CopperLeggingsEventManager implements Listener, CommandExecutor {
   public final HashMap<UUID, ItemDisplay> playerCoreDisplays = new HashMap<>();
@@ -54,19 +54,19 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
   public void startEventCountdown() {
     int i = AltarSMP.getInstance().getConfig().getInt("leggingsEventAnnounceTime", 60);
     int j = AltarSMP.getInstance().getConfig().getInt("leggingsTime", 30) * 60 * 20;
-    (new CopperLeggingsEventTask(this, j, i)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new CopperLeggingsEventTask(this, j, i)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public void endLeggingsEvent() {
     UUID uUID = null;
     int i = -1;
     for (Map.Entry<UUID, Integer> entry : this.playerHoldingTimes.entrySet()) {
-      if (entry.getValue().intValue() > i) {
-        i = entry.getValue().intValue();
+      if (entry.getValue() > i) {
+        i = entry.getValue();
         uUID = entry.getKey();
       } 
     } 
-    AltarSMP.getInstance().getConfig().set("leggingsActive", Boolean.valueOf(false));
+    AltarSMP.getInstance().getConfig().set("leggingsActive", Boolean.FALSE);
     cleanupEventEntities();
     if (uUID != null) {
       Player player = Bukkit.getPlayer(uUID);
@@ -179,7 +179,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     }return paramWorld.getName();
   }
 
-  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
+  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String @NonNull [] paramArrayOfString) {
     Player player;
     if (paramCommandSender instanceof Player) {
       player = (Player)paramCommandSender;
@@ -187,7 +187,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
       return true;
     } 
     this.playerHoldingTimes.clear();
-    AltarSMP.getInstance().getConfig().set("leggingsActive", Boolean.valueOf(true));
+    AltarSMP.getInstance().getConfig().set("leggingsActive", Boolean.TRUE);
     showEventBossBar();
     spawnCopperCore(player);
     createCopperCoreItem();
@@ -198,7 +198,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     int i = AltarSMP.getInstance().getConfig().getInt("leggingsTime", 30) * 60;
     for (Player player : Bukkit.getOnlinePlayers()) {
       player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1.0F, 1.0F);
-      BossBarManager.showEventBar(String.valueOf(ChatColor.of("#B06736")) + "§lEvent Time Remaining:", i, BarColor.PINK);
+      BossBarManager.showEventBar(ChatColor.of("#B06736") + "§lEvent Time Remaining:", i, BarColor.PINK);
     } 
   }
 
@@ -209,7 +209,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     int j = location.getBlockY();
     int i = location.getBlockZ();
     String str2 = ChatColor.of("#B06736").toString();
-    Bukkit.broadcastMessage("A " + String.valueOf(ChatColor.of("#B06736")) + "§lCopper Infused Heavy Core §rhas spawned!\\nLocation: " + str2 + "§lX: " + k + " §lY: " + j + " §lZ: " + i + " §rPunch players to steal the core! Whoever holds it longest receives the " + String.valueOf(ChatColor.of("#B06736")) + "§lCopper Leggings§r!");
+    Bukkit.broadcastMessage("A " + ChatColor.of("#B06736") + "§lCopper Infused Heavy Core §rhas spawned!\\nLocation: " + str2 + "§lX: " + k + " §lY: " + j + " §lZ: " + i + " §rPunch players to steal the core! Whoever holds it longest receives the " + ChatColor.of("#B06736") + "§lCopper Leggings§r!");
     location.setYaw(0.0F);
     location.setPitch(0.0F);
     location.getWorld().spawn(location.clone().add(0.0D, 2.0D, 0.0D), ItemDisplay.class, CopperLeggingsEventManager::lambda$spawnCore$1);

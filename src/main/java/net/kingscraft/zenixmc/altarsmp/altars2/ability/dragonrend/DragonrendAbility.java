@@ -243,7 +243,7 @@ public final class DragonrendAbility {
     Location clockLoc = base.clone().add(0.0D, 0.5D, 0.0D);
     clockLoc.setYaw(0.0F);
     clockLoc.setPitch(0.0F);
-    playCustom(center, "altar:use", 1.2F, 1.0F);
+    playCustom(center, "altar:use", 1.2F);
     ItemDisplay display = spawnClock(clockLoc);
     spawnClockBurst(clockLoc);
     VoidZone zone = new VoidZone(center, display);
@@ -268,7 +268,7 @@ public final class DragonrendAbility {
           return;
         }
         if (this.tick % 40 == 5) {
-          playCustom(center, "altar:tick", 1.2F, 1.0F);
+          playCustom(center, "altar:tick", 1.2F);
         }
         updateDisplay(display, this.tick);
         orbitParticles(center, radius);
@@ -302,7 +302,7 @@ public final class DragonrendAbility {
       if (zone.display != null && zone.display.isValid()) {
         zone.display.remove();
       }
-      playCustom(center, "altar:use", 1.5F, 1.0F);
+      playCustom(center, "altar:use", 1.5F);
     }, 10L);
   }
 
@@ -509,10 +509,10 @@ public final class DragonrendAbility {
     player.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, ticks, 4, true, false, false));
   }
 
-  private static void playCustom(Location location, String sound, float volume, float pitch) {
+  private static void playCustom(Location location, String sound, float volume) {
     World world = location.getWorld();
     if (world != null) {
-      world.playSound(location, sound, volume, pitch);
+      world.playSound(location, sound, volume, 1.0f);
     }
   }
 

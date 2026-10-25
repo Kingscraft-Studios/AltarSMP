@@ -7,9 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,13 +24,11 @@ public class AltarManager {
 
   public final Map<String, Altar> altars;
 
-  public static final Pattern HEX_COLOR_PATTERN;
-
   public File altarsFile;
 
   public FileConfiguration altarsConfig;
 
-  public static double rotationSpeed;
+  public static double rotationSpeed = AltarSMP.getInstance().getConfig().getDouble("settings.rotation_speed", 5.0D) * 0.01D;
 
 
   public AltarManager(AltarSMP main) {
@@ -48,7 +45,7 @@ public class AltarManager {
         this.altarsFile.getParentFile().mkdirs();
         this.plugin.saveResource("altars.yml", false);
       } 
-    }this.altarsConfig = (FileConfiguration)YamlConfiguration.loadConfiguration(this.altarsFile);
+    }this.altarsConfig = YamlConfiguration.loadConfiguration(this.altarsFile);
   }
 
   public FileConfiguration getAltarConfig() {
@@ -61,16 +58,6 @@ public class AltarManager {
     } catch (IOException iOException) {
       iOException.printStackTrace();
     } 
-  }
-
-  public String translateColors(String text) {
-    Matcher matcher = HEX_COLOR_PATTERN.matcher(text);
-    StringBuffer stringBuffer = new StringBuffer(text.length() + 32);
-    while (matcher.find()) {
-      String str = matcher.group(1);
-      matcher.appendReplacement(stringBuffer, ChatColor.of("#" + str).toString());
-    } 
-    return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(stringBuffer).toString());
   }
 
   public void loadAltars() {
@@ -105,16 +92,16 @@ public class AltarManager {
   public Altar loadAltar(String paramString, ConfigurationSection paramConfigurationSection) {
     String str = AltarController.createItemStack(paramString).getItemMeta().getDisplayName();
     double d = paramConfigurationSection.getDouble("hologram-height", 3.0D);
-    List<String> arrayList = new ArrayList();
+    List<String> arrayList = new ArrayList<>();
     List<Map<?, ?>> list = paramConfigurationSection.getMapList("recipes." + paramString + ".ingredients");
-    for (Map map : list) {
+    for (Map<?, ?> map : list) {
       String str1 = map.get("material").toString();
-      int i = ((Integer)map.get("amount")).intValue();
+      int i = (Integer) map.get("amount");
       String str2 = getMaterialDisplayName(str1);
       arrayList.add("§7" + i + "x §f" + str2);
     } 
     arrayList.add(str);
-    Map<Object, Object> hashMap = new HashMap<>();
+    Map<String, AltarRecipe> hashMap = new HashMap<>();
     ConfigurationSection configurationSection = paramConfigurationSection.getConfigurationSection("recipes");
     if (configurationSection != null)
       for (String str1 : configurationSection.getKeys(false)) {
@@ -126,17 +113,16 @@ public class AltarManager {
               hashMap.put(str1, altarRecipe);
           }} 
       }  
-    return new Altar(paramString, str, arrayList, (Map)hashMap, d);
+    return new Altar(paramString, str, arrayList, hashMap, d);
   }
 
   public AltarRecipe loadRecipe(String paramString, ConfigurationSection paramConfigurationSection) {
     AltarRecipeBuilder altarRecipeBuilder = new AltarRecipeBuilder(paramString);
     altarRecipeBuilder.material(Material.STONE);
-    List list = paramConfigurationSection.getList("ingredients");
+    List<?> list = paramConfigurationSection.getList("ingredients");
     if (list != null)
       for (Object map : list) {
-        if (map instanceof Map) {
-          Map map1 = (Map)map;
+        if (map instanceof Map<?, ?> map1) {
           String str = (String)map1.get("material");
           {
             if (str == null)
@@ -148,9 +134,9 @@ public class AltarManager {
           ItemMeta referenceMeta = referenceItem.getItemMeta();
           int customModelData = referenceMeta != null && referenceMeta.hasCustomModelData() ? referenceMeta.getCustomModelData() : 0;
           String itemModel = referenceMeta != null && referenceMeta.hasItemModel() ? referenceMeta.getItemModel().toString() : null;
-          int bool = 0;
+          int bool;
           {
-            bool = map1.containsKey("amount") ? ((Integer)map1.get("amount")).intValue() : 1;
+            bool = map1.containsKey("amount") ? (Integer) map1.get("amount") : 1;
           }
           altarRecipeBuilder.ingredient(material, bool, customModelData, itemModel);
         } 
@@ -191,11 +177,6 @@ public class AltarManager {
 
   public double getHologramHeight() {
     return this.plugin.getConfig().getDouble("settings.hologram_height", 3.0D);
-  }
-
-  static {
-    HEX_COLOR_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
-    rotationSpeed = AltarSMP.getInstance().getConfig().getDouble("settings.rotation_speed", 5.0D) * 0.01D;
   }
 
 }

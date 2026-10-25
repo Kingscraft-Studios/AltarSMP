@@ -55,7 +55,7 @@ class CopperLeggingsEventTask extends BukkitRunnable {
       {
         if (bool) {
           {
-            this.eventManager.playerHoldingTimes.put(player.getUniqueId(), Integer.valueOf(((Integer)this.eventManager.playerHoldingTimes.getOrDefault(player.getUniqueId(), Integer.valueOf(0))).intValue() + 1));
+            this.eventManager.playerHoldingTimes.put(player.getUniqueId(), this.eventManager.playerHoldingTimes.getOrDefault(player.getUniqueId(), 0) + 1);
             if (!this.eventManager.playerCoreDisplays.containsKey(player.getUniqueId()))
               this.eventManager.spawnPlayerCoreDisplay(player);
           }{
@@ -68,7 +68,7 @@ class CopperLeggingsEventTask extends BukkitRunnable {
       }{
         if (bool && this.elapsedTicks % (this.announcementIntervalSeconds * 20) == 0) {
           Location location = player.getLocation();
-          Bukkit.broadcastMessage(String.valueOf(ChatColor.of("#B06736")) + ChatColor.BOLD.toString() + player.getName() + "§r has the core in " + this.eventManager.getWorldDisplayName(player.getWorld()) + " at (" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ")");
+          Bukkit.broadcastMessage(ChatColor.of("#B06736") + ChatColor.BOLD.toString() + player.getName() + "§r has the core in " + this.eventManager.getWorldDisplayName(player.getWorld()) + " at (" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ")");
         } 
       }} 
     this.elapsedTicks++;

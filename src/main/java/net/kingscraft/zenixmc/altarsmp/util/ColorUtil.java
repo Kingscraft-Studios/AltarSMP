@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.util;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import org.bukkit.ChatColor;
 
 public class ColorUtil {
@@ -77,9 +75,7 @@ public class ColorUtil {
       return true;
     if (paramChar >= 'A' && paramChar <= 'F')
       return true;
-    if (paramChar >= 'a' && paramChar <= 'f')
-      return true;
-    return false;
+    return paramChar >= 'a' && paramChar <= 'f';
   }
 
   public static String toMinecraftHexColor(String paramString) {

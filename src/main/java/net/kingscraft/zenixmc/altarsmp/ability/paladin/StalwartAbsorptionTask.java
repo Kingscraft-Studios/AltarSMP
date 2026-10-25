@@ -42,12 +42,12 @@ public class StalwartAbsorptionTask extends BukkitRunnable {
           this.player.getWorld().playSound(this.player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0F, 1.0F);
           this.player.getWorld().spawnParticle(Particle.FIREWORK, this.player.getLocation(), 40, 0.0D, 0.0D, 0.0D, 0.5D);
           this.player.getWorld().spawnParticle(Particle.GUST_EMITTER_LARGE, this.player.getLocation(), 0, 0.0D, 0.0D, 0.0D, 0.0D);
-          if (entity instanceof LivingEntity) {
-            LivingEntity livingEntity = (LivingEntity)entity;
+          if (entity instanceof LivingEntity livingEntity) {
             {
               if (livingEntity == this.player)
                 continue; 
-            }int k = ((Integer) PaladinEarthAbility.absorptionDamage.getOrDefault(this.player.getUniqueId(), Integer.valueOf(1))).intValue() / j;
+            }
+            int k = PaladinEarthAbility.absorptionDamage.getOrDefault(this.player.getUniqueId(), 1) / j;
             livingEntity.damage(k);
             livingEntity.getWorld().strikeLightningEffect(livingEntity.getLocation());
           } 
@@ -56,7 +56,7 @@ public class StalwartAbsorptionTask extends BukkitRunnable {
         cancel();
         return;
       } 
-    }int i = ((Integer) PaladinEarthAbility.absorptionDamage.getOrDefault(this.player.getUniqueId(), Integer.valueOf(0))).intValue();
+    }int i = PaladinEarthAbility.absorptionDamage.getOrDefault(this.player.getUniqueId(), 0);
     this.damageDisplay.setText("§6" + i + " §c❤");
     this.player.sendActionBar("§6Damage Absorbed: §e" + i);
     this.ticks++;

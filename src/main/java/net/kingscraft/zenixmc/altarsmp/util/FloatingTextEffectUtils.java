@@ -5,21 +5,14 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Transformation;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class FloatingTextEffectUtils {
-  public static void spawnPlayerStarEffect(Player paramPlayer) {
-    Location location = paramPlayer.getLocation();
-    int b = 5;
-    spawnAnimatedTextEffect(location, 1, Color.WHITE, Color.WHITE, b, b * 10, 10, b, true, "✦", 40, 10);
-  }
 
   public static void spawnAnimatedTextEffect(Location paramLocation, int paramInt1, Color paramColor1, Color paramColor2, double paramDouble, int paramInt2, int paramInt3, int paramInt4, boolean paramBoolean, String paramString, int paramInt5, int paramInt6) {
-    (new FloatingTextSpawnTask(paramInt1, paramInt2, paramLocation, paramColor1, paramColor2, paramDouble, paramInt3, paramInt4, paramBoolean, paramString, paramInt5, paramInt6)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new FloatingTextSpawnTask(paramInt1, paramInt2, paramLocation, paramColor1, paramColor2, paramDouble, paramInt3, paramInt4, paramBoolean, paramString, paramInt5, paramInt6)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void spawnFloatingTextDisplay(Location paramLocation, Color paramColor1, Color paramColor2, double paramDouble1, int paramInt1, double paramDouble2, boolean paramBoolean, String paramString, int paramInt2, int paramInt3) {
@@ -43,9 +36,9 @@ public class FloatingTextEffectUtils {
     textDisplay.setInterpolationDelay(0);
     textDisplay.setInterpolationDuration(paramInt1);
     textDisplay.setTeleportDuration(paramInt1);
-    (new FloatingTextParticleAnimationTask(paramLocation, paramBoolean, paramDouble1, paramDouble2, textDisplay, paramString, paramColor2)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
-    (new FloatingTextShrinkTask(textDisplay, paramInt2)).runTaskLater((Plugin)AltarSMP.getInstance(), paramInt3);
-    (new FloatingTextRemovalTask(textDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), (paramInt3 + paramInt2));
+    (new FloatingTextParticleAnimationTask(paramLocation, paramBoolean, paramDouble1, paramDouble2, textDisplay, paramString, paramColor2)).runTaskLater(AltarSMP.getInstance(), 2L);
+    (new FloatingTextShrinkTask(textDisplay, paramInt2)).runTaskLater(AltarSMP.getInstance(), paramInt3);
+    (new FloatingTextRemovalTask(textDisplay)).runTaskLater(AltarSMP.getInstance(), (paramInt3 + paramInt2));
   }
 
 }

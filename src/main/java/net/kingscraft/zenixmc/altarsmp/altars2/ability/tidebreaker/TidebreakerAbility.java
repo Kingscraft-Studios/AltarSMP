@@ -325,7 +325,7 @@ public final class TidebreakerAbility {
           world.spawnParticle(Particle.CLOUD, point.clone().add(0.0D, 0.08D, 0.0D), 0, outward.getX() * 0.45D, 0.025D, outward.getZ() * 0.45D, 0.24D);
         }
         if (i % Math.max(1, count / splashCount) == 0) {
-          placeWaterColumn(world, point, columnHeight, 8);
+          placeWaterColumn(point, columnHeight);
         }
       }
     }
@@ -356,7 +356,7 @@ public final class TidebreakerAbility {
     }
   }
 
-  private static void placeWaterColumn(World world, Location location, int height, int revertTicks) {
+  private static void placeWaterColumn(Location location, int height) {
     Block start = location.getBlock();
     List<ColumnBlock> blocks = new ArrayList<>();
     for (int i = 0; i < height; i++) {
@@ -379,7 +379,7 @@ public final class TidebreakerAbility {
           block.setBlockData(record.original(), false);
         }
       }
-    }, revertTicks);
+    }, 8);
   }
 
   private static boolean isColumnReplaceable(Block block) {
@@ -693,7 +693,7 @@ public final class TidebreakerAbility {
       if (tick < 7) {
         Location feet = player.getLocation().clone().subtract(0.0D, 1.75D + Math.min(0.85D, tick * 0.06D), 0.0D);
         int height = Math.min(6, 2 + tick / 2);
-        placeWaterColumn(world, feet, height, 8);
+        placeWaterColumn(feet, height);
         tideRings(world, feet, tick);
       }
       if (tick == 0) {
@@ -846,7 +846,7 @@ public final class TidebreakerAbility {
         }
         Location rowBase = offsetLocation(world, origin, direction, side, distance, 0);
         int baseY = Math.max(world.getMinHeight() + 1, rowBase.getBlockY());
-        int height = Math.max(1, Math.min(4, row + 2));
+        int height = Math.clamp(row + 2, 1, 4);
         maxRowHeight = Math.max(maxRowHeight, height);
         for (int sideOffset = -1; sideOffset <= 1; sideOffset++) {
           for (Location column : waveColumnLocations(world, origin, direction, side, distance, sideOffset)) {

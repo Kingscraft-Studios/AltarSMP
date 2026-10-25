@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
+import net.kingscraft.zenixmc.altarsmp.core.tracker.KillTracker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -40,7 +42,7 @@ import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 
 public class BloodLustAbilityListener implements Listener {
-  public final BloodLustKillTracker killTracker;
+  public final KillTracker killTracker;
 
   public final Map<UUID, BukkitRunnable> bloodHookTasks = new ConcurrentHashMap<>();
 
@@ -68,7 +70,7 @@ public class BloodLustAbilityListener implements Listener {
     bloodlustTrackRange = plugin.getConfig().getDouble("bloodlustTrackRange", 80.0D);
   }
 
-  public BloodLustAbilityListener(BloodLustKillTracker paramBloodLustKillTracker) {
+  public BloodLustAbilityListener(KillTracker paramBloodLustKillTracker) {
     this.killTracker = paramBloodLustKillTracker;
     (new BloodLustAbilityMonitorTask(this, paramBloodLustKillTracker)).runTaskTimer((Plugin) plugin, 0L, 20L);
   }

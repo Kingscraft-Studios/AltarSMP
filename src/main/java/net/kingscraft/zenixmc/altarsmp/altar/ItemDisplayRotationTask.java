@@ -4,7 +4,6 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.joml.AxisAngle4f;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class ItemDisplayRotationTask extends BukkitRunnable {
   public float rotation;

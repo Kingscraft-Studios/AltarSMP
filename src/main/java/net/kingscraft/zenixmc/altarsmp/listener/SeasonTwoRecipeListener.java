@@ -11,7 +11,6 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
@@ -36,7 +35,7 @@ public class SeasonTwoRecipeListener implements Listener {
         paramAltarSMP.getLogger().warning("No result item for recipe '" + key + "', skipping.");
         continue;
       }
-      NamespacedKey recipeKey = new NamespacedKey((Plugin)paramAltarSMP, "altars2_" + key);
+      NamespacedKey recipeKey = new NamespacedKey(paramAltarSMP, "altars2_" + key);
       Recipe recipe = section.getString("type", "shaped").equalsIgnoreCase("shapeless")
           ? buildShapeless(paramAltarSMP, section, recipeKey, result)
           : buildShaped(paramAltarSMP, section, recipeKey, result);

@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class CooldownManager {
   private static final Map<UUID, Map<String, Double>> expiryTimestamps = new ConcurrentHashMap<>();
@@ -18,24 +17,23 @@ public class CooldownManager {
   }
 
   public static void setCooldown(UUID paramUUID, String paramString, double paramDouble) {
-    ((Map<String, Double>) expiryTimestamps.computeIfAbsent(paramUUID, CooldownManager::newCooldownMap)).put(paramString, Double.valueOf(System.currentTimeMillis() + paramDouble * 1000.0D));
-    ((Map<String, Double>) remainingCooldowns.computeIfAbsent(paramUUID, CooldownManager::newCooldownMap)).put(paramString, Double.valueOf(paramDouble));
-    ((Map<String, Double>) totalCooldowns.computeIfAbsent(paramUUID, CooldownManager::newCooldownMap)).put(paramString, Double.valueOf(paramDouble));
+    expiryTimestamps.computeIfAbsent(paramUUID, CooldownManager::newCooldownMap).put(paramString, System.currentTimeMillis() + paramDouble * 1000.0D);
+    remainingCooldowns.computeIfAbsent(paramUUID, CooldownManager::newCooldownMap).put(paramString, paramDouble);
+    totalCooldowns.computeIfAbsent(paramUUID, CooldownManager::newCooldownMap).put(paramString, paramDouble);
   }
 
   public static double getRemainingCooldown(UUID paramUUID, String paramString) {
-    return ((Double)((Map) remainingCooldowns.getOrDefault(paramUUID, Collections.emptyMap())).getOrDefault(paramString, Double.valueOf(0.0D))).doubleValue();
+    return remainingCooldowns.getOrDefault(paramUUID, Collections.emptyMap()).getOrDefault(paramString, 0.0D);
   }
 
-  public static Integer getRemainingSeconds(UUID paramUUID, String paramString) {
-    Map map = expiryTimestamps.get(paramUUID);
+  public static int getRemainingSeconds(UUID paramUUID, String paramString) {
+    Map<String, Double> map = expiryTimestamps.get(paramUUID);
     if (map != null)
       if (map.containsKey(paramString)) {
-        double d = ((Double)map.get(paramString)).doubleValue() - System.currentTimeMillis();
-        int i = (int)(d / 1000.0D);
-        return Integer.valueOf(i);
+        double d = map.get(paramString) - System.currentTimeMillis();
+        return (int)(d / 1000.0D);
       }
-    return Integer.valueOf(0);
+    return 0;
   }
 
   public static double getRemainingMillis(UUID paramUUID, String paramString) {
@@ -44,11 +42,11 @@ public class CooldownManager {
       return 0.0D;
     }
     double remaining = map.get(paramString) - System.currentTimeMillis();
-    return (remaining > 0.0D) ? remaining : 0.0D;
+    return Math.max(remaining, 0.0D);
   }
 
   public static double getTotalCooldown(UUID paramUUID, String paramString) {
-    return ((Double)((Map) remainingCooldowns.getOrDefault(paramUUID, Collections.emptyMap())).getOrDefault(paramString, Double.valueOf(0.0D))).doubleValue();
+    return remainingCooldowns.getOrDefault(paramUUID, Collections.emptyMap()).getOrDefault(paramString, 0.0D);
   }
 
   public static boolean hasActiveCooldown(UUID paramUUID) {

@@ -100,7 +100,7 @@ public final class OmenAbility {
     Location location = player.getLocation();
     world.playSound(location, Sound.BLOCK_TRIAL_SPAWNER_AMBIENT_OMINOUS, 1.0F, 0.7F);
     world.spawnParticle(Particle.SOUL_FIRE_FLAME, location.clone().add(0.0, 1.0, 0.0), 35, 0.65, 0.65, 0.65, 0.12);
-    OmenParticles.ambientEndRod(world, location, 20.0, 20.0, 200);
+    OmenParticles.ambientEndRod(world, location);
     OmenParticles.casterRing(world, player);
     return true;
   }
@@ -244,7 +244,7 @@ public final class OmenAbility {
     Vector velocity = target.getVelocity().clone();
     velocity.setX(velocity.getX() * 0.55 + pull.getX());
     velocity.setZ(velocity.getZ() * 0.55 + pull.getZ());
-    velocity.setY(Math.max(0.0, Math.min(0.12, velocity.getY())));
+    velocity.setY(Math.clamp(velocity.getY(), 0.0, 0.12));
     target.setVelocity(velocity);
   }
 
@@ -288,7 +288,7 @@ public final class OmenAbility {
     }
   }
 
-  static LivingEntity traceEntities(World world, Player caster, Location from, Location to, double radius) {
+  static LivingEntity traceEntities(World world, Player caster, Location from, Location to) {
     Vector difference = to.toVector().subtract(from.toVector());
     double length = difference.length();
     if (length <= 0.01) {
@@ -296,8 +296,8 @@ public final class OmenAbility {
     }
     Vector direction = difference.clone().normalize();
     Location middle = from.clone().add(difference.clone().multiply(0.5));
-    double searchRadius = Math.max(radius + 1.0, length * 0.5 + radius + 0.5);
-    double radiusSquared = radius * radius;
+    double searchRadius = Math.max(OmenAbility.PROJECTILE_HIT_RADIUS + 1.0, length * 0.5 + OmenAbility.PROJECTILE_HIT_RADIUS + 0.5);
+    double radiusSquared = OmenAbility.PROJECTILE_HIT_RADIUS * OmenAbility.PROJECTILE_HIT_RADIUS;
     LivingEntity closest = null;
     double closestProjection = Double.MAX_VALUE;
     for (Entity entity : world.getNearbyEntities(middle, searchRadius, searchRadius + 1.5, searchRadius)) {
@@ -306,7 +306,7 @@ public final class OmenAbility {
       }
       Location center = living.getLocation().add(0.0, living.getHeight() * 0.55, 0.0);
       double projection = center.toVector().subtract(from.toVector()).dot(direction);
-      if (projection >= -radius && projection <= length + radius && pointSegmentDistanceSquared(center, from, to) <= radiusSquared && projection < closestProjection) {
+      if (projection >= -OmenAbility.PROJECTILE_HIT_RADIUS && projection <= length + OmenAbility.PROJECTILE_HIT_RADIUS && pointSegmentDistanceSquared(center, from, to) <= radiusSquared && projection < closestProjection) {
         closestProjection = projection;
         closest = living;
       }
@@ -349,15 +349,16 @@ public final class OmenAbility {
       return point.distanceSquared(start);
     }
     double projection = point.toVector().subtract(start.toVector()).dot(segment) / lengthSquared;
-    projection = Math.max(0.0, Math.min(1.0, projection));
+    projection = Math.clamp(projection, 0.0, 1.0);
     Location closest = start.clone().add(segment.multiply(projection));
     return point.distanceSquared(closest);
   }
 
   private static Location traceVaultEnd(World world, Location start, Vector direction, double range) {
     RayTraceResult result = world.rayTraceBlocks(start, direction, range, FluidCollisionMode.NEVER, true);
-    if (result != null && result.getHitPosition() != null) {
-      return result.getHitPosition().toLocation(world).add(direction.clone().multiply(-0.08));
+    if (result != null) {
+        result.getHitPosition();
+        return result.getHitPosition().toLocation(world).add(direction.clone().multiply(-0.08));
     }
     return start.clone().add(direction.clone().multiply(range));
   }

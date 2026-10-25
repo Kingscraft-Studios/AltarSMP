@@ -1,16 +1,17 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.blood;
 
+import net.kingscraft.zenixmc.altarsmp.core.tracker.KillTracker;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BloodLustAbilityMonitorTask extends BukkitRunnable {
-  public final BloodLustKillTracker killTracker;
+  public final KillTracker killTracker;
 
   public final BloodLustAbilityListener abilityListener;
 
-  public BloodLustAbilityMonitorTask(BloodLustAbilityListener bloodLustAbilityListener, BloodLustKillTracker paramBloodLustKillTracker) {
+  public BloodLustAbilityMonitorTask(BloodLustAbilityListener bloodLustAbilityListener, KillTracker paramBloodLustKillTracker) {
         this.abilityListener = bloodLustAbilityListener;
         this.killTracker = paramBloodLustKillTracker;
     }

@@ -7,14 +7,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
+import org.jetbrains.annotations.NotNull;
 
 public class FindLegendaryItemDuplicatesCommand implements CommandExecutor {
 
-  public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
-    if (paramCommandSender instanceof Player) {
-      Player player = (Player)paramCommandSender;
+  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, String @NotNull [] paramArrayOfString) {
+    if (paramCommandSender instanceof Player player) {
       {
         if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
           player.sendMessage("You need to be holding a legendary in your mainhand");
@@ -27,7 +26,7 @@ public class FindLegendaryItemDuplicatesCommand implements CommandExecutor {
           return true;
         } 
       }
-      ArrayList<String> arrayList = new ArrayList();
+      ArrayList<String> arrayList = new ArrayList<>();
       label35: for (Player player1 : Bukkit.getOnlinePlayers()) {
         {
           if (player1 == player)

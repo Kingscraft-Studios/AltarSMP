@@ -11,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
@@ -32,7 +31,7 @@ public class NetheriteHelmetAbilityListener implements Listener {
   }
 
   public void startEffectTask() {
-    this.effectTask = (new NetheriteHelmetEffectTask(this)).runTaskTimer((Plugin)this.plugin, 0L, 20L);
+    this.effectTask = (new NetheriteHelmetEffectTask(this)).runTaskTimer(this.plugin, 0L, 20L);
   }
 
   public static boolean isCustomNetheriteHelmet(Player paramPlayer) {
@@ -60,12 +59,12 @@ public class NetheriteHelmetAbilityListener implements Listener {
   public void handleSneakAbility(Player paramPlayer) {
     UUID uUID = paramPlayer.getUniqueId();
     if (paramPlayer.isSneaking()) {
-      int i = ((Integer)this.sneakCounts.getOrDefault(uUID, Integer.valueOf(0))).intValue() + 1;
-      this.sneakCounts.put(uUID, Integer.valueOf(i));
+      int i = this.sneakCounts.getOrDefault(uUID, 0) + 1;
+      this.sneakCounts.put(uUID, i);
       if (i <= 4) {
         paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.BLOCK_TRIAL_SPAWNER_CLOSE_SHUTTER, 1.0F, 1.0F);
-      } else if (i >= 5) {
-        this.sneakCounts.put(uUID, Integer.valueOf(0));
+      } else {
+        this.sneakCounts.put(uUID, 0);
         paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.BLOCK_TRIAL_SPAWNER_CLOSE_SHUTTER, 1.0F, 1.0F);
         paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1.0F, 1.0F);
         paramPlayer.getWorld().strikeLightning(paramPlayer.getLocation());
@@ -77,7 +76,7 @@ public class NetheriteHelmetAbilityListener implements Listener {
       } 
 
     } else {
-      this.sneakCounts.put(uUID, Integer.valueOf(0));
+      this.sneakCounts.put(uUID, 0);
     } 
   }
 

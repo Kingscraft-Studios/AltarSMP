@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -25,13 +24,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Transformation;
 import org.joml.Quaternionf;
-import org.joml.Quaternionfc;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
@@ -50,26 +47,17 @@ import net.kingscraft.zenixmc.altarsmp.weapon.earth.EarthShatterTeleportAnimatio
 public class PaladinEarthAbility implements Listener {
   public AltarSMP plugin;
 
-  public static int EARTH_SHATTER_COOLDOWN;
+  public static int EARTH_SHATTER_COOLDOWN = AltarSMP.getInstance().getConfig().getInt("paladinEarthShatterCooldown", 45);
 
-  public static int STALWART_ABSORPTION_COOLDOWN;
+  public static int STALWART_ABSORPTION_COOLDOWN = AltarSMP.getInstance().getConfig().getInt("paladinStalwartAbsorptionCooldown", 45);
 
-  public static int STALWART_ABSORPTION_DURATION;
+  public static int STALWART_ABSORPTION_DURATION = AltarSMP.getInstance().getConfig().getInt("paladinStalwartAbsorptionDuration", 5);
 
-  public static String EARTH_SHATTER_COOLDOWN_KEY;
+  public static String EARTH_SHATTER_COOLDOWN_KEY = "paladinEarthShatter";
 
-  public static String STALWART_ABSORPTION_COOLDOWN_KEY;
+  public static String STALWART_ABSORPTION_COOLDOWN_KEY = "paladinStalwartAbsorption";
 
-  public static HashMap<UUID, Integer> absorptionDamage;
-
-  static {
-    EARTH_SHATTER_COOLDOWN = AltarSMP.getInstance().getConfig().getInt("paladinEarthShatterCooldown", 45);
-    STALWART_ABSORPTION_COOLDOWN = AltarSMP.getInstance().getConfig().getInt("paladinStalwartAbsorptionCooldown", 45);
-    STALWART_ABSORPTION_DURATION = AltarSMP.getInstance().getConfig().getInt("paladinStalwartAbsorptionDuration", 5);
-    EARTH_SHATTER_COOLDOWN_KEY = "paladinEarthShatter";
-    STALWART_ABSORPTION_COOLDOWN_KEY = "paladinStalwartAbsorption";
-    absorptionDamage = new HashMap<>();
-  }
+  public static HashMap<UUID, Integer> absorptionDamage = new HashMap<>();
 
 
   public PaladinEarthAbility(AltarSMP paramAltarSMP) {
@@ -86,21 +74,20 @@ public class PaladinEarthAbility implements Listener {
     transformation.getScale().set(1.0F, 1.0F, 1.0F);
     transformation.getTranslation().set(0.0D, 0.5D, 0.0D);
     textDisplay.setTransformation(transformation);
-    paramPlayer.addPassenger((Entity)textDisplay);
-    (new StalwartAbsorptionTask(paramPlayer, textDisplay)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    paramPlayer.addPassenger(textDisplay);
+    (new StalwartAbsorptionTask(paramPlayer, textDisplay)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   @EventHandler(ignoreCancelled = true)
   public static void onAbsorptionDamage(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Entity entity = paramEntityDamageByEntityEvent.getEntity();
-    if (entity instanceof Player) {
-      Player player = (Player)entity;
-      if (CooldownManager.isOnCooldown(player.getUniqueId(), "StalwartAbsorption")) {
+    if (entity instanceof Player player) {
+        if (CooldownManager.isOnCooldown(player.getUniqueId(), "StalwartAbsorption")) {
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_BREEZE_CHARGE, 1.0F, 1.0F);
         player.getWorld().spawnParticle(Particle.DUST, player.getLocation().clone().add(0.0D, 1.0D, 0.0D), 50, 0.3D, 0.5D, 0.3D, new Particle.DustOptions(Color.fromRGB(200, 165, 100), 1.0F));
         int i = AltarSMP.getInstance().getConfig().getInt("absorptionDamageLimit");
-        int j = Math.min(((Integer) absorptionDamage.getOrDefault(player.getUniqueId(), Integer.valueOf(0))).intValue() + (int)paramEntityDamageByEntityEvent.getDamage(), i);
-        absorptionDamage.put(player.getUniqueId(), Integer.valueOf(j));
+        int j = Math.min(absorptionDamage.getOrDefault(player.getUniqueId(), 0) + (int)paramEntityDamageByEntityEvent.getDamage(), i);
+        absorptionDamage.put(player.getUniqueId(), j);
       } 
     } 
   }
@@ -108,7 +95,7 @@ public class PaladinEarthAbility implements Listener {
   public static ItemStack createEarthShatterItem() {
     ItemStack itemStack = new ItemStack(Material.CLAY_BALL);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(8));
+    itemMeta.setCustomModelData(8);
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
@@ -133,25 +120,24 @@ public class PaladinEarthAbility implements Listener {
     ItemDisplay itemDisplay = (ItemDisplay)location.getWorld().spawnEntity(location, EntityType.ITEM_DISPLAY);
     Transformation transformation = itemDisplay.getTransformation();
     transformation.getScale().set(1.0F, 1.0F, 1.0F);
-    transformation.getRightRotation().set((Quaternionfc)(new Quaternionf()).rotateX(3.1415927F));
+    transformation.getRightRotation().set((new Quaternionf()).rotateX(3.1415927F));
     itemDisplay.setTransformation(transformation);
     itemDisplay.setRotation(180.0F, 0.0F);
-    (new EarthShatterRisingAnimationTask(itemDisplay, b, location)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
-    (new EarthShatterItemDisplayTask(itemDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
-    (new EarthShatterDisplayExpandTask(itemDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), 3L);
-    (new EarthShatterTeleportAnimationTask(itemDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), 3L);
-    (new EarthShatterDisplayRiseTask(itemDisplay, b)).runTaskLater((Plugin)AltarSMP.getInstance(), 4L);
-    (new EarthShatterDisplayTeleportResetTask(itemDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), 5L);
-    (new EarthShatterDisplayFinalRiseTask(itemDisplay, b)).runTaskLater((Plugin)AltarSMP.getInstance(), 6L);
-    (new EarthShatterDisplayTeleportSlowTask(itemDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), 18L);
-    (new EarthShatterDisplayDescendTask(itemDisplay, b)).runTaskLater((Plugin)AltarSMP.getInstance(), 20L);
-    (new EarthShatterDetonationTask(itemDisplay, paramPlayer, location, i, b, d)).runTaskLater((Plugin)AltarSMP.getInstance(), 27L);
+    (new EarthShatterRisingAnimationTask(itemDisplay, b, location)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
+    (new EarthShatterItemDisplayTask(itemDisplay)).runTaskLater(AltarSMP.getInstance(), 2L);
+    (new EarthShatterDisplayExpandTask(itemDisplay)).runTaskLater(AltarSMP.getInstance(), 3L);
+    (new EarthShatterTeleportAnimationTask(itemDisplay)).runTaskLater(AltarSMP.getInstance(), 3L);
+    (new EarthShatterDisplayRiseTask(itemDisplay, b)).runTaskLater(AltarSMP.getInstance(), 4L);
+    (new EarthShatterDisplayTeleportResetTask(itemDisplay)).runTaskLater(AltarSMP.getInstance(), 5L);
+    (new EarthShatterDisplayFinalRiseTask(itemDisplay, b)).runTaskLater(AltarSMP.getInstance(), 6L);
+    (new EarthShatterDisplayTeleportSlowTask(itemDisplay)).runTaskLater(AltarSMP.getInstance(), 18L);
+    (new EarthShatterDisplayDescendTask(itemDisplay, b)).runTaskLater(AltarSMP.getInstance(), 20L);
+    (new EarthShatterDetonationTask(itemDisplay, paramPlayer, location, i, b, d)).runTaskLater(AltarSMP.getInstance(), 27L);
     return true;
   }
 
   public static void createRisingBlocks(Location paramLocation, int paramInt) {
     World world = paramLocation.getWorld();
-    Random random = new Random();
     Map<Integer, List<Block>> map = new HashMap<>();
     for (int i = -paramInt; i <= paramInt; i++) {
       for (int j = -paramInt; j <= paramInt; j++) {
@@ -177,19 +163,19 @@ public class PaladinEarthAbility implements Listener {
     }
   }
 
-  private static void lambda$risingBlocks$1(List paramList, World paramWorld) {
-    for (Block block : (Iterable<Block>)(Iterable<?>)paramList) {
+  private static void lambda$risingBlocks$1(List<Block> paramList, World paramWorld) {
+    for (Block block : paramList) {
       Location location = block.getLocation().clone().add(0.5D, 0.5D, 0.5D);
       ItemDisplay itemDisplay = (ItemDisplay)paramWorld.spawnEntity(location, EntityType.ITEM_DISPLAY);
       itemDisplay.setItemStack(new ItemStack(block.getType()));
       itemDisplay.setBrightness(new Display.Brightness(15, 15));
       itemDisplay.setTeleportDuration(5);
-      (new EarthShatterRisingBlockAnimationTask(itemDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
+      (new EarthShatterRisingBlockAnimationTask(itemDisplay)).runTaskLater(AltarSMP.getInstance(), 2L);
     } 
   }
 
-  private static List lambda$risingBlocks$0(Integer paramInteger) {
-    return new ArrayList();
+  private static List<Block> lambda$risingBlocks$0(Integer paramInteger) {
+    return new ArrayList<>();
   }
 
 

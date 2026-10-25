@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.armor.copper;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 

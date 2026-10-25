@@ -1,7 +1,6 @@
 package net.kingscraft.zenixmc.altarsmp.legendary;
 
 import io.papermc.paper.dialog.Dialog;
-import net.kyori.adventure.dialog.DialogLike;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -9,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,7 +38,7 @@ public class LegendaryItemConfigMenu implements Listener {
 
   public static void showConfigDialog(Player paramPlayer, CustomItem paramCustomItem) {
     if (instance != null && paramCustomItem != null) {
-      paramPlayer.showDialog((DialogLike) instance.buildWeaponDialog(paramCustomItem));
+      paramPlayer.showDialog(instance.buildWeaponDialog(paramCustomItem));
     }
   }
 
@@ -80,7 +78,7 @@ public class LegendaryItemConfigMenu implements Listener {
       if (customItem.isSeasonTwo()) {
         continue;
       }
-      inventory.addItem(new ItemStack[] { customItem.getItem() });
+      inventory.addItem(customItem.getItem());
     } 
     paramPlayer.openInventory(inventory);
   }
@@ -92,7 +90,7 @@ public class LegendaryItemConfigMenu implements Listener {
       if (!customItem.isSeasonTwo()) {
         continue;
       }
-      inventory.addItem(new ItemStack[] { customItem.getItem() });
+      inventory.addItem(customItem.getItem());
     } 
     inventory.setItem(40, LegendaryItemsMenu.createWeaponSettingsButton());
     paramPlayer.openInventory(inventory);
@@ -115,7 +113,7 @@ public class LegendaryItemConfigMenu implements Listener {
     if (!(humanEntity instanceof Player player)) {
       return;
     }
-    player.playSound((Entity)player, Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
+    player.playSound(player, Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
     paramInventoryClickEvent.setCancelled(true);
     if (itemStack != null && itemStack.getType() == Material.GRAY_STAINED_GLASS_PANE) {
       return;
@@ -136,7 +134,7 @@ public class LegendaryItemConfigMenu implements Listener {
     if (customItem == null) {
       return;
     }
-    player.showDialog((DialogLike) buildWeaponDialog(customItem));
+    player.showDialog(buildWeaponDialog(customItem));
   }
 
   public Dialog buildWeaponDialog(CustomItem customItem) {
@@ -149,15 +147,15 @@ public class LegendaryItemConfigMenu implements Listener {
         if (o.key().equals("empty") || o.label().equals(Component.empty()))
           continue;
         visibleButtons++;
-        if (o instanceof RangedStat x) {
-          builder.addActionButton(x.label(), player -> openRangedStatDialog(customItem, s, x, player));
-        } else if (o instanceof ToggleStat x) {
-          builder.addActionButton(x.label(), player -> openToggleStatDialog(customItem, s, x, player));
-        } else if (o instanceof SteppedStat x) {
-          builder.addActionButton(x.label(), player -> openSteppedStatDialog(customItem, s, x, player));
-        } else {
-          throw new MatchException(null, (Throwable)null);
-        }
+          switch (o) {
+              case RangedStat x ->
+                      builder.addActionButton(x.label(), player -> openRangedStatDialog(customItem, s, x, player));
+              case ToggleStat x ->
+                      builder.addActionButton(x.label(), player -> openToggleStatDialog(customItem, s, x, player));
+              case SteppedStat x ->
+                      builder.addActionButton(x.label(), player -> openSteppedStatDialog(customItem, s, x, player));
+              default -> throw new MatchException(null, null);
+          }
       }
     }
     if (visibleButtons == 0) {
@@ -205,22 +203,22 @@ public class LegendaryItemConfigMenu implements Listener {
   public void saveBooleanConfig(String paramString, Dialog paramDialog, Player paramPlayer, Boolean paramBoolean) {
     this.config.set(paramString, paramBoolean);
     AltarSMP.getInstance().saveConfig();
-    paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + paramString + " set to " + paramBoolean);
-    paramPlayer.showDialog((DialogLike)paramDialog);
+    paramPlayer.sendMessage(ChatColor.GREEN + paramString + " set to " + paramBoolean);
+    paramPlayer.showDialog(paramDialog);
   }
 
   public void saveFloatConfig(String paramString, Dialog paramDialog, Player paramPlayer, Float paramFloat) {
     this.config.set(paramString, paramFloat);
     AltarSMP.getInstance().saveConfig();
-    paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + paramString + " set to " + paramFloat);
-    paramPlayer.showDialog((DialogLike)paramDialog);
+    paramPlayer.sendMessage(ChatColor.GREEN + paramString + " set to " + paramFloat);
+    paramPlayer.showDialog(paramDialog);
   }
 
   public void saveNumberConfig(String paramString, Dialog paramDialog, Player paramPlayer, Integer paramInteger) {
     this.config.set(paramString, paramInteger);
     AltarSMP.getInstance().saveConfig();
-    paramPlayer.sendMessage(String.valueOf(ChatColor.GREEN) + paramString + " set to " + paramInteger);
-    paramPlayer.showDialog((DialogLike)paramDialog);
+    paramPlayer.sendMessage(ChatColor.GREEN + paramString + " set to " + paramInteger);
+    paramPlayer.showDialog(paramDialog);
   }
 
   public void openSteppedStatDialog(CustomItem customItem, String paramString, SteppedStat steppedStat, Player paramPlayer) {

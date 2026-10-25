@@ -7,7 +7,6 @@ import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +17,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemType;
@@ -34,9 +32,8 @@ public class LegendaryItemsMenu implements CommandExecutor, Listener {
   }
 
 
-  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, @NotNull String[] paramArrayOfString) {
-    if (paramCommandSender instanceof Player) {
-      Player player = (Player)paramCommandSender;
+  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, String @NotNull [] paramArrayOfString) {
+    if (paramCommandSender instanceof Player player) {
       openLegendaryItemsMenu(player);
     } 
     return false;
@@ -214,7 +211,7 @@ for (CustomItemType customItemType : CustomItemType.values()) {
   public static ItemStack createSeasonTwoWeaponsButton() {
     ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(16));
+    itemMeta.setCustomModelData(16);
     itemStack.setItemMeta(itemMeta);
     return createMenuButton(itemStack, "§d", "ꜱᴇᴀꜱᴏɴ ᴛᴡᴏ ᴡᴇᴀᴘᴏɴꜱ");
   }

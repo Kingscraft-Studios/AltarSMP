@@ -1,6 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.item;
 
-import io.papermc.paper.datacomponent.DataComponentBuilder;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Consumable;
 import io.papermc.paper.datacomponent.item.consumable.ItemUseAnimation;
@@ -38,9 +37,9 @@ public class ItemUtility {
     String str = Bukkit.getMinecraftVersion();
     {
       if (Integer.parseInt(str.split("\\.")[2]) >= 11) {
-        paramItemStack.setData(DataComponentTypes.CONSUMABLE, (DataComponentBuilder)Consumable.consumable().consumeSeconds((float)AltarSMP.getInstance().getConfig().getDouble(paramString, 3.0D)).animation(ItemUseAnimation.TRIDENT).hasConsumeParticles(false).sound(Key.key("")));
+        paramItemStack.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds((float)AltarSMP.getInstance().getConfig().getDouble(paramString, 3.0D)).animation(ItemUseAnimation.TRIDENT).hasConsumeParticles(false).sound(Key.key("")));
       } else {
-        paramItemStack.setData(DataComponentTypes.CONSUMABLE, (DataComponentBuilder)Consumable.consumable().consumeSeconds((float)AltarSMP.getInstance().getConfig().getDouble(paramString, 3.0D)).animation(ItemUseAnimation.BOW).hasConsumeParticles(false).sound(Key.key("")));
+        paramItemStack.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds((float)AltarSMP.getInstance().getConfig().getDouble(paramString, 3.0D)).animation(ItemUseAnimation.BOW).hasConsumeParticles(false).sound(Key.key("")));
       } 
     }}
 

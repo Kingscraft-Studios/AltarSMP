@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class VampireSunAndMoonTask extends BukkitRunnable {
   private static final String VampireSunAndMoonTask = "§cThe blood moon is rising.";

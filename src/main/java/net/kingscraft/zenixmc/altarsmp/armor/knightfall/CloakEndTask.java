@@ -33,7 +33,7 @@ public class CloakEndTask extends BukkitRunnable {
       cancel();
       return;
     } 
-    this.player.sendActionBar(ChatColor.RED.toString() + String.valueOf(ChatColor.BOLD) + INVISIBLE_LABEL);
+    this.player.sendActionBar(ChatColor.RED + String.valueOf(ChatColor.BOLD) + INVISIBLE_LABEL);
     this.ticks++;
   }
 }

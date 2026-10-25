@@ -7,9 +7,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.plugin.Plugin;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 
@@ -22,10 +20,10 @@ public class IllusionCoreRecipeListener implements Listener {
     ConfigurationSection configurationSection = paramAltarSMP.getConfig().getConfigurationSection("IllusionCore");
     {
       if (configurationSection != null && configurationSection.getBoolean("enabled")) {
-        List list = configurationSection.getStringList("shape");
+        List<String> list = configurationSection.getStringList("shape");
         ItemStack itemStack = CustomItemRegistry.getIllusionCore();
-        ShapedRecipe shapedRecipe = new ShapedRecipe(new NamespacedKey((Plugin)paramAltarSMP, "core_crafting"), itemStack);
-        shapedRecipe.shape((String[])list.toArray((Object[])new String[0]));
+        ShapedRecipe shapedRecipe = new ShapedRecipe(new NamespacedKey(paramAltarSMP, "core_crafting"), itemStack);
+        shapedRecipe.shape(list.toArray(new String[0]));
         ConfigurationSection configurationSection1 = configurationSection.getConfigurationSection("ingredients");
         if (configurationSection1 != null)
           for (String str : configurationSection1.getKeys(false)) {
@@ -35,7 +33,7 @@ public class IllusionCoreRecipeListener implements Listener {
               if (material != null)
                 shapedRecipe.setIngredient(c, material); 
             }}  
-        Bukkit.addRecipe((Recipe)shapedRecipe);
+        Bukkit.addRecipe(shapedRecipe);
       } 
     }}
 

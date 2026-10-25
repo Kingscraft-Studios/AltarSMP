@@ -18,7 +18,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -36,18 +35,12 @@ import net.kingscraft.zenixmc.altarsmp.weapon.blood.CrimsonBiteTask;
 
   public static final Map<UUID, Boolean> transformedPlayers;
 
-  public static int unusedInt1;
-
-  public static int unusedInt2;
-
-  public static double unusedDouble;
-
   public Vampire() {
     config = plugin.getConfig();
   }
 
   public static void startPassiveTask() {
-    (new NightPiercerPassiveTask()).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 40L);
+    (new NightPiercerPassiveTask()).runTaskTimer(AltarSMP.getInstance(), 0L, 40L);
   }
 
   public static void crimsonBite(Player paramPlayer) {
@@ -60,10 +53,9 @@ import net.kingscraft.zenixmc.altarsmp.weapon.blood.CrimsonBiteTask;
     LivingEntity livingEntity1 = null;
     Location location = paramPlayer.getLocation().clone().add(0.0D, 1.5D, 0.0D).add(paramPlayer.getLocation().getDirection().clone().normalize().multiply(1.5D));
     for (Entity entity : location.getNearbyEntities(3.0D, 3.0D, 3.0D)) {
-      if (entity instanceof LivingEntity) {
-        LivingEntity livingEntity = (LivingEntity)entity;
+      if (entity instanceof LivingEntity livingEntity) {
         {
-          if (AltarSMP.isTrusted(paramPlayer, (Entity)livingEntity))
+          if (AltarSMP.isTrusted(paramPlayer, livingEntity))
             continue; 
         }{
           if (paramPlayer == livingEntity)
@@ -78,26 +70,26 @@ import net.kingscraft.zenixmc.altarsmp.weapon.blood.CrimsonBiteTask;
         return;
       } 
     }LivingEntity livingEntity2 = livingEntity1;
-    spawnBiteParticles((LivingEntity)paramPlayer);
+    spawnBiteParticles(paramPlayer);
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_PHANTOM_BITE, 1.0F, 1.0F);
-    (new CrimsonBiteTask(livingEntity2, d, paramPlayer, j, i)).runTaskLater((Plugin) plugin, 1L);
+    (new CrimsonBiteTask(livingEntity2, d, paramPlayer, j, i)).runTaskLater(plugin, 1L);
   }
 
   public static void transformIntoBat(Player paramPlayer) {
     for (Player player : Bukkit.getOnlinePlayers())
-      player.hidePlayer((Plugin)AltarSMP.getInstance(), paramPlayer); 
+      player.hidePlayer(AltarSMP.getInstance(), paramPlayer);
     int i = config.getInt("transformationDuration", 2);
     double d = config.getDouble("transformationSpeed", 1.0D);
     int j = config.getInt("transformationDamage", 6);
     paramPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, i * 20, 0));
-    ArrayList<Bat> arrayList = new ArrayList();
-    HashMap<Object, Object> hashMap = new HashMap<>();
+    ArrayList<Bat> arrayList = new ArrayList<>();
+    HashMap<Bat, Vector> hashMap = new HashMap<>();
     for (int b = 0; b < 7; b++) {
       double d1 = (Math.random() - 0.5D) * 2.0D;
       double d2 = Math.random();
       double d3 = (Math.random() - 0.5D) * 2.0D;
       Vector vector = new Vector(d1, d2, d3);
-      Bat bat = (Bat)paramPlayer.getWorld().spawn(paramPlayer.getLocation().clone().add(vector), Bat.class);
+      Bat bat = paramPlayer.getWorld().spawn(paramPlayer.getLocation().clone().add(vector), Bat.class);
       bat.setAI(false);
       bat.setInvulnerable(true);
       bat.setSilent(true);
@@ -105,8 +97,8 @@ import net.kingscraft.zenixmc.altarsmp.weapon.blood.CrimsonBiteTask;
       arrayList.add(bat);
       hashMap.put(bat, vector);
     } 
-    transformedPlayers.put(paramPlayer.getUniqueId(), Boolean.valueOf(true));
-    (new BatTransformationTask(i, paramPlayer, arrayList, hashMap, d, j)).runTaskTimer((Plugin) plugin, 0L, 1L);
+    transformedPlayers.put(paramPlayer.getUniqueId(), Boolean.TRUE);
+    (new BatTransformationTask(i, paramPlayer, arrayList, hashMap, d, j)).runTaskTimer(plugin, 0L, 1L);
   }
 
   public static void spawnBiteParticles(LivingEntity paramLivingEntity) {

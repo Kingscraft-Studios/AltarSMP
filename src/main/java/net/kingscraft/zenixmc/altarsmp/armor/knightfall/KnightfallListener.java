@@ -23,7 +23,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -66,7 +65,7 @@ public class KnightfallListener implements Listener {
 
   public KnightfallListener(KnightFallKillTracker killTracker) {
     this.killTracker = killTracker;
-    (new CloakAutoStartTask(this, killTracker)).runTaskTimer((Plugin) plugin, 0L, 20L);
+    (new CloakAutoStartTask(this, killTracker)).runTaskTimer(plugin, 0L, 20L);
   }
 
   public static boolean isKnightfall(ItemStack paramItemStack) {
@@ -114,18 +113,16 @@ public class KnightfallListener implements Listener {
     }
     paramEntityDamageByEntityEvent.setDamage(0.0D);
     Entity entity2 = paramEntityDamageByEntityEvent.getEntity();
-    if (entity2 instanceof LivingEntity) {
-      LivingEntity livingEntity = (LivingEntity)entity2;
-      TrueDamage.apply(livingEntity, i, player, true);
+    if (entity2 instanceof LivingEntity livingEntity) {
+        TrueDamage.apply(livingEntity, i, player, true);
     } 
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
   public void onMaceCooldown(EntityDamageByEntityEvent paramEntityDamageByEntityEvent) {
     Entity entity = paramEntityDamageByEntityEvent.getDamager();
-    if (entity instanceof Player) {
-      Player player = (Player)entity;
-      ItemStack itemStack = player.getInventory().getItemInMainHand();
+    if (entity instanceof Player player) {
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
       {
         if (!isKnightfall(itemStack))
           return; 
@@ -149,7 +146,7 @@ public class KnightfallListener implements Listener {
           paramEntityDamageByEntityEvent.setCancelled(true);
           player.setVelocity(new Vector(0, 0, 0));
           player.setFallDistance(0.0F);
-          player.sendMessage(String.valueOf(ChatColor.RED) + "Your knightfall is still on cooldown");
+          player.sendMessage(ChatColor.RED + "Your knightfall is still on cooldown");
           return;
         } 
       }
@@ -169,11 +166,11 @@ public class KnightfallListener implements Listener {
         return; 
     }
     this.killTracker.incrementKillCount(player);
-    player.sendMessage(String.valueOf(ChatColor.RED) + "Knightfall is now at " + this.killTracker.getKillCount(player) + " kills");
+    player.sendMessage(ChatColor.RED + "Knightfall is now at " + this.killTracker.getKillCount(player) + " kills");
     ItemStack itemStack = player.getInventory().getItemInMainHand();
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setLore(CustomItemRegistry.getKnightfall(player, false).getLore());
-    itemMeta.setCustomModelData(Integer.valueOf(CustomItemRegistry.getKnightfall(player, false).getItemMeta().getCustomModelData()));
+    itemMeta.setCustomModelData(CustomItemRegistry.getKnightfall(player, false).getItemMeta().getCustomModelData());
     itemStack.setItemMeta(itemMeta);
     player.getInventory().setItemInMainHand(itemStack);
   }
@@ -183,8 +180,8 @@ public class KnightfallListener implements Listener {
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.5F);
     paramPlayer.getWorld().spawnParticle(Particle.SQUID_INK, paramPlayer.getLocation(), 20, 0.0D, 0.0D, 0.0D, 0.0D);
     for (Player player : Bukkit.getOnlinePlayers())
-      player.hidePlayer((Plugin)AltarSMP.getInstance(), paramPlayer); 
-    (new CloakEndTask(paramInt, paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+      player.hidePlayer(AltarSMP.getInstance(), paramPlayer);
+    (new CloakEndTask(paramInt, paramPlayer)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   @EventHandler
@@ -219,7 +216,7 @@ public class KnightfallListener implements Listener {
 
   public void startCloakLoop(Player paramPlayer) {
     CloakSpeedTask clockSpeedTask = new CloakSpeedTask(this, paramPlayer);
-    clockSpeedTask.runTaskTimer((Plugin) plugin, 0L, 20L);
+    clockSpeedTask.runTaskTimer(plugin, 0L, 20L);
     this.cloakTasks.put(paramPlayer.getUniqueId(), clockSpeedTask);
   }
 
@@ -255,7 +252,7 @@ public class KnightfallListener implements Listener {
     transformation.getLeftRotation().rotateX((float)Math.toRadians(90.0D));
     itemDisplay.setTransformation(transformation);
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.BLOCK_CHAIN_BREAK, 1.0F, 0.1F);
-    (new HammerProjectileTask(location, d1, paramPlayer, itemDisplay, vector, d3, world, bool, j, d2)).runTaskTimer((Plugin) plugin, 3L, 1L);
+    (new HammerProjectileTask(location, d1, paramPlayer, itemDisplay, vector, d3, world, bool, j, d2)).runTaskTimer(plugin, 3L, 1L);
     return true;
   }
 
@@ -264,7 +261,7 @@ public class KnightfallListener implements Listener {
       if (WorldGuardHook.isBlocked(paramLivingEntity.getLocation()))
         return; 
     }
-    (new ChainPullTask(paramLivingEntity, paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new ChainPullTask(paramLivingEntity, paramPlayer)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void showHookCharges(Player paramPlayer) {
@@ -282,7 +279,7 @@ public class KnightfallListener implements Listener {
         return false; 
     }
     {
-      if (((Integer) hookCharges.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(0))).intValue() >= 3)
+      if (hookCharges.getOrDefault(paramPlayer.getUniqueId(), 0) >= 3)
         return false; 
     }
     BukkitTask bukkitTask = hookCooldownTasks.get(paramPlayer.getUniqueId());
@@ -290,9 +287,9 @@ public class KnightfallListener implements Listener {
       if (bukkitTask != null)
         bukkitTask.cancel(); 
     }
-    hookCharges.put(paramPlayer.getUniqueId(), Integer.valueOf(((Integer) hookCharges.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(0))).intValue() + 1));
+    hookCharges.put(paramPlayer.getUniqueId(), hookCharges.getOrDefault(paramPlayer.getUniqueId(), 0) + 1);
     showHookCharges(paramPlayer);
-    int k = ((Integer) hookCharges.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(1))).intValue();
+    int k = hookCharges.getOrDefault(paramPlayer.getUniqueId(), 1);
     BossBarManager.createBar(paramPlayer, "Grappling Hook §6§lx" + k, i, ChatColor.YELLOW);
     startHookCooldown(paramPlayer, i);
     launchGrapple(location, paramPlayer, j);
@@ -308,12 +305,11 @@ public class KnightfallListener implements Listener {
     double d1 = AltarSMP.getInstance().getConfig().getDouble("grapplingHookStrength", 1.5D);
     int i = AltarSMP.getInstance().getConfig().getInt("grapplingHookLeapStrength", 1);
     double d2 = paramInt / d1;
-    Location location2 = paramPlayer.getLocation().clone().add(0.0D, 1.0D, 0.0D);
-    (new GrapplePullTask(paramPlayer, d2, location1, i, itemStack, d1)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new GrapplePullTask(paramPlayer, d2, location1, i, itemStack, d1)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void startHookCooldown(Player paramPlayer, int paramInt) {
-    BukkitTask bukkitTask = (new RestoreHookChargesTask(paramPlayer, paramInt)).runTaskLater((Plugin)AltarSMP.getInstance(), (paramInt * 20));
+    BukkitTask bukkitTask = (new RestoreHookChargesTask(paramPlayer, paramInt)).runTaskLater(AltarSMP.getInstance(), (paramInt * 20L));
     hookCooldownTasks.put(paramPlayer.getUniqueId(), bukkitTask);
   }
 

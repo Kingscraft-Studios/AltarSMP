@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
+import org.jspecify.annotations.NonNull;
 
 public class OffhandAbilityCommand implements CommandExecutor {
    public final AltarSMP plugin;
@@ -13,14 +14,12 @@ public class OffhandAbilityCommand implements CommandExecutor {
       this.plugin = var1;
    }
 
-   public boolean onCommand(CommandSender var1, Command var2, String var3, String[] var4) {
+   public boolean onCommand(@NonNull CommandSender var1, @NonNull Command var2, @NonNull String var3, String @NonNull [] var4) {
       if (!(var1 instanceof Player var5)) {
          var1.sendMessage(ChatColor.RED + "Only players can use this command.");
          return true;
       } else {
-         Boolean var6 = this.plugin
-            .getConfig()
-            .getBoolean("offhand." + var5.getName(), true);
+         boolean var6 = this.plugin.getConfig().getBoolean("offhand." + var5.getName(), true);
          this.plugin.getConfig().set("offhand." + var5.getName(), !var6);
          this.plugin.saveConfig();
          if (!var6) {

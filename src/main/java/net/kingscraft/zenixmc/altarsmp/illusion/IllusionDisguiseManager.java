@@ -6,9 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -35,7 +33,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import java.util.HashMap;
@@ -72,24 +69,23 @@ public class IllusionDisguiseManager implements Listener {
       entity = paramPlayer1.getWorld().spawnEntity(paramPlayer1.getLocation(), paramEntityType);
       ((LivingEntity)entity).setAI(false);
       for (Player player : Bukkit.getOnlinePlayers())
-        player.hidePlayer((Plugin)AltarSMP.getInstance(), paramPlayer1); 
-      paramPlayer1.hideEntity((Plugin)AltarSMP.getInstance(), entity);
+        player.hidePlayer(AltarSMP.getInstance(), paramPlayer1);
+      paramPlayer1.hideEntity(AltarSMP.getInstance(), entity);
       paramPlayer1.setInvisible(true);
     } 
-    BossBar keyedBossBar = Bukkit.createBossBar(DISGUISE_BOSS_BAR_KEY, "§e§lCurrently Disguised as §a§l" + str, BarColor.YELLOW, BarStyle.SOLID, new org.bukkit.boss.BarFlag[0]);
+    BossBar keyedBossBar = Bukkit.createBossBar(DISGUISE_BOSS_BAR_KEY, "§e§lCurrently Disguised as §a§l" + str, BarColor.YELLOW, BarStyle.SOLID);
     keyedBossBar.setProgress(1.0D);
     keyedBossBar.addPlayer(paramPlayer1);
     paramPlayer1.getWorld().playSound(paramPlayer1.getLocation(), Sound.ENTITY_ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
-    paramPlayer1.sendTitle(String.valueOf(ChatColor.GREEN) + "Disguised as:", String.valueOf(ChatColor.GOLD) + str);
+    paramPlayer1.sendTitle(ChatColor.GREEN + "Disguised as:", ChatColor.GOLD + str);
     spawnRevealParticles(paramPlayer1);
     if (paramEntityType == EntityType.PLAYER) {
-      BukkitTask bukkitTask = (new NetheriteSwordCooldownTask(paramPlayer1)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+      BukkitTask bukkitTask = (new NetheriteSwordCooldownTask(paramPlayer1)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
       disguisedPlayerTargets.put(paramPlayer1.getUniqueId(), paramPlayer2.getUniqueId());
-      activeDisguises.put(paramPlayer1.getUniqueId(), new DisguiseEntityTask((Entity)paramPlayer1, bukkitTask, (BossBar)keyedBossBar));
+      activeDisguises.put(paramPlayer1.getUniqueId(), new DisguiseEntityTask(paramPlayer1, bukkitTask, keyedBossBar));
     } else {
-      Entity entity1 = entity;
-      BukkitTask bukkitTask = (new DisguiseFollowTask(paramPlayer1, entity1)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
-      activeDisguises.put(paramPlayer1.getUniqueId(), new DisguiseEntityTask(entity, bukkitTask, (BossBar)keyedBossBar));
+      BukkitTask bukkitTask = (new DisguiseFollowTask(paramPlayer1, entity)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
+      activeDisguises.put(paramPlayer1.getUniqueId(), new DisguiseEntityTask(entity, bukkitTask, keyedBossBar));
       disguisedEntityOwners.put(entity.getUniqueId(), paramPlayer1.getUniqueId());
       copyMobAttributes(paramPlayer1, paramEntityType);
     } 
@@ -114,7 +110,7 @@ public class IllusionDisguiseManager implements Listener {
 
   @EventHandler
   public void onPlayerChangedWorld(PlayerChangedWorldEvent paramPlayerChangedWorldEvent) {
-    (new DisguiseWorldChangeTask(paramPlayerChangedWorldEvent)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
+    (new DisguiseWorldChangeTask(paramPlayerChangedWorldEvent)).runTaskLater(AltarSMP.getInstance(), 2L);
   }
 
   @EventHandler
@@ -125,14 +121,9 @@ public class IllusionDisguiseManager implements Listener {
       player = (Player)entity1;
     } else {
       return;
-    } 
-    Entity entity2 = paramEntityDamageByEntityEvent.getEntity();
-    if (entity2 instanceof LivingEntity) {
-      LivingEntity livingEntity = (LivingEntity)entity2;
-    } else {
-      return;
-    } 
-    {
+    }
+
+      {
       if (disguisedPlayerTargets.containsKey(player.getUniqueId()))
         return; 
     }
@@ -176,7 +167,7 @@ public class IllusionDisguiseManager implements Listener {
     }
     disguisedEntityOwners.remove(disguiseEntityTask.entity().getUniqueId());
     for (Player player : Bukkit.getOnlinePlayers())
-      player.showPlayer((Plugin)AltarSMP.getInstance(), paramPlayer); 
+      player.showPlayer(AltarSMP.getInstance(), paramPlayer);
     restorePlayerProfile(paramPlayer);
     paramPlayer.setInvisible(false);
     disguiseEntityTask.bossBar().removePlayer(paramPlayer);
@@ -188,7 +179,7 @@ public class IllusionDisguiseManager implements Listener {
       if (disguiseEntityTask.entity().getType() != EntityType.PLAYER)
         disguiseEntityTask.entity().remove();
     }{
-      paramPlayer.sendTitle("", String.valueOf(ChatColor.GREEN) + "You have been " + String.valueOf(ChatColor.RED) + "REVEALED" + String.valueOf(ChatColor.GREEN) + ".");
+      paramPlayer.sendTitle("", ChatColor.GREEN + "You have been " + ChatColor.RED + "REVEALED" + ChatColor.GREEN + ".");
       spawnRevealParticles(paramPlayer);
       paramPlayer.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20.0D);
       paramPlayer.setHealth(20.0D);
@@ -221,7 +212,7 @@ public class IllusionDisguiseManager implements Listener {
     for (Player player1 : Bukkit.getOnlinePlayers()) {
       {
         if (activeDisguises.containsKey(player1.getUniqueId()))
-          player.hidePlayer((Plugin)AltarSMP.getInstance(), player1); 
+          player.hidePlayer(AltarSMP.getInstance(), player1);
       }} 
   }
 
@@ -260,9 +251,9 @@ public class IllusionDisguiseManager implements Listener {
     if (paramPlayer == null || !paramPlayer.isOnline())
       return;
     PersistentDataContainer persistentDataContainer = paramPlayer.getPersistentDataContainer();
-    String str1 = (String)persistentDataContainer.get(REAL_SKIN_VALUE_KEY, PersistentDataType.STRING);
-    String str2 = (String)persistentDataContainer.get(REAL_SKIN_SIGNATURE_KEY, PersistentDataType.STRING);
-    String str3 = (String)persistentDataContainer.get(REAL_OLD_NAME_KEY, PersistentDataType.STRING);
+    String str1 = persistentDataContainer.get(REAL_SKIN_VALUE_KEY, PersistentDataType.STRING);
+    String str2 = persistentDataContainer.get(REAL_SKIN_SIGNATURE_KEY, PersistentDataType.STRING);
+    String str3 = persistentDataContainer.get(REAL_OLD_NAME_KEY, PersistentDataType.STRING);
     {
       if (str3 == null || str3.isEmpty())
         str3 = paramPlayer.getName();
@@ -276,9 +267,7 @@ public class IllusionDisguiseManager implements Listener {
         ProfileProperty profileProperty = new ProfileProperty("textures", str1, (str2 == null || str2.isEmpty()) ? null : str2);
         PlayerProfile playerProfile = AltarSMP.getInstance().getServer().createProfile(paramPlayer.getUniqueId(), str3);
 
-        if (playerProfile == null)
-          return;
-        playerProfile.clearProperties();
+          playerProfile.clearProperties();
         playerProfile.setProperty(profileProperty);
         paramPlayer.setPlayerProfile(playerProfile);
       } catch (Exception exception) {
@@ -292,8 +281,8 @@ public class IllusionDisguiseManager implements Listener {
           if (!player.isOnline())
             continue;
         }
-        player.hidePlayer((Plugin)AltarSMP.getInstance(), paramPlayer);
-        player.showPlayer((Plugin)AltarSMP.getInstance(), paramPlayer);
+        player.hidePlayer(AltarSMP.getInstance(), paramPlayer);
+        player.showPlayer(AltarSMP.getInstance(), paramPlayer);
       } 
   }
 
@@ -310,15 +299,12 @@ public class IllusionDisguiseManager implements Listener {
     PlayerProfile playerProfile = AltarSMP.getInstance().getServer()
             .createProfile(paramPlayer.getUniqueId(), paramString);
 
-    if (playerProfile == null)
-      return;
-
-    playerProfile.clearProperties();
+      playerProfile.clearProperties();
     playerProfile.setProperty(paramProfileProperty);
     paramPlayer.setPlayerProfile(playerProfile);
     for (Player player : Bukkit.getOnlinePlayers()) {
-      player.hidePlayer((Plugin)AltarSMP.getInstance(), paramPlayer);
-      player.showPlayer((Plugin)AltarSMP.getInstance(), paramPlayer);
+      player.hidePlayer(AltarSMP.getInstance(), paramPlayer);
+      player.showPlayer(AltarSMP.getInstance(), paramPlayer);
     } 
   }
 
@@ -349,15 +335,9 @@ public class IllusionDisguiseManager implements Listener {
 
   public static double getMobMaxHealth(EntityType paramEntityType) {
     return switch (EntityTypeSwitchMappings.ENTITY_TYPE_MAPPING[paramEntityType.ordinal()]) {
-      case 1, 2, 3 -> 6.0D;
-      case 4, 5, 6, 7, 8 -> 6.0D;
-      case 9, 10 -> 6.0D;
+      case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 -> 6.0D;
       case 11, 12 -> 10.0D;
-      case 13, 14, 15, 16 -> 20.0D;
-      case 17, 18, 19 -> 20.0D;
-      case 20, 21 -> 30.0D;
-      case 22 -> 30.0D;
-      case 23 -> 30.0D;
+      case 20, 21, 22, 23 -> 30.0D;
       default -> 20.0D;
     };
   }
@@ -371,9 +351,7 @@ public class IllusionDisguiseManager implements Listener {
               if (paramEntityType != EntityType.BLAZE) {
                 if (paramEntityType != EntityType.VEX) {
                   if (paramEntityType != EntityType.ALLAY) {
-                    if (paramEntityType != EntityType.WITHER) {
-                      return false;
-                    }
+                      return paramEntityType == EntityType.WITHER;
                   }
                 }
               }
@@ -387,11 +365,9 @@ public class IllusionDisguiseManager implements Listener {
 
   public static double getMobScale(EntityType paramEntityType) {
     return switch (EntityTypeSwitchMappings.ENTITY_TYPE_MAPPING[paramEntityType.ordinal()]) {
-      case 1, 2, 3 -> 0.5D;
-      case 5, 6, 7, 8 -> 0.5D;
+      case 1, 2, 3, 5, 6, 7, 8 -> 0.5D;
       case 4, 9, 10, 12 -> 0.6D;
       case 11 -> 0.7D;
-      case 13, 14, 15, 16 -> 1.0D;
       default -> 1.0D;
     };
   }
@@ -411,7 +387,7 @@ public class IllusionDisguiseManager implements Listener {
   public static void completePlayerProfileLookup(PlayerProfile paramPlayerProfile, String paramString, Player paramPlayer) {
     try {
       paramPlayerProfile.complete(true);
-    } catch (Exception e) {
+    } catch (Exception ignored) {
     }
     ProfileProperty profileProperty = getTextureProperty(paramPlayerProfile);
     String str = paramPlayerProfile.getName() != null ? paramPlayerProfile.getName() : paramString;
@@ -424,7 +400,7 @@ public class IllusionDisguiseManager implements Listener {
         return; 
     }{
       if (paramProfileProperty == null) {
-        paramPlayer.sendMessage(((TextComponent)Component.text("Couldn't find a player named " + paramString1 + ".").color((TextColor)NamedTextColor.RED)).decoration(TextDecoration.ITALIC, false));
+        paramPlayer.sendMessage(Component.text("Couldn't find a player named " + paramString1 + ".").color(NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
         return;
       } 
     }

@@ -9,7 +9,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class PlayerBossBarUpdater extends BukkitRunnable {
 
@@ -19,9 +18,9 @@ class PlayerBossBarUpdater extends BukkitRunnable {
     while (true) {
       List<PlayerBossBar> list;
       if (iterator.hasNext()) {
-        Map.Entry entry = iterator.next();
-        Player player = Bukkit.getPlayer((UUID)entry.getKey());
-        list = (List)entry.getValue();
+        Map.Entry<UUID, List<PlayerBossBar>> entry = iterator.next();
+        Player player = Bukkit.getPlayer(entry.getKey());
+        list = entry.getValue();
         if (player != null) {
           if (player.isOnline()) {
             Iterator<PlayerBossBar> iterator1 = list.iterator();
@@ -33,13 +32,13 @@ class PlayerBossBarUpdater extends BukkitRunnable {
                 continue;
               } 
               double d = (bar.expiryTime - l) / (double)bar.durationMillis;
-              d = Math.max(0.0D, Math.min(1.0D, d));
+              d = Math.clamp(d, 0.0D, 1.0D);
               bar.bossBar.setProgress(d);
               if (l >= bar.expiryTime) {
                 if (bar.repeatCount > 0)
                   if (!bar.repeated) {
                     bar.repeated = true;
-                    bar.bossBar.setTitle(String.valueOf(ChatColor.YELLOW) + String.valueOf(ChatColor.BOLD) + bar.title);
+                    bar.bossBar.setTitle(ChatColor.YELLOW + String.valueOf(ChatColor.BOLD) + bar.title);
                     bar.bossBar.setColor(BarColor.YELLOW);
                     bar.expiryTime = System.currentTimeMillis() + bar.repeatCount * 1000L;
                     bar.durationMillis = bar.repeatCount * 1000L;

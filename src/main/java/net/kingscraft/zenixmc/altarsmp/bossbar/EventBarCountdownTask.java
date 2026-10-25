@@ -2,7 +2,6 @@ package net.kingscraft.zenixmc.altarsmp.bossbar;
 
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.util.TimeUtils;
 
 class EventBarCountdownTask extends BukkitRunnable {

@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.event.crazy;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
