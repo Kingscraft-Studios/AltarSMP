@@ -8,7 +8,16 @@ import java.util.Objects;
 import java.util.UUID;
 
 import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightFallKillTracker;
+import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightfallListener;
 import net.kingscraft.zenixmc.altarsmp.core.tracker.KillTracker;
+import net.kingscraft.zenixmc.altarsmp.event.crazy.CrazySlotsListener;
+import net.kingscraft.zenixmc.altarsmp.illusion.IllusionWandAbility;
+import net.kingscraft.zenixmc.altarsmp.listener.*;
+import net.kingscraft.zenixmc.altarsmp.weapon.blood.BloodLustAbilityListener;
+import net.kingscraft.zenixmc.altarsmp.weapon.boneblade.BoneBladeAbility;
+import net.kingscraft.zenixmc.altarsmp.weapon.frostscythe.FrostScytheAbilityListener;
+import net.kingscraft.zenixmc.altarsmp.weapon.scorching.ScorchingBladeAbility;
+import net.kingscraft.zenixmc.altarsmp.weapon.vulcan.VulcanGauntletAbility;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -55,10 +64,6 @@ import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 import net.kingscraft.zenixmc.altarsmp.legendary.FindLegendaryItemDuplicatesCommand;
 import net.kingscraft.zenixmc.altarsmp.legendary.LegendaryItemConfigMenu;
 import net.kingscraft.zenixmc.altarsmp.legendary.LegendaryItemsMenu;
-import net.kingscraft.zenixmc.altarsmp.listener.MobDropListener;
-import net.kingscraft.zenixmc.altarsmp.listener.PluginEnableListener;
-import net.kingscraft.zenixmc.altarsmp.listener.SeasonTwoRecipeListener;
-import net.kingscraft.zenixmc.altarsmp.listener.WeaponHandleRecipeListener;
 import net.kingscraft.zenixmc.altarsmp.trust.TrustCommand;
 import net.kingscraft.zenixmc.altarsmp.trust.TrustManager;
 import net.kingscraft.zenixmc.altarsmp.vampire.Vampire;
@@ -135,7 +140,32 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       Bukkit.getPluginManager().registerEvents(DARK_BLADE, this);
       Bukkit.getPluginManager().registerEvents(new KnightfallEnchantmentListener(), this);
       Bukkit.getPluginManager().registerEvents(new EclipseAbility(), this);
-      Bukkit.getPluginManager().registerEvents(new PluginEnableListener(), this);
+
+      BoneBladeAbility boneBladeAbility = new BoneBladeAbility();
+      VulcanGauntletAbility vulcanGauntletAbility = new VulcanGauntletAbility(this);
+      BloodLustAbilityListener bloodLustAbilityListener = new BloodLustAbilityListener(bloodLustKillTracker);
+      KnightfallListener knightfallListener = new KnightfallListener(knightFallKillTracker);
+      FrostScytheAbilityListener frostScytheAbilityListener = new FrostScytheAbilityListener(this);
+
+      IllusionWandAbility illusionWandAbility = new IllusionWandAbility(this);
+      Bukkit.getPluginManager().registerEvents(illusionWandAbility, this);
+
+      CrazySlotsListener crazySlotsListener = new CrazySlotsListener(this);
+      ScorchingBladeAbility scorchingBladeAbility = new ScorchingBladeAbility();
+
+      Bukkit.getPluginManager().registerEvents(boneBladeAbility, this);
+      Bukkit.getPluginManager().registerEvents(vulcanGauntletAbility, this);
+      Bukkit.getPluginManager().registerEvents(bloodLustAbilityListener, this);
+      Bukkit.getPluginManager().registerEvents(knightfallListener, this);
+      Bukkit.getPluginManager().registerEvents(frostScytheAbilityListener, this);
+      Bukkit.getPluginManager().registerEvents(crazySlotsListener, this);
+      Bukkit.getPluginManager().registerEvents(scorchingBladeAbility, this);
+
+      AbilityInputListener abilityInputListener = new AbilityInputListener();
+      Bukkit.getPluginManager().registerEvents(abilityInputListener, this);
+      this.getCommand("ability1").setExecutor(abilityInputListener);
+      this.getCommand("ability2").setExecutor(abilityInputListener);
+
       Bukkit.getPluginManager().registerEvents(new CrazyRandomizerListener(), this);
       Bukkit.getPluginManager().registerEvents(new CutlassAbility(), this);
       Bukkit.getPluginManager().registerEvents(new WindweaverAbility(this), this);
