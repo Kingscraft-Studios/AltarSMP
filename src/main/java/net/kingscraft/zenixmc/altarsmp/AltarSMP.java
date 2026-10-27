@@ -28,6 +28,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -100,6 +101,8 @@ public final class AltarSMP extends JavaPlugin implements Listener {
    private CopperHelmetAbilityListener copperHelmetAbilityListener;
 
    private net.kingscraft.zenixmc.altarsmp.core.update.UpdateChecker updateChecker;
+
+   private static final int BSTATS_PLUGIN_ID = 34971;
 
    @Override
    public void onEnable() {
@@ -245,6 +248,9 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       } catch (Exception e) {
          getLogger().severe("An Error Occurred while trying to check for updates: " + e);
       }
+
+      // bStats Basic
+      Metrics metrics = new Metrics(this, BSTATS_PLUGIN_ID);
    }
 
    public static boolean areSimilar(ItemStack var0, ItemStack var1) {
