@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.vulcan;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 

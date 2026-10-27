@@ -1,5 +1,7 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.blood;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -10,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BloodTrailInvisibilityTask extends BukkitRunnable {
   public int ticksElapsed;
@@ -19,7 +20,11 @@ class BloodTrailInvisibilityTask extends BukkitRunnable {
 
   public final int durationSeconds;
 
-  private static final String EXIT_ACTIONBAR = "§cPress §e[JUMP] §cto Exit.";
+  private static final Component EXIT_ACTIONBAR = Component.text()
+      .append(Component.text("Press ", NamedTextColor.RED))
+      .append(Component.text("[JUMP]", NamedTextColor.YELLOW))
+      .append(Component.text(" to Exit.", NamedTextColor.RED))
+      .build();
 
   public BloodTrailInvisibilityTask(Player paramPlayer, int paramInt) {
         this.player = paramPlayer;

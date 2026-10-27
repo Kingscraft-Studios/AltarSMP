@@ -11,7 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 class WitherLeapAuraTask extends BukkitRunnable {
@@ -66,9 +66,8 @@ class WitherLeapAuraTask extends BukkitRunnable {
                 if (this.player == entity)
                   continue; 
               }{
-                if (!AltarSMP.isTrusted(this.player, entity) && entity instanceof LivingEntity) {
-                  LivingEntity livingEntity = (LivingEntity)entity;
-                  {
+                if (!AltarSMP.isTrusted(this.player, entity) && entity instanceof LivingEntity livingEntity) {
+                    {
                     if (CooldownManager.isOnCooldown(livingEntity.getUniqueId(), "witheringWait"))
                       continue; 
                   }

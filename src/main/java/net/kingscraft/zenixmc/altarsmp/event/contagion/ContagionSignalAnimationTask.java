@@ -9,6 +9,8 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kingscraft.zenixmc.altarsmp.altar.AltarRitualListener;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 import net.kingscraft.zenixmc.altarsmp.vampire.VampireEventManager;
@@ -77,15 +79,15 @@ public class ContagionSignalAnimationTask extends BukkitRunnable {
         return;
       } 
     }
-      StringBuilder str = new StringBuilder();
+      Component healthBar = Component.empty();
     int i = AltarRitualListener.contagionInteractions.get(this.interaction);
     int j = AltarRitualListener.CONTAGION_SIGNAL_HEALTH - i;
     int b;
 for (b = 0; b < i; b++)
-      str.append("§a|");
+      healthBar = healthBar.append(Component.text("|", NamedTextColor.GREEN));
     for (b = 0; b < j; b++)
-      str.append("§7|");
-    this.textDisplay.setText(str.toString());
+      healthBar = healthBar.append(Component.text("|", NamedTextColor.GRAY));
+    this.textDisplay.text(healthBar);
     this.bossBar.setProgress(1.0D - (double)this.ticksLived / (double)this.duration);
     this.ticksLived++;
     this.signalHealth += this.healthDecrement;

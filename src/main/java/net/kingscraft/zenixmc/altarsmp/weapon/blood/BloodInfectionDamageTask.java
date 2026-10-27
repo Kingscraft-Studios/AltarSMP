@@ -5,7 +5,6 @@ import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BloodInfectionDamageTask extends BukkitRunnable {
   public int ticksElapsed;
@@ -18,7 +17,7 @@ class BloodInfectionDamageTask extends BukkitRunnable {
 
   private static final String HIT_SOUND = "minecraft*bloodlust.hit";
 
-  public BloodInfectionDamageTask(BloodLustAbilityListener bloodLustAbilityListener, int paramInt1, LivingEntity paramLivingEntity, int paramInt2) {
+  public BloodInfectionDamageTask(int paramInt1, LivingEntity paramLivingEntity, int paramInt2) {
         this.duration = paramInt1;
         this.target = paramLivingEntity;
         this.damageAmount = paramInt2;

@@ -1,6 +1,8 @@
 package net.kingscraft.zenixmc.altarsmp.command;
 
 import java.util.List;
+
+import net.kingscraft.zenixmc.altarsmp.altarS2.AltarS2;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,6 +11,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import org.jspecify.annotations.NonNull;
 
@@ -19,21 +23,21 @@ public class SetKillsCommand implements CommandExecutor, TabCompleter {
     Player player;
     {
       if (paramArrayOfString.length < 2) {
-        paramCommandSender.sendMessage("§c/setkills <bloodlust/knightfall/ancientblade> <num> <player>");
+        paramCommandSender.sendMessage(Component.text("/setkills <bloodlust/knightfall/ancientblade> <num> <player>", NamedTextColor.RED));
         return true;
       } 
     }String str = paramArrayOfString[0];
     try {
       i = Integer.parseInt(paramArrayOfString[1]);
     } catch (NumberFormatException numberFormatException) {
-      paramCommandSender.sendMessage("§cInvalid number.");
+      paramCommandSender.sendMessage(Component.text("Invalid number.", NamedTextColor.RED));
       return true;
     } 
     if (paramArrayOfString.length >= 3) {
       player = Bukkit.getPlayer(paramArrayOfString[2]);
       {
         if (player == null) {
-          paramCommandSender.sendMessage("§cThat player is not online");
+          paramCommandSender.sendMessage(Component.text("That player is not online", NamedTextColor.RED));
           return true;
         } 
       }} else {
@@ -41,7 +45,7 @@ public class SetKillsCommand implements CommandExecutor, TabCompleter {
       if (paramCommandSender instanceof Player) {
         player1 = (Player)paramCommandSender;
       } else {
-        paramCommandSender.sendMessage("§cYou must specify a player.");
+        paramCommandSender.sendMessage(Component.text("You must specify a player.", NamedTextColor.RED));
         return true;
       } 
       player = player1;
@@ -56,14 +60,14 @@ public class SetKillsCommand implements CommandExecutor, TabCompleter {
           } else {
             {
               if (str.equalsIgnoreCase("ancientblade")) {
-                net.kingscraft.zenixmc.altarsmp.altars2.Altars2.getKillTracker().setKillCount(player, i);
+                AltarS2.getKillTracker().setKillCount(player, i);
               } else {
-                paramCommandSender.sendMessage("§c/setkills <bloodlust/knightfall/ancientblade> <num> <player>");
+                paramCommandSender.sendMessage(Component.text("/setkills <bloodlust/knightfall/ancientblade> <num> <player>", NamedTextColor.RED));
                 return true;
               } 
             }} 
         }} 
-    }paramCommandSender.sendMessage("§aKills updated.");
+    }paramCommandSender.sendMessage(Component.text("Kills updated.", NamedTextColor.GREEN));
     return true;
   }
 

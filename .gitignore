@@ -3,3 +3,4 @@ target/
 *.class
 tools/
 .idea/
+dependency-reduced-pom.xml

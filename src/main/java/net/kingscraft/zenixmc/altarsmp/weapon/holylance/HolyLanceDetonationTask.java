@@ -4,7 +4,6 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.weapon.scorching.ScorchingBladeAbility;
 
 public class HolyLanceDetonationTask extends BukkitRunnable {

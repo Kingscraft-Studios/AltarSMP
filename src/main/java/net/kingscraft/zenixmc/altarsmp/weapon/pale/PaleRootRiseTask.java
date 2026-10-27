@@ -3,12 +3,11 @@ package net.kingscraft.zenixmc.altarsmp.weapon.pale;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class PaleRootRiseTask extends BukkitRunnable {
   public final ItemDisplay rootDisplay;
 
-  public PaleRootRiseTask(PaleRootsGrowthTask paleRootsGrowthTask, ItemDisplay paramItemDisplay) {
+  public PaleRootRiseTask(ItemDisplay paramItemDisplay) {
         this.rootDisplay = paramItemDisplay;
     }
 

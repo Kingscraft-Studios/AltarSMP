@@ -8,12 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class ShadowDaggerPullTask extends BukkitRunnable {
   public int ticksLived;
-
-  final int MAX_TICKS = 10;
 
   public final Entity target;
 
@@ -46,7 +43,7 @@ class ShadowDaggerPullTask extends BukkitRunnable {
               double d = vector1.length();
               Vector vector2 = vector1.normalize().multiply(1);
               if (this.ticksLived % 2 == 0) {
-                double d1 = 0;
+                double d1;
                 for (d1 = 0.0D; d1 < d; d1++) {
                   Location location = location1.clone().add(vector2.clone().multiply(d1));
                   location1.getWorld().spawnParticle(Particle.ITEM, location, 0, 0.0D, 0.0D, 0.0D, 0.0D, new ItemStack(Material.BLACK_CONCRETE));

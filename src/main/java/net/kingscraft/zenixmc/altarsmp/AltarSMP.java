@@ -7,17 +7,25 @@ import java.util.HexFormat;
 import java.util.Objects;
 import java.util.UUID;
 
-import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightFallKillTracker;
-import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightfallListener;
-import net.kingscraft.zenixmc.altarsmp.core.tracker.KillTracker;
-import net.kingscraft.zenixmc.altarsmp.event.crazy.CrazySlotsListener;
-import net.kingscraft.zenixmc.altarsmp.illusion.IllusionWandAbility;
+import net.kingscraft.zenixmc.altarsmp.altarS2.AltarS2;
+import net.kingscraft.zenixmc.altarsmp.altarS2.weapon.amethyst.AmethystToolListener;
+import net.kingscraft.zenixmc.altarsmp.command.*;
+import net.kingscraft.zenixmc.altarsmp.weapon.knightfall.KnightFallKillTracker;
+import net.kingscraft.zenixmc.altarsmp.weapon.knightfall.KnightfallListener;
+import net.kingscraft.zenixmc.altarsmp.core.KillTracker;
+import net.kingscraft.zenixmc.altarsmp.weapon.crazy.CrazySlotsListener;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.IllusionWandAbility;
 import net.kingscraft.zenixmc.altarsmp.listener.*;
 import net.kingscraft.zenixmc.altarsmp.weapon.blood.BloodLustAbilityListener;
 import net.kingscraft.zenixmc.altarsmp.weapon.boneblade.BoneBladeAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.frostscythe.FrostScytheAbilityListener;
 import net.kingscraft.zenixmc.altarsmp.weapon.scorching.ScorchingBladeAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.vulcan.VulcanGauntletAbility;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -34,42 +42,36 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import net.kingscraft.zenixmc.altarsmp.ability.paladin.PaladinEarthAbility;
-import net.kingscraft.zenixmc.altarsmp.altar.AltarCommand;
+import net.kingscraft.zenixmc.altarsmp.weapon.paladin.PaladinEarthAbility;
 import net.kingscraft.zenixmc.altarsmp.altar.AltarController;
 import net.kingscraft.zenixmc.altarsmp.altar.AltarManager;
 import net.kingscraft.zenixmc.altarsmp.altar.AltarReloadTask;
 import net.kingscraft.zenixmc.altarsmp.altar.AltarRitualListener;
-import net.kingscraft.zenixmc.altarsmp.armor.copper.CopperBootsSpeedAbility;
-import net.kingscraft.zenixmc.altarsmp.armor.copper.CopperChestplateEventManager;
-import net.kingscraft.zenixmc.altarsmp.armor.copper.CopperHelmetEventManager;
-import net.kingscraft.zenixmc.altarsmp.armor.copper.CopperLeggingsEventManager;
-import net.kingscraft.zenixmc.altarsmp.armor.copper.CopperLeggingsShockwaveAbility;
-import net.kingscraft.zenixmc.altarsmp.armor.copper.CopperOreVeinMinerListener;
-import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightfallEnchantmentListener;
-import net.kingscraft.zenixmc.altarsmp.armor.netherite.NetheriteChestplateComboAbility;
-import net.kingscraft.zenixmc.altarsmp.armor.netherite.NetheriteHelmetAbilityListener;
+import net.kingscraft.zenixmc.altarsmp.copper.boots.CopperBootsSpeedAbility;
+import net.kingscraft.zenixmc.altarsmp.copper.chestplate.CopperChestplateEventManager;
+import net.kingscraft.zenixmc.altarsmp.copper.helmet.CopperHelmetEventManager;
+import net.kingscraft.zenixmc.altarsmp.copper.leggings.CopperLeggingsEventManager;
+import net.kingscraft.zenixmc.altarsmp.copper.leggings.CopperLeggingsShockwaveAbility;
+import net.kingscraft.zenixmc.altarsmp.copper.pickaxe.CopperPickaxeListener;
+import net.kingscraft.zenixmc.altarsmp.weapon.knightfall.KnightfallEnchantmentListener;
+import net.kingscraft.zenixmc.altarsmp.copper.chestplate.CopperChestplateComboAbility;
+import net.kingscraft.zenixmc.altarsmp.copper.helmet.CopperHelmetAbilityListener;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.command.ClearCooldownsCommand;
-import net.kingscraft.zenixmc.altarsmp.command.OffhandAbilityCommand;
-import net.kingscraft.zenixmc.altarsmp.command.SetKillsCommand;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.event.bingo.BingoEventManager;
-import net.kingscraft.zenixmc.altarsmp.event.crazy.CrazyRandomizerListener;
-import net.kingscraft.zenixmc.altarsmp.event.crazy.CrazySelectorMenuListener;
-import net.kingscraft.zenixmc.altarsmp.illusion.IllusionCoreRecipeListener;
-import net.kingscraft.zenixmc.altarsmp.illusion.IllusionDisguiseManager;
+import net.kingscraft.zenixmc.altarsmp.weapon.crazy.CrazyRandomizerListener;
+import net.kingscraft.zenixmc.altarsmp.weapon.crazy.CrazySelectorMenuListener;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.IllusionCoreRecipeListener;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.IllusionDisguiseManager;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRefreshTask;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
-import net.kingscraft.zenixmc.altarsmp.legendary.FindLegendaryItemDuplicatesCommand;
-import net.kingscraft.zenixmc.altarsmp.legendary.LegendaryItemConfigMenu;
-import net.kingscraft.zenixmc.altarsmp.legendary.LegendaryItemsMenu;
-import net.kingscraft.zenixmc.altarsmp.trust.TrustCommand;
-import net.kingscraft.zenixmc.altarsmp.trust.TrustManager;
-import net.kingscraft.zenixmc.altarsmp.vampire.Vampire;
+import net.kingscraft.zenixmc.altarsmp.menu.LegendaryItemConfigMenu;
+import net.kingscraft.zenixmc.altarsmp.menu.LegendaryItemsMenu;
+import net.kingscraft.zenixmc.altarsmp.core.TrustManager;
+import net.kingscraft.zenixmc.altarsmp.vampire.VampireListener;
 import net.kingscraft.zenixmc.altarsmp.vampire.VampireEventManager;
 import net.kingscraft.zenixmc.altarsmp.weapon.cutlass.CutlassAbility;
-import net.kingscraft.zenixmc.altarsmp.weapon.earth.EarthGauntletAbility;
+import net.kingscraft.zenixmc.altarsmp.weapon.gauntlet.EarthGauntletAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.echo.EchoAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.eclipse.EclipseAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.pale.PaleCannonAbility;
@@ -86,7 +88,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
    public AltarManager altarConfigManager;
    public AltarController altarController;
    public static AltarSMP instance;
-   public static Vampire NIGHT_PIERCER;
+   public static VampireListener NIGHT_PIERCER;
    public static ShadeSoul PURE_BLADE;
    public static WitherBoneAbility WITHER_BONE;
    public static EarthGauntletAbility EARTH_GAUNTLET;
@@ -115,11 +117,11 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       this.knightFallKillTracker = new KnightFallKillTracker(this);
       this.altarConfigManager = new AltarManager(this);
       this.altarController = new AltarController(this);
-      net.kingscraft.zenixmc.altarsmp.altars2.Altars2.bootstrap(this);
+      AltarS2.bootstrap(this);
 
       Bukkit.getPluginManager().registerEvents(new MobDropListener(this), this);
       Bukkit.getPluginManager().registerEvents(new AltarRitualListener(this.altarController), this);
-      Vampire.startPassiveTask();
+      VampireListener.startPassiveTask();
       Bukkit.getPluginManager().registerEvents(new WeaponHandleRecipeListener(this), this);
       Bukkit.getPluginManager().registerEvents(new VulcanSkullRecipeListener(this), this);
       Bukkit.getPluginManager().registerEvents(new IllusionCoreRecipeListener(this), this);
@@ -127,7 +129,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
 
       this.getCommand("cooldown").setExecutor(new ClearCooldownsCommand());
 
-      NIGHT_PIERCER = new Vampire();
+      NIGHT_PIERCER = new VampireListener();
       PURE_BLADE = new ShadeSoul(this);
       WITHER_BONE = new WitherBoneAbility();
       EARTH_GAUNTLET = new EarthGauntletAbility();
@@ -161,10 +163,9 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       Bukkit.getPluginManager().registerEvents(crazySlotsListener, this);
       Bukkit.getPluginManager().registerEvents(scorchingBladeAbility, this);
 
-      AbilityInputListener abilityInputListener = new AbilityInputListener();
-      Bukkit.getPluginManager().registerEvents(abilityInputListener, this);
-      this.getCommand("ability1").setExecutor(abilityInputListener);
-      this.getCommand("ability2").setExecutor(abilityInputListener);
+      Bukkit.getPluginManager().registerEvents(new AbilityInputListener(), this);
+      this.getCommand("ability1").setExecutor(new AbilityCommand());
+      this.getCommand("ability2").setExecutor(new AbilityCommand());
 
       Bukkit.getPluginManager().registerEvents(new CrazyRandomizerListener(), this);
       Bukkit.getPluginManager().registerEvents(new CutlassAbility(), this);
@@ -172,9 +173,9 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       Bukkit.getPluginManager().registerEvents(new PaladinEarthAbility(this), this);
       Bukkit.getPluginManager().registerEvents(this, this);
       Bukkit.getPluginManager().registerEvents(new IllusionDisguiseManager(), this);
-      Bukkit.getPluginManager().registerEvents(new NetheriteHelmetAbilityListener(this), this);
+      Bukkit.getPluginManager().registerEvents(new CopperHelmetAbilityListener(this), this);
       Bukkit.getPluginManager().registerEvents(new CopperLeggingsShockwaveAbility(this), this);
-      Bukkit.getPluginManager().registerEvents(new NetheriteChestplateComboAbility(this), this);
+      Bukkit.getPluginManager().registerEvents(new CopperChestplateComboAbility(this), this);
       Bukkit.getPluginManager().registerEvents(new CopperBootsSpeedAbility(this), this);
 
       BingoEventManager var11 = new BingoEventManager(this);
@@ -196,8 +197,8 @@ public final class AltarSMP extends JavaPlugin implements Listener {
 
       Bukkit.getPluginManager().registerEvents(new CrazySelectorMenuListener(), this);
       Bukkit.getPluginManager().registerEvents(new LegendaryItemConfigMenu(), this);
-      Bukkit.getPluginManager().registerEvents(new CopperOreVeinMinerListener(this), this);
-      Bukkit.getPluginManager().registerEvents(new net.kingscraft.zenixmc.altarsmp.altars2.listener.AmethystToolListener(this), this);
+      Bukkit.getPluginManager().registerEvents(new CopperPickaxeListener(this), this);
+      Bukkit.getPluginManager().registerEvents(new AmethystToolListener(this), this);
       Bukkit.getPluginManager().registerEvents(this.altarController, this);
       Bukkit.getPluginManager().registerEvents(new EchoAbility(), this);
       Bukkit.getPluginManager().registerEvents(new StrikerBowAbility(), this);
@@ -212,7 +213,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       VampireEventManager.startSunDamageTask();
 
       this.getCommand("altar").setExecutor(new AltarCommand(this.altarController, this.altarConfigManager));
-      this.getCommand("legendaries").setExecutor(new LegendaryItemsMenu());
+      this.getCommand("legendaries").setExecutor(new LegendaryCommand());
       this.getCommand("setkills").setExecutor(new SetKillsCommand());
       this.getCommand("setkills").setTabCompleter(new SetKillsCommand());
 
@@ -225,7 +226,6 @@ public final class AltarSMP extends JavaPlugin implements Listener {
 
       Bukkit.getPluginManager().registerEvents(new LegendaryItemsMenu(), this);
 
-      new BossBarManager();
       BossBarManager.startUpdater();
 
       new AltarReloadTask(this).runTaskLater(getInstance(), 40L);
@@ -249,18 +249,18 @@ public final class AltarSMP extends JavaPlugin implements Listener {
             } else if (var2.hasItemModel() && !Objects.equals(var2.getItemModel(), var3.getItemModel())) {
                return false;
             } else {
-               boolean hasCmdA = var2.hasCustomModelData();
-               boolean hasCmdB = var3.hasCustomModelData();
+               boolean hasCmdA = !var2.getCustomModelDataComponent().getFloats().isEmpty();
+               boolean hasCmdB = !var3.getCustomModelDataComponent().getFloats().isEmpty();
                if (hasCmdA != hasCmdB) {
                   return false;
                }
                if (hasCmdA) {
-                  return var2.getCustomModelData() == var3.getCustomModelData();
+                  return var2.getCustomModelDataComponent().getFloats().equals(var3.getCustomModelDataComponent().getFloats());
                }
                if (var2.hasItemModel()) {
                   return true;
                }
-               return Objects.equals(var2.getDisplayName(), var3.getDisplayName());
+               return Objects.equals(var2.displayName(), var3.displayName());
             }
          } else {
             return false;
@@ -274,7 +274,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
    public void join(PlayerJoinEvent event) {
       Player player = event.getPlayer();
       if (getInstance().getConfig().getBoolean("reset_hearts_on_relog", true)) {
-         player.setMaxHealth(20.0);
+         player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20.0);
          AttributeInstance var3 = player.getAttribute(Attribute.MAX_HEALTH);
          var3.setBaseValue(20.0);
       }
@@ -284,7 +284,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       String PACK_URL = "https://download.mc-packs.net/pack/6854d1e3ba2be9c4a08c774a1058a749746c9ea0.zip";
       byte[] PACK_SHA1 = HexFormat.of().parseHex("6854d1e3ba2be9c4a08c774a1058a749746c9ea0");
       UUID PACK_UUID = UUID.fromString("fec0911a-8d2c-46fc-b277-c1cbbfe1dad3");
-      String PACK_PROMPT = "§aThis Server Requires a Custom Resource Pack for Optimal Experience";
+      String PACK_PROMPT = LegacyComponentSerializer.legacySection().serialize(Component.text("This Server Requires a Custom Resource Pack for Optimal Experience", NamedTextColor.GREEN));
 
       // Merged Resource Pack
       player.addResourcePack(PACK_UUID, PACK_URL, PACK_SHA1, PACK_PROMPT, true);
@@ -293,7 +293,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
 
    @Override
    public void onDisable() {
-      net.kingscraft.zenixmc.altarsmp.altars2.Altars2.shutdown();
+      AltarS2.shutdown();
 
       if (this.bloodLustKillTracker != null) {
          this.bloodLustKillTracker.flush();
@@ -343,9 +343,9 @@ public final class AltarSMP extends JavaPlugin implements Listener {
           return;
        }
 
-       if (!var4.getItemMeta().hasCustomModelData()) {
-          return;
-       }
+      if (var4.getItemMeta().getCustomModelDataComponent().getFloats().isEmpty()) {
+         return;
+      }
 
        if (!var4.getItemMeta().isUnbreakable()) {
           return;
@@ -361,7 +361,8 @@ public final class AltarSMP extends JavaPlugin implements Listener {
           return;
        }
 
-       Bukkit.broadcastMessage(var4.getItemMeta().getDisplayName() + " §4§lHas been destroyed!");
+      Bukkit.broadcast(Component.text(var4.getItemMeta().displayName() == null ? "" : PlainTextComponentSerializer.plainText().serialize(var4.getItemMeta().displayName()))
+              .append(Component.text(" Has been destroyed!", NamedTextColor.DARK_RED, TextDecoration.BOLD)));
        CooldownManager.setCooldown(
           var2.getUniqueId(), "wait_a_bit", 1.0
        );
@@ -375,7 +376,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
             return;
          }
 
-         if (!var4.getItemMeta().hasCustomModelData()) {
+         if (var4.getItemMeta().getCustomModelDataComponent().getFloats().isEmpty()) {
             return;
          }
 
@@ -393,7 +394,8 @@ public final class AltarSMP extends JavaPlugin implements Listener {
             return;
          }
 
-         Bukkit.broadcastMessage(var4.getItemMeta().getDisplayName() + " §4§lHas been destroyed!");
+         Bukkit.broadcast(Component.text(PlainTextComponentSerializer.plainText().serialize(var4.getItemMeta().displayName()) + " ")
+                 .append(Component.text("Has been destroyed!", NamedTextColor.DARK_RED, TextDecoration.BOLD)));
          CooldownManager.setCooldown(
             var2.getUniqueId(), "wait_a_bit", 1.0
          );

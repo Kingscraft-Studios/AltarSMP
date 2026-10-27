@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 
 class BoneCageProjectileTask extends BukkitRunnable {
@@ -46,15 +45,13 @@ class BoneCageProjectileTask extends BukkitRunnable {
           location.getWorld().spawnParticle(Particle.ITEM, location, 5, 0.2D, 0.2D, 0.2D, 0.0D, new ItemStack(Material.BONE));
           BoneBladeAbility.spawnBoneParticles(location, Material.BONE, 5, 1.0D, 10);
           for (Entity entity : location.getNearbyEntities(1.5D, 1.5D, 1.5D)) {
-            if (entity instanceof LivingEntity) {
-              LivingEntity livingEntity = (LivingEntity)entity;
-              if (livingEntity.equals(this.shooter))
-                continue; 
+            if (entity instanceof LivingEntity livingEntity) {
+                if (livingEntity.equals(this.shooter))
+                  continue;
 
-              if (livingEntity instanceof Player) {
-                Player player = (Player)livingEntity;
-                if (player.getGameMode() == GameMode.SPECTATOR)
-                  continue; 
+              if (livingEntity instanceof Player player) {
+                  if (player.getGameMode() == GameMode.SPECTATOR)
+                    continue;
 
               } 
               if (!BoneBladeAbility.boneCageDisplays.containsKey(livingEntity)) {

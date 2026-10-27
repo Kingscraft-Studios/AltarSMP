@@ -21,9 +21,7 @@ class FrostScytheProjectileTask extends BukkitRunnable {
 
   public Vector movementVector;
 
-  final double VERTICAL_OFFSET = 0.0D;
-
-  public final Vector initialVelocity;
+    public final Vector initialVelocity;
 
   public final ItemDisplay scytheDisplay;
 
@@ -44,7 +42,7 @@ class FrostScytheProjectileTask extends BukkitRunnable {
       this.scytheDisplay.getWorld().spawnParticle(Particle.ITEM, this.scytheDisplay.getLocation(), 200, 0.0D, 0.0D, 0.0D, 0.5D, new ItemStack(Material.BLUE_ICE));
       this.launchTask.player.getWorld().playSound(this.launchTask.player.getLocation(), Sound.BLOCK_GLASS_BREAK, 1.0F, 0.7F);
       if (this.launchTask.returnScythe) {
-        FrostScytheAbilityListener.animateScythe(this.launchTask.player, this.scytheDisplay, (double)this.launchTask.maxThrowDistance);
+        FrostScytheAbilityListener.animateScythe(this.launchTask.player, this.scytheDisplay, this.launchTask.maxThrowDistance);
       } else {
         this.scytheDisplay.remove();
       } 
@@ -67,10 +65,9 @@ class FrostScytheProjectileTask extends BukkitRunnable {
     Vector vector = this.movementVector.clone().normalize();
     location.setDirection(vector);
     for (Entity entity : this.scytheDisplay.getNearbyEntities(1.0D, 1.0D, 1.0D)) {
-      if (entity instanceof LivingEntity) {
-        LivingEntity livingEntity = (LivingEntity)entity;
-        if (entity != this.launchTask.player) {
-          TrueDamage.apply(livingEntity, (double)this.launchTask.damage, this.launchTask.player);
+      if (entity instanceof LivingEntity livingEntity) {
+          if (entity != this.launchTask.player) {
+          TrueDamage.apply(livingEntity, this.launchTask.damage, this.launchTask.player);
           int i = AltarSMP.getInstance().getConfig().getInt(FROST_DURATION_KEY, 10);
           livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, i, 1, false, true, true));
           new FrostScytheFreezeTask(i, livingEntity).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
@@ -79,7 +76,7 @@ class FrostScytheProjectileTask extends BukkitRunnable {
           this.scytheDisplay.getWorld().spawnParticle(Particle.ITEM, this.scytheDisplay.getLocation(), 200, 0.0D, 0.0D, 0.0D, 0.5D, new ItemStack(Material.BLUE_ICE));
           this.launchTask.player.getWorld().playSound(this.launchTask.player.getLocation(), Sound.BLOCK_GLASS_BREAK, 1.0F, 0.7F);
           if (this.launchTask.returnScythe) {
-            FrostScytheAbilityListener.animateScythe(this.launchTask.player, this.scytheDisplay, (double)this.launchTask.maxThrowDistance);
+            FrostScytheAbilityListener.animateScythe(this.launchTask.player, this.scytheDisplay, this.launchTask.maxThrowDistance);
           } else {
             this.scytheDisplay.remove();
           } 
@@ -92,7 +89,7 @@ class FrostScytheProjectileTask extends BukkitRunnable {
       this.scytheDisplay.getWorld().spawnParticle(Particle.ITEM, this.scytheDisplay.getLocation(), 200, 0.0D, 0.0D, 0.0D, 0.5D, new ItemStack(Material.BLUE_ICE));
       this.launchTask.player.getWorld().playSound(this.launchTask.player.getLocation(), Sound.BLOCK_GLASS_BREAK, 1.0F, 0.7F);
       if (this.launchTask.returnScythe) {
-        FrostScytheAbilityListener.animateScythe(this.launchTask.player, this.scytheDisplay, (double)this.launchTask.maxThrowDistance);
+        FrostScytheAbilityListener.animateScythe(this.launchTask.player, this.scytheDisplay, this.launchTask.maxThrowDistance);
       } else {
         this.scytheDisplay.remove();
       } 

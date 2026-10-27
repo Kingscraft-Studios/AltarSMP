@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import net.kyori.adventure.text.Component;
 import net.kingscraft.zenixmc.altarsmp.item.RecipeIngredient;
 
 public class AltarRecipeBuilder {
@@ -15,9 +16,9 @@ public class AltarRecipeBuilder {
 
   public Material material;
 
-  public String displayName;
+  public Component displayName;
 
-  public List<String> lore = new ArrayList<>();
+  public List<Component> lore = new ArrayList<>();
 
   public Map<Enchantment, Integer> enchantments = new HashMap<>();
 
@@ -43,13 +44,12 @@ public class AltarRecipeBuilder {
     ItemMeta itemMeta = itemStack.getItemMeta();
     if (itemMeta != null) {
       if (this.displayName != null)
-        itemMeta.setDisplayName(this.displayName);
+        itemMeta.displayName(this.displayName);
 
       if (!this.lore.isEmpty())
-        itemMeta.setLore(this.lore);
+        itemMeta.lore(this.lore);
 
-      if (this.customModelData > 0)
-        itemMeta.setCustomModelData(this.customModelData);
+      AltarManager.applyCustomModelData(itemMeta, this.customModelData);
 
       itemStack.setItemMeta(itemMeta);
     }

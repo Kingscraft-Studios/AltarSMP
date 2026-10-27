@@ -4,7 +4,6 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class ElectricSparkEffectTask extends BukkitRunnable {
   public int sparkTicks;

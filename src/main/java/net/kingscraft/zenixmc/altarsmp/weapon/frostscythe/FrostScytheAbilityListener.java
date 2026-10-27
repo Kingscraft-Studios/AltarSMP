@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -21,10 +21,8 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import org.joml.Quaternionf;
@@ -32,8 +30,8 @@ import org.joml.Vector3f;
 import java.util.HashMap;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.event.crazy.CrazySlotsListener;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.weapon.crazy.CrazySlotsListener;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
@@ -47,10 +45,6 @@ public class FrostScytheAbilityListener implements Listener {
   public static Map<UUID, Integer> throwCounts;
 
   public static Map<UUID, Long> lastThrowTimestamps;
-
-  public static final int ICE_THROW_COOLDOWN = 23;
-
-  public static final int SCYTHE_THROW_COOLDOWN = 30;
 
 
   public FrostScytheAbilityListener(AltarSMP paramAltarSMP) {
@@ -69,11 +63,9 @@ public class FrostScytheAbilityListener implements Listener {
       if (itemMeta == null)
         return false; 
     }{
-      if (!itemMeta.hasCustomModelData())
-        return false; 
-    }{
-
-    }return (itemMeta.getCustomModelData() == 4);
+      List<Float> customModelData = itemMeta.getCustomModelDataComponent().getFloats();
+      return !customModelData.isEmpty() && customModelData.getFirst() == 4;
+    }
   }
 
   @EventHandler
@@ -94,11 +86,11 @@ public class FrostScytheAbilityListener implements Listener {
     {
       if (isFrostScythe(paramPlayerItemConsumeEvent.getItem())) {
         paramPlayerItemConsumeEvent.setCancelled(true);
-        (new FrostScytheInventoryUpdateTask(this, paramPlayerItemConsumeEvent)).runTaskLater((Plugin)AltarSMP.getInstance(), 1L);
+        (new FrostScytheInventoryUpdateTask(paramPlayerItemConsumeEvent)).runTaskLater(AltarSMP.getInstance(), 1L);
         if (!CooldownManager.isOnCooldown(paramPlayerItemConsumeEvent.getPlayer().getUniqueId(), SCYTHE_THROW_COOLDOWN_KEY)) {
           int i = AltarSMP.getInstance().getConfig().getInt("scytheThrowCooldown", 30);
           launchScythe(paramPlayerItemConsumeEvent.getPlayer());
-          BossBarManager.createBar(paramPlayerItemConsumeEvent.getPlayer(), "Scythe Throw", i, ChatColor.YELLOW);
+          BossBarManager.createBar(paramPlayerItemConsumeEvent.getPlayer(), "Scythe Throw", i, NamedTextColor.YELLOW);
           CooldownManager.setCooldown(paramPlayerItemConsumeEvent.getPlayer().getUniqueId(), SCYTHE_THROW_COOLDOWN_KEY, i);
         } 
       } 
@@ -108,10 +100,10 @@ public class FrostScytheAbilityListener implements Listener {
     int b1 = 35;
     double d = 2.2D;
     for (int b2 = 0; b2 < b1; b2++) {
-      double d2 = 0;
-      double d3 = 0;
-      double d4 = 0;
-      double d1 = b2 / b1;
+      double d2;
+      double d3;
+      double d4;
+      double d1 = (double) b2 / b1;
       if (!paramBoolean1)
         d1 = 1.0D - d1; 
       if (paramBoolean2) {
@@ -164,15 +156,15 @@ public class FrostScytheAbilityListener implements Listener {
     {
       if (lastThrowTimestamps.containsKey(paramPlayer.getUniqueId()))
         {
-          if (l - ((Long) lastThrowTimestamps.get(paramPlayer.getUniqueId())).longValue() > 2500L)
-            throwCounts.put(paramPlayer.getUniqueId(), Integer.valueOf(0));
-        }}return ((Integer) throwCounts.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(0))).intValue();
+          if (l - lastThrowTimestamps.get(paramPlayer.getUniqueId()) > 2500L)
+            throwCounts.put(paramPlayer.getUniqueId(), 0);
+        }}return throwCounts.getOrDefault(paramPlayer.getUniqueId(), 0);
   }
 
   public static void incrementThrowCount(Player paramPlayer) {
     int i = getThrowCount(paramPlayer);
-    throwCounts.put(paramPlayer.getUniqueId(), Integer.valueOf(i + 1));
-    lastThrowTimestamps.put(paramPlayer.getUniqueId(), Long.valueOf(System.currentTimeMillis()));
+    throwCounts.put(paramPlayer.getUniqueId(), i + 1);
+    lastThrowTimestamps.put(paramPlayer.getUniqueId(), System.currentTimeMillis());
   }
 
   public static void launchScythe(Player paramPlayer) {
@@ -185,11 +177,11 @@ public class FrostScytheAbilityListener implements Listener {
     int i = AltarSMP.getInstance().getConfig().getInt("scytheThrowMaxThrow", 100);
     int j = AltarSMP.getInstance().getConfig().getInt("scytheThrowDamage", 8);
     boolean bool = AltarSMP.getInstance().getConfig().getBoolean("scytheThrowReturnScythe", true);
-    (new FrostScytheLaunchTask(paramPlayer, bool, d, i, j)).runTaskLater((Plugin)AltarSMP.getInstance(), 20L);
+    (new FrostScytheLaunchTask(paramPlayer, bool, d, i, j)).runTaskLater(AltarSMP.getInstance(), 20L);
   }
 
   public static void animateScythe(Player paramPlayer, ItemDisplay paramItemDisplay, double paramDouble) {
-    (new FrostScytheReturnTask(paramPlayer, paramItemDisplay, paramDouble)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new FrostScytheReturnTask(paramPlayer, paramItemDisplay, paramDouble)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static Boolean hasEmptyInventorySlot(Player paramPlayer) {
@@ -200,11 +192,11 @@ public class FrostScytheAbilityListener implements Listener {
         if (b < 36) {
           {
             if (playerInventory.getItem(b) == null)
-              return Boolean.valueOf(true); 
+              return true;
           }b++;
           continue;
         } 
-      }return Boolean.valueOf(false);
+      }return false;
     } 
   }
 
@@ -227,24 +219,25 @@ public class FrostScytheAbilityListener implements Listener {
 
   public static void returnScytheToPlayer(Player paramPlayer, ItemDisplay paramItemDisplay) {
     {
-      if (hasEmptyInventorySlot(paramPlayer).booleanValue()) {
+      if (hasEmptyInventorySlot(paramPlayer)) {
         paramItemDisplay.remove();
-        paramPlayer.getInventory().addItem(new ItemStack[] { paramItemDisplay.getItemStack() });
+        paramPlayer.getInventory().addItem(paramItemDisplay.getItemStack());
       } else {
         {
           if (CrazySlotsListener.isCrazySlotsItem(paramItemDisplay.getItemStack())) {
             paramItemDisplay.remove();
             return;
           } 
-        }BukkitTask bukkitTask = (new FrostScytheReturnAnimationTask(paramPlayer, paramItemDisplay)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+        }
+        (new FrostScytheReturnAnimationTask(paramPlayer, paramItemDisplay)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
       } 
     }}
 
   public static void activateCommandOfIce(Player paramPlayer) {
-    ArrayList<ItemDisplay> arrayList = new ArrayList();
+    ArrayList<ItemDisplay> arrayList = new ArrayList<>();
     Location location = paramPlayer.getLocation();
     int i = plugin.getConfig().getInt("commandOfIceCooldown", 45);
-    BossBarManager.createBar(paramPlayer, "Command Of Ice", i, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Command Of Ice", i, NamedTextColor.YELLOW);
     for (int b = 0; b < 3; b++) {
       double d = 0.0D;
       Vector vector1 = location.getDirection();
@@ -252,16 +245,16 @@ public class FrostScytheAbilityListener implements Listener {
       Location location1 = location.clone().add(0.0D, 0.0D, 0.0D).add(vector2.multiply(d));
       ItemDisplay itemDisplay = (ItemDisplay)paramPlayer.getWorld().spawnEntity(location1, EntityType.ITEM_DISPLAY);
       itemDisplay.setItemStack(new ItemStack(Material.BLUE_ICE));
-      paramPlayer.addPassenger((Entity)itemDisplay);
+      paramPlayer.addPassenger(itemDisplay);
       itemDisplay.setRotation(0.0F, 0.0F);
       itemDisplay.setViewRange(0.0F);
       Transformation transformation = new Transformation(new Vector3f(0.0F, 0.0F, 0.0F), new Quaternionf(), new Vector3f(0.75F, 0.75F, 0.75F), new Quaternionf());
       itemDisplay.setTransformation(transformation);
       arrayList.add(itemDisplay);
     } 
-    (new FrostScytheBladeFormationTask(arrayList, paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 2L, 5L);
+    (new FrostScytheBladeFormationTask(arrayList, paramPlayer)).runTaskTimer(AltarSMP.getInstance(), 2L, 5L);
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.BLOCK_TRIAL_SPAWNER_ABOUT_TO_SPAWN_ITEM, 1.0F, 2.0F);
-    (new FrostScytheBladeChargingTask(arrayList, paramPlayer)).runTaskTimer((Plugin) plugin, 0L, 1L);
+    (new FrostScytheBladeChargingTask(arrayList, paramPlayer)).runTaskTimer(plugin, 0L, 1L);
   }
 
   public static void scheduleIceBladeLaunches(List<ItemDisplay> paramList, Player paramPlayer) {
@@ -269,7 +262,7 @@ public class FrostScytheAbilityListener implements Listener {
     for (int b = 0; b < arrayOfInt.length; b++) {
       int i = arrayOfInt[b];
       int j = b * 3;
-      (new FrostScytheBladeLaunchTask(paramList, i, paramPlayer)).runTaskLater((Plugin) plugin, j);
+      (new FrostScytheBladeLaunchTask(paramList, i, paramPlayer)).runTaskLater(plugin, j);
     } 
   }
 
@@ -284,8 +277,7 @@ public class FrostScytheAbilityListener implements Listener {
     double d2 = 3.0D;
     for (Entity entity : paramLocation.getWorld().getNearbyEntities(paramLocation, d2, d2, d2)) {
       {
-        if (entity instanceof LivingEntity && entity != paramPlayer) {
-          LivingEntity livingEntity = (LivingEntity)entity;
+        if (entity instanceof LivingEntity livingEntity && entity != paramPlayer) {
           TrueDamage.apply(livingEntity, d1, paramPlayer);
           livingEntity.setNoDamageTicks(0);
           livingEntity.setFreezeTicks(100);

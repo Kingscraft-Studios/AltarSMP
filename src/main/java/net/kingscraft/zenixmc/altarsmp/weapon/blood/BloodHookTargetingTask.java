@@ -2,9 +2,7 @@ package net.kingscraft.zenixmc.altarsmp.weapon.blood;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BloodHookTargetingTask extends BukkitRunnable {
   public final Player player;
@@ -55,11 +53,11 @@ class BloodHookTargetingTask extends BukkitRunnable {
               if (bukkitRunnable != null)
                 try {
                   bukkitRunnable.cancel();
-                } catch (IllegalStateException illegalStateException) {} 
+                } catch (IllegalStateException ignored) {}
 
               BloodHookTrailParticleTask bloodHookTrailParticleTask = new BloodHookTrailParticleTask(this, location5, location6);
               this.abilityListener.bloodInfectionTasks.put(this.player.getUniqueId(), bloodHookTrailParticleTask);
-              bloodHookTrailParticleTask.runTaskTimer((Plugin) BloodLustAbilityListener.plugin, 0L, 1L);
+              bloodHookTrailParticleTask.runTaskTimer(BloodLustAbilityListener.plugin, 0L, 1L);
               return;
             } 
             this.abilityListener.cancelPlayerAbilities(this.player);

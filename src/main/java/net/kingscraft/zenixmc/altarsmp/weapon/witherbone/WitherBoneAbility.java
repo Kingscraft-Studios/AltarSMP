@@ -2,7 +2,8 @@ package net.kingscraft.zenixmc.altarsmp.weapon.witherbone;
 
 import java.util.HashMap;
 import java.util.UUID;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -16,14 +17,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
 
 public class WitherBoneAbility implements Listener {
@@ -35,8 +35,6 @@ public class WitherBoneAbility implements Listener {
 
   public static final HashMap<UUID, Integer> remainingLeaps;
 
-  public static final int MAX_LEAPS = 3;
-
   public static HashMap<UUID, Integer> cleansingChargeBars;
 
   public static int cleansingRequiredBars;
@@ -45,7 +43,7 @@ public class WitherBoneAbility implements Listener {
 
 
   public static void startTask() {
-    (new WitherBoneChargeBarTask()).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 5L);
+    (new WitherBoneChargeBarTask()).runTaskTimer(AltarSMP.getInstance(), 0L, 5L);
   }
 
   public static boolean hasWitheredBoneBlade(Player paramPlayer) {
@@ -65,13 +63,13 @@ public class WitherBoneAbility implements Listener {
     {
       if (!hasWitheredBoneBlade(player))
         return; 
-    }int i = ((Integer) cleansingChargeBars.getOrDefault(player.getUniqueId(), Integer.valueOf(0))).intValue();
-    cleansingChargeBars.put(player.getUniqueId(), Integer.valueOf(i + cleansingBarsPerCharge));
+    }int i = cleansingChargeBars.getOrDefault(player.getUniqueId(), 0);
+    cleansingChargeBars.put(player.getUniqueId(), i + cleansingBarsPerCharge);
   }
 
   public static void performLeap(Player paramPlayer) {
     UUID uUID = paramPlayer.getUniqueId();
-    int i = ((Integer) remainingLeaps.getOrDefault(uUID, Integer.valueOf(3))).intValue();
+    int i = remainingLeaps.getOrDefault(uUID, 3);
     {
       if (i <= 0)
         return; 
@@ -81,23 +79,23 @@ public class WitherBoneAbility implements Listener {
       paramPlayer.setVelocity(vector);
       paramPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 2));
       spawnLeapEffects(paramPlayer);
-      remainingLeaps.put(uUID, Integer.valueOf(--i));
+      remainingLeaps.put(uUID, --i);
       paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_SKELETON_DEATH, 1.0F, 1.0F);
       paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_WITHER_BREAK_BLOCK, 1.5F, 1.5F);
       if (i <= 0) {
         remainingLeaps.remove(uUID);
-        BossBarManager.createBar(paramPlayer, "Wither Leap", leapCooldown, ChatColor.YELLOW);
+        BossBarManager.createBar(paramPlayer, "Wither Leap", leapCooldown, NamedTextColor.YELLOW);
         CooldownManager.setCooldown(paramPlayer.getUniqueId(), leapCooldownKey, leapCooldown);
       } 
     }}
 
   public static void spawnLeapEffects(Player paramPlayer) {
-    (new WitherLeapAuraTask(paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new WitherLeapAuraTask(paramPlayer)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void spawnBoneParticle(Location paramLocation) {
     Location location = paramLocation.clone();
-    ItemDisplay itemDisplay = (ItemDisplay)paramLocation.getWorld().spawn(location, ItemDisplay.class);
+    ItemDisplay itemDisplay = paramLocation.getWorld().spawn(location, ItemDisplay.class);
     itemDisplay.setItemStack(new ItemStack(Material.BONE));
     Transformation transformation = itemDisplay.getTransformation();
     transformation.getScale().set(0.2F, 0.2F, 0.2F);
@@ -106,17 +104,17 @@ public class WitherBoneAbility implements Listener {
     double d1 = Math.random() * Math.PI * 2.0D;
     double d2 = 0.15D;
     Vector vector = new Vector(Math.cos(d1) * d2, 0.0D, Math.sin(d1) * d2);
-    (new WitherBoneParticleTask(vector, itemDisplay)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new WitherBoneParticleTask(vector, itemDisplay)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void performCleansing(Player paramPlayer) {
     {
-      if (((Integer) cleansingChargeBars.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(0))).intValue() < cleansingRequiredBars) {
-        paramPlayer.sendMessage("§7Not enough bars");
+      if (cleansingChargeBars.getOrDefault(paramPlayer.getUniqueId(), 0) < cleansingRequiredBars) {
+        paramPlayer.sendMessage(Component.text("Not enough bars", NamedTextColor.GRAY));
         return;
       } 
     }
-    cleansingChargeBars.put(paramPlayer.getUniqueId(), Integer.valueOf(0));
+    cleansingChargeBars.put(paramPlayer.getUniqueId(), 0);
     paramPlayer.swingMainHand();
     paramPlayer.updateInventory();
     Location location = paramPlayer.getLocation();
@@ -144,8 +142,8 @@ public class WitherBoneAbility implements Listener {
         if (location1.getWorld() == location2.getWorld()) {
           double d = location1.distance(location2);
           int j = (int)Math.min(d / 1.2D, 40.0D);
-          (new CleansingBlockAnimationTask(itemDisplay1, itemDisplay2, j, location2, world, location1, f1, f2)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
-          (new CleansingBlockEffectTask(itemDisplay1, itemDisplay2, i, j, world, paramPlayer, vector)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+          (new CleansingBlockAnimationTask(itemDisplay1, itemDisplay2, j, location2, world, location1, f1, f2)).runTaskLater(AltarSMP.getInstance(), 2L);
+          (new CleansingBlockEffectTask(itemDisplay1, itemDisplay2, i, j, world, paramPlayer, vector)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
         } 
       }} 
     world.playSound(location, Sound.ENTITY_PLAYER_SPLASH, 1.0F, 0.8F);

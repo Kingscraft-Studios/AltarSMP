@@ -1,17 +1,17 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.echo;
 
+import java.util.List;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Transformation;
@@ -20,8 +20,8 @@ import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.illusion.IllusionDisguiseManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.IllusionDisguiseManager;
 
 public class EchoAbility implements Listener {
   public static String ECHO_SHRIEK_COOLDOWN_KEY;
@@ -40,20 +40,17 @@ public class EchoAbility implements Listener {
       if (itemMeta == null)
         return false; 
     }{
-      if (!itemMeta.hasCustomModelData())
-        return false; 
-    }{
-
-    }return (itemMeta.getCustomModelData() == 13);
+      List<Float> customModelData = itemMeta.getCustomModelDataComponent().getFloats();
+      return !customModelData.isEmpty() && customModelData.getFirst() == 13;
+    }
   }
 
   public static void activateSonicCharge(Player paramPlayer) {
-    paramPlayer.playSound((Entity)paramPlayer, Sound.ENTITY_WARDEN_SONIC_CHARGE, 1.0F, 1.0F);
-    (new EchoSonicBlastDelayTask(paramPlayer)).runTaskLater((Plugin)AltarSMP.getInstance(), 30L);
+    paramPlayer.playSound(paramPlayer, Sound.ENTITY_WARDEN_SONIC_CHARGE, 1.0F, 1.0F);
+    (new EchoSonicBlastDelayTask(paramPlayer)).runTaskLater(AltarSMP.getInstance(), 30L);
   }
 
   public static void launchSonicBlast(Player paramPlayer) {
-    Location location1 = paramPlayer.getLocation().clone().add(paramPlayer.getLocation().getDirection()).add(0.0D, 1.2D, 0.0D);
     ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
     int i = AltarSMP.getInstance().getConfig().getInt("echoSonicDamage", 10);
     Location location2 = paramPlayer.getEyeLocation();
@@ -62,18 +59,18 @@ public class EchoAbility implements Listener {
       if (!isEchoSword(itemStack)) {
         CooldownManager.setCooldown(paramPlayer.getUniqueId(), ECHO_SONIC_COOLDOWN_KEY, 0.0D);
         BossBarManager.removeBar(paramPlayer, "Sonic Blast");
-        paramPlayer.sendMessage("You must keep holding Echo");
+        paramPlayer.sendMessage(Component.text("You must keep holding Echo"));
         return;
       } 
     }paramPlayer.setVelocity(paramPlayer.getLocation().getDirection().multiply(-1));
     paramPlayer.swingMainHand();
-    paramPlayer.playSound((Entity)paramPlayer, Sound.ENTITY_WARDEN_SONIC_BOOM, 1.0F, 1.0F);
+    paramPlayer.playSound(paramPlayer, Sound.ENTITY_WARDEN_SONIC_BOOM, 1.0F, 1.0F);
     ItemDisplay itemDisplay = (ItemDisplay)paramPlayer.getWorld().spawnEntity(location2.add(vector1.clone().multiply(0.5D)), EntityType.ITEM_DISPLAY);
     itemDisplay.setItemStack(itemStack);
     itemDisplay.setTransformation(new Transformation(new Vector3f(0.0F, 0.0F, 0.0F), new AxisAngle4f((float)Math.toRadians(90.0D), 1.0F, 0.0F, 0.0F), new Vector3f(1.5F, 1.5F, 1.5F), new AxisAngle4f(0.0F, 0.0F, 0.0F, 1.0F)));
     double d = AltarSMP.getInstance().getConfig().getInt("echoSonicThrowStrength", 2);
     Vector vector2 = vector1.multiply(d);
-    (new EchoSonicProjectileTask(vector2, itemDisplay, paramPlayer, i)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new EchoSonicProjectileTask(vector2, itemDisplay, paramPlayer, i)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void activateEchoShriek(Player paramPlayer) {
@@ -100,7 +97,7 @@ public class EchoAbility implements Listener {
         if (player == paramPlayer)
           continue; 
       }{
-        if (AltarSMP.isTrusted(paramPlayer, (Entity)player))
+        if (AltarSMP.isTrusted(paramPlayer, player))
           continue; 
       }player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, i, 1));
       player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, i, 1));
@@ -110,7 +107,7 @@ public class EchoAbility implements Listener {
         if (player == paramPlayer)
           continue; 
       }{
-        if (AltarSMP.isTrusted(paramPlayer, (Entity)player))
+        if (AltarSMP.isTrusted(paramPlayer, player))
           continue; 
       }player.removePotionEffect(PotionEffectType.INVISIBILITY);
       IllusionDisguiseManager.revealPlayer(player);

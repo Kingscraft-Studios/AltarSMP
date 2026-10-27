@@ -1,5 +1,6 @@
 package net.kingscraft.zenixmc.altarsmp.item;
 
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -59,10 +60,11 @@ public class RecipeIngredient {
     }
 
     if (hasCustomModelData()) {
-      if (meta == null || !meta.hasCustomModelData())
+      if (meta == null)
         return false;
 
-      return meta.getCustomModelData() == customModelData;
+      List<Float> floats = meta.getCustomModelDataComponent().getFloats();
+      return !floats.isEmpty() && floats.getFirst() == customModelData;
     }
 
     return true;

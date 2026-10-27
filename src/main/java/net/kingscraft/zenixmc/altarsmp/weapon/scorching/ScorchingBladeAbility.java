@@ -3,9 +3,13 @@ package net.kingscraft.zenixmc.altarsmp.weapon.scorching;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,7 +34,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
@@ -40,7 +43,7 @@ import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.util.CombatEffectUtils;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 import net.kingscraft.zenixmc.altarsmp.weapon.holylance.HolyLanceDetonationTask;
@@ -59,10 +62,18 @@ public class ScorchingBladeAbility implements Listener {
 
   public static FileConfiguration config;
 
+  private static String legacyTitle(String text) {
+    return LegacyComponentSerializer.legacySection().serialize(Component.text()
+        .append(Component.text("!! ", NamedTextColor.GOLD, TextDecoration.BOLD))
+        .append(Component.text(text + " ", NamedTextColor.YELLOW, TextDecoration.BOLD))
+        .append(Component.text("!!", NamedTextColor.GOLD, TextDecoration.BOLD))
+        .build());
+  }
+
 
   public ScorchingBladeAbility() {
     plugin = AltarSMP.getInstance();
-    Bukkit.getScheduler().runTaskTimer((Plugin) plugin, ScorchingBladeAbility::lambda$new$0, 0L, 20L);
+    Bukkit.getScheduler().runTaskTimer(plugin, ScorchingBladeAbility::lambda$new$0, 0L, 20L);
   }
 
   public static boolean isScorchingBladeInMainHand(Player paramPlayer) {
@@ -81,11 +92,9 @@ public class ScorchingBladeAbility implements Listener {
       if (itemMeta == null)
         return false; 
     }{
-      if (!itemMeta.hasCustomModelData())
-        return false; 
-    }{
-
-    }return (itemMeta.getCustomModelData() == 6);
+      List<Float> customModelData = itemMeta.getCustomModelDataComponent().getFloats();
+      return !customModelData.isEmpty() && customModelData.getFirst() == 6;
+    }
   }
 
   public static boolean isScorchingBladeInOffHand(Player paramPlayer) {
@@ -104,11 +113,9 @@ public class ScorchingBladeAbility implements Listener {
       if (itemMeta == null)
         return false; 
     }{
-      if (!itemMeta.hasCustomModelData())
-        return false; 
-    }{
-
-    }return (itemMeta.getCustomModelData() == 6);
+      List<Float> customModelData = itemMeta.getCustomModelDataComponent().getFloats();
+      return !customModelData.isEmpty() && customModelData.getFirst() == 6;
+    }
   }
 
   @EventHandler
@@ -121,12 +128,12 @@ public class ScorchingBladeAbility implements Listener {
       if (!isScorchingBladeInMainHand(player))
         return; 
     }
-      CombatEffectUtils.spawnDualParticleRings((LivingEntity)player, Particle.FLAME, Particle.CRIT, Sound.ITEM_TRIDENT_THROW, 0.7F);
+      CombatEffectUtils.spawnDualParticleRings(player, Particle.FLAME, Particle.CRIT, Sound.ITEM_TRIDENT_THROW, 0.7F);
   }
 
   public static boolean activateThunderstrike(Player paramPlayer) {
     Location location1 = null;
-    RayTraceResult rayTraceResult = paramPlayer.getWorld().rayTraceEntities(paramPlayer.getEyeLocation(), paramPlayer.getEyeLocation().getDirection(), 100.0D, 0.25D, paramEnt -> lambda$activateThunderstrike$1(paramPlayer, paramEnt));
+    RayTraceResult rayTraceResult = paramPlayer.getWorld().rayTraceEntities(paramPlayer.getEyeLocation(), paramPlayer.getEyeLocation().getDirection(), 100.0D, 0.25D, ScorchingBladeAbility::lambda$activateThunderstrike$1);
     {
       if (rayTraceResult != null && rayTraceResult.getHitEntity() != null) {
         location1 = rayTraceResult.getHitEntity().getLocation().clone().subtract(0.0D, 0.5D, 0.0D);
@@ -144,25 +151,24 @@ public class ScorchingBladeAbility implements Listener {
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1.0F, 1.0F);
     startThunderstrikeCharge(paramPlayer);
     startHolyLanceDescent(location2, d);
-    (new HolyLanceDetonationTask(location2, paramPlayer, d)).runTaskLater((Plugin)AltarSMP.getInstance(), 20L);
+    (new HolyLanceDetonationTask(location2, paramPlayer, d)).runTaskLater(AltarSMP.getInstance(), 20L);
     return true;
   }
 
   public static void startThunderstrikeCharge(Player paramPlayer) {
-    (new ElectricSparkEffectTask(paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new ElectricSparkEffectTask(paramPlayer)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void startHolyLanceDescent(Location paramLocation, double paramDouble) {
-    (new ElectricSparkRingTask(paramDouble, paramLocation)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new ElectricSparkRingTask(paramDouble, paramLocation)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void spawnHolyLanceVisual(Location paramLocation, double paramDouble) {
-    float f1 = 30.0F;
-    float f2 = (float)paramDouble / 2.0F;
+      float f2 = (float)paramDouble / 2.0F;
     Location location = paramLocation.clone().add(0.0D, 0.0D, 0.0D);
     paramLocation.getWorld().spawnParticle(Particle.BLOCK, location, 30, 0.5D, 0.3D, 0.5D, 0.0D, Material.DIRT.createBlockData());
-    ItemDisplay itemDisplay = (ItemDisplay)paramLocation.getWorld().spawn(location, ItemDisplay.class, paramDisplay -> lambda$lanceVisual$2(f2, paramDisplay));
-    (new HolyLanceDisplayAnimationTask(itemDisplay)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    ItemDisplay itemDisplay = paramLocation.getWorld().spawn(location, ItemDisplay.class, paramDisplay -> lambda$lanceVisual$2(f2, paramDisplay));
+    (new HolyLanceDisplayAnimationTask(itemDisplay)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void detonateHolyLance(Location paramLocation, Player paramPlayer) {
@@ -173,16 +179,15 @@ public class ScorchingBladeAbility implements Listener {
     paramLocation.getWorld().spawnParticle(Particle.ITEM, paramLocation, 300, 0.0D, 0.0D, 0.0D, 0.5D, new ItemStack(Material.DIRT));
     paramLocation.getWorld().spawnParticle(Particle.DUST, paramLocation, 32, 1.0D, 0.5D, 1.0D, 0.0D, new Particle.DustOptions(Color.fromRGB(185, 187, 90), 1.0F));
     for (Entity entity : paramLocation.getNearbyEntities(d2, d2, d2)) {
-      if (entity instanceof LivingEntity) {
-        LivingEntity livingEntity = (LivingEntity)entity;
-        {
+      if (entity instanceof LivingEntity livingEntity) {
+          {
           if (!livingEntity.isValid())
             continue; 
         }{
           if (livingEntity == paramPlayer)
             continue; 
         }{
-          if (AltarSMP.isTrusted(paramPlayer, (Entity)livingEntity))
+          if (AltarSMP.isTrusted(paramPlayer, livingEntity))
             continue; 
         }
           TrueDamage.apply(livingEntity, d1, paramPlayer);
@@ -198,7 +203,7 @@ public class ScorchingBladeAbility implements Listener {
     spawnParticleRing(paramPlayer.getLocation(), 0.4D, Particle.FLAME);
     spawnParticleRing(paramPlayer.getLocation(), 0.6D, Particle.FLAME);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "scorchingPending", 10.0D);
-    BossBarManager.createBar(paramPlayer, "§6§l!! §e§lSCORCHING §6§l!!", 10, ChatColor.YELLOW, BarColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, legacyTitle("SCORCHING"), 10, NamedTextColor.YELLOW, BarColor.YELLOW);
   }
 
   @EventHandler
@@ -224,12 +229,12 @@ public class ScorchingBladeAbility implements Listener {
     BossBarManager.removeBar(player, "!! SCORCHING !!");
     int i = AltarSMP.getInstance().getConfig().getInt("scorchingCooldown", 30);
     CooldownManager.setCooldown(player.getUniqueId(), SCORCHING_BLADE_COOLDOWN_KEY, i);
-    BossBarManager.createBar(player, "Scorching Blade", i, ChatColor.YELLOW);
+    BossBarManager.createBar(player, "Scorching Blade", i, NamedTextColor.YELLOW);
     player.getWorld().playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 1.5F, 0.5F);
     player.getWorld().playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1.5F, 0.8F);
     Vector vector1 = player.getEyeLocation().getDirection().normalize();
     Vector vector2 = vector1.clone().crossProduct(new Vector(0, 1, 0)).normalize();
-    HashSet<FallingBlock> hashSet = new HashSet();
+    HashSet<FallingBlock> hashSet = new HashSet<>();
     for (int b = 0; b < 40; b++) {
       double d1 = b * 0.3D - 6.0D;
       Location location = player.getEyeLocation().clone().add(vector2.clone().multiply(d1));
@@ -239,26 +244,25 @@ public class ScorchingBladeAbility implements Listener {
       fallingBlock.setBlockData(Material.FIRE.createBlockData());
       fallingBlock.setDropItem(false);
       fallingBlock.setCancelDrop(true);
-      fallingBlock.getPersistentDataContainer().set(FIRE_BLOCK_KEY, PersistentDataType.BYTE, Byte.valueOf((byte)1));
+      fallingBlock.getPersistentDataContainer().set(FIRE_BLOCK_KEY, PersistentDataType.BYTE, (byte) 1);
       fallingBlock.setVelocity(vector);
       hashSet.add(fallingBlock);
     } 
-    (new ScorchingBladeProjectileTask(this, hashSet, player)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new ScorchingBladeProjectileTask(hashSet, player)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void applyHallowedFlames(Player paramPlayer, LivingEntity paramLivingEntity) {
     {
-      if (AltarSMP.isTrusted(paramPlayer, (Entity)paramLivingEntity))
+      if (AltarSMP.isTrusted(paramPlayer, paramLivingEntity))
         return; 
     }int i = config.getInt("hollowedFlamesDamage", 1);
     int j = config.getInt("hollowedFlamesDuration", 4);
-    if (paramLivingEntity instanceof Player) {
-      Player player = (Player)paramLivingEntity;
-      BossBarManager.createBar(player, "§6§l!! §e§lHALLOWED FLAMES §6§l!!", j, ChatColor.RED);
+    if (paramLivingEntity instanceof Player player) {
+        BossBarManager.createBar(player, legacyTitle("HALLOWED FLAMES"), j, NamedTextColor.RED);
     } 
     paramLivingEntity.getWorld().spawnParticle(Particle.FLAME, paramLivingEntity.getLocation().add(0.0D, 1.0D, 0.0D), 50, 0.5D, 1.0D, 0.5D, 0.1D);
     paramLivingEntity.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME, paramLivingEntity.getLocation().add(0.0D, 1.0D, 0.0D), 50, 0.5D, 1.0D, 0.5D, 0.1D);
-    (new BurningDamageTask(j, paramLivingEntity, i, paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new BurningDamageTask(j, paramLivingEntity, i, paramPlayer)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void detonateScorchingBlade(Location paramLocation, Player paramPlayer) {
@@ -267,20 +271,19 @@ public class ScorchingBladeAbility implements Listener {
     {
       while (b < 3)
         b++; 
-    }ArrayList arrayList = new ArrayList();
-    (new ScorchingBladeLavaColumnTask(arrayList, block)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    }ArrayList<Block> arrayList = new ArrayList<>();
+    (new ScorchingBladeLavaColumnTask(arrayList, block)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
     double d = plugin.getConfig().getDouble("scorchingDamage", 6.0D);
     for (Entity entity : paramLocation.getNearbyEntities(2.5D, 2.5D, 2.5D)) {
-      if (entity instanceof LivingEntity) {
-        LivingEntity livingEntity = (LivingEntity)entity;
-        {
+      if (entity instanceof LivingEntity livingEntity) {
+          {
           if (livingEntity == paramPlayer)
             continue; 
         }{
           if (CooldownManager.isOnCooldown(livingEntity.getUniqueId(), "damaged"))
             continue; 
         }{
-          if (AltarSMP.isTrusted(paramPlayer, (Entity)livingEntity))
+          if (AltarSMP.isTrusted(paramPlayer, livingEntity))
             continue; 
         }
           TrueDamage.apply(livingEntity, d, paramPlayer);
@@ -296,7 +299,7 @@ public class ScorchingBladeAbility implements Listener {
 
   public static void spawnParticleRing(Location paramLocation, double paramDouble, Particle paramParticle) {
     Vector vector = new Vector(paramDouble, 0.0D, 0.0D);
-    int i = 0;
+    int i;
     for (i = 0; i < 360; i += Math.max(1, (int)(Math.random() * 5.0D))) {
       Vector vector1 = vector.clone().rotateAroundY(Math.toRadians(i));
       Location location = paramLocation.clone().add(vector1).add(0.0D, 0.0D, 0.0D);
@@ -316,12 +319,10 @@ public class ScorchingBladeAbility implements Listener {
     paramItemDisplay.setTransformation(transformation);
   }
 
-  private static boolean lambda$activateThunderstrike$1(Player paramPlayer, Entity paramEntity) {
+  private static boolean lambda$activateThunderstrike$1(Entity paramEntity) {
     {
-      if (paramEntity instanceof LivingEntity)
-        {
-          if (!paramEntity.equals(paramPlayer));
-        }}return false;
+      return paramEntity instanceof LivingEntity;
+    }
   }
 
   private static void lambda$new$0() {

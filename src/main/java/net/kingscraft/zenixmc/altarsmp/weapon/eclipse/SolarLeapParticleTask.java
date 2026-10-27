@@ -4,7 +4,6 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.util.FloatingTextEffectUtils;
 
 class SolarLeapParticleTask extends BukkitRunnable {

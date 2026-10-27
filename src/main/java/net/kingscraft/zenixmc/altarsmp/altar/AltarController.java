@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,6 +27,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Transformation;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemIds;
@@ -69,7 +71,7 @@ public class AltarController implements Listener {
     } else {
       return false;
     } 
-    return structure.getPersistentDataContainer().getOrDefault(this.altarUsedKey, PersistentDataType.BOOLEAN, Boolean.FALSE);
+    return structure.getPersistentDataContainer().getOrDefault(this.altarUsedKey, PersistentDataType.BOOLEAN, false);
   }
 
   public void setAltarUsed(Location paramLocation, boolean paramBoolean) {
@@ -104,67 +106,44 @@ public class AltarController implements Listener {
   public static ItemStack createCustomModelItem(Material paramMaterial, int paramInt) {
     ItemStack itemStack = new ItemStack(paramMaterial);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(paramInt);
-    itemStack.setItemMeta(itemMeta);
+    if (itemMeta != null) {
+      AltarManager.applyCustomModelData(itemMeta, paramInt);
+      itemStack.setItemMeta(itemMeta);
+    }
     return itemStack;
   }
 
-  public static String toTitleCase(String paramString) {
-    {
-      if (paramString != null)
-        {
-          if (!paramString.isEmpty()) {
-            String[] arrayOfString = paramString.toLowerCase().split(" ");
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String str : arrayOfString) {
-              {
-                if (!str.isEmpty())
-                  stringBuilder.append(Character.toUpperCase(str.charAt(0))).append(str.substring(1)).append(" "); 
-              }
-            }
-            return stringBuilder.toString().trim();
-          } 
-          return paramString;
-        }
+  public void sendMissingIngredients(Player paramPlayer, List<RecipeIngredient> paramList) {
+    if (paramList.isEmpty())
+      return;
+    paramPlayer.sendMessage(Component.text("Missing items:", NamedTextColor.RED, TextDecoration.BOLD));
+    for (RecipeIngredient ingredient : paramList) {
+      paramPlayer.sendMessage(Component.text()
+          .append(Component.text("- " + ingredient.getAmount() + "x ", NamedTextColor.GRAY))
+          .append(getIngredientDisplayName(ingredient).colorIfAbsent(NamedTextColor.WHITE))
+          .build());
     }
-    return null;
   }
 
-  public void sendMissingIngredients(Player paramPlayer, List<RecipeIngredient> paramList) {
-    {
-      if (paramList.isEmpty())
-        return; 
-    }paramPlayer.sendMessage("§c§lMissing items:");
-    for (RecipeIngredient paramB4 : paramList) {
-      String str;
-      CustomItemType itemType = CustomItemType.fromItem(createCustomModelItem(paramB4.material, paramB4.customModelData));
-      if (itemType != null) {
-        str = itemType.getItem().getItemMeta().getDisplayName();
-      } else {
-        CustomItem customItem = CustomItem.fromItem(createCustomModelItem(paramB4.material, paramB4.customModelData));
-        if (customItem != null) {
-          str = customItem.getItem().getItemMeta().getDisplayName();
-        } else {
-          str = paramB4.getMaterial().toString();
-          str = str.toLowerCase().replace("_", " ");
-          str = toTitleCase(str);
-        } 
-      } 
-      paramPlayer.sendMessage("§7- §7" + paramB4.getAmount() + "x §f" + str);
-    } 
+  private static Component getIngredientDisplayName(RecipeIngredient ingredient) {
+    ItemStack referenceItem = createCustomModelItem(ingredient.getMaterial(), ingredient.getCustomModelData());
+    CustomItemType itemType = CustomItemType.fromItem(referenceItem);
+    if (itemType != null)
+      return AltarManager.getItemDisplayName(itemType.getItem());
+    CustomItem customItem = CustomItem.fromItem(referenceItem);
+    if (customItem != null)
+      return AltarManager.getItemDisplayName(customItem.getItem());
+    return AltarManager.getItemDisplayName(referenceItem);
   }
 
   public void broadcastCraftAnnouncement(Player paramPlayer, ItemStack paramItemStack) {
-    String str1 = paramItemStack.getItemMeta().getDisplayName();
-    String str3 = ChatColor.BOLD.toString();
-    String str4 = String.valueOf(ChatColor.GOLD);
-    String str6 = ChatColor.BOLD.toString();
-    String str7 = ChatColor.BOLD.toString();
-    String str8 = String.valueOf(ChatColor.GOLD);
-    String str9 = paramPlayer.getName();
-    String str10 = ChatColor.BOLD.toString();
-    String str2 = ChatColor.WHITE + str3 + str9 + str4 + str6 + " has crafted the " + str7 + str1 + str8 + str10 + "!";
-    Bukkit.broadcastMessage(str2);
+    Component itemName = AltarManager.getItemDisplayName(paramItemStack);
+    Bukkit.broadcast(Component.text()
+        .append(Component.text(paramPlayer.getName(), NamedTextColor.WHITE, TextDecoration.BOLD))
+        .append(Component.text(" has crafted the ", NamedTextColor.GOLD))
+        .append(itemName.colorIfAbsent(NamedTextColor.GOLD).decorate(TextDecoration.BOLD))
+        .append(Component.text("!", NamedTextColor.GOLD))
+        .build());
     for (Player player : Bukkit.getOnlinePlayers())
       player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0F, 1.0F); 
   }
@@ -187,13 +166,8 @@ public class AltarController implements Listener {
     } 
   }
 
-  public double getItemDisplayOffsetY(String paramString) {
-    try {
-        CustomItem.valueOf(paramString.toUpperCase());
-        return 1.0D;
-    } catch (IllegalArgumentException illegalArgumentException) {
-      return 1.0D;
-    } 
+  public double getItemDisplayOffsetY() {
+    return 1.0D;
   }
 
   public double getItemDisplayScale(String paramString) {
@@ -300,20 +274,20 @@ public class AltarController implements Listener {
 
   public void spawnItemDisplay(AltarInstance altarInstance, Location paramLocation, String paramString) {
     double d1 = getItemDisplayScale(paramString);
-    double d2 = getItemDisplayOffsetY(paramString);
+    double d2 = getItemDisplayOffsetY();
     Location location = paramLocation.clone().add(0.5D, d1, 0.5D);
     ItemDisplay itemDisplay = paramLocation.getWorld().spawn(location, ItemDisplay.class, display -> configureItemDisplay(paramString, d2, display));
     altarInstance.setItemDisplay(itemDisplay);
   }
 
-  public void spawnHologram(AltarInstance altarInstance, Location paramLocation, String paramString, List<String> paramList) {
+  public void spawnHologram(AltarInstance altarInstance, Location paramLocation, String paramString, List<Component> paramList) {
     Altar bs = this.plugin.getConfigManager().getAltar(paramString);
     double d = (bs != null && bs.hologramHeight() > 0.0D) ? bs.hologramHeight() : this.plugin.getConfigManager().getHologramHeight();
     World world = paramLocation.getWorld();
     for (int i = 0; i < paramList.size(); i++) {
-      String str = paramList.get(paramList.size() - 1 - i);
+      Component component = paramList.get(paramList.size() - 1 - i);
       Location location = paramLocation.clone().add(0.5D, d + i * 0.25D, 0.5D);
-      TextDisplay textDisplay = world.spawn(location, TextDisplay.class, display -> configureHologram(str, display));
+      TextDisplay textDisplay = world.spawn(location, TextDisplay.class, display -> configureHologram(component, display));
       altarInstance.addHologram(textDisplay);
     }
   }
@@ -340,13 +314,13 @@ public class AltarController implements Listener {
     this.plugin.getConfigManager().saveAltarConfig();
   }
 
-  public static void configureHologram(String paramString, TextDisplay paramTextDisplay) {
+  public static void configureHologram(Component paramComponent, TextDisplay paramTextDisplay) {
     paramTextDisplay.setShadowed(false);
     paramTextDisplay.setBillboard(Display.Billboard.CENTER);
     paramTextDisplay.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
     paramTextDisplay.setGravity(false);
     paramTextDisplay.setInvulnerable(true);
-    paramTextDisplay.setText(ChatColor.translateAlternateColorCodes('&', paramString));
+    paramTextDisplay.text(paramComponent);
   }
 
   public static void configureItemDisplay(String paramString, double paramDouble, ItemDisplay paramItemDisplay) {

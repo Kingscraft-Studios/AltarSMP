@@ -1,37 +1,36 @@
 package net.kingscraft.zenixmc.altarsmp.listener;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.altars2.ability.Altars2AbilityDispatcher;
-import net.kingscraft.zenixmc.altarsmp.ability.nuke.NukeAbility;
-import net.kingscraft.zenixmc.altarsmp.ability.paladin.PaladinEarthAbility;
-import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightfallListener;
+import net.kingscraft.zenixmc.altarsmp.altarS2.core.AltarS2AbilityDispatcher;
+import net.kingscraft.zenixmc.altarsmp.weapon.nuke.NukeAbility;
+import net.kingscraft.zenixmc.altarsmp.weapon.paladin.PaladinEarthAbility;
+import net.kingscraft.zenixmc.altarsmp.weapon.knightfall.KnightfallListener;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
-import net.kingscraft.zenixmc.altarsmp.illusion.IllusionDisguiseManager;
-import net.kingscraft.zenixmc.altarsmp.illusion.IllusionWandAbility;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.IllusionDisguiseManager;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.IllusionWandAbility;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
-import net.kingscraft.zenixmc.altarsmp.vampire.Vampire;
+import net.kingscraft.zenixmc.altarsmp.vampire.VampireListener;
 import net.kingscraft.zenixmc.altarsmp.weapon.blood.BloodLustAbilityListener;
 import net.kingscraft.zenixmc.altarsmp.weapon.boneblade.BoneBladeAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.cutlass.CutlassAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.cutlass.CutlassParryActivationTask;
-import net.kingscraft.zenixmc.altarsmp.weapon.earth.EarthGauntletAbility;
+import net.kingscraft.zenixmc.altarsmp.weapon.gauntlet.EarthGauntletAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.echo.EchoAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.eclipse.EclipseAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.frostscythe.FrostScytheAbilityListener;
@@ -44,24 +43,7 @@ import net.kingscraft.zenixmc.altarsmp.weapon.shadow.ShadowBladeAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.wind.WindweaverAbility;
 import net.kingscraft.zenixmc.altarsmp.weapon.witherbone.WitherBoneAbility;
 
-public class AbilityInputListener implements Listener, CommandExecutor {
-
-
-  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, String @NotNull [] paramArrayOfString) {
-    if (paramCommandSender instanceof Player player) {
-        {
-        if (paramCommand.getName().equals("ability1")) {
-          activateMainHandAbility(player);
-          return true;
-        } 
-      }{
-        if (paramCommand.getName().equals("ability2")) {
-          activateOffhandAbility(player);
-          return true;
-        } 
-      }} 
-    return true;
-  }
+public class AbilityInputListener implements Listener {
 
   @EventHandler
   public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent paramPlayerSwapHandItemsEvent) {
@@ -92,12 +74,12 @@ public class AbilityInputListener implements Listener, CommandExecutor {
       if (j != -1)
         {
           if (CustomItem.countInInventory(paramPlayer) > j) {
-            paramPlayer.sendMessage("§eThe legendary limit is " + j);
+            paramPlayer.sendMessage(Component.text("The legendary limit is " + j, NamedTextColor.YELLOW));
             paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
             return false;
           } 
         }}{
-      if (Altars2AbilityDispatcher.dispatchMainHand(paramPlayer)) {
+      if (AltarS2AbilityDispatcher.dispatchMainHand(paramPlayer)) {
         paramPlayer.swingMainHand();
         paramPlayer.updateInventory();
         return true;
@@ -117,7 +99,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
         }int k = AltarSMP.getInstance().getConfig().getInt("CutlassCutsCooldown", 15);
         paramPlayer.swingMainHand();
         paramPlayer.updateInventory();
-        BossBarManager.createBar(paramPlayer, "Thousand Cuts", k, ChatColor.YELLOW);
+        BossBarManager.createBar(paramPlayer, "Thousand Cuts", k, NamedTextColor.YELLOW);
         CutlassAbility.startCutlassAttack(paramPlayer);
         CooldownManager.setCooldown(paramPlayer.getUniqueId(), CutlassAbility.cutsCooldownKey, k);
         return true;
@@ -129,7 +111,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
             return true; 
         }int k = AltarSMP.getInstance().getConfig().getInt("paleRootsCooldown", 45);
         PaleCannonAbility.spawnPaleRoots(paramPlayer);
-        BossBarManager.createBar(paramPlayer, "Pale Roots", k, ChatColor.YELLOW);
+        BossBarManager.createBar(paramPlayer, "Pale Roots", k, NamedTextColor.YELLOW);
         CooldownManager.setCooldown(paramPlayer.getUniqueId(), "PaleRoots", k);
         return true;
       } 
@@ -147,7 +129,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
             {
               if (!CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "used_meteor")) {
                 paramPlayer.updateInventory();
-                BossBarManager.createBar(paramPlayer, "Meteor Strike", EarthGauntletAbility.meteorUseDuration, ChatColor.GREEN);
+                BossBarManager.createBar(paramPlayer, "Meteor Strike", EarthGauntletAbility.meteorUseDuration, NamedTextColor.GREEN);
                 CooldownManager.setCooldown(paramPlayer.getUniqueId(), "used_meteor", EarthGauntletAbility.meteorUseDuration);
                 paramPlayer.getWorld().playSound(paramPlayer, Sound.ENTITY_EVOKER_PREPARE_ATTACK, 1.0F, 1.0F);
                 paramPlayer.getWorld().spawnParticle(Particle.WITCH, paramPlayer.getLocation().clone().add(0.0D, 1.0D, 0.0D), 120, 0.2D, 0.5D, 0.2D, 0.1D);
@@ -165,7 +147,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
         }{
           paramPlayer.updateInventory();
           if (PaladinEarthAbility.activateEarthShatter(paramPlayer)) {
-            BossBarManager.createBar(paramPlayer, "Earth Shatter", PaladinEarthAbility.EARTH_SHATTER_COOLDOWN, ChatColor.YELLOW);
+            BossBarManager.createBar(paramPlayer, "Earth Shatter", PaladinEarthAbility.EARTH_SHATTER_COOLDOWN, NamedTextColor.YELLOW);
             CooldownManager.setCooldown(paramPlayer.getUniqueId(), PaladinEarthAbility.EARTH_SHATTER_COOLDOWN_KEY, PaladinEarthAbility.EARTH_SHATTER_COOLDOWN);
           } 
         }return true;
@@ -178,7 +160,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
         }
         ShadeSoul.castShadeSoul(paramPlayer);
         CooldownManager.setCooldown(paramPlayer.getUniqueId(), ShadeSoul.shadePart, ShadeSoul.shadeSoulCooldown);
-        BossBarManager.createBar(paramPlayer, "Shade Soul", ShadeSoul.shadeSoulCooldown, ChatColor.YELLOW);
+        BossBarManager.createBar(paramPlayer, "Shade Soul", ShadeSoul.shadeSoulCooldown, NamedTextColor.YELLOW);
         return true;
       } 
     }{
@@ -209,7 +191,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
         }paramPlayer.updateInventory();
         EchoAbility.activateSonicCharge(paramPlayer);
         CooldownManager.setCooldown(paramPlayer.getUniqueId(), EchoAbility.ECHO_SONIC_COOLDOWN_KEY, i);
-        BossBarManager.createBar(paramPlayer, "Sonic Blast", i, ChatColor.YELLOW);
+        BossBarManager.createBar(paramPlayer, "Sonic Blast", i, NamedTextColor.YELLOW);
         return true;
       } 
     }{
@@ -263,7 +245,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
           if (!CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), FrostScytheAbilityListener.SCYTHE_THROW_COOLDOWN_KEY)) {
             FrostScytheAbilityListener.launchScythe(paramPlayer);
             CooldownManager.setCooldown(paramPlayer.getUniqueId(), FrostScytheAbilityListener.SCYTHE_THROW_COOLDOWN_KEY, k);
-            BossBarManager.createBar(paramPlayer, "Scythe Throw", k, ChatColor.YELLOW);
+            BossBarManager.createBar(paramPlayer, "Scythe Throw", k, NamedTextColor.YELLOW);
           } 
         }return true;
       } 
@@ -278,13 +260,13 @@ public class AbilityInputListener implements Listener, CommandExecutor {
             paramPlayer.swingMainHand();
             paramPlayer.updateInventory();
             CooldownManager.setCooldown(paramPlayer.getUniqueId(), ScorchingBladeAbility.THUNDERSTRIKE_COOLDOWN_KEY, k);
-            BossBarManager.createBar(paramPlayer, "Holy Lance", k, ChatColor.YELLOW);
+            BossBarManager.createBar(paramPlayer, "Holy Lance", k, NamedTextColor.YELLOW);
           } 
         }return true;
       } 
     }{
       if (AltarSMP.areSimilar(itemStack, CustomItemRegistry.getNightpiercer())) {
-        Vampire.crimsonBite(paramPlayer);
+        VampireListener.crimsonBite(paramPlayer);
         return true;
       } 
     }{
@@ -298,7 +280,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
         }
         CooldownManager.setCooldown(paramPlayer.getUniqueId(), "charged_vulcan_powershot", 30.0D);
         paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
-        paramPlayer.sendMessage("§c§lCharged your Vulcan's Crossbow");
+        paramPlayer.sendMessage(Component.text("Charged your Vulcan's Crossbow", NamedTextColor.RED, TextDecoration.BOLD));
         return true;
       } 
     }{
@@ -310,7 +292,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
         if (NukeAbility.activateNuke(paramPlayer)) {
           int k = AltarSMP.getInstance().getConfig().getInt("nukeRemoteCooldownMinutes") * 60;
           CooldownManager.setCooldown(paramPlayer.getUniqueId(), "nukeRemoteCooldownMinutes", k);
-          BossBarManager.createBar(paramPlayer, "Nuke", k, ChatColor.YELLOW);
+          BossBarManager.createBar(paramPlayer, "Nuke", k, NamedTextColor.YELLOW);
         } 
         return true;
       } 
@@ -319,10 +301,10 @@ public class AbilityInputListener implements Listener, CommandExecutor {
         {
           paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
           if (!StrikerBowAbility.activeOrbitalShotPlayers.contains(paramPlayer.getUniqueId())) {
-            paramPlayer.sendActionBar("§e§lᴍᴏᴅᴇ: §cᴏʀʙɪᴛᴀʟ ꜱᴛʀɪᴋᴇ");
+            paramPlayer.sendActionBar(Component.text("ᴍᴏᴅᴇ: ", NamedTextColor.YELLOW, TextDecoration.BOLD).append(Component.text("ᴏʀʙɪᴛᴀʟ ꜱᴛʀɪᴋᴇ", NamedTextColor.RED)));
             StrikerBowAbility.activeOrbitalShotPlayers.add(paramPlayer.getUniqueId());
           } else {
-            paramPlayer.sendActionBar("§e§lᴍᴏᴅᴇ: §cꜱᴛᴀʙꜱʜᴏᴛ");
+            paramPlayer.sendActionBar(Component.text("ᴍᴏᴅᴇ: ", NamedTextColor.YELLOW, TextDecoration.BOLD).append(Component.text("ꜱᴛᴀʙꜱʜᴏᴛ", NamedTextColor.RED)));
             StrikerBowAbility.activeOrbitalShotPlayers.remove(paramPlayer.getUniqueId());
           } 
         }return true;
@@ -340,13 +322,13 @@ public class AbilityInputListener implements Listener, CommandExecutor {
       if (j != -1)
         {
           if (CustomItem.countInInventory(paramPlayer) > j) {
-            paramPlayer.sendMessage("§eThe legendary limit is " + j);
+            paramPlayer.sendMessage(Component.text("The legendary limit is " + j, NamedTextColor.YELLOW));
             paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
             return false;
           } 
         }}    ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
     {
-      if (Altars2AbilityDispatcher.dispatchOffhand(paramPlayer)) {
+      if (AltarS2AbilityDispatcher.dispatchOffhand(paramPlayer)) {
         paramPlayer.swingMainHand();
         paramPlayer.updateInventory();
         return true;
@@ -361,7 +343,9 @@ public class AbilityInputListener implements Listener, CommandExecutor {
                 int k = AltarSMP.getInstance().getConfig().getInt("CutlassParryDuration", 7);
                 paramPlayer.swingMainHand();
                 paramPlayer.updateInventory();
-                BossBarManager.createBar(paramPlayer, "§6§l!! §e§lParry x3 §6§l!!", k, ChatColor.YELLOW, BarColor.RED);
+                BossBarManager.createBar(paramPlayer, LegacyComponentSerializer.legacySection().serialize(
+                        Component.text("!! ", NamedTextColor.GOLD, TextDecoration.BOLD).append(Component.text("Parry x3", NamedTextColor.YELLOW, TextDecoration.BOLD))
+                                .append(Component.text(" !!", NamedTextColor.GOLD, TextDecoration.BOLD))), k, NamedTextColor.YELLOW, BarColor.RED);
                 CooldownManager.setCooldown(paramPlayer.getUniqueId(), "active_parry", k);
                 (new CutlassParryActivationTask(paramPlayer)).runTaskLater(AltarSMP.getInstance(), 20L * k - 1L);
                 return true;
@@ -382,7 +366,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
           if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), EarthGauntletAbility.mudslideCooldownKey))
             return true; 
         }
-        BossBarManager.createBar(paramPlayer, "Mudslide", EarthGauntletAbility.mudslideCooldown, ChatColor.YELLOW);
+        BossBarManager.createBar(paramPlayer, "Mudslide", EarthGauntletAbility.mudslideCooldown, NamedTextColor.YELLOW);
         CooldownManager.setCooldown(paramPlayer.getUniqueId(), EarthGauntletAbility.mudslideCooldownKey, EarthGauntletAbility.mudslideCooldown);
         EarthGauntletAbility.activateMeteorStrike(paramPlayer);
         return true;
@@ -395,7 +379,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
               if (!CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "StalwartAbsorption")) {
                 paramPlayer.updateInventory();
                 PaladinEarthAbility.activateStalwartAbsorption(paramPlayer);
-                BossBarManager.createBar(paramPlayer, "Stalwart Absorption", PaladinEarthAbility.STALWART_ABSORPTION_DURATION, ChatColor.GREEN);
+                BossBarManager.createBar(paramPlayer, "Stalwart Absorption", PaladinEarthAbility.STALWART_ABSORPTION_DURATION, NamedTextColor.GREEN);
                 return true;
               } 
               return true;
@@ -409,7 +393,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
         }paramPlayer.updateInventory();
         ShadeSoul.castHolyLance(paramPlayer);
         CooldownManager.setCooldown(paramPlayer.getUniqueId(), ShadeSoul.slashPart, ShadeSoul.cycloneSlashCooldown);
-        BossBarManager.createBar(paramPlayer, "Cyclone Slash", ShadeSoul.cycloneSlashCooldown, ChatColor.YELLOW);
+        BossBarManager.createBar(paramPlayer, "Cyclone Slash", ShadeSoul.cycloneSlashCooldown, NamedTextColor.YELLOW);
         return true;
       } 
     }{
@@ -420,7 +404,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
     }{
       if (AltarSMP.areSimilar(itemStack, CustomItemRegistry.getWindweaver())) {
         {
-          if (WindweaverAbility.isCharging.getOrDefault(paramPlayer.getUniqueId(), Boolean.FALSE)) {
+          if (WindweaverAbility.isCharging.getOrDefault(paramPlayer.getUniqueId(), false)) {
             WindweaverAbility.activateWindGust(paramPlayer);
           } else {
             WindweaverAbility.startWindGustCharge(paramPlayer);
@@ -445,7 +429,7 @@ public class AbilityInputListener implements Listener, CommandExecutor {
         paramPlayer.updateInventory();
         EchoAbility.activateEchoShriek(paramPlayer);
         CooldownManager.setCooldown(paramPlayer.getUniqueId(), EchoAbility.ECHO_SHRIEK_COOLDOWN_KEY, i);
-        BossBarManager.createBar(paramPlayer, "Echo Shriek", i, ChatColor.YELLOW);
+        BossBarManager.createBar(paramPlayer, "Echo Shriek", i, NamedTextColor.YELLOW);
         return true;
       } 
     }{
@@ -523,11 +507,11 @@ public class AbilityInputListener implements Listener, CommandExecutor {
             return true; 
         }paramPlayer.swingMainHand();
         paramPlayer.updateInventory();
-        Vampire.transformIntoBat(paramPlayer);
+        VampireListener.transformIntoBat(paramPlayer);
         paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_BAT_AMBIENT, 1.0F, 1.0F);
         int k = AltarSMP.getInstance().getConfig().getInt("transformationCooldown", 30);
         CooldownManager.setCooldown(paramPlayer.getUniqueId(), "batFlight", k);
-        BossBarManager.createBar(paramPlayer, "Transformation", k, ChatColor.YELLOW);
+        BossBarManager.createBar(paramPlayer, "Transformation", k, NamedTextColor.YELLOW);
         return true;
       } 
     }{
@@ -535,10 +519,10 @@ public class AbilityInputListener implements Listener, CommandExecutor {
         {
           paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
           if (!StrikerBowAbility.activeOrbitalShotPlayers.contains(paramPlayer.getUniqueId())) {
-            paramPlayer.sendActionBar("§e§lᴍᴏᴅᴇ: §cᴏʀʙɪᴛᴀʟ ꜱᴛʀɪᴋᴇ");
+            paramPlayer.sendActionBar(Component.text("ᴍᴏᴅᴇ: ", NamedTextColor.YELLOW, TextDecoration.BOLD).append(Component.text("ᴏʀʙɪᴛᴀʟ ꜱᴛʀɪᴋᴇ", NamedTextColor.RED)));
             StrikerBowAbility.activeOrbitalShotPlayers.add(paramPlayer.getUniqueId());
           } else {
-            paramPlayer.sendActionBar("§e§lᴍᴏᴅᴇ: §cꜱᴛᴀʙꜱʜᴏᴛ");
+            paramPlayer.sendActionBar(Component.text("ᴍᴏᴅᴇ: ", NamedTextColor.YELLOW, TextDecoration.BOLD).append(Component.text("ꜱᴛᴀʙꜱʜᴏᴛ", NamedTextColor.RED)));
             StrikerBowAbility.activeOrbitalShotPlayers.remove(paramPlayer.getUniqueId());
           } 
         }return true;

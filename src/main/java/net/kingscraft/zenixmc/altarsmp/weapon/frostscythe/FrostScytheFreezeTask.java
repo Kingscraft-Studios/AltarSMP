@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.frostscythe;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 

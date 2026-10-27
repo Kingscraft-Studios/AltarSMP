@@ -1,10 +1,10 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.scorching;
 
+import net.kyori.adventure.util.TriState;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 public class BurningDamageTask extends BukkitRunnable {
@@ -28,19 +28,18 @@ public class BurningDamageTask extends BukkitRunnable {
 
   public void run() {
     if (this.ticks >= this.durationSeconds * 20) {
-      this.target.setVisualFire(false);
+      this.target.setVisualFire(TriState.FALSE);
       cancel();
       return;
-    } 
+    }
 
-    this.target.setVisualFire(true);
+    this.target.setVisualFire(TriState.TRUE);
     if (this.ticks % 20 == 0) {
       TrueDamage.apply(this.target, this.damage, this.attacker);
-      if (this.target instanceof Player) {
-        Player player = (Player)this.target;
+      if (this.target instanceof Player player) {
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT_ON_FIRE, 1.0F, 1.0F);
-      } 
-    } 
+      }
+    }
 
     this.ticks++;
   }

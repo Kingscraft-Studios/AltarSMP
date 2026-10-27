@@ -6,23 +6,22 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class FrostScytheBladeFormationTask extends BukkitRunnable {
-  int animationStep = 1;
+  int animationStep;
 
-  public final List bladeDisplays;
+  public final List<ItemDisplay> bladeDisplays;
 
   public final Player player;
 
-  public FrostScytheBladeFormationTask(List paramList, Player paramPlayer) {
+  public FrostScytheBladeFormationTask(List<ItemDisplay> paramList, Player paramPlayer) {
         this.bladeDisplays = paramList;
         this.player = paramPlayer;
         this.animationStep = 1;
     }
 
   public void run() {
-    ItemDisplay itemDisplay = (ItemDisplay)this.bladeDisplays.get(this.animationStep);
+    ItemDisplay itemDisplay = this.bladeDisplays.get(this.animationStep);
     double d = 1.5D;
     if (this.animationStep == 1)
       d = 2.0D; 

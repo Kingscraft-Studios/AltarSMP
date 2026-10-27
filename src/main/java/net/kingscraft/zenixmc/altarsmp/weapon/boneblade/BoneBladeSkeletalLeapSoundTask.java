@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.weapon.boneblade;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BoneBladeSkeletalLeapSoundTask extends BukkitRunnable {
   public final Player player;

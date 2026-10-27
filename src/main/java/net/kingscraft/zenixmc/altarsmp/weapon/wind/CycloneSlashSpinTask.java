@@ -3,10 +3,9 @@ package net.kingscraft.zenixmc.altarsmp.weapon.wind;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class CycloneSlashSpinTask extends BukkitRunnable {
-  double scale = 7.5D;
+  double scale;
 
   public int ticks;
 

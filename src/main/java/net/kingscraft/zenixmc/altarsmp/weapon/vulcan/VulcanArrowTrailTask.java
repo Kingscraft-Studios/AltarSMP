@@ -4,7 +4,6 @@ import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Arrow;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class VulcanArrowTrailTask extends BukkitRunnable {
   public int ticksLived;

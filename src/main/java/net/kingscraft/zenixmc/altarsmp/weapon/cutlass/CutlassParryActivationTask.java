@@ -2,8 +2,7 @@ package net.kingscraft.zenixmc.altarsmp.weapon.cutlass;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 
 public class CutlassParryActivationTask extends BukkitRunnable {
   public final Player player;

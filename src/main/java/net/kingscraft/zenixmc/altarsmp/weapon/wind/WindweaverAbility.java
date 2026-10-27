@@ -1,8 +1,9 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.wind;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -13,14 +14,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 
 public class WindweaverAbility implements Listener {
   public static AltarSMP plugin;
@@ -62,11 +62,9 @@ public class WindweaverAbility implements Listener {
       if (itemMeta == null)
         return false; 
     }{
-      if (!itemMeta.hasCustomModelData())
-        return false; 
-    }{
-
-    }return (itemMeta.getCustomModelData() == 12);
+      List<Float> customModelData = itemMeta.getCustomModelDataComponent().getFloats();
+      return !customModelData.isEmpty() && customModelData.getFirst() == 12;
+    }
   }
 
   public static boolean isWindweaverSwordInOffHand(Player paramPlayer) {
@@ -85,11 +83,9 @@ public class WindweaverAbility implements Listener {
       if (itemMeta == null)
         return false; 
     }{
-      if (!itemMeta.hasCustomModelData())
-        return false; 
-    }{
-
-    }return (itemMeta.getCustomModelData() == 12);
+      List<Float> customModelData = itemMeta.getCustomModelDataComponent().getFloats();
+      return !customModelData.isEmpty() && customModelData.getFirst() == 12;
+    }
   }
 
   @EventHandler
@@ -103,7 +99,7 @@ public class WindweaverAbility implements Listener {
         }}{
       if (!paramPlayerToggleSneakEvent.isSneaking())
         {
-          if (((Boolean) isCharging.getOrDefault(player.getUniqueId(), Boolean.valueOf(false))).booleanValue()) {
+          if (isCharging.getOrDefault(player.getUniqueId(), false)) {
             cancelWindGustCharge(player);
             BossBarManager.removeBar(player, "Charging");
           } 
@@ -115,7 +111,7 @@ public class WindweaverAbility implements Listener {
         return; 
     }
       CooldownManager.setCooldown(paramPlayer.getUniqueId(), "windleap", DASH_COOLDOWN);
-    BossBarManager.createBar(paramPlayer, "Wind Leap", DASH_COOLDOWN, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Wind Leap", DASH_COOLDOWN, NamedTextColor.YELLOW);
     Location location = paramPlayer.getLocation();
     Vector vector1 = paramPlayer.getLocation().getDirection().normalize();
     double d = AltarSMP.getInstance().getConfig().getDouble("windweaver.dashStrength", 2.0D);
@@ -124,11 +120,11 @@ public class WindweaverAbility implements Listener {
     paramPlayer.getWorld().spawnParticle(Particle.GUST, location, 20, 0.3D, 0.1D, 0.3D, 0.05D);
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_WIND_CHARGE_WIND_BURST, 1.0F, 1.2F);
     paramPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, SPEED_BOOST_DURATION * 20, 3, true, true, true));
-    (new WindLeapParticleTask(paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 2L);
+    (new WindLeapParticleTask(paramPlayer)).runTaskTimer(AltarSMP.getInstance(), 0L, 2L);
   }
 
   public static void spawnWindParticles(Location paramLocation, int paramInt1, Particle paramParticle, Player paramPlayer, int paramInt2) {
-    (new WindGustExpansionTask(paramInt1, paramLocation, paramParticle, paramPlayer, paramInt2)).runTaskTimer((Plugin) plugin, 0L, 1L);
+    (new WindGustExpansionTask(paramInt1, paramLocation, paramParticle, paramPlayer, paramInt2)).runTaskTimer(plugin, 0L, 1L);
   }
 
   public static void activateWindGust(Player paramPlayer) {
@@ -136,11 +132,11 @@ public class WindweaverAbility implements Listener {
       if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "windgust"))
         return; 
     }UUID uUID = paramPlayer.getUniqueId();
-    int i = ((Integer) gustChargeLevels.getOrDefault(uUID, Integer.valueOf(0))).intValue();
+    int i = gustChargeLevels.getOrDefault(uUID, 0);
     spawnWindParticles(paramPlayer.getLocation(), 3 + i, Particle.CLOUD, paramPlayer, i + GUST_STRENGTH);
     BossBarManager.removeBar(paramPlayer, "Charging");
     CooldownManager.setCooldown(uUID, "windgust", GUST_COOLDOWN);
-    BossBarManager.createBar(paramPlayer, "Windweaver Gust", GUST_COOLDOWN, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Windweaver Gust", GUST_COOLDOWN, NamedTextColor.YELLOW);
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_WIND_CHARGE_WIND_BURST, 2.0F, 0.8F);
     cancelWindGustCharge(paramPlayer);
   }
@@ -151,23 +147,23 @@ public class WindweaverAbility implements Listener {
       if (CooldownManager.isOnCooldown(uUID, "windgust"))
         return; 
     }{
-      if (((Boolean) isCharging.getOrDefault(uUID, Boolean.valueOf(false))).booleanValue())
+      if (isCharging.getOrDefault(uUID, false))
         return; 
     }
-    isCharging.put(uUID, Boolean.valueOf(true));
-    gustChargeLevels.put(uUID, Integer.valueOf(0));
+    isCharging.put(uUID, true);
+    gustChargeLevels.put(uUID, 0);
     WindGustChargeTask windGustChargeTask = new WindGustChargeTask(uUID, paramPlayer);
-    windGustChargeTask.runTaskTimer((Plugin) plugin, 0L, 1L);
+    windGustChargeTask.runTaskTimer(plugin, 0L, 1L);
     chargeTasks.put(uUID, windGustChargeTask);
   }
 
   public static void cancelWindGustCharge(Player paramPlayer) {
     UUID uUID = paramPlayer.getUniqueId();
     {
-      isCharging.put(uUID, Boolean.valueOf(false));
+      isCharging.put(uUID, false);
       gustChargeStartTimes.remove(uUID);
       if (chargeTasks.containsKey(uUID)) {
-        ((BukkitRunnable) chargeTasks.get(uUID)).cancel();
+        chargeTasks.get(uUID).cancel();
         chargeTasks.remove(uUID);
       } 
     }}

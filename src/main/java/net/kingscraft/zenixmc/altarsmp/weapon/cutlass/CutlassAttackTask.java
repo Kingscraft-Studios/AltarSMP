@@ -2,7 +2,6 @@ package net.kingscraft.zenixmc.altarsmp.weapon.cutlass;
 
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,19 +27,19 @@ class CutlassAttackTask extends BukkitRunnable {
 
   public void run() {
     if (this.ticks >= 20.0D) {
-      this.player.getWorld().playSound((Entity)this.player, Sound.ENTITY_BREEZE_CHARGE, 1.0F, 1.0F);
+      this.player.getWorld().playSound(this.player, Sound.ENTITY_BREEZE_CHARGE, 1.0F, 1.0F);
       CutlassAbility.startCutlassParry(this.player);
       cancel();
       return;
     } 
 
-    LivingEntity livingEntity = CutlassAbility.findTargetEntity((LivingEntity)this.player, 3.0D);
+    LivingEntity livingEntity = CutlassAbility.findTargetEntity(this.player, 3.0D);
     if (this.ticks % 4 == 0)
-      CombatEffectUtils.spawnDualParticleRings((LivingEntity)this.player, Particle.ELECTRIC_SPARK, Particle.CRIT, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2.0F);
+      CombatEffectUtils.spawnDualParticleRings(this.player, Particle.ELECTRIC_SPARK, Particle.CRIT, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2.0F);
 
     if (livingEntity != null) {
       livingEntity.setNoDamageTicks(0);
-      livingEntity.damage(AltarSMP.getInstance().getConfig().getDouble(CUTLASS_DAMAGE_CONFIG_KEY, 12.0D) / 4.0D, (Entity)this.player);
+      livingEntity.damage(AltarSMP.getInstance().getConfig().getDouble(CUTLASS_DAMAGE_CONFIG_KEY, 12.0D) / 4.0D, this.player);
     } 
 
     this.player.swingMainHand();

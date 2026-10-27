@@ -9,12 +9,11 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class WindGustExpansionTask extends BukkitRunnable {
   public double radius;
 
-  HashSet<UUID> affectedEntities = new HashSet<>();
+  HashSet<UUID> affectedEntities;
 
   public final int durationTicks;
 
@@ -33,7 +32,7 @@ class WindGustExpansionTask extends BukkitRunnable {
         this.player = paramPlayer;
         this.gustStrength = paramInt2;
         this.radius = 0.0;
-        this.affectedEntities = new HashSet();
+        this.affectedEntities = new HashSet<>();
     }
 
   public void run() {
@@ -49,12 +48,11 @@ class WindGustExpansionTask extends BukkitRunnable {
       this.center.getWorld().spawnParticle(this.particle, location, 1, 0.0D, 0.0D, 0.0D, 0.0D);
     } 
     for (Entity entity : this.center.getWorld().getNearbyEntities(this.center, this.radius + 1.0D, 3.0D, this.radius + 1.0D)) {
-      if (entity instanceof LivingEntity)
+      if (entity instanceof LivingEntity livingEntity)
         {
           if (entity != this.player && !this.affectedEntities.contains(entity.getUniqueId())) {
-            LivingEntity livingEntity = (LivingEntity)entity;
-            if (livingEntity.getWorld() != this.center.getWorld())
-              continue; 
+              if (livingEntity.getWorld() != this.center.getWorld())
+                continue;
 
             double d1 = livingEntity.getLocation().distance(this.center);
             if (d1 <= this.radius + 0.5D && d1 >= this.radius - 0.5D) {
@@ -62,7 +60,7 @@ class WindGustExpansionTask extends BukkitRunnable {
               vector.setY(0.5D);
               vector.multiply(1.5D + this.gustStrength * 0.2D);
               livingEntity.setVelocity(vector);
-              livingEntity.damage(2.0D + this.gustStrength * 0.5D, (Entity)this.player);
+              livingEntity.damage(2.0D + this.gustStrength * 0.5D, this.player);
               this.affectedEntities.add(entity.getUniqueId());
             } 
 

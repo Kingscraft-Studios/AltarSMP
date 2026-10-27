@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -15,6 +14,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemType;
@@ -42,7 +44,8 @@ public class AltarManager {
     {
       this.altarsFile = new File(this.plugin.getDataFolder(), "altars.yml");
       if (!this.altarsFile.exists()) {
-        this.altarsFile.getParentFile().mkdirs();
+        if (this.altarsFile.getParentFile().mkdirs())
+          plugin.getLogger().severe("Failed to create Directory");
         this.plugin.saveResource("altars.yml", false);
       } 
     }this.altarsConfig = YamlConfiguration.loadConfiguration(this.altarsFile);
@@ -56,7 +59,7 @@ public class AltarManager {
     try {
       this.altarsConfig.save(this.altarsFile);
     } catch (IOException iOException) {
-      iOException.printStackTrace();
+      plugin.getLogger().severe("An Error Occurred while trying to save altars.yml: " + iOException);
     } 
   }
 
@@ -78,29 +81,49 @@ public class AltarManager {
       }} 
   }
 
-  public String getMaterialDisplayName(String materialName) {
-    {
-      if (getItem(materialName).getType() != Material.NETHER_STAR)
-        return getItem(materialName).getItemMeta().getDisplayName();
-    }String str = materialName.toLowerCase().replace("_", " ");
+  public static Component getItemDisplayName(ItemStack itemStack) {
+    if (itemStack != null) {
+      ItemMeta itemMeta = itemStack.getItemMeta();
+      if (itemMeta != null && itemMeta.hasDisplayName()) {
+        Component displayName = itemMeta.displayName();
+        if (displayName != null)
+          return displayName;
+      }
+      return Component.text(formatMaterialName(itemStack.getType().name()));
+    }
+    return Component.empty();
+  }
+
+  public static Component getMaterialDisplayName(String materialName) {
+    ItemStack itemStack = getItem(materialName);
+    if (itemStack.getType() != Material.NETHER_STAR)
+      return getItemDisplayName(itemStack);
+    return Component.text(formatMaterialName(materialName));
+  }
+
+  private static String formatMaterialName(String materialName) {
     StringBuilder stringBuilder = new StringBuilder();
-    for (String str1 : str.split(" "))
-      stringBuilder.append(Character.toUpperCase(str1.charAt(0))).append(str1.substring(1)).append(" "); 
+    for (String str : materialName.toLowerCase().replace("_", " ").split(" ")) {
+      if (!str.isEmpty())
+        stringBuilder.append(Character.toUpperCase(str.charAt(0))).append(str.substring(1)).append(' ');
+    }
     return stringBuilder.toString().trim();
   }
 
   public Altar loadAltar(String paramString, ConfigurationSection paramConfigurationSection) {
-    String str = AltarController.createItemStack(paramString).getItemMeta().getDisplayName();
+    Component displayName = getItemDisplayName(AltarController.createItemStack(paramString));
     double d = paramConfigurationSection.getDouble("hologram-height", 3.0D);
-    List<String> arrayList = new ArrayList<>();
+    List<Component> arrayList = new ArrayList<>();
     List<Map<?, ?>> list = paramConfigurationSection.getMapList("recipes." + paramString + ".ingredients");
     for (Map<?, ?> map : list) {
       String str1 = map.get("material").toString();
-      int i = (Integer) map.get("amount");
-      String str2 = getMaterialDisplayName(str1);
-      arrayList.add("§7" + i + "x §f" + str2);
+      int i = (int) map.get("amount");
+      arrayList.add(Component.text()
+          .append(Component.text(i + "x ", NamedTextColor.GRAY))
+          .append(getMaterialDisplayName(str1).colorIfAbsent(NamedTextColor.WHITE))
+          .build());
     } 
-    arrayList.add(str);
+    arrayList.add(displayName);
     Map<String, AltarRecipe> hashMap = new HashMap<>();
     ConfigurationSection configurationSection = paramConfigurationSection.getConfigurationSection("recipes");
     if (configurationSection != null)
@@ -113,7 +136,7 @@ public class AltarManager {
               hashMap.put(str1, altarRecipe);
           }} 
       }  
-    return new Altar(paramString, str, arrayList, hashMap, d);
+    return new Altar(paramString, displayName, arrayList, hashMap, d);
   }
 
   public AltarRecipe loadRecipe(String paramString, ConfigurationSection paramConfigurationSection) {
@@ -132,11 +155,11 @@ public class AltarManager {
           if (material == null)
             material = referenceItem.getType();
           ItemMeta referenceMeta = referenceItem.getItemMeta();
-          int customModelData = referenceMeta != null && referenceMeta.hasCustomModelData() ? referenceMeta.getCustomModelData() : 0;
-          String itemModel = referenceMeta != null && referenceMeta.hasItemModel() ? referenceMeta.getItemModel().toString() : null;
+          int customModelData = getCustomModelData(referenceMeta);
+          String itemModel = (referenceMeta != null && referenceMeta.hasItemModel()) ? referenceMeta.getItemModel().toString() : null;
           int bool;
           {
-            bool = map1.containsKey("amount") ? (Integer) map1.get("amount") : 1;
+            bool = map1.containsKey("amount") ? (int) map1.get("amount") : 1;
           }
           altarRecipeBuilder.ingredient(material, bool, customModelData, itemModel);
         } 
@@ -144,11 +167,21 @@ public class AltarManager {
     return altarRecipeBuilder.build();
   }
 
-  public static int getCustomModelData(String paramString) {
-    {
-      if (getItem(paramString).getItemMeta().hasCustomModelData())
-        return getItem(paramString).getItemMeta().getCustomModelData();
-    }return 0;
+  public static void applyCustomModelData(ItemMeta itemMeta, int customModelData) {
+    if (itemMeta == null || customModelData <= 0)
+      return;
+    CustomModelDataComponent component = itemMeta.getCustomModelDataComponent();
+    component.setFloats(List.of((float) customModelData));
+    itemMeta.setCustomModelDataComponent(component);
+  }
+
+  public static int getCustomModelData(ItemMeta itemMeta) {
+    if (itemMeta == null)
+      return 0;
+    CustomModelDataComponent component = itemMeta.getCustomModelDataComponent();
+    if (component.getFloats() != null && !component.getFloats().isEmpty())
+      return Math.round(component.getFloats().getFirst());
+    return 0;
   }
 
   public static ItemStack getItem(String paramString) {

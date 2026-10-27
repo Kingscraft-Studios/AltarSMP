@@ -1,10 +1,12 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.boneblade;
 
-import org.bukkit.ChatColor;
+import java.time.Duration;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.title.Title;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BoneCageStunTitleTask extends BukkitRunnable {
   public final LivingEntity target;
@@ -21,9 +23,11 @@ class BoneCageStunTitleTask extends BukkitRunnable {
       return;
     } 
 
-    if (this.target instanceof Player) {
-      Player player = (Player)this.target;
-      player.sendTitle("", String.valueOf(ChatColor.YELLOW) + STUNNED_MESSAGE, 0, 10, 0);
+    if (this.target instanceof Player player) {
+        player.showTitle(Title.title(
+          Component.empty(),
+          Component.text(STUNNED_MESSAGE, NamedTextColor.YELLOW),
+          Title.Times.times(Duration.ZERO, Duration.ofMillis(500), Duration.ZERO)));
     } 
   }
 

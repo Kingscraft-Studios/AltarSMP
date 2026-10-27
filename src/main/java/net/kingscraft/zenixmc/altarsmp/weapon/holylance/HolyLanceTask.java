@@ -8,13 +8,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.weapon.shade.ShadeSoul;
 
 public class HolyLanceTask extends BukkitRunnable {
-  final double UNUSED_LITERAL = 1.5D;
 
   public int ticks;
 
@@ -34,8 +32,8 @@ public class HolyLanceTask extends BukkitRunnable {
     if (this.ticks >= 6.0D) {
       this.display.setInterpolationDelay(0);
       this.display.setInterpolationDuration(6);
-      (new HolyLanceCollapseTask(this)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
-      (new HolyLanceDespawnTask(this)).runTaskLater((Plugin)AltarSMP.getInstance(), 20L);
+      (new HolyLanceCollapseTask(this)).runTaskLater(AltarSMP.getInstance(), 2L);
+      (new HolyLanceDespawnTask(this)).runTaskLater(AltarSMP.getInstance(), 20L);
       cancel();
       return;
     }
@@ -55,13 +53,12 @@ public class HolyLanceTask extends BukkitRunnable {
       } 
     } 
     for (Entity entity : this.player.getLocation().getNearbyEntities(3.0D, 3.0D, 3.0D)) {
-      if (entity instanceof LivingEntity) {
-        LivingEntity livingEntity = (LivingEntity)entity;
-        if (entity.equals(this.player))
-          continue;
+      if (entity instanceof LivingEntity livingEntity) {
+          if (entity.equals(this.player))
+            continue;
 
         this.player.getWorld().playSound(this.player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2.0F, 1.0F);
-        livingEntity.damage(AltarSMP.getInstance().getConfig().getDouble(DAMAGE_CONFIG_KEY, 6.0D), (Entity)this.player);
+        livingEntity.damage(AltarSMP.getInstance().getConfig().getDouble(DAMAGE_CONFIG_KEY, 6.0D), this.player);
       } 
     }
     if (this.ticks == 0)

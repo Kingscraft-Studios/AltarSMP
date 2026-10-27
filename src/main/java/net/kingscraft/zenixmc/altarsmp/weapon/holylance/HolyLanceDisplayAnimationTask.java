@@ -5,16 +5,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
-import org.joml.Quaternionfc;
 import org.joml.Vector3f;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class HolyLanceDisplayAnimationTask extends BukkitRunnable {
   public int ticks;
 
-  float rotationAngle = 0.0F;
+  float rotationAngle;
 
-  float scale = 1.5F;
+  float scale;
 
   public final ItemDisplay itemDisplay;
 
@@ -45,7 +43,7 @@ public class HolyLanceDisplayAnimationTask extends BukkitRunnable {
 
           Quaternionf quaternionf = new Quaternionf();
           quaternionf.rotateY(this.rotationAngle);
-          Transformation transformation = new Transformation(new Vector3f(0.0F, 15.0F, 0.0F), new AxisAngle4f((Quaternionfc)quaternionf), new Vector3f(this.scale, 30.0F, this.scale), new AxisAngle4f(0.0F, 0.0F, 0.0F, 0.0F));
+          Transformation transformation = new Transformation(new Vector3f(0.0F, 15.0F, 0.0F), new AxisAngle4f(quaternionf), new Vector3f(this.scale, 30.0F, this.scale), new AxisAngle4f(0.0F, 0.0F, 0.0F, 0.0F));
           this.itemDisplay.setTransformation(transformation);
           this.ticks++;
           return;

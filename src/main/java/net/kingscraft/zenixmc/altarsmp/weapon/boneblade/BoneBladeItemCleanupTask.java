@@ -3,12 +3,11 @@ package net.kingscraft.zenixmc.altarsmp.weapon.boneblade;
 import java.util.List;
 import org.bukkit.entity.Item;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BoneBladeItemCleanupTask extends BukkitRunnable {
   public final List<Item> boneItems;
 
-  public BoneBladeItemCleanupTask(List paramList) {
+  public BoneBladeItemCleanupTask(List<Item> paramList) {
         this.boneItems = paramList;
     }
 

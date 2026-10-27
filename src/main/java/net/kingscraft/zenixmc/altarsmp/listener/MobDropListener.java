@@ -2,8 +2,10 @@ package net.kingscraft.zenixmc.altarsmp.listener;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -40,13 +42,10 @@ public class MobDropListener implements Listener {
                ItemStack var6 = new ItemStack(Material.PLAYER_HEAD);
                SkullMeta var7 = (SkullMeta)var6.getItemMeta();
                var7.setOwningPlayer(Bukkit.getOfflinePlayer(var2.getUniqueId()));
-               var7.setDisplayName(ChatColor.RESET + var2.getName() + "'s Head");
-               ArrayList var8 = new ArrayList();
-               String var10001 = String.valueOf(ChatColor.GOLD);
-               String var10002 = String.valueOf(ChatColor.YELLOW);
-               String var9 = var3.getName();
-               var8.add(var10001 + "Killed by " + var10002 + var9);
-               var7.setLore(var8);
+               var7.displayName(Component.text(var2.getName() + "'s Head"));
+               ArrayList<Component> var8 = new ArrayList<>();
+               var8.add(Component.text("Killed by ", NamedTextColor.GOLD).append(Component.text(var3.getName(), NamedTextColor.YELLOW)));
+               var7.lore(var8);
                var6.setItemMeta(var7);
                if (AltarSMP.getInstance().getConfig().getBoolean("give_dropped_head_to_killer", true)) {
                   var3.getInventory().addItem(var6);

@@ -5,7 +5,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
@@ -47,7 +46,7 @@ class FrostScytheLaunchTask extends BukkitRunnable {
     transformation.getLeftRotation().rotateZ((float)Math.toRadians(90.0D));
     itemDisplay.setTransformation(transformation);
     Vector vector2 = vector1.multiply(this.throwPower);
-    (new FrostScytheProjectileTask(this, vector2, itemDisplay)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new FrostScytheProjectileTask(this, vector2, itemDisplay)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
 }

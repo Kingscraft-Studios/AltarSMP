@@ -13,7 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightfallListener;
+import net.kingscraft.zenixmc.altarsmp.weapon.knightfall.KnightfallListener;
 import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
@@ -80,12 +80,10 @@ public class HammerProjectileTask extends BukkitRunnable {
     this.world.spawnParticle(Particle.DUST, this.currentLocation, 3, 0.1D, 0.1D, 0.1D, new Particle.DustOptions(Color.BLACK, 1.0F));
     this.world.spawnParticle(Particle.ELECTRIC_SPARK, this.currentLocation, 3, 0.1D, 0.1D, 0.1D, 0.0D);
     for (Entity entity : this.world.getNearbyEntities(this.currentLocation, 1.0D, 1.0D, 1.0D)) {
-      if (entity instanceof LivingEntity && entity != this.thrower) {
-        LivingEntity livingEntity = (LivingEntity)entity;
-        if (livingEntity instanceof Player) {
-          Player player = (Player)livingEntity;
-          if (AltarSMP.isTrusted(this.thrower, player))
-            continue; 
+      if (entity instanceof LivingEntity livingEntity && entity != this.thrower) {
+          if (livingEntity instanceof Player player) {
+            if (AltarSMP.isTrusted(this.thrower, player))
+                continue;
           if (this.stunShield) {
             player.setCooldown(Material.SHIELD, this.shieldStunTicks);
             player.clearActiveItem();

@@ -1,12 +1,11 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.meteor;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.weapon.earth.EarthGauntletAbility;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.weapon.gauntlet.EarthGauntletAbility;
 
 public class MeteorStrikeCooldownTask extends BukkitRunnable {
   public final Player player;
@@ -18,7 +17,7 @@ public class MeteorStrikeCooldownTask extends BukkitRunnable {
   public void run() {
     {
       if (CooldownManager.isOnCooldown(this.player.getUniqueId(), "used_meteor")) {
-        BossBarManager.createBar(this.player, "Meteor Strike", EarthGauntletAbility.meteorStrikeCooldown, ChatColor.YELLOW);
+        BossBarManager.createBar(this.player, "Meteor Strike", EarthGauntletAbility.meteorStrikeCooldown, NamedTextColor.YELLOW);
         CooldownManager.setCooldown(this.player.getUniqueId(), EarthGauntletAbility.meteorStrikeCooldownKey, EarthGauntletAbility.meteorStrikeCooldown);
       } 
     }}

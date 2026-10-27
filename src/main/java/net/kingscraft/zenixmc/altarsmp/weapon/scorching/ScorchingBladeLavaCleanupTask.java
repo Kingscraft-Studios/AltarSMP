@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.weapon.scorching;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class ScorchingBladeLavaCleanupTask extends BukkitRunnable {
   public int cleanupIndex;
@@ -22,7 +21,7 @@ class ScorchingBladeLavaCleanupTask extends BukkitRunnable {
       return;
     } 
 
-    Block block = (Block)this.parentTask.lavaBlocks.get(this.totalBlocks - this.cleanupIndex - 1);
+    Block block = this.parentTask.lavaBlocks.get(this.totalBlocks - this.cleanupIndex - 1);
     if (block.getType() == Material.LAVA)
       block.setType(Material.AIR); 
 

@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.witherbone;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import org.bukkit.scheduler.BukkitRunnable;
 
 class CleansingBlockCleanupTask extends BukkitRunnable {

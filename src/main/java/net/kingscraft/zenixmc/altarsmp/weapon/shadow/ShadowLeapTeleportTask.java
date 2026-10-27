@@ -1,16 +1,15 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.shadow;
 
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 
 class ShadowLeapTeleportTask extends BukkitRunnable {
   public final Player player;
@@ -31,7 +30,7 @@ class ShadowLeapTeleportTask extends BukkitRunnable {
       this.player.teleport(this.targetLocation);
       this.player.setVelocity(vector1);
       if (!CooldownManager.isOnCooldown(this.player.getUniqueId(), "shadwoleap")) {
-        BossBarManager.createBar(this.player, "Shadow Leap", ShadowBladeAbility.leapCooldown, ChatColor.YELLOW);
+        BossBarManager.createBar(this.player, "Shadow Leap", ShadowBladeAbility.leapCooldown, NamedTextColor.YELLOW);
         CooldownManager.setCooldown(this.player.getUniqueId(), "shadwoleap", ShadowBladeAbility.leapCooldown);
       } 
     }{
@@ -40,7 +39,7 @@ class ShadowLeapTeleportTask extends BukkitRunnable {
     }for (Player player : Bukkit.getOnlinePlayers()) {
       {
         if (!player.equals(this.player))
-          player.showPlayer((Plugin)AltarSMP.getInstance(), this.player);
+          player.showPlayer(AltarSMP.getInstance(), this.player);
       }} 
     this.player.removePotionEffect(PotionEffectType.INVISIBILITY);
   }

@@ -7,21 +7,21 @@ import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.util.BlockAreaUtils;
 
 class ScorchingBladeProjectileTask extends BukkitRunnable {
-  final int MAX_TICKS = 5;
 
   public int ticks;
 
-  public final Set fallingBlocks;
+  public final Set<FallingBlock> fallingBlocks;
 
   public final Player player;
 
-  public ScorchingBladeProjectileTask(ScorchingBladeAbility scorchingBladeAbility, Set paramSet, Player paramPlayer) {
+  public ScorchingBladeProjectileTask(Set<FallingBlock> paramSet, Player paramPlayer) {
         this.fallingBlocks = paramSet;
         this.player = paramPlayer;
         this.ticks = 0;
@@ -29,7 +29,7 @@ class ScorchingBladeProjectileTask extends BukkitRunnable {
 
   public void run() {
     if (this.ticks >= 100) {
-      for (FallingBlock fallingBlock : (Iterable<FallingBlock>)(Iterable<?>)this.fallingBlocks)
+      for (FallingBlock fallingBlock : this.fallingBlocks)
         fallingBlock.remove(); 
       cancel();
       return;
@@ -55,16 +55,10 @@ class ScorchingBladeProjectileTask extends BukkitRunnable {
     return paramBlock.getType().isSolid();
   }
 
-  public static boolean isTargetableEntity(Player paramPlayer, Entity paramEntity) {
-    if (paramEntity instanceof org.bukkit.entity.LivingEntity)
-      {
-        if (paramEntity != paramPlayer)
-          {
-            if (!AltarSMP.isTrusted(paramPlayer, paramEntity));
-          }  
-      }  
-
-    return false;
+  public static boolean isTargetableEntity(Player player, Entity entity) {
+    return entity instanceof LivingEntity
+            && entity != player
+            && !AltarSMP.isTrusted(player, entity);
   }
 
 }

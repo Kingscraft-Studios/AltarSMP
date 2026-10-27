@@ -3,11 +3,9 @@ package net.kingscraft.zenixmc.altarsmp.weapon.precision;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.weapon.shade.ShadeSoul;
 
 public class SlashSwingTask extends BukkitRunnable {
-  final int UNUSED_LITERAL = 1;
 
   public int ticks;
 

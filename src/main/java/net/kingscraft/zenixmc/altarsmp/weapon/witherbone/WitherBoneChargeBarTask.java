@@ -1,9 +1,10 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.witherbone;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class WitherBoneChargeBarTask extends BukkitRunnable {
 
@@ -16,15 +17,11 @@ class WitherBoneChargeBarTask extends BukkitRunnable {
       }{
         if (!WitherBoneAbility.hasWitheredBoneBlade(player))
           return; 
-      }int i = ((Integer) WitherBoneAbility.cleansingChargeBars.getOrDefault(player.getUniqueId(), Integer.valueOf(0))).intValue();
-      String str = "§f☠ -§7";
-      for (int b = 1; b < WitherBoneAbility.cleansingRequiredBars + 1; b++) {
-        String str1 = "§7";
-        if (b <= i)
-          str1 = "§8"; 
-        str = str + str1 + "|";
-      } 
-      player.sendActionBar(str);
+      }int i = WitherBoneAbility.cleansingChargeBars.getOrDefault(player.getUniqueId(), 0);
+      Component chargeBar = Component.text("☠ -", NamedTextColor.WHITE);
+      for (int b = 1; b < WitherBoneAbility.cleansingRequiredBars + 1; b++)
+        chargeBar = chargeBar.append(Component.text("|", b <= i ? NamedTextColor.DARK_GRAY : NamedTextColor.GRAY));
+      player.sendActionBar(chargeBar);
     } 
   }
 

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -29,8 +28,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Transformation;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.event.contagion.ContagionRitualAnnouncementTask;
 import net.kingscraft.zenixmc.altarsmp.event.contagion.ContagionRitualBootSequenceTask;
 import net.kingscraft.zenixmc.altarsmp.event.contagion.ContagionRitualCoordinatesAnnouncementTask;
@@ -79,7 +82,7 @@ public class AltarRitualListener implements Listener {
     ItemStack itemStack = player.getInventory().getItemInMainHand();
     {
       if (AltarSMP.areSimilar(itemStack, CustomItemRegistry.getContagionSignal())) {
-        player.sendMessage("starting");
+        player.sendMessage(Component.text("starting"));
         itemStack.setAmount(itemStack.getAmount() - 1);
         paramPlayerInteractEvent.setCancelled(true);
         startContagionRitual(location, player);
@@ -101,7 +104,7 @@ public class AltarRitualListener implements Listener {
         return; 
     }    Iterator<AltarRecipe> iterator = altar.getRecipe().values().iterator();
     if (!iterator.hasNext()) {
-      player.sendMessage(ChatColor.RED + "No valid recipe found!");
+      player.sendMessage(Component.text("No valid recipe found!", NamedTextColor.RED));
       return;
     }
     while (iterator.hasNext()) {
@@ -162,7 +165,7 @@ public class AltarRitualListener implements Listener {
     animateContagionSignal(itemDisplay);
     TextDisplay textDisplay = (TextDisplay)world.spawnEntity(location.clone().add(0.0D, 2.5D, 0.0D), EntityType.TEXT_DISPLAY);
     textDisplay.setBillboard(Display.Billboard.CENTER);
-    textDisplay.setText("§a|".repeat(Math.max(0, CONTAGION_SIGNAL_HEALTH)));
+    textDisplay.text(Component.text("|".repeat(Math.max(0, CONTAGION_SIGNAL_HEALTH)), NamedTextColor.GREEN));
     Transformation transformation2 = textDisplay.getTransformation();
     transformation2.getTranslation().set(0.0F, 0.0F, 0.0F);
     textDisplay.setTransformation(transformation2);
@@ -172,7 +175,13 @@ public class AltarRitualListener implements Listener {
     interaction.setResponsive(false);
     int i = (int)(CONTAGION_RITUAL_DURATION * 60.0D * 20.0D);
     startContagionSequence(str1, paramLocation);
-    BossBar bossBar = Bukkit.createBossBar("§a§kaa §f" + str1 + " §aCONTAGION RITUAL §a§kaa", BarColor.PINK, BarStyle.SOLID);
+    Component bossBarTitle = Component.text()
+        .append(Component.text("aa ", NamedTextColor.GREEN, TextDecoration.OBFUSCATED))
+        .append(Component.text(str1, NamedTextColor.WHITE))
+        .append(Component.text(" CONTAGION RITUAL ", NamedTextColor.GREEN))
+        .append(Component.text("aa", NamedTextColor.GREEN, TextDecoration.OBFUSCATED))
+        .build();
+    BossBar bossBar = Bukkit.createBossBar(LegacyComponentSerializer.legacySection().serialize(bossBarTitle), BarColor.PINK, BarStyle.SOLID);
     int b2 = 5;
     String str3 = str1;
     (new ContagionSignalAnimationTask(interaction, bossBar, paramLocation, itemDisplay, textDisplay, i, str3, b2)).runTaskTimer(AltarSMP.getInstance(), 140L, 1L);
@@ -220,10 +229,13 @@ public class AltarRitualListener implements Listener {
 
   public static void startContagionSequence(String paramString, Location paramLocation) {
     for (Player player : Bukkit.getOnlinePlayers()) {
-      player.sendMessage(" ");
-      player.sendMessage("§8>> §a# SUCCESSFULLY DOCKED TO ALTAR");
-      player.sendMessage("§eBEGINNING BOOT SEQUENCE...");
-      player.sendMessage(" ");
+      player.sendMessage(Component.text(" "));
+      player.sendMessage(Component.text()
+          .append(Component.text(">> ", NamedTextColor.DARK_GRAY))
+          .append(Component.text("# SUCCESSFULLY DOCKED TO ALTAR", NamedTextColor.GREEN))
+          .build());
+      player.sendMessage(Component.text("BEGINNING BOOT SEQUENCE...", NamedTextColor.YELLOW));
+      player.sendMessage(Component.text(" "));
     } 
     (new ContagionRitualAnnouncementTask(paramString)).runTaskLater(AltarSMP.getInstance(), 40L);
     (new ContagionRitualCoordinatesAnnouncementTask(paramLocation)).runTaskLater(AltarSMP.getInstance(), 80L);
@@ -249,15 +261,15 @@ public class AltarRitualListener implements Listener {
         if (itemStack != null)
           for (Map.Entry<Object, Object> entry : hashMap.entrySet()) {
             {
-              if ((Integer) entry.getValue() <= 0)
+              if ((int) entry.getValue() <= 0)
                 continue; 
             }
             RecipeIngredient recipeIngredient = (RecipeIngredient)entry.getKey();
             if (recipeIngredient.matches(itemStack)) {
-              int i = Math.min((Integer) entry.getValue(), itemStack.getAmount());
+              int i = Math.min((int) entry.getValue(), itemStack.getAmount());
               {
                 itemStack.setAmount(itemStack.getAmount() - i);
-                hashMap.put(recipeIngredient, (Integer) entry.getValue() - i);
+                hashMap.put(recipeIngredient, (int) entry.getValue() - i);
                 if (itemStack.getAmount() <= 0)
                   playerInventory.setItem(b, null); 
               }} 

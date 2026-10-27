@@ -4,12 +4,9 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BloodHookTrailParticleTask extends BukkitRunnable {
   public int ticksElapsed;
-
-  final int duration = 100;
 
   public final Location startLocation;
 

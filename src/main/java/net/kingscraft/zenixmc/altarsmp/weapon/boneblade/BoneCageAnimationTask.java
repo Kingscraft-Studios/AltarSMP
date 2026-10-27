@@ -9,7 +9,6 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class BoneCageAnimationTask extends BukkitRunnable {
   public int ticks;
@@ -20,11 +19,11 @@ class BoneCageAnimationTask extends BukkitRunnable {
 
   public final int durationSeconds;
 
-  public final List cageDisplays;
+  public final List<ItemDisplay> cageDisplays;
 
   public final LivingEntity target;
 
-  public BoneCageAnimationTask(int paramInt, List paramList, LivingEntity paramLivingEntity) {
+  public BoneCageAnimationTask(int paramInt, List<ItemDisplay> paramList, LivingEntity paramLivingEntity) {
     this.durationSeconds = paramInt;
     this.durationTicks = this.durationSeconds * 20;
     this.cageDisplays = paramList;
@@ -36,20 +35,20 @@ class BoneCageAnimationTask extends BukkitRunnable {
   public void run() {
     this.ticks++;
     if (this.ticks >= this.durationTicks) {
-      ((List<ItemDisplay>)(List<?>)this.cageDisplays).forEach(Entity::remove);
+      this.cageDisplays.forEach(Entity::remove);
       BoneBladeAbility.boneCageDisplays.remove(this.target);
       cancel();
       return;
     } 
 
     Location location = this.target.getLocation().add(0.0D, 1.0D, 0.0D);
-    double d1 = this.ticks / this.durationTicks;
+    double d1 = (double) this.ticks / this.durationTicks;
     double d2 = 2.0D * (1.0D - d1);
     for (int b = 0; b < this.cageDisplays.size(); b++) {
       double d3 = this.rotationAngle + 6.283185307179586D * b / this.cageDisplays.size();
       double d4 = Math.cos(d3) * d2;
       double d5 = Math.sin(d3) * d2;
-      ItemDisplay itemDisplay = (ItemDisplay)this.cageDisplays.get(b);
+      ItemDisplay itemDisplay = this.cageDisplays.get(b);
       Location location1 = location.clone().add(d4, 0.0D, d5);
       itemDisplay.setTeleportDuration(3);
       itemDisplay.setInterpolationDelay(0);

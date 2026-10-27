@@ -1,21 +1,14 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.wind;
 
 import java.util.UUID;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
 
 class WindGustChargeTask extends BukkitRunnable {
   public int chargeTicks;
-
-  final int MAX_CHARGE_LEVEL = 7;
-
-  final int TICKS_PER_CHARGE_LEVEL = 20;
-
-  final int MAX_CHARGE_TICKS = 140;
 
   public final UUID playerId;
 
@@ -30,7 +23,7 @@ class WindGustChargeTask extends BukkitRunnable {
 
   public void run() {
     {
-      if (!((Boolean) WindweaverAbility.isCharging.getOrDefault(this.playerId, Boolean.valueOf(false))).booleanValue()) {
+      if (!WindweaverAbility.isCharging.getOrDefault(this.playerId, false)) {
         finishCharging();
         return;
       } 
@@ -46,9 +39,8 @@ class WindGustChargeTask extends BukkitRunnable {
         if (this.chargeTicks < 140) {
           this.chargeTicks++;
           int i = this.chargeTicks / 20;
-          WindweaverAbility.gustChargeLevels.put(this.playerId, Integer.valueOf(i));
-          double d = i / 7.0D;
-          BossBarManager.createBar(this.player, "Charging", 7, ChatColor.WHITE, BarColor.WHITE);
+          WindweaverAbility.gustChargeLevels.put(this.playerId, i);
+            BossBarManager.createBar(this.player, "Charging", 7, NamedTextColor.WHITE, BarColor.WHITE);
         } 
       } else {
         WindweaverAbility.cancelWindGustCharge(this.player);

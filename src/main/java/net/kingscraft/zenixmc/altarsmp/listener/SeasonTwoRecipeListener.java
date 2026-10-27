@@ -1,6 +1,9 @@
 package net.kingscraft.zenixmc.altarsmp.listener;
 
 import java.util.List;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -101,7 +104,7 @@ public class SeasonTwoRecipeListener implements Listener {
   private ItemStack strengthPotion() {
     ItemStack stack = new ItemStack(Material.SPLASH_POTION);
     if (stack.getItemMeta() instanceof PotionMeta meta) {
-      meta.setDisplayName("§cStrength Potion");
+      meta.displayName(Component.text("Strength Potion", NamedTextColor.RED));
       meta.addCustomEffect(new PotionEffect(PotionEffectType.STRENGTH, 9600, 1, false, true, true), true);
       stack.setItemMeta(meta);
     }

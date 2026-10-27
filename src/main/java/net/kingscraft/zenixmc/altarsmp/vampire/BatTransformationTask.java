@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 public class BatTransformationTask extends BukkitRunnable {
@@ -54,7 +54,7 @@ public class BatTransformationTask extends BukkitRunnable {
           player.showPlayer(AltarSMP.getInstance(), this.player);
         this.bats.clear();
         this.batOffsets.clear();
-        Vampire.transformedPlayers.remove(this.player.getUniqueId());
+        VampireListener.transformedPlayers.remove(this.player.getUniqueId());
         cancel();
         return;
       } 

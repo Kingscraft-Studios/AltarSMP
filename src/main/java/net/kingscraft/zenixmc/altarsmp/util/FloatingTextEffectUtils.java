@@ -1,5 +1,7 @@
 package net.kingscraft.zenixmc.altarsmp.util;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -19,14 +21,14 @@ public class FloatingTextEffectUtils {
     paramLocation.add(0.0D, 0.0D, 0.0D);
     World world = paramLocation.getWorld();
     TextDisplay textDisplay = (TextDisplay)world.spawnEntity(paramLocation, EntityType.TEXT_DISPLAY);
-    textDisplay.setText(paramString);
+    textDisplay.text(Component.text(paramString));
     float f = 2.0F;
     if (paramString.equals(" ")) {
       textDisplay.setBackgroundColor(paramColor1);
     } else {
       f = 4.0F;
       textDisplay.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
-      textDisplay.setText(ChatFormattingUtils.toHexColorCode(paramColor1) + paramString);
+      textDisplay.text(Component.text(paramString, TextColor.color(paramColor1.getRed(), paramColor1.getGreen(), paramColor1.getBlue())));
     } 
 
     textDisplay.setBillboard(Display.Billboard.CENTER);

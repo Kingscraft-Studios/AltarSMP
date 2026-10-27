@@ -6,17 +6,23 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.event.bingo.BingoBarCountdownTask;
 
 public class BossBarManager {
+  public static final TextColor COPPER = TextColor.color(0xB06736);
+
   public static final List<BossBar> activeBars = new ArrayList<>();
 
   public static final Map<UUID, List<PlayerBossBar>> playerBars = new HashMap<>();
@@ -29,27 +35,27 @@ public class BossBarManager {
 
   public static BukkitRunnable eventBarTask;
 
-  public static int updateInterval;
+  public static int updateInterval = AltarSMP.getInstance().getConfig().getInt("bossbar_update_interval", 1);
 
-  public BossBarManager() {
-    updateInterval = AltarSMP.getInstance().getConfig().getInt("bossbar_update_interval", 1);
+  public static Component formatTitle(Component title, TextColor color) {
+    return title.colorIfAbsent(color).decorate(TextDecoration.BOLD);
   }
 
   public static void startUpdater() {
     (new PlayerBossBarUpdater()).runTaskTimer(AltarSMP.getInstance(), 1L, 1L);
   }
 
-  public static void createBar(Player paramPlayer, String paramString, int paramInt, ChatColor paramChatColor) {
-    createBar(paramPlayer, paramString, paramInt, paramChatColor, BarColor.YELLOW);
+  public static void createBar(Player paramPlayer, String paramString, int paramInt, NamedTextColor paramNamedTextColor) {
+    createBar(paramPlayer, paramString, paramInt, paramNamedTextColor, BarColor.YELLOW);
   }
 
-  public static void createBar(Player paramPlayer, String paramString, int paramInt, ChatColor paramChatColor, BarColor paramBarColor) {
+  public static void createBar(Player paramPlayer, String  paramString, int paramInt, NamedTextColor paramNamedTextColor, BarColor paramBarColor) {
     {
       if (paramPlayer != null)
         {
           if (paramPlayer.isOnline()) {
             removeBar(paramPlayer, paramString);
-            BossBar bossBar = Bukkit.createBossBar(paramChatColor + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID);
+            BossBar bossBar = Bukkit.createBossBar(LegacyComponentSerializer.legacySection().serialize(formatTitle(Component.text(paramString), paramNamedTextColor)), paramBarColor, BarStyle.SOLID);
             bossBar.addPlayer(paramPlayer);
             bossBar.setProgress(1.0D);
             PlayerBossBar playerBossBar = new PlayerBossBar();
@@ -64,7 +70,7 @@ public class BossBarManager {
 
   public static void showBingoBar(String paramString, int paramInt, BarColor paramBarColor) {
     hideBingoBar();
-    bingoBar = Bukkit.createBossBar(BossBarKeys.bossBarKey, net.md_5.bungee.api.ChatColor.of("#B06736") + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID);
+    bingoBar = Bukkit.createBossBar(BossBarKeys.bossBarKey, LegacyComponentSerializer.legacySection().serialize(formatTitle(Component.text(paramString), COPPER)), paramBarColor, BarStyle.SOLID);
     bingoBar.setProgress(1.0D);
     for (Player player : Bukkit.getOnlinePlayers())
       bingoBar.addPlayer(player);
@@ -74,7 +80,7 @@ public class BossBarManager {
 
   public static void showEventBar(String paramString, int paramInt, BarColor paramBarColor) {
     hideEventBar();
-    eventBar = Bukkit.createBossBar(BossBarKeys.bossBarKey, net.md_5.bungee.api.ChatColor.of("#B06736") + String.valueOf(ChatColor.BOLD) + paramString, paramBarColor, BarStyle.SOLID);
+    eventBar = Bukkit.createBossBar(BossBarKeys.bossBarKey, LegacyComponentSerializer.legacySection().serialize(formatTitle(Component.text(paramString), COPPER)), paramBarColor, BarStyle.SOLID);
     eventBar.setProgress(1.0D);
     for (Player player : Bukkit.getOnlinePlayers())
       eventBar.addPlayer(player);
@@ -86,17 +92,17 @@ public class BossBarManager {
     List<PlayerBossBar> list = playerBars.get(paramPlayer.getUniqueId());
     {
       if (list == null)
-        return; 
-    }String str = ChatColor.stripColor(paramString).toLowerCase();
+        return;
+    }
     Iterator<PlayerBossBar> iterator = list.iterator();
     while (iterator.hasNext()) {
       PlayerBossBar bossbar = iterator.next();
       {
-        if (ChatColor.stripColor(bossbar.title).toLowerCase().equals(str)) {
+        if (bossbar.title.equals(paramString)) {
           bossbar.bossBar.removeAll();
           iterator.remove();
-        } 
-      }} 
+        }
+      }}
     {
       if (list.isEmpty())
         playerBars.remove(paramPlayer.getUniqueId());
@@ -112,22 +118,21 @@ public class BossBarManager {
   }
 
   public static void removeBarFromAll(String paramString) {
-    String str = ChatColor.stripColor(paramString).toLowerCase();
     Iterator<Map.Entry<UUID, List<PlayerBossBar>>> iterator = playerBars.entrySet().iterator();
     while (iterator.hasNext()) {
       Map.Entry<UUID, List<PlayerBossBar>> entry = iterator.next();
       List<PlayerBossBar> list = entry.getValue();
       {
         list.removeIf(bar -> {
-              if (ChatColor.stripColor(bar.title).toLowerCase().equals(str)) {
-                bar.bossBar.removeAll();
-                return true;
-              } 
-              return false;
-            });
+          if (bar.title.equals(paramString)) {
+            bar.bossBar.removeAll();
+            return true;
+          }
+          return false;
+        });
         if (list.isEmpty())
-          iterator.remove(); 
-      }} 
+          iterator.remove();
+      }}
   }
 
   public static void hideBingoBar() {

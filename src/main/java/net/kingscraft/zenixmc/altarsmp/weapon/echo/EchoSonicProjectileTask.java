@@ -10,7 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
 class EchoSonicProjectileTask extends BukkitRunnable {
@@ -61,14 +61,13 @@ class EchoSonicProjectileTask extends BukkitRunnable {
             location.setDirection(vector);
             for (Entity entity : this.projectileDisplay.getNearbyEntities(2.0D, 2.0D, 2.0D)) {
               {
-                if (entity instanceof LivingEntity) {
-                  if (entity instanceof Player) {
-                    Player player = (Player)entity;
-                    {
-                      if (player == this.player)
+                if (entity instanceof LivingEntity livingEntity) {
+                  if (entity instanceof Player player1) {
+                      {
+                      if (player1 == this.player)
                         continue; 
                     }{
-                      if (AltarSMP.isTrusted(this.player, (Entity)player))
+                      if (AltarSMP.isTrusted(this.player, player1))
                         continue; 
                     }} 
                   {
@@ -76,8 +75,7 @@ class EchoSonicProjectileTask extends BukkitRunnable {
                       continue; 
                   }
                   CooldownManager.setCooldown(entity.getUniqueId(), "sonic", 1.0D);
-                  LivingEntity livingEntity = (LivingEntity)entity;
-                  TrueDamage.apply(livingEntity, this.damage, this.player);
+                    TrueDamage.apply(livingEntity, this.damage, this.player);
                   return;
                 } 
               }} 

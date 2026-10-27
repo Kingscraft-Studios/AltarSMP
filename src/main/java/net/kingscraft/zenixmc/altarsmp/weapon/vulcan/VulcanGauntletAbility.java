@@ -1,14 +1,12 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.vulcan;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.AbstractArrow;
@@ -29,9 +27,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
@@ -39,7 +35,7 @@ import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
@@ -47,6 +43,12 @@ public class VulcanGauntletAbility implements Listener {
   public AltarSMP plugin;
 
   public Set<Player> chargedCrossbowUsers = new HashSet<>();
+
+  private static final NamespacedKey PASSIVE_SIDE_KEY =
+          new NamespacedKey(AltarSMP.getInstance(), "passive_side");
+
+  private static final NamespacedKey PASSIVE_MAIN_KEY =
+          new NamespacedKey(AltarSMP.getInstance(), "passive_main");
 
 
   public VulcanGauntletAbility(AltarSMP paramAltarSMP) {
@@ -66,30 +68,34 @@ public class VulcanGauntletAbility implements Listener {
       if (itemMeta == null)
         return false;
     }{
-      if (!itemMeta.hasCustomModelData())
-        return false;
-    }{
-
-    }return (itemMeta.getCustomModelData() == 1);
+      List<Float> customModelData = itemMeta.getCustomModelDataComponent().getFloats();
+      return !customModelData.isEmpty() && customModelData.getFirst() == 1;
+    }
   }
 
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent paramPlayerInteractEvent) {
     Player player = paramPlayerInteractEvent.getPlayer();
     ItemStack itemStack = player.getInventory().getItemInMainHand();
+
     if (!hasVulcanCrossbow(player)) {
       return;
     }
-    CrossbowMeta crossbowMeta = (CrossbowMeta)itemStack.getItemMeta();
+
+    CrossbowMeta crossbowMeta = (CrossbowMeta) itemStack.getItemMeta();
     if (!crossbowMeta.hasChargedProjectiles()) {
       return;
     }
-    if (paramPlayerInteractEvent.getAction() != Action.RIGHT_CLICK_AIR && paramPlayerInteractEvent.getAction() != Action.RIGHT_CLICK_BLOCK) {
+
+    if (paramPlayerInteractEvent.getAction() != Action.RIGHT_CLICK_AIR
+            && paramPlayerInteractEvent.getAction() != Action.RIGHT_CLICK_BLOCK) {
       return;
     }
+
     paramPlayerInteractEvent.setCancelled(true);
     crossbowMeta.setChargedProjectiles(null);
     itemStack.setItemMeta(crossbowMeta);
+
     if (player.isSneaking() || CooldownManager.isOnCooldown(player.getUniqueId(), "charged_vulcan_powershot")) {
       if (!CooldownManager.isOnCooldown(player.getUniqueId(), "vulcan_powershot")) {
         CooldownManager.setCooldown(player.getUniqueId(), "charged_vulcan_powershot", 0.0D);
@@ -97,6 +103,7 @@ public class VulcanGauntletAbility implements Listener {
         return;
       }
     }
+
     firePassiveArrows(player);
   }
 
@@ -122,23 +129,22 @@ public class VulcanGauntletAbility implements Listener {
   public void onProjectileHit(ProjectileHitEvent paramProjectileHitEvent) {
     double d = AltarSMP.getInstance().getConfig().getDouble("vulcansScattershotDamage", 12.0D);
     Projectile projectile = paramProjectileHitEvent.getEntity();
-    if (!(projectile instanceof Arrow)) {
+    if (!(projectile instanceof Arrow arrow)) {
       return;
     }
-    Arrow arrow = (Arrow)projectile;
     ProjectileSource projectileSource = arrow.getShooter();
-    if (!(projectileSource instanceof Player)) {
+    if (!(projectileSource instanceof Player player)) {
       return;
     }
-    Player player = (Player)projectileSource;
     Entity entity = paramProjectileHitEvent.getHitEntity();
-    if (!(entity instanceof LivingEntity)) {
+    if (!(entity instanceof LivingEntity livingEntity)) {
       return;
     }
-    LivingEntity livingEntity = (LivingEntity)entity;
-    if (arrow.hasMetadata("passive_side") || arrow.hasMetadata("passive_main")) {
+
+    if (arrow.getPersistentDataContainer().has(PASSIVE_SIDE_KEY, PersistentDataType.BYTE)
+            || arrow.getPersistentDataContainer().has(PASSIVE_MAIN_KEY, PersistentDataType.BYTE)) {
       livingEntity.damage(d, player);
-      if (arrow.hasMetadata("passive_main")) {
+      if (arrow.getPersistentDataContainer().has(PASSIVE_MAIN_KEY, PersistentDataType.BYTE)) {
         livingEntity.setFireTicks(80);
       }
     }
@@ -150,7 +156,7 @@ public class VulcanGauntletAbility implements Listener {
       if (i != -1)
         {
           if (CustomItem.countInInventory(paramPlayer) > i) {
-            paramPlayer.sendMessage("§eThe legendary limit is " + i);
+            paramPlayer.sendMessage(Component.text("The legendary limit is " + i, NamedTextColor.YELLOW));
             paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
             return;
           }
@@ -159,8 +165,8 @@ public class VulcanGauntletAbility implements Listener {
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ITEM_CROSSBOW_SHOOT, 1.0F, 0.0F);
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_WARDEN_SONIC_BOOM, 1.0F, 1.0F);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "vulcan_powershot", j);
-    (new VulcanChargedCrossbowCleanupTask(this, paramPlayer)).runTaskLater((Plugin)this.plugin, 5L);
-    BossBarManager.createBar(paramPlayer, "Vulcan's Wrath", j, ChatColor.YELLOW);
+    (new VulcanChargedCrossbowCleanupTask(this, paramPlayer)).runTaskLater(this.plugin, 5L);
+    BossBarManager.createBar(paramPlayer, "Vulcan's Wrath", j, NamedTextColor.YELLOW);
     Location location = paramPlayer.getEyeLocation();
     Vector vector1 = location.getDirection().normalize();
     ItemDisplay itemDisplay = (ItemDisplay)paramPlayer.getWorld().spawnEntity(location.add(vector1.clone().multiply(0.5D)), EntityType.ITEM_DISPLAY);
@@ -168,12 +174,12 @@ public class VulcanGauntletAbility implements Listener {
     itemDisplay.setTransformation(new Transformation(new Vector3f(0.0F, 0.0F, 0.0F), new AxisAngle4f((float)Math.toRadians(90.0D), 1.0F, 0.0F, 0.0F), new Vector3f(0.75F, 0.75F, 0.75F), new AxisAngle4f(0.0F, 0.0F, 0.0F, 1.0F)));
     double d = AltarSMP.getInstance().getConfig().getInt("vulcanPower", 2);
     Vector vector2 = vector1.multiply(d);
-    (new VulcanMagmaProjectileTask(this, vector2, itemDisplay, paramPlayer)).runTaskTimer((Plugin)this.plugin, 0L, 1L);
+    (new VulcanMagmaProjectileTask(this, vector2, itemDisplay, paramPlayer)).runTaskTimer(this.plugin, 0L, 1L);
   }
 
   public void createVulcanExplosion(Location paramLocation, Player paramPlayer) {
     int i = this.plugin.getConfig().getInt("vulcanExplosionRadius", 4);
-    paramLocation = findSafeExplosionLocation(paramLocation, 10).clone().subtract(0.0D, (i / 2), 0.0D);
+    paramLocation = findSafeExplosionLocation(paramLocation, 10).clone().subtract(0.0D, ((double) i / 2), 0.0D);
     paramLocation.getWorld().spawnParticle(Particle.FLAME, paramLocation, 150, 0.0D, 0.0D, 0.0D, 0.5D);
     double d = this.plugin.getConfig().getDouble("vulcansWrathDamage", 8.0D);
     boolean bool = this.plugin.getConfig().getBoolean("vulcanWrathVisual", false);
@@ -184,7 +190,7 @@ public class VulcanGauntletAbility implements Listener {
         return;
     }Set<Material> set = Set.of(Material.BEDROCK, Material.END_PORTAL, Material.END_PORTAL_FRAME, Material.BARRIER, Material.COMMAND_BLOCK, Material.END_GATEWAY);
     Random random = new Random();
-    int j = 0;
+    int j;
     for (j = -i; j <= i; j++) {
       for (int k = -i; k <= i; k++) {
         for (int m = -i; m <= i; m++) {
@@ -246,13 +252,12 @@ public class VulcanGauntletAbility implements Listener {
       }
     }
     for (Entity entity : world.getNearbyEntities(paramLocation, i, i, i)) {
-      if (entity instanceof LivingEntity) {
-        LivingEntity livingEntity = (LivingEntity)entity;
-        {
+      if (entity instanceof LivingEntity livingEntity) {
+          {
           if (livingEntity == paramPlayer)
             continue;
         }{
-          if (AltarSMP.isTrusted(paramPlayer, (Entity)livingEntity))
+          if (AltarSMP.isTrusted(paramPlayer, livingEntity))
             continue;
         }
           TrueDamage.apply(livingEntity, d, paramPlayer);
@@ -266,7 +271,7 @@ public class VulcanGauntletAbility implements Listener {
     Transformation transformation = blockDisplay.getTransformation();
     transformation.getScale().set(1.01D, 1.01D, 1.01D);
     blockDisplay.setTransformation(transformation);
-    (new VulcanMagmaBlockShrinkTask(blockDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), 100L);
+    (new VulcanMagmaBlockShrinkTask(blockDisplay)).runTaskLater(AltarSMP.getInstance(), 100L);
   }
 
   public static Location findSafeExplosionLocation(Location paramLocation, int paramInt) {
@@ -295,16 +300,14 @@ public class VulcanGauntletAbility implements Listener {
             {
               if (paramLocation.getBlock().getType().isSolid()) {
                 {
-                  if (!paramLocation.clone().add(0.0D, 1.0D, 0.0D).getBlock().getType().isSolid())
-                    return true;
-                }return false;
+                    return !paramLocation.clone().add(0.0D, 1.0D, 0.0D).getBlock().getType().isSolid();
+                }
               }
             }return false;
           }
         }}{
-      if (!paramLocation.clone().add(0.0D, 1.0D, 0.0D).getBlock().getType().isSolid())
-        return true;
-    }return false;
+          return !paramLocation.clone().add(0.0D, 1.0D, 0.0D).getBlock().getType().isSolid();
+    }
   }
 
   private static void lambda$passiveArrows$2(Player paramPlayer, Vector paramVector1, Vector paramVector2, Entity paramEntity) {
@@ -312,9 +315,9 @@ public class VulcanGauntletAbility implements Listener {
     arrow.setRotation(paramPlayer.getYaw(), paramPlayer.getPitch());
     arrow.setVelocity(paramVector1.clone().multiply(3).add(paramVector2));
     arrow.setDamage(0.0D);
-    arrow.setShooter((ProjectileSource)paramPlayer);
+    arrow.setShooter(paramPlayer);
     arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
-    arrow.setMetadata("passive_side", (MetadataValue)new FixedMetadataValue((Plugin)AltarSMP.getInstance(), paramPlayer.getUniqueId().toString()));
+    arrow.getPersistentDataContainer().set(PASSIVE_SIDE_KEY, PersistentDataType.BYTE, (byte) 1);
   }
 
   private static void lambda$passiveArrows$1(Player paramPlayer, Vector paramVector1, Vector paramVector2, Entity paramEntity) {
@@ -322,9 +325,9 @@ public class VulcanGauntletAbility implements Listener {
     arrow.setRotation(paramPlayer.getYaw(), paramPlayer.getPitch());
     arrow.setVelocity(paramVector1.clone().multiply(3).add(paramVector2));
     arrow.setDamage(0.0D);
-    arrow.setShooter((ProjectileSource)paramPlayer);
+    arrow.setShooter(paramPlayer);
     arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
-    arrow.setMetadata("passive_side", (MetadataValue)new FixedMetadataValue((Plugin)AltarSMP.getInstance(), paramPlayer.getUniqueId().toString()));
+    arrow.getPersistentDataContainer().set(PASSIVE_SIDE_KEY, PersistentDataType.BYTE, (byte) 1);
   }
 
   private static void lambda$passiveArrows$0(Player paramPlayer, Vector paramVector1, Vector paramVector2, Entity paramEntity) {
@@ -332,10 +335,10 @@ public class VulcanGauntletAbility implements Listener {
     arrow.setRotation(paramPlayer.getYaw(), paramPlayer.getPitch());
     arrow.setVelocity(paramVector1.clone().multiply(3).add(paramVector2));
     arrow.setDamage(0.0D);
-    arrow.setShooter((ProjectileSource)paramPlayer);
+    arrow.setShooter(paramPlayer);
     arrow.setPierceLevel(3);
     arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
-    arrow.setMetadata("passive_main", (MetadataValue)new FixedMetadataValue((Plugin)AltarSMP.getInstance(), paramPlayer.getUniqueId().toString()));
+    arrow.getPersistentDataContainer().set(PASSIVE_MAIN_KEY, PersistentDataType.BYTE, (byte) 1);
   }
 
 

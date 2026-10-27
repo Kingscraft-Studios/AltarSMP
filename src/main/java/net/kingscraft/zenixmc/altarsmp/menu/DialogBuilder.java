@@ -281,27 +281,27 @@ public class DialogBuilder {
     paramBiConsumer.accept(paramDialogResponseView, player);
   }
 
-  public void buildMultiActionDialog(List<ActionButton> paramList, RegistryBuilderFactory paramRegistryBuilderFactory) {
+  public void buildMultiActionDialog(List<ActionButton> paramList, RegistryBuilderFactory<?, ?> paramRegistryBuilderFactory) {
     ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).build()).type(io.papermc.paper.registry.data.dialog.type.DialogType.multiAction(paramList).columns(1).build());
   }
 
-  public void buildConfirmationDialog(RegistryBuilderFactory paramRegistryBuilderFactory) {
+  public void buildConfirmationDialog(RegistryBuilderFactory<?, ?> paramRegistryBuilderFactory) {
     ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).body(List.of(DialogBody.plainMessage(this.body))).build()).type(io.papermc.paper.registry.data.dialog.type.DialogType.confirmation(createActionButton(Component.text("Confirm"), this::handleConfirm), createActionButton(Component.text("Cancel"), this::handleCancel)));
   }
 
   public void handleCancel(Player paramPlayer) {
     {
       if (this.onConfirmationSubmit != null)
-        this.onConfirmationSubmit.accept(paramPlayer, Boolean.FALSE);
+        this.onConfirmationSubmit.accept(paramPlayer, false);
     }}
 
   public void handleConfirm(Player paramPlayer) {
     {
       if (this.onConfirmationSubmit != null)
-        this.onConfirmationSubmit.accept(paramPlayer, Boolean.TRUE);
+        this.onConfirmationSubmit.accept(paramPlayer, true);
     }}
 
-  public void buildSingleOptionDialog(RegistryBuilderFactory paramRegistryBuilderFactory) {
+  public void buildSingleOptionDialog(RegistryBuilderFactory<?, ?> paramRegistryBuilderFactory) {
     ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).inputs(List.of(DialogInput.singleOption(this.inputName, this.description, this.options).build())).build()).type(io.papermc.paper.registry.data.dialog.type.DialogType.notice(createConfirmButton(this::handleOptionSubmit)));
   }
 
@@ -311,7 +311,7 @@ public class DialogBuilder {
         this.onOptionSubmit.accept(paramPlayer, paramDialogResponseView.getText(this.inputName));
     }}
 
-  public void buildBooleanDialog(RegistryBuilderFactory paramRegistryBuilderFactory) {
+  public void buildBooleanDialog(RegistryBuilderFactory<?, ?> paramRegistryBuilderFactory) {
     ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).inputs(List.of(DialogInput.bool(this.inputName, this.description).initial(this.initialBoolean).build())).build()).type(io.papermc.paper.registry.data.dialog.type.DialogType.notice(createConfirmButton(this::handleBooleanSubmit)));
   }
 
@@ -321,11 +321,11 @@ public class DialogBuilder {
         this.onBooleanSubmit.accept(paramPlayer, paramDialogResponseView.getBoolean(this.inputName));
     }}
 
-  public void buildNumberDialog(RegistryBuilderFactory paramRegistryBuilderFactory) {
+  public void buildNumberDialog(RegistryBuilderFactory<?, ?> paramRegistryBuilderFactory) {
     {
       {
 
-      }}((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).inputs(List.of(this.useTextInput ? DialogInput.text(this.inputName, this.description).initial(String.valueOf(this.useFloatInput ? this.initialNumber : (int)this.initialNumber)).build() : DialogInput.numberRange(this.inputName, this.description, this.minimumNumber, this.maximumNumber).initial(Float.valueOf(Math.clamp(this.initialNumber, this.minimumNumber, this.maximumNumber))).step(Float.valueOf(this.numberStep)).width(500).build())).build()).type(io.papermc.paper.registry.data.dialog.type.DialogType.notice(createConfirmButton(this::handleNumberSubmit)));
+      }}((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).inputs(List.of(this.useTextInput ? DialogInput.text(this.inputName, this.description).initial(String.valueOf(this.useFloatInput ? this.initialNumber : (int)this.initialNumber)).build() : DialogInput.numberRange(this.inputName, this.description, this.minimumNumber, this.maximumNumber).initial(Math.clamp(this.initialNumber, this.minimumNumber, this.maximumNumber)).step(this.numberStep).width(500).build())).build()).type(io.papermc.paper.registry.data.dialog.type.DialogType.notice(createConfirmButton(this::handleNumberSubmit)));
   }
 
   public void handleNumberSubmit(DialogResponseView paramDialogResponseView, Player paramPlayer) {
@@ -335,21 +335,19 @@ public class DialogBuilder {
           try {
             {
 
-            }float f = this.useTextInput ? Float.parseFloat(paramDialogResponseView.getText(this.inputName).trim()) : paramDialogResponseView.getFloat(this.inputName).floatValue();
+            }float f = this.useTextInput ? Float.parseFloat(paramDialogResponseView.getText(this.inputName).trim()) : paramDialogResponseView.getFloat(this.inputName);
             this.onFloatSubmit.accept(paramPlayer, f);
-          } catch (NumberFormatException numberFormatException) {} 
+          } catch (NumberFormatException ignored) {}
       } else if (this.onIntegerSubmit != null) {
         try {
-          {
-
-          }int i = this.useTextInput ? Integer.parseInt(paramDialogResponseView.getText(this.inputName).trim()) : Math.round(paramDialogResponseView.getFloat(this.inputName).floatValue());
+          int i = this.useTextInput ? Integer.parseInt(paramDialogResponseView.getText(this.inputName).trim()) : Math.round(paramDialogResponseView.getFloat(this.inputName));
           this.onIntegerSubmit.accept(paramPlayer, i);
-        } catch (NumberFormatException numberFormatException) {}
+        } catch (NumberFormatException ignored) {}
       } 
     }}
 
-  public void buildTextDialog(RegistryBuilderFactory paramRegistryBuilderFactory) {
-    ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).inputs(List.of(DialogInput.text(this.inputName, this.description).initial(this.initialText).build())).build()).type((io.papermc.paper.registry.data.dialog.type.DialogType) io.papermc.paper.registry.data.dialog.type.DialogType.notice(createConfirmButton(this::handleTextSubmit)));
+  public void buildTextDialog(RegistryBuilderFactory<?, ?> paramRegistryBuilderFactory) {
+    ((DialogRegistryEntry.Builder)paramRegistryBuilderFactory.empty()).base(DialogBase.builder(this.title).inputs(List.of(DialogInput.text(this.inputName, this.description).initial(this.initialText).build())).build()).type(io.papermc.paper.registry.data.dialog.type.DialogType.notice(createConfirmButton(this::handleTextSubmit)));
   }
 
   public void handleTextSubmit(DialogResponseView paramDialogResponseView, Player paramPlayer) {

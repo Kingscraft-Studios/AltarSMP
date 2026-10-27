@@ -4,7 +4,6 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.ItemDisplay;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
@@ -42,13 +41,11 @@ public class CleansingBlockAnimationTask extends BukkitRunnable {
         if (this.innerBlockDisplay.isValid()) {
           this.outerBlockDisplay.setTeleportDuration(this.animationDuration);
           this.innerBlockDisplay.setTeleportDuration(this.animationDuration);
-          (new CleansingBlockLandingTask(this)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
+          (new CleansingBlockLandingTask(this)).runTaskLater(AltarSMP.getInstance(), 2L);
           this.world.spawnParticle(Particle.SQUID_INK, this.originLocation, 20, 0.2D, 0.2D, 0.2D, 0.05D);
-          (new CleansingBlockShrinkTask(this)).runTaskLater((Plugin)AltarSMP.getInstance(), this.animationDuration + 2L);
-          return;
-        } 
-        return;
-      }  
+          (new CleansingBlockShrinkTask(this)).runTaskLater(AltarSMP.getInstance(), this.animationDuration + 2L);
+        }
+      }
 
   }
 

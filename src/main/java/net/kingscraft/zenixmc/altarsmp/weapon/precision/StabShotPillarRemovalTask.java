@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.precision;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 

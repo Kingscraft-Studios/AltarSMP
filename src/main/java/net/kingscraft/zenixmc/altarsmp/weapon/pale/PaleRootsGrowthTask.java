@@ -11,14 +11,13 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 import net.kingscraft.zenixmc.altarsmp.weapon.vulcan.VulcanGauntletAbility;
 
@@ -33,14 +32,14 @@ class PaleRootsGrowthTask extends BukkitRunnable {
 
   public final Player player;
 
-  public final List rootDisplays;
+  public final List<ItemDisplay> rootDisplays;
 
   public final int maxRoots;
 
   public final int rootDamage;
 
 
-  public PaleRootsGrowthTask(Player paramPlayer, List paramList, int paramInt1, int paramInt2) {
+  public PaleRootsGrowthTask(Player paramPlayer, List<ItemDisplay> paramList, int paramInt1, int paramInt2) {
         this.player = paramPlayer;
         this.rootDisplays = paramList;
         this.maxRoots = paramInt1;
@@ -52,7 +51,7 @@ class PaleRootsGrowthTask extends BukkitRunnable {
 
   public void run() {
     if (this.ticks >= this.durationSeconds * 20) {
-      for (ItemDisplay itemDisplay : (Iterable<ItemDisplay>)(Iterable<?>) this.rootDisplays) {
+      for (ItemDisplay itemDisplay : this.rootDisplays) {
         this.player.getWorld().playSound(itemDisplay.getLocation(), Sound.BLOCK_CREAKING_HEART_BREAK, 1.0F, 1.0F);
         itemDisplay.getWorld().spawnParticle(Particle.ITEM, itemDisplay.getLocation(), 20, 0.0D, 0.0D, 0.0D, 0.1D, new ItemStack(Material.PALE_OAK_LOG));
         itemDisplay.remove();
@@ -77,18 +76,17 @@ class PaleRootsGrowthTask extends BukkitRunnable {
         this.rootDisplays.add(itemDisplay);
         itemDisplay.setInterpolationDelay(0);
         itemDisplay.setInterpolationDuration(12);
-        (new PaleRootRiseTask(this, itemDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), 3L);
+        (new PaleRootRiseTask(itemDisplay)).runTaskLater(AltarSMP.getInstance(), 3L);
         this.lastRootLocation = location2;
       } 
-    }for (ItemDisplay itemDisplay : (Iterable<ItemDisplay>)(Iterable<?>) this.rootDisplays) {
+    }for (ItemDisplay itemDisplay : this.rootDisplays) {
       for (Entity entity : itemDisplay.getNearbyEntities(2.0D, 2.0D, 2.0D)) {
-        if (entity instanceof LivingEntity) {
-          LivingEntity livingEntity = (LivingEntity)entity;
+        if (entity instanceof LivingEntity livingEntity) {
           {
             if (CooldownManager.isOnCooldown(livingEntity.getUniqueId(), "rootsDamage"))
               continue; 
           }{
-            if (AltarSMP.isTrusted(this.player, (Entity)livingEntity))
+            if (AltarSMP.isTrusted(this.player, livingEntity))
               continue; 
           }{
             if (this.player == livingEntity)

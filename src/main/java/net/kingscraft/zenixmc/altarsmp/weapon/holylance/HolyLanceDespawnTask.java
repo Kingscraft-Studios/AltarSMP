@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.holylance;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import org.bukkit.scheduler.BukkitRunnable;
 
 class HolyLanceDespawnTask extends BukkitRunnable {

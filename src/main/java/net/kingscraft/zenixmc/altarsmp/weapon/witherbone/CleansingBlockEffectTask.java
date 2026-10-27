@@ -18,8 +18,6 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 public class CleansingBlockEffectTask extends BukkitRunnable {
   public int ticksLived;
 
-  final double knockbackStrength = 1.5D;
-
   public boolean hasReachedLanding;
 
   public final ItemDisplay outerBlockDisplay;
@@ -72,9 +70,8 @@ public class CleansingBlockEffectTask extends BukkitRunnable {
     } 
     if (this.ticksLived % 5 == 0) {
       for (Entity entity : this.world.getNearbyEntities(location, 1.5D, 1.5D, 1.5D)) {
-        if (entity instanceof LivingEntity && entity != this.player && entity.getType() != EntityType.ARMOR_STAND) {
-          LivingEntity livingEntity = (LivingEntity)entity;
-          livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 4, false, true, true));
+        if (entity instanceof LivingEntity livingEntity && entity != this.player && entity.getType() != EntityType.ARMOR_STAND) {
+            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 4, false, true, true));
           if (!this.hasReachedLanding) {
             Vector vector = this.knockbackDirection.clone().normalize();
             if (livingEntity.getWorld() != location.getWorld())

@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.weapon.frostscythe;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -48,7 +47,7 @@ class FrostScytheReturnTask extends BukkitRunnable {
           transformation.getLeftRotation().rotateX((float)Math.toRadians(30.0D));
           this.scytheDisplay.setTransformation(transformation);
           if (this.ticksElapsed % 4 == 0)
-            this.player.getWorld().playSound((Entity)this.player, Sound.ENTITY_WITCH_THROW, 1.0F, 1.0F);
+            this.player.getWorld().playSound(this.player, Sound.ENTITY_WITCH_THROW, 1.0F, 1.0F);
 
           Location location1 = this.scytheDisplay.getLocation();
           Location location2 = this.player.getEyeLocation();

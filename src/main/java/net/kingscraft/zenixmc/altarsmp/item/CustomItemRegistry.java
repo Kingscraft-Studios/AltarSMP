@@ -7,7 +7,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import net.md_5.bungee.api.ChatColor;
+
+import net.kingscraft.zenixmc.altarsmp.altarS2.AltarS2;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -18,11 +26,12 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.inventory.meta.components.EquippableComponent;
 import org.bukkit.persistence.PersistentDataType;
 import java.util.HashMap;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.armor.knightfall.KnightFallKillTracker;
+import net.kingscraft.zenixmc.altarsmp.weapon.knightfall.KnightFallKillTracker;
 import net.kingscraft.zenixmc.altarsmp.util.ColorUtil;
 
 public class CustomItemRegistry {
@@ -30,7 +39,9 @@ public class CustomItemRegistry {
 
   public static int quickChargeLevel;
 
-  public static final Map<String, List<String>> loreCache;
+  private static final TextColor COPPER = TextColor.color(0xB06736);
+
+  public static final Map<String, List<Component>> loreCache;
 
   public static ItemStack boneBlade;
 
@@ -132,8 +143,21 @@ public class CustomItemRegistry {
     messagesConfig = YamlConfiguration.loadConfiguration(file);
   }
 
-  public static List<String> getLore(String paramString) {
+  public static List<Component> getLore(String paramString) {
     return loreCache.computeIfAbsent(paramString, CustomItemRegistry::loadLore);
+  }
+
+  private static void setCustomModelData(ItemMeta itemMeta, int value) {
+    CustomModelDataComponent component = itemMeta.getCustomModelDataComponent();
+    component.setFloats(List.of((float) value));
+    itemMeta.setCustomModelDataComponent(component);
+  }
+
+  private static Component gradientBold(String text, TextColor... colors) {
+    TextComponent.Builder builder = Component.text();
+    for (int i = 0; i < text.length(); i++)
+      builder.append(Component.text(text.charAt(i), colors[i], TextDecoration.BOLD));
+    return builder.build();
   }
 
   public static ItemStack getBoneBlade() {
@@ -142,13 +166,16 @@ public class CustomItemRegistry {
         return boneBlade;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    String str = ChatColor.of("#eac492") + String.valueOf(ChatColor.BOLD) + "B" + ChatColor.of("#eed7b0") + ChatColor.BOLD + "o" + ChatColor.of("#f1e6ca") + ChatColor.BOLD + "n" + ChatColor.of("#f4f0e0") + ChatColor.BOLD + "e" + ChatColor.of("#f7f5f4") + ChatColor.BOLD + " " + ChatColor.of("#f6efdf") + ChatColor.BOLD + "B" + ChatColor.of("#f5e5c6") + ChatColor.BOLD + "l" + ChatColor.of("#f4dcb4") + ChatColor.BOLD + "a" + ChatColor.of("#f3d4a9") + ChatColor.BOLD + "d" + ChatColor.of("#f3d9a7") + ChatColor.BOLD + "e";
-    itemMeta.setLore(getLore("bone_blade"));
+    itemMeta.displayName(gradientBold("Bone Blade",
+        TextColor.color(0xeac492), TextColor.color(0xeed7b0), TextColor.color(0xf1e6ca),
+        TextColor.color(0xf4f0e0), TextColor.color(0xf7f5f4), TextColor.color(0xf6efdf),
+        TextColor.color(0xf5e5c6), TextColor.color(0xf4dcb4), TextColor.color(0xf3d4a9),
+        TextColor.color(0xf3d9a7)));
+    itemMeta.lore(getLore("bone_blade"));
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
-    itemMeta.setDisplayName(str);
-    itemMeta.setCustomModelData(1);
+    setCustomModelData(itemMeta, 1);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "bone"));
     itemMeta.setUnbreakable(true);
     itemStack.setItemMeta(itemMeta);
@@ -162,12 +189,17 @@ public class CustomItemRegistry {
         return vulcanCrossbow;
     }ItemStack itemStack = new ItemStack(Material.CROSSBOW);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    String str = ChatColor.of("#ff4500") + String.valueOf(ChatColor.BOLD) + "V" + ChatColor.of("#ff5a17") + ChatColor.BOLD + "u" + ChatColor.of("#ff6e2f") + ChatColor.BOLD + "l" + ChatColor.of("#ff8144") + ChatColor.BOLD + "c" + ChatColor.of("#ff9257") + ChatColor.BOLD + "a" + ChatColor.of("#ffa068") + ChatColor.BOLD + "n" + ChatColor.of("#ffab6f") + ChatColor.BOLD + "'" + ChatColor.of("#ffb067") + ChatColor.BOLD + "s" + ChatColor.of("#ffa462") + ChatColor.BOLD + " " + ChatColor.of("#ff9257") + ChatColor.BOLD + "C" + ChatColor.of("#ff8144") + ChatColor.BOLD + "r" + ChatColor.of("#ff6e2f") + ChatColor.BOLD + "o" + ChatColor.of("#ff5a17") + ChatColor.BOLD + "s" + ChatColor.of("#ff4500") + ChatColor.BOLD + "s" + ChatColor.of("#ff4500") + ChatColor.BOLD + "b" + ChatColor.of("#ff4500") + ChatColor.BOLD + "o" + ChatColor.of("#ff4500") + ChatColor.BOLD + "w";
+    itemMeta.displayName(gradientBold("Vulcan's Crossbow",
+        TextColor.color(0xff4500), TextColor.color(0xff5a17), TextColor.color(0xff6e2f),
+        TextColor.color(0xff8144), TextColor.color(0xff9257), TextColor.color(0xffa068),
+        TextColor.color(0xffab6f), TextColor.color(0xffb067), TextColor.color(0xffa462),
+        TextColor.color(0xff9257), TextColor.color(0xff8144), TextColor.color(0xff6e2f),
+        TextColor.color(0xff5a17), TextColor.color(0xff4500), TextColor.color(0xff4500),
+        TextColor.color(0xff4500), TextColor.color(0xff4500)));
     itemMeta.addEnchant(Enchantment.QUICK_CHARGE, quickChargeLevel, true);
-    itemMeta.setDisplayName(str);
-    itemMeta.setCustomModelData(1);
+    setCustomModelData(itemMeta, 1);
     itemMeta.setUnbreakable(true);
-    itemMeta.setLore(getLore("vulcan_crossbow"));
+    itemMeta.lore(getLore("vulcan_crossbow"));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "vulcan"));
     itemStack.setItemMeta(itemMeta);
     vulcanCrossbow = itemStack;
@@ -180,11 +212,10 @@ public class CustomItemRegistry {
         return nukeRemote;
     }ItemStack itemStack = new ItemStack(Material.CLAY_BALL);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    String str = "§c§lNuke Remote";
-    itemMeta.setDisplayName(str);
-    itemMeta.setCustomModelData(12);
+    itemMeta.displayName(Component.text("Nuke Remote", NamedTextColor.RED, TextDecoration.BOLD));
+    setCustomModelData(itemMeta, 12);
     itemMeta.setUnbreakable(true);
-    itemMeta.setLore(getLore("nuke_remote"));
+    itemMeta.lore(getLore("nuke_remote"));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "red"));
     itemStack.setItemMeta(itemMeta);
     nukeRemote = itemStack;
@@ -197,12 +228,11 @@ public class CustomItemRegistry {
         return strikerBow;
     }ItemStack itemStack = new ItemStack(Material.BOW);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    String str = "§c§lStriker Bow";
-    itemMeta.setDisplayName(str);
-    itemMeta.setCustomModelData(1);
+    itemMeta.displayName(Component.text("Striker Bow", NamedTextColor.RED, TextDecoration.BOLD));
+    setCustomModelData(itemMeta, 1);
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.POWER, 5, true);
-    itemMeta.setLore(getLore("striker"));
+    itemMeta.lore(getLore("striker"));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "red"));
     itemStack.setItemMeta(itemMeta);
     strikerBow = itemStack;
@@ -220,13 +250,15 @@ public class CustomItemRegistry {
         (AltarSMP.getInstance()).bloodLustKillTracker.setKillCount(paramPlayer, 10);
     }itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.FIRE_ASPECT, 2, true);
-    itemMeta.setCustomModelData(3);
-    String str = ChatColor.of("#8b0000") + String.valueOf(ChatColor.BOLD) + "B" + ChatColor.of("#9e0000") + ChatColor.BOLD + "l" + ChatColor.of("#b10000") + ChatColor.BOLD + "o" + ChatColor.of("#c40000") + ChatColor.BOLD + "o" + ChatColor.of("#d70000") + ChatColor.BOLD + "d" + ChatColor.of("#ea0000") + ChatColor.BOLD + "l" + ChatColor.of("#f50000") + ChatColor.BOLD + "u" + ChatColor.of("#ff0000") + ChatColor.BOLD + "s" + ChatColor.of("#d20000") + ChatColor.BOLD + "t";
-    itemMeta.setDisplayName(str);
-    itemMeta.setLore(getLore("bloodlust"));
+    setCustomModelData(itemMeta, 3);
+    itemMeta.displayName(gradientBold("Bloodlust",
+        TextColor.color(0x8b0000), TextColor.color(0x9e0000), TextColor.color(0xb10000),
+        TextColor.color(0xc40000), TextColor.color(0xd70000), TextColor.color(0xea0000),
+        TextColor.color(0xf50000), TextColor.color(0xff0000), TextColor.color(0xd20000)));
+    itemMeta.lore(getLore("bloodlust"));
     itemMeta.setUnbreakable(true);
     itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-    itemMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+    itemMeta.setHideTooltip(true);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "red"));
     itemStack.setItemMeta(itemMeta);
     bloodlust = itemStack;
@@ -239,13 +271,16 @@ public class CustomItemRegistry {
       if (AltarSMP.getInstance().getConfig().getBoolean("holdForThrowFrostScythe", true))
         ItemUtility.setConsumableData(itemStack, "frostScytheChargeDuration");
     }ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(4);
+    setCustomModelData(itemMeta, 4);
     itemMeta.setUnbreakable(true);
-    String str = ChatColor.of("#bfffff") + String.valueOf(ChatColor.BOLD) + "F" + ChatColor.of("#c9ffff") + ChatColor.BOLD + "r" + ChatColor.of("#d3ffff") + ChatColor.BOLD + "o" + ChatColor.of("#ddffff") + ChatColor.BOLD + "s" + ChatColor.of("#e7ffff") + ChatColor.BOLD + "t" + ChatColor.of("#f1ffff") + ChatColor.BOLD + " " + ChatColor.of("#ffffff") + ChatColor.BOLD + "S" + ChatColor.of("#f1ffff") + ChatColor.BOLD + "c" + ChatColor.of("#e7ffff") + ChatColor.BOLD + "y" + ChatColor.of("#ddffff") + ChatColor.BOLD + "t" + ChatColor.of("#d3ffff") + ChatColor.BOLD + "h" + ChatColor.of("#c9ffff") + ChatColor.BOLD + "e";
-    itemMeta.setDisplayName(str);
+    itemMeta.displayName(gradientBold("Frost Scythe",
+        TextColor.color(0xbfffff), TextColor.color(0xc9ffff), TextColor.color(0xd3ffff),
+        TextColor.color(0xddffff), TextColor.color(0xe7ffff), TextColor.color(0xf1ffff),
+        TextColor.color(0xffffff), TextColor.color(0xf1ffff), TextColor.color(0xe7ffff),
+        TextColor.color(0xddffff), TextColor.color(0xd3ffff), TextColor.color(0xc9ffff)));
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
-    itemMeta.setLore(getLore("frost_scythe"));
+    itemMeta.lore(getLore("frost_scythe"));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "frost"));
     itemStack.setItemMeta(itemMeta);
     return itemStack;
@@ -255,10 +290,15 @@ public class CustomItemRegistry {
     ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemUtility.setConsumableData(itemStack, "IllusionWandChargeDuration");
     ItemMeta itemMeta = itemStack.getItemMeta();
-    String str = ChatColor.of("#872BA8") + String.valueOf(ChatColor.BOLD) + "W" + ChatColor.of("#932EAB") + ChatColor.BOLD + "a" + ChatColor.of("#9E31AE") + ChatColor.BOLD + "n" + ChatColor.of("#A934B1") + ChatColor.BOLD + "d" + ChatColor.of("#B237B4") + ChatColor.BOLD + " " + ChatColor.of("#BC3AB7") + ChatColor.BOLD + "o" + ChatColor.of("#C138B6") + ChatColor.BOLD + "f" + ChatColor.of("#B73AC0") + ChatColor.BOLD + " " + ChatColor.of("#AC3CC9") + ChatColor.BOLD + "I" + ChatColor.of("#A03FCF") + ChatColor.BOLD + "l" + ChatColor.of("#943FCC") + ChatColor.BOLD + "l" + ChatColor.of("#883FC9") + ChatColor.BOLD + "u" + ChatColor.of("#7D3FCA") + ChatColor.BOLD + "s" + ChatColor.of("#803CC6") + ChatColor.BOLD + "i" + ChatColor.of("#8539C2") + ChatColor.BOLD + "o" + ChatColor.of("#993CBE") + ChatColor.BOLD + "n";
-    itemMeta.setDisplayName(str);
-    itemMeta.setLore(getLore("illusion_wand"));
-    itemMeta.setCustomModelData(Integer.valueOf(2));
+    itemMeta.displayName(gradientBold("Wand of Illusion",
+        TextColor.color(0x872BA8), TextColor.color(0x932EAB), TextColor.color(0x9E31AE),
+        TextColor.color(0xA934B1), TextColor.color(0xB237B4), TextColor.color(0xBC3AB7),
+        TextColor.color(0xC138B6), TextColor.color(0xB73AC0), TextColor.color(0xAC3CC9),
+        TextColor.color(0xA03FCF), TextColor.color(0x943FCC), TextColor.color(0x883FC9),
+        TextColor.color(0x7D3FCA), TextColor.color(0x803CC6), TextColor.color(0x8539C2),
+        TextColor.color(0x993CBE)));
+    itemMeta.lore(getLore("illusion_wand"));
+    setCustomModelData(itemMeta, 2);
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
@@ -273,11 +313,11 @@ public class CustomItemRegistry {
         return crazySlots;
     }ItemStack itemStack = new ItemStack(Material.CLAY_BALL);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(4);
+    setCustomModelData(itemMeta, 4);
     itemMeta.setMaxStackSize(1);
-    itemMeta.setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "Crazy Slots");
+    itemMeta.displayName(Component.text("Crazy Slots", NamedTextColor.GOLD, TextDecoration.BOLD));
     itemMeta.setUnbreakable(true);
-    itemMeta.setLore(getLore("crazy_slots"));
+    itemMeta.lore(getLore("crazy_slots"));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "gold"));
     itemStack.setItemMeta(itemMeta);
     crazySlots = itemStack;
@@ -291,13 +331,15 @@ public class CustomItemRegistry {
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setUnbreakable(true);
-    itemMeta.setCustomModelData(Integer.valueOf(6));
+    setCustomModelData(itemMeta, 6);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.FIRE_ASPECT, 2, true);
-    itemMeta.setLore(getLore("hyperion"));
-    String str1 = ChatColor.WHITE + String.valueOf(ChatColor.BOLD) + "H" + ChatColor.YELLOW + ChatColor.BOLD + "y" + ChatColor.GOLD + ChatColor.BOLD + "p" + ChatColor.of("#E27B41") + ChatColor.BOLD + "er" + ChatColor.GOLD + ChatColor.BOLD + "i" + ChatColor.YELLOW + ChatColor.BOLD + "o" + ChatColor.WHITE + ChatColor.BOLD + "n";
-    itemMeta.setDisplayName(str1);
+    itemMeta.lore(getLore("hyperion"));
+    itemMeta.displayName(gradientBold("Hyperion",
+        NamedTextColor.WHITE, NamedTextColor.YELLOW, NamedTextColor.GOLD,
+        TextColor.color(0xE27B41), TextColor.color(0xE27B41), NamedTextColor.GOLD,
+        NamedTextColor.YELLOW, NamedTextColor.WHITE));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "gold"));
     itemStack.setItemMeta(itemMeta);
     hyperion = itemStack;
@@ -310,14 +352,17 @@ public class CustomItemRegistry {
         return nightpiercer;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setLore(getLore("nightpiercer"));
+    itemMeta.lore(getLore("nightpiercer"));
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
-    itemMeta.setCustomModelData(5);
+    setCustomModelData(itemMeta, 5);
     itemMeta.setUnbreakable(true);
-    String str = ChatColor.of("#55131d") + String.valueOf(ChatColor.BOLD) + "N" + ChatColor.of("#5d1823") + ChatColor.BOLD + "i" + String.valueOf(ChatColor.of("#652029")) + String.valueOf(ChatColor.BOLD) + "g" + String.valueOf(ChatColor.of("#6d2830")) + String.valueOf(ChatColor.BOLD) + "h" + String.valueOf(ChatColor.of("#753037")) + String.valueOf(ChatColor.BOLD) + "t" + String.valueOf(ChatColor.of("#7d383e")) + String.valueOf(ChatColor.BOLD) + "p" + String.valueOf(ChatColor.of("#86333d")) + String.valueOf(ChatColor.BOLD) + "i" + String.valueOf(ChatColor.of("#7d383e")) + String.valueOf(ChatColor.BOLD) + "e" + String.valueOf(ChatColor.of("#753037")) + String.valueOf(ChatColor.BOLD) + "r" + String.valueOf(ChatColor.of("#6d2830")) + String.valueOf(ChatColor.BOLD) + "c" + String.valueOf(ChatColor.of("#652029")) + String.valueOf(ChatColor.BOLD) + "e" + String.valueOf(ChatColor.of("#5d1823")) + String.valueOf(ChatColor.BOLD) + "r";
-    itemMeta.setDisplayName(str);
+    itemMeta.displayName(gradientBold("Nightpiercer",
+        TextColor.color(0x55131d), TextColor.color(0x5d1823), TextColor.color(0x652029),
+        TextColor.color(0x6d2830), TextColor.color(0x753037), TextColor.color(0x7d383e),
+        TextColor.color(0x86333d), TextColor.color(0x7d383e), TextColor.color(0x753037),
+        TextColor.color(0x6d2830), TextColor.color(0x652029), TextColor.color(0x5d1823)));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "red"));
     itemStack.setItemMeta(itemMeta);
     nightpiercer = itemStack;
@@ -333,10 +378,10 @@ public class CustomItemRegistry {
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
-    itemMeta.setLore(getLore("pure_blade"));
+    itemMeta.lore(getLore("pure_blade"));
     itemMeta.setUnbreakable(true);
-    itemMeta.setCustomModelData(Integer.valueOf(7));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.WHITE) + ChatColor.BOLD.toString() + "Pure Blade");
+    setCustomModelData(itemMeta, 7);
+    itemMeta.displayName(Component.text("Pure Blade", NamedTextColor.WHITE, TextDecoration.BOLD));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "pure"));
     itemStack.setItemMeta(itemMeta);
     pureBlade = itemStack;
@@ -352,11 +397,10 @@ public class CustomItemRegistry {
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
-    itemMeta.setLore(getLore("earth_gauntlet"));
-    itemMeta.setCustomModelData(Integer.valueOf(8));
+    itemMeta.lore(getLore("earth_gauntlet"));
+    setCustomModelData(itemMeta, 8);
     itemMeta.setUnbreakable(true);
-    String str = ColorUtil.translateColors("&#FACA8C&lE&#FBD39F&la&#FCDCB2&lr&#FDE5C6&lt&#FDEDD9&lh &#FFFFFF&lG&#FEF7EF&la&#FEF0DE&lu&#FDE8CE&ln&#FCE1BD&lt&#FBD9AD&ll&#FBD29C&le&#FACA8C&lt");
-    itemMeta.setDisplayName(ChatColor.BOLD.toString() + str);
+    itemMeta.displayName(ColorUtil.translateColors("&#FACA8C&lE&#FBD39F&la&#FCDCB2&lr&#FDE5C6&lt&#FDEDD9&lh &#FFFFFF&lG&#FEF7EF&la&#FEF0DE&lu&#FDE8CE&ln&#FCE1BD&lt&#FBD9AD&ll&#FBD29C&le&#FACA8C&lt"));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "earth"));
     itemStack.setItemMeta(itemMeta);
     earthGauntlet = itemStack;
@@ -369,14 +413,13 @@ public class CustomItemRegistry {
         return witheredBone;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setLore(getLore("withered_bone"));
+    itemMeta.lore(getLore("withered_bone"));
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
-    itemMeta.setCustomModelData(Integer.valueOf(9));
+    setCustomModelData(itemMeta, 9);
     itemMeta.setUnbreakable(true);
-    String str = ColorUtil.translateColors("&#424242&lW&#424242&li&#424242&lt&#424242&lh&#4C4C4C&le&#555555&lr&#5F5F5F&le&#686868&ld &#7C7C7C&lB&#858585&lo&#8F8F8F&ln&#989898&le &#ACACAC&lB&#B5B5B5&ll&#BFBFBF&la&#C8C8C8&ld&#D2D2D2&le");
-    itemMeta.setDisplayName(ChatColor.BOLD.toString() + str);
+    itemMeta.displayName(ColorUtil.translateColors("&#424242&lW&#424242&li&#424242&lt&#424242&lh&#4C4C4C&le&#555555&lr&#5F5F5F&le&#686868&ld &#7C7C7C&lB&#858585&lo&#8F8F8F&ln&#989898&le &#ACACAC&lB&#B5B5B5&ll&#BFBFBF&la&#C8C8C8&ld&#D2D2D2&le"));
     itemStack.setItemMeta(itemMeta);
     witheredBone = itemStack;
     return itemStack;
@@ -388,35 +431,17 @@ public class CustomItemRegistry {
         return shadowBlade;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setLore(getLore("shadow_blade"));
+    itemMeta.lore(getLore("shadow_blade"));
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
-    itemMeta.setCustomModelData(Integer.valueOf(10));
+    setCustomModelData(itemMeta, 10);
     itemMeta.setUnbreakable(true);
-    String str2 = String.valueOf(ChatColor.BOLD);
-    String str3 = String.valueOf(ChatColor.of("#888888"));
-    String str4 = String.valueOf(ChatColor.BOLD);
-    String str5 = String.valueOf(ChatColor.of("#747474"));
-    String str6 = String.valueOf(ChatColor.BOLD);
-    String str7 = String.valueOf(ChatColor.of("#6a6a6a"));
-    String str8 = String.valueOf(ChatColor.BOLD);
-    String str9 = String.valueOf(ChatColor.of("#606060"));
-    String str10 = String.valueOf(ChatColor.BOLD);
-    String str11 = String.valueOf(ChatColor.of("#565656"));
-    String str12 = String.valueOf(ChatColor.BOLD);
-    String str13 = String.valueOf(ChatColor.of("#4c4c4c"));
-    String str14 = String.valueOf(ChatColor.BOLD);
-    String str15 = String.valueOf(ChatColor.of("#424242"));
-    String str16 = String.valueOf(ChatColor.BOLD);
-    String str17 = String.valueOf(ChatColor.of("#383838"));
-    String str18 = String.valueOf(ChatColor.BOLD);
-    String str19 = String.valueOf(ChatColor.of("#2e2e2e"));
-    String str20 = String.valueOf(ChatColor.BOLD);
-    String str21 = String.valueOf(ChatColor.of("#242424"));
-    String str22 = String.valueOf(ChatColor.BOLD);
-    String str1 =String.valueOf(ChatColor.of("#1a1a1a")) + String.valueOf(ChatColor.BOLD) + "ѕ" + String.valueOf(ChatColor.of("#242424")) + String.valueOf(ChatColor.BOLD) + "ʜ" + String.valueOf(ChatColor.of("#2e2e2e")) + String.valueOf(ChatColor.BOLD) + "ᴀ" + String.valueOf(ChatColor.of("#383838")) + String.valueOf(ChatColor.BOLD) + "ᴅ" + String.valueOf(ChatColor.of("#424242")) + String.valueOf(ChatColor.BOLD) + "ᴏ" + String.valueOf(ChatColor.of("#4c4c4c")) + String.valueOf(ChatColor.BOLD) + "ᴡ " + String.valueOf(ChatColor.of("#565656")) + String.valueOf(ChatColor.BOLD) + "ʙ" + String.valueOf(ChatColor.of("#606060")) + String.valueOf(ChatColor.BOLD) + "ʟ" + String.valueOf(ChatColor.of("#6a6a6a")) + String.valueOf(ChatColor.BOLD) + "ᴀ" + String.valueOf(ChatColor.of("#747474")) + String.valueOf(ChatColor.BOLD) + "ᴅ" + String.valueOf(ChatColor.of("#888888")) + String.valueOf(ChatColor.BOLD) + "ᴇ";
-    itemMeta.setDisplayName(ChatColor.BOLD.toString() + str1);
+    itemMeta.displayName(gradientBold("ѕʜᴀᴅᴏᴡ ʙʟᴀᴅᴇ",
+        TextColor.color(0x1a1a1a), TextColor.color(0x242424), TextColor.color(0x2e2e2e),
+        TextColor.color(0x383838), TextColor.color(0x424242), TextColor.color(0x4c4c4c),
+        TextColor.color(0x4c4c4c), TextColor.color(0x565656), TextColor.color(0x606060),
+        TextColor.color(0x6a6a6a), TextColor.color(0x747474), TextColor.color(0x888888)));
     itemStack.setItemMeta(itemMeta);
     shadowBlade = itemStack;
     return itemStack;
@@ -428,13 +453,12 @@ public class CustomItemRegistry {
         return cutlass;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setLore(getLore("cutlass"));
+    itemMeta.lore(getLore("cutlass"));
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
-    itemMeta.setCustomModelData(Integer.valueOf(11));
+    setCustomModelData(itemMeta, 11);
     itemMeta.setUnbreakable(true);
-    String str = ColorUtil.translateColors("&#65CFF5&lC&#98DFF8&lu&#CCEFFC&lt&#FFFFFF&ll&#CCEFFC&la&#98DFF8&ls&#65CFF5&ls");
-    itemMeta.setDisplayName(String.valueOf(ChatColor.BOLD) + str);
+    itemMeta.displayName(ColorUtil.translateColors("&#65CFF5&lC&#98DFF8&lu&#CCEFFC&lt&#FFFFFF&ll&#CCEFFC&la&#98DFF8&ls&#65CFF5&ls"));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "frost"));
     itemStack.setItemMeta(itemMeta);
     cutlass = itemStack;
@@ -447,13 +471,12 @@ public class CustomItemRegistry {
         return paladinAxe;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_AXE);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setLore(getLore("paladin_axe"));
+    itemMeta.lore(getLore("paladin_axe"));
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.EFFICIENCY, 5, true);
-    itemMeta.setCustomModelData(Integer.valueOf(2));
+    setCustomModelData(itemMeta, 2);
     itemMeta.setUnbreakable(true);
-    String str = ColorUtil.translateColors("&#EEB215&lP&#F0BA2C&la&#F1C144&ll&#F3C95B&la&#F5D173&ld&#F7D98A&li&#F8E0A1&ln&#FAE8B9&l'&#FCF0D0&ls &#FFFFFF&lB&#FDF6E5&la&#FBEECB&lt&#F9E5B1&lt&#F7DD97&ll&#F6D47D&le &#F2C349&lA&#F0BB2F&lx&#EEB215&le");
-    itemMeta.setDisplayName(str);
+    itemMeta.displayName(ColorUtil.translateColors("&#EEB215&lP&#F0BA2C&la&#F1C144&ll&#F3C95B&la&#F5D173&ld&#F7D98A&li&#F8E0A1&ln&#FAE8B9&l'&#FCF0D0&ls &#FFFFFF&lB&#FDF6E5&la&#FBEECB&lt&#F9E5B1&lt&#F7DD97&ll&#F6D47D&le &#F2C349&lA&#F0BB2F&lx&#EEB215&le"));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "gold"));
     itemStack.setItemMeta(itemMeta);
     paladinAxe = itemStack;
@@ -466,10 +489,13 @@ public class CustomItemRegistry {
         return windweaver;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    String str = "§x§7§8§C§5§C§0§lᴡ§x§9§0§C§F§C§A§lɪ§x§A§9§D§8§D§5§lɴ§x§C§1§E§2§D§F§lᴅ§x§D§A§E§B§E§A§lᴡ§x§F§2§F§5§F§4§lᴇ§x§D§4§E§9§E§7§lᴀ§x§B§5§D§D§D§A§lᴠ§x§9§7§D§1§C§D§lᴇ§x§7§8§C§5§C§0§lʀ";
-    itemMeta.setDisplayName(str);
-    itemMeta.setCustomModelData(Integer.valueOf(12));
-    itemMeta.setLore(getLore("windweaver"));
+    itemMeta.displayName(gradientBold("ᴡɪɴᴅᴡᴇᴀᴠᴇʀ",
+        TextColor.color(0x78C5C0), TextColor.color(0x90CFCA), TextColor.color(0xA9D8D5),
+        TextColor.color(0xC1E2DF), TextColor.color(0xDAEBEA), TextColor.color(0xF2F5F4),
+        TextColor.color(0xD4E9E7), TextColor.color(0xB5DDDA), TextColor.color(0x97D1CD),
+        TextColor.color(0x78C5C0)));
+    setCustomModelData(itemMeta, 12);
+    itemMeta.lore(getLore("windweaver"));
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
@@ -486,10 +512,13 @@ public class CustomItemRegistry {
         return paleCannon;
     }ItemStack itemStack = new ItemStack(Material.CROSSBOW);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    String str = "§x§9§A§9§9§9§9§lP§x§A§4§9§2§8§A§la§x§A§E§8§A§7§B§ll§x§B§8§8§3§6§C§le §x§C§C§7§4§4§E§lC§x§C§2§7§B§5§D§la§x§B§8§8§3§6§C§ln§x§A§E§8§A§7§B§ln§x§A§4§9§2§8§A§lo§x§9§A§9§9§9§9§ln";
-    itemMeta.setDisplayName(str);
-    itemMeta.setCustomModelData(Integer.valueOf(2));
-    itemMeta.setLore(getLore("pale_cannon"));
+    itemMeta.displayName(gradientBold("Pale Cannon",
+        TextColor.color(0x9A9999), TextColor.color(0xA4928A), TextColor.color(0xAE8A7B),
+        TextColor.color(0xB8836C), TextColor.color(0xB8836C), TextColor.color(0xCC744E),
+        TextColor.color(0xC27B5D), TextColor.color(0xB8836C), TextColor.color(0xAE8A7B),
+        TextColor.color(0xA4928A), TextColor.color(0x9A9999)));
+    setCustomModelData(itemMeta, 2);
+    itemMeta.lore(getLore("pale_cannon"));
     itemMeta.setUnbreakable(true);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "gold"));
     itemMeta.addEnchant(Enchantment.QUICK_CHARGE, 3, true);
@@ -504,10 +533,9 @@ public class CustomItemRegistry {
         return echo;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    String str = "§x§0§0§A§9§A§8§lEcho";
-    itemMeta.setDisplayName(str);
-    itemMeta.setCustomModelData(Integer.valueOf(13));
-    itemMeta.setLore(getLore("echo"));
+    itemMeta.displayName(Component.text("Echo", TextColor.color(0x00A9A8), TextDecoration.BOLD));
+    setCustomModelData(itemMeta, 13);
+    itemMeta.lore(getLore("echo"));
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
@@ -524,10 +552,9 @@ public class CustomItemRegistry {
         return eclipse;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    String str = "§f§lEclipse";
-    itemMeta.setDisplayName(str);
-    itemMeta.setCustomModelData(Integer.valueOf(14));
-    itemMeta.setLore(getLore("eclipse"));
+    itemMeta.displayName(Component.text("Eclipse", NamedTextColor.WHITE, TextDecoration.BOLD));
+    setCustomModelData(itemMeta, 14);
+    itemMeta.lore(getLore("eclipse"));
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
@@ -559,22 +586,22 @@ public class CustomItemRegistry {
     String str = String.valueOf(i);
     {
       if (i >= 10) {
-        itemMeta.setCustomModelData(Integer.valueOf(3));
+        setCustomModelData(itemMeta, 3);
       } else {
         {
           if (i >= 4) {
-            itemMeta.setCustomModelData(Integer.valueOf(2));
+            setCustomModelData(itemMeta, 2);
           } else {
-            itemMeta.setCustomModelData(Integer.valueOf(1));
+            setCustomModelData(itemMeta, 1);
           }
         }}
-    }itemMeta.setDisplayName("§f§lKnightfall");
-    ArrayList<String> arrayList = new ArrayList<>(getLore("knightfall"));
-    arrayList.replaceAll(paramS -> replaceKnightfallKills(str, paramS));
-    itemMeta.setLore(arrayList);
+    }itemMeta.displayName(Component.text("Knightfall", NamedTextColor.WHITE, TextDecoration.BOLD));
+    ArrayList<Component> arrayList = new ArrayList<>(getLore("knightfall"));
+    arrayList.replaceAll(paramComponent -> replaceKnightfallKills(str, paramComponent));
+    itemMeta.lore(arrayList);
     itemMeta.setUnbreakable(true);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "pure"));
-    itemMeta.getPersistentDataContainer().set(new NamespacedKey("altarsmp", "knightfall"), PersistentDataType.BOOLEAN, Boolean.valueOf(true));
+    itemMeta.getPersistentDataContainer().set(new NamespacedKey("altarsmp", "knightfall"), PersistentDataType.BOOLEAN, true);
     itemStack.setItemMeta(itemMeta);
     knightfall = itemStack;
     return itemStack;
@@ -586,13 +613,17 @@ public class CustomItemRegistry {
         return wardenHeart;
     }ItemStack itemStack = new ItemStack(Material.PAPER);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(5));
-    String str =String.valueOf(ChatColor.of("#009999")) + String.valueOf(ChatColor.BOLD) + "W" + String.valueOf(ChatColor.of("#00a3a3")) + String.valueOf(ChatColor.BOLD) + "a" + String.valueOf(ChatColor.of("#00adad")) + String.valueOf(ChatColor.BOLD) + "r" + String.valueOf(ChatColor.of("#00b7b7")) + String.valueOf(ChatColor.BOLD) + "d" + String.valueOf(ChatColor.of("#00c1c1")) + String.valueOf(ChatColor.BOLD) + "e" + String.valueOf(ChatColor.of("#00cbcb")) + String.valueOf(ChatColor.BOLD) + "n" + String.valueOf(ChatColor.of("#00d5d5")) + String.valueOf(ChatColor.BOLD) + "'" + String.valueOf(ChatColor.of("#22cccc")) + String.valueOf(ChatColor.BOLD) + "s" + String.valueOf(ChatColor.of("#00c5c5")) + String.valueOf(ChatColor.BOLD) + " " + String.valueOf(ChatColor.of("#00b5b5")) + String.valueOf(ChatColor.BOLD) + "H" + String.valueOf(ChatColor.of("#00a7a7")) + String.valueOf(ChatColor.BOLD) + "e" + String.valueOf(ChatColor.of("#009f9f")) + String.valueOf(ChatColor.BOLD) + "a" + String.valueOf(ChatColor.of("#009797")) + String.valueOf(ChatColor.BOLD) + "r" + String.valueOf(ChatColor.of("#008f8f")) + String.valueOf(ChatColor.BOLD) + "t";
-    itemMeta.setDisplayName(str);
+    setCustomModelData(itemMeta, 5);
+    itemMeta.displayName(gradientBold("Warden's Heart",
+        TextColor.color(0x009999), TextColor.color(0x00a3a3), TextColor.color(0x00adad),
+        TextColor.color(0x00b7b7), TextColor.color(0x00c1c1), TextColor.color(0x00cbcb),
+        TextColor.color(0x00d5d5), TextColor.color(0x22cccc), TextColor.color(0x00c5c5),
+        TextColor.color(0x00b5b5), TextColor.color(0x00a7a7), TextColor.color(0x009f9f),
+        TextColor.color(0x009797), TextColor.color(0x008f8f)));
     itemMeta.addEnchant(Enchantment.MENDING, 1, true);
-    itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+    itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "ancient"));
-    itemMeta.setLore(List.of("§7Used to forge Mythical Weapons"));
+    itemMeta.lore(List.of(Component.text("Used to forge Mythical Weapons", NamedTextColor.GRAY)));
     itemStack.setItemMeta(itemMeta);
     wardenHeart = itemStack;
     return itemStack;
@@ -604,9 +635,9 @@ public class CustomItemRegistry {
         return weaponHandle;
     }ItemStack itemStack = new ItemStack(Material.PAPER);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(9));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.RED) + "Weapon Handle");
-    itemMeta.setLore(getLore("weapon_handle"));
+    setCustomModelData(itemMeta, 9);
+    itemMeta.displayName(Component.text("Weapon Handle", NamedTextColor.RED));
+    itemMeta.lore(getLore("weapon_handle"));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "red"));
     itemStack.setItemMeta(itemMeta);
     weaponHandle = itemStack;
@@ -619,9 +650,9 @@ public class CustomItemRegistry {
         return vulcanSkull;
     }ItemStack itemStack = new ItemStack(Material.CLAY_BALL);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(3));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.RED) + "Vulcan's Skull");
-    itemMeta.setLore(getLore("vulcans_skull"));
+    setCustomModelData(itemMeta, 3);
+    itemMeta.displayName(Component.text("Vulcan's Skull", NamedTextColor.RED));
+    itemMeta.lore(getLore("vulcans_skull"));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "vulcan"));
     itemStack.setItemMeta(itemMeta);
     vulcanSkull = itemStack;
@@ -634,11 +665,11 @@ public class CustomItemRegistry {
         return illusionCore;
     }ItemStack itemStack = new ItemStack(Material.CLAY_BALL);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(1));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.LIGHT_PURPLE) + "Illusion Core");
-    itemMeta.setLore(getLore("illusion_core"));
+    setCustomModelData(itemMeta, 1);
+    itemMeta.displayName(Component.text("Illusion Core", NamedTextColor.LIGHT_PURPLE));
+    itemMeta.lore(getLore("illusion_core"));
     itemMeta.addEnchant(Enchantment.MENDING, 1, true);
-    itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+    itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "purple"));
     itemStack.setItemMeta(itemMeta);
     illusionCore = itemStack;
@@ -651,9 +682,9 @@ public class CustomItemRegistry {
         return hyperionShard;
     }ItemStack itemStack = new ItemStack(Material.PAPER);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setDisplayName(String.valueOf(ChatColor.GOLD) + ChatColor.BOLD.toString() + "Hyperion Shard");
-    itemMeta.setCustomModelData(Integer.valueOf(3));
-    itemMeta.setLore(List.of("§7Used to forge the Hyperion"));
+    itemMeta.displayName(Component.text("Hyperion Shard", NamedTextColor.GOLD, TextDecoration.BOLD));
+    setCustomModelData(itemMeta, 3);
+    itemMeta.lore(List.of(Component.text("Used to forge the Hyperion", NamedTextColor.GRAY)));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "gold"));
     itemStack.setItemMeta(itemMeta);
     hyperionShard = itemStack;
@@ -666,10 +697,10 @@ public class CustomItemRegistry {
         return vampireShard;
     }ItemStack itemStack = new ItemStack(Material.PAPER);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setDisplayName(String.valueOf(ChatColor.DARK_RED) + ChatColor.BOLD.toString() + "Vampire Shard");
+    itemMeta.displayName(Component.text("Vampire Shard", NamedTextColor.DARK_RED, TextDecoration.BOLD));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "red"));
-    itemMeta.setLore(List.of("§7Used to forge Nightpiercer"));
-    itemMeta.setCustomModelData(Integer.valueOf(1));
+    itemMeta.lore(List.of(Component.text("Used to forge Nightpiercer", NamedTextColor.GRAY)));
+    setCustomModelData(itemMeta, 1);
     itemStack.setItemMeta(itemMeta);
     vampireShard = itemStack;
     return itemStack;
@@ -681,9 +712,9 @@ public class CustomItemRegistry {
         return paleShard;
     }ItemStack itemStack = new ItemStack(Material.PAPER);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setDisplayName(String.valueOf(ChatColor.GRAY) + ChatColor.BOLD.toString() + "Pale Shard");
-    itemMeta.setCustomModelData(Integer.valueOf(2));
-    itemMeta.setLore(List.of("§7Used to forge the Pale Cannon"));
+    itemMeta.displayName(Component.text("Pale Shard", NamedTextColor.GRAY, TextDecoration.BOLD));
+    setCustomModelData(itemMeta, 2);
+    itemMeta.lore(List.of(Component.text("Used to forge the Pale Cannon", NamedTextColor.GRAY)));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "pure"));
     itemStack.setItemMeta(itemMeta);
     paleShard = itemStack;
@@ -693,10 +724,10 @@ public class CustomItemRegistry {
   public static ItemStack getChestplateShard() {
     ItemStack itemStack = new ItemStack(Material.AMETHYST_SHARD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(66));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + "§lChestplate Shard");
+    setCustomModelData(itemMeta, 66);
+    itemMeta.displayName(Component.text("Chestplate Shard", COPPER, TextDecoration.BOLD));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "gold"));
-    itemMeta.setLore(List.of("§7Used to forge the Copper Chestplate"));
+    itemMeta.lore(List.of(Component.text("Used to forge the Copper Chestplate", NamedTextColor.GRAY)));
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
@@ -704,10 +735,10 @@ public class CustomItemRegistry {
   public static ItemStack getHelmetShard() {
     ItemStack itemStack = new ItemStack(Material.AMETHYST_SHARD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(67));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + "§lHelmet Shard");
+    setCustomModelData(itemMeta, 67);
+    itemMeta.displayName(Component.text("Helmet Shard", COPPER, TextDecoration.BOLD));
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "gold"));
-    itemMeta.setLore(List.of("§7Used to forge the Copper Helmet"));
+    itemMeta.lore(List.of(Component.text("Used to forge the Copper Helmet", NamedTextColor.GRAY)));
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
@@ -718,15 +749,15 @@ public class CustomItemRegistry {
         return copperHelmet;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_HELMET);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(1));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + "Copper Helmet");
+    setCustomModelData(itemMeta, 1);
+    itemMeta.displayName(Component.text("Copper Helmet", COPPER));
     EquippableComponent equippableComponent = itemMeta.getEquippable();
     equippableComponent.setSlot(EquipmentSlot.HEAD);
     equippableComponent.setModel(new NamespacedKey("custom", "copper"));
     itemMeta.setItemModel(new NamespacedKey("custom", "copper_helmet"));
     itemMeta.setEquippable(equippableComponent);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "red"));
-    itemMeta.setLore(getLore("copper_helmet"));
+    itemMeta.lore(getLore("copper_helmet"));
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.PROTECTION, 4, true);
     itemMeta.addEnchant(Enchantment.RESPIRATION, 3, true);
@@ -743,14 +774,14 @@ public class CustomItemRegistry {
         return copperChestplate;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_CHESTPLATE);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(1));
+    setCustomModelData(itemMeta, 1);
     EquippableComponent equippableComponent = itemMeta.getEquippable();
     equippableComponent.setSlot(EquipmentSlot.CHEST);
     equippableComponent.setModel(new NamespacedKey("custom", "copper"));
     itemMeta.setItemModel(new NamespacedKey("custom", "copper_chestplate"));
     itemMeta.setEquippable(equippableComponent);
-    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + "Copper Chestplate");
-    itemMeta.setLore(getLore("copper_chestplate"));
+    itemMeta.displayName(Component.text("Copper Chestplate", COPPER));
+    itemMeta.lore(getLore("copper_chestplate"));
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.PROTECTION, 4, true);
     itemMeta.addEnchant(Enchantment.MENDING, 1, true);
@@ -767,14 +798,14 @@ public class CustomItemRegistry {
         return copperLeggings;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_LEGGINGS);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(1));
+    setCustomModelData(itemMeta, 1);
     EquippableComponent equippableComponent = itemMeta.getEquippable();
     equippableComponent.setSlot(EquipmentSlot.LEGS);
     equippableComponent.setModel(new NamespacedKey("custom", "copper"));
     itemMeta.setItemModel(new NamespacedKey("custom", "copper_leggings"));
     itemMeta.setEquippable(equippableComponent);
-    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + "Copper Leggings");
-    itemMeta.setLore(getLore("copper_leggings"));
+    itemMeta.displayName(Component.text("Copper Leggings", COPPER));
+    itemMeta.lore(getLore("copper_leggings"));
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.PROTECTION, 4, true);
     itemMeta.addEnchant(Enchantment.MENDING, 1, true);
@@ -796,9 +827,9 @@ public class CustomItemRegistry {
     equippableComponent.setModel(new NamespacedKey("custom", "copper"));
     itemMeta.setItemModel(new NamespacedKey("custom", "copper_boots"));
     itemMeta.setEquippable(equippableComponent);
-    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + "Copper Boots");
-    itemMeta.setLore(getLore("copper_boots"));
-    itemMeta.setCustomModelData(Integer.valueOf(1));
+    itemMeta.displayName(Component.text("Copper Boots", COPPER));
+    itemMeta.lore(getLore("copper_boots"));
+    setCustomModelData(itemMeta, 1);
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.PROTECTION, 4, true);
     itemMeta.addEnchant(Enchantment.FEATHER_FALLING, 4, true);
@@ -817,9 +848,9 @@ public class CustomItemRegistry {
         return copperPickaxe;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_PICKAXE);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(1));
-    itemMeta.setDisplayName(String.valueOf(ChatColor.of("#B06736")) + "Copper Pickaxe");
-    itemMeta.setLore(getLore("copper_pickaxe"));
+    setCustomModelData(itemMeta, 1);
+    itemMeta.displayName(Component.text("Copper Pickaxe", COPPER));
+    itemMeta.lore(getLore("copper_pickaxe"));
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.SILK_TOUCH, 1, true);
     itemMeta.addEnchant(Enchantment.EFFICIENCY, 5, true);
@@ -837,15 +868,18 @@ public class CustomItemRegistry {
     }ItemStack itemStack = new ItemStack(Material.PRISMARINE_SHARD);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setItemModel(new NamespacedKey("minecraft", "contag"));
-    itemMeta.setDisplayName("§aContagion Signal");
-    itemMeta.setCustomModelData(Integer.valueOf(3278542));
+    itemMeta.displayName(Component.text("Contagion Signal", NamedTextColor.GREEN));
+    setCustomModelData(itemMeta, 3278542);
     itemStack.setItemMeta(itemMeta);
     copperPickaxe = itemStack;
     return itemStack;
   }
 
-  public static String replaceKnightfallKills(String paramString1, String paramString2) {
-    return paramString2.replace("<kills>", paramString1);
+  public static Component replaceKnightfallKills(String paramString1, Component paramString2) {
+    return paramString2.replaceText(TextReplacementConfig.builder()
+        .matchLiteral("<kills>")
+        .replacement(paramString1)
+        .build());
   }
 
   public static ItemStack getTidebreaker() {
@@ -862,17 +896,17 @@ public class CustomItemRegistry {
   public static ItemStack getAncientBlade(Player paramPlayer) {
     ItemStack itemStack = buildSeasonTwoLegendary(Material.NETHERITE_SWORD, "Ancient Blade", "#55ffff", "#005555", "altar:item/ancientblade", "minecraft:ancient", "ancient_blade");
     int kills = 0;
-    if (paramPlayer != null && net.kingscraft.zenixmc.altarsmp.altars2.Altars2.isEnabled())
-      kills = net.kingscraft.zenixmc.altarsmp.altars2.Altars2.getKillTracker().getKillCount(paramPlayer);
+    if (paramPlayer != null && AltarS2.isEnabled())
+      kills = AltarS2.getKillTracker().getKillCount(paramPlayer);
     ItemMeta itemMeta = itemStack.getItemMeta();
     if (itemMeta == null)
       return itemStack;
-    List<String> lore = itemMeta.getLore();
+    List<Component> lore = itemMeta.lore();
     if (lore != null) {
-      List<String> updated = new ArrayList<>(lore);
+      List<Component> updated = new ArrayList<>(lore);
       for (int i = 0; i < updated.size(); i++)
-        updated.set(i, updated.get(i).replace("<kills>", String.valueOf(kills)));
-      itemMeta.setLore(updated);
+        updated.set(i, replaceKnightfallKills(String.valueOf(kills), updated.get(i)));
+      itemMeta.lore(updated);
     }
     itemStack.setItemMeta(itemMeta);
     return itemStack;
@@ -904,14 +938,15 @@ public class CustomItemRegistry {
     ItemMeta itemMeta = itemStack.getItemMeta();
     if (itemMeta == null)
       return itemStack;
-    itemMeta.setDisplayName(ColorUtil.gradient(displayName, fromHex, toHex));
-    itemMeta.setLore(getLore(loreKey));
+    itemMeta.displayName(ColorUtil.gradient(displayName, fromHex, toHex));
+    itemMeta.lore(getLore(loreKey));
     int sharpness = AltarSMP.getInstance().getConfig().getInt("sharpness", 7);
     itemMeta.addEnchant(Enchantment.SHARPNESS, sharpness, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
     itemMeta.setUnbreakable(true);
-    itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+    itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
+    itemMeta.setHideTooltip(true);
     itemMeta.setItemModel(NamespacedKey.fromString(itemModel));
     if (tooltipStyle != null)
       itemMeta.setTooltipStyle(NamespacedKey.fromString(tooltipStyle));
@@ -932,7 +967,13 @@ public class CustomItemRegistry {
   }
 
   public static ItemStack getNetheriteHarness() {
-    return buildSeasonTwoItem(Material.PURPLE_HARNESS, "§0§lNetherite Harness", null, null, null);
+    ItemStack itemStack = new ItemStack(Material.PURPLE_HARNESS);
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    if (itemMeta == null)
+      return itemStack;
+    itemMeta.displayName(Component.text("Netherite Harness", NamedTextColor.BLACK, TextDecoration.BOLD));
+    itemStack.setItemMeta(itemMeta);
+    return itemStack;
   }
 
   public static ItemStack getAmethystAxe() {
@@ -956,7 +997,9 @@ public class CustomItemRegistry {
     ItemMeta itemMeta = itemStack.getItemMeta();
     if (itemMeta == null)
       return itemStack;
-    itemMeta.setDisplayName(fromHex == null || toHex == null ? displayName : ColorUtil.gradient(displayName, fromHex, toHex));
+    itemMeta.displayName(fromHex == null || toHex == null
+            ? Component.text(displayName)
+            : ColorUtil.gradient(displayName, fromHex, toHex));
     if (itemModel != null)
       itemMeta.setItemModel(NamespacedKey.fromString(itemModel));
     if (unbreakable) {
@@ -967,12 +1010,12 @@ public class CustomItemRegistry {
     return itemStack;
   }
 
-  public static List loadLore(String paramString) {
-    return messagesConfig.getStringList("weapons." + paramString).stream().map(paramLore1 -> translateLoreColors(paramLore1)).toList();
+  public static List<Component> loadLore(String paramString) {
+    return messagesConfig.getStringList("weapons." + paramString).stream().map(CustomItemRegistry::translateLoreColors).toList();
   }
 
-  public static String translateLoreColors(String paramString) {
-    return paramString.replace("&", "§");
+  public static Component translateLoreColors(String paramString) {
+    return LegacyComponentSerializer.legacyAmpersand().deserialize(paramString);
   }
 
   static {

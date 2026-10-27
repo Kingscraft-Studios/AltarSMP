@@ -1,7 +1,8 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.pale;
 
 import java.util.ArrayList;
-import org.bukkit.ChatColor;
+import java.util.List;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,7 +24,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Transformation;
@@ -32,7 +32,7 @@ import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 import net.kingscraft.zenixmc.altarsmp.weapon.vulcan.VulcanGauntletAbility;
 
@@ -65,11 +65,9 @@ public class PaleCannonAbility implements Listener {
       if (itemMeta == null)
         return false; 
     }{
-      if (!itemMeta.hasCustomModelData())
-        return false; 
-    }{
-
-    }return (itemMeta.getCustomModelData() == 2);
+      List<Float> customModelData = itemMeta.getCustomModelDataComponent().getFloats();
+      return !customModelData.isEmpty() && customModelData.getFirst() == 2;
+    }
   }
 
   @EventHandler
@@ -86,7 +84,7 @@ public class PaleCannonAbility implements Listener {
     {
       if (crossbowMeta != null) {
         {
-          if (!crossbowMeta.hasCustomModelData())
+          if (crossbowMeta.getCustomModelDataComponent().getFloats().isEmpty())
             return; 
         }} else {
         return;
@@ -126,10 +124,10 @@ public class PaleCannonAbility implements Listener {
   }
 
   public static void spawnPaleRoots(Player paramPlayer) {
-    ArrayList arrayList = new ArrayList();
+    ArrayList<ItemDisplay> arrayList = new ArrayList<>();
     int i = AltarSMP.getInstance().getConfig().getInt("paleRootsCount", 12);
     int j = AltarSMP.getInstance().getConfig().getInt("paleRootsDamage", 3);
-    (new PaleRootsGrowthTask(paramPlayer, arrayList, i, j)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new PaleRootsGrowthTask(paramPlayer, arrayList, i, j)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public void activatePaleCannon(Player paramPlayer) {
@@ -138,11 +136,11 @@ public class PaleCannonAbility implements Listener {
         return; 
     }CrossbowMeta crossbowMeta = (CrossbowMeta)paramPlayer.getInventory().getItemInMainHand().getItemMeta();
     crossbowMeta.setChargedProjectiles(null);
-    paramPlayer.getInventory().getItemInMainHand().setItemMeta((ItemMeta)crossbowMeta);
+    paramPlayer.getInventory().getItemInMainHand().setItemMeta(crossbowMeta);
     paramPlayer.setVelocity(paramPlayer.getLocation().getDirection().normalize().multiply(-0.5D));
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 2.0F, 1.5F);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "palecannon", COOLDOWN);
-    BossBarManager.createBar(paramPlayer, "Pale Cannon", COOLDOWN, ChatColor.YELLOW, BarColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Pale Cannon", COOLDOWN, NamedTextColor.YELLOW, BarColor.YELLOW);
     Location location = paramPlayer.getEyeLocation();
     Vector vector1 = location.getDirection().normalize();
     ItemDisplay itemDisplay = (ItemDisplay)paramPlayer.getWorld().spawnEntity(location, EntityType.ITEM_DISPLAY);
@@ -150,7 +148,7 @@ public class PaleCannonAbility implements Listener {
     itemDisplay.setTransformation(new Transformation(new Vector3f(0.0F, 0.0F, 0.0F), new AxisAngle4f((float)Math.toRadians(90.0D), 1.0F, 0.0F, 0.0F), new Vector3f(0.75F, 0.75F, 0.75F), new AxisAngle4f(0.0F, 0.0F, 0.0F, 1.0F)));
     double d = AltarSMP.getInstance().getConfig().getInt("palePower", 2);
     Vector vector2 = vector1.multiply(d);
-    (new PaleCannonProjectileTask(this, vector2, itemDisplay, paramPlayer)).runTaskTimer((Plugin)this.plugin, 0L, 1L);
+    (new PaleCannonProjectileTask(this, vector2, itemDisplay, paramPlayer)).runTaskTimer(this.plugin, 0L, 1L);
   }
 
   public static void detonatePaleCannon(Location paramLocation, Player paramPlayer) {
@@ -164,9 +162,8 @@ public class PaleCannonAbility implements Listener {
         if (entity == paramPlayer)
           continue; 
       }{
-        if (!AltarSMP.isTrusted(paramPlayer, entity) && entity instanceof LivingEntity) {
-          LivingEntity livingEntity = (LivingEntity)entity;
-          TrueDamage.apply(livingEntity, d, paramPlayer);
+        if (!AltarSMP.isTrusted(paramPlayer, entity) && entity instanceof LivingEntity livingEntity) {
+            TrueDamage.apply(livingEntity, d, paramPlayer);
         } 
       }} 
     if (AltarSMP.getInstance().getConfig().getBoolean("paleParticleEffects", true)) {

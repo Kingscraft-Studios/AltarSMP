@@ -3,7 +3,17 @@ version: ${project.version}
 main: net.kingscraft.zenixmc.altarsmp.AltarSMP
 api-version: '1.21'
 authors: [Kingscraft-Studios]
-softdepend: [WorldGuard]
+contributors: ["Doomwen"]
+website: https://modrinth.com/user/Doomwen
+
+description: >
+  Premium AltarSMP Plugin No Obfuscation or any Paywall.
+  Custom resource pack assets created by Doomwen and loaded externally.
+
+softdepend:
+  - WorldGuard
+  - WorldEdit
+
 permissions:
   altar.admin:
     default: op

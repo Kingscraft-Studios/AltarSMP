@@ -1,7 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.scorching;
 
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.scheduler.BukkitRunnable;

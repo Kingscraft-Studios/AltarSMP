@@ -6,9 +6,10 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.kingscraft.zenixmc.altarsmp.core.tracker.KillTracker;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kingscraft.zenixmc.altarsmp.core.KillTracker;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -31,13 +32,12 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 
@@ -63,7 +63,7 @@ public class BloodLustAbilityListener implements Listener {
   public static double bloodlustTrackRange;
 
   static {
-    activeBloodTrails = new ConcurrentHashMap();
+    activeBloodTrails = new ConcurrentHashMap<>();
     plugin = AltarSMP.getInstance();
     speedLevel = plugin.getConfig().getInt("speedLevel", 1);
     strengthLevel = plugin.getConfig().getInt("strengthLevel", 0);
@@ -72,7 +72,7 @@ public class BloodLustAbilityListener implements Listener {
 
   public BloodLustAbilityListener(KillTracker paramBloodLustKillTracker) {
     this.killTracker = paramBloodLustKillTracker;
-    (new BloodLustAbilityMonitorTask(this, paramBloodLustKillTracker)).runTaskTimer((Plugin) plugin, 0L, 20L);
+    (new BloodLustAbilityMonitorTask(this, paramBloodLustKillTracker)).runTaskTimer(plugin, 0L, 20L);
   }
 
   public static boolean isHoldingBloodlust(Player paramPlayer) {
@@ -92,7 +92,7 @@ public class BloodLustAbilityListener implements Listener {
           if (paramPlayerInteractEvent.getAction() == Action.LEFT_CLICK_BLOCK) {
             if (player.isSneaking()) {
               int i = this.killTracker.getKillCount(player);
-              player.sendActionBar(String.valueOf(ChatColor.RED) + "You are at " + i + " bloodlust kill(s).");
+              player.sendActionBar(Component.text("You are at " + i + " bloodlust kill(s).", NamedTextColor.RED));
             } 
             return;
           } 
@@ -100,7 +100,7 @@ public class BloodLustAbilityListener implements Listener {
       } 
     }if (player.isSneaking()) {
       int i = this.killTracker.getKillCount(player);
-      player.sendActionBar(String.valueOf(ChatColor.RED) + "You are at " + i + " bloodlust kill(s).");
+      player.sendActionBar(Component.text("You are at " + i + " bloodlust kill(s).", NamedTextColor.RED));
     } 
   }
 
@@ -114,7 +114,7 @@ public class BloodLustAbilityListener implements Listener {
       if (!isHoldingBloodlust(player))
         return; 
     }this.killTracker.incrementKillCount(player);
-    player.sendActionBar(String.valueOf(ChatColor.RED) + "Your weapon grows stronger...");
+    player.sendActionBar(Component.text("Your weapon grows stronger...", NamedTextColor.RED));
     player.getWorld().playSound(player.getLocation(), "minecraft:bloodlust.kill", 1.0F, 1.0F);
   }
 
@@ -154,12 +154,12 @@ public class BloodLustAbilityListener implements Listener {
     int j = plugin.getConfig().getInt("infectionDuration", 5) * 20;
     int k = plugin.getConfig().getInt("infectionDamage", 2);
     CooldownManager.setCooldown(player.getUniqueId(), "infection", i);
-    (new BloodInfectionDamageTask(this, j, livingEntity, k)).runTaskTimer((Plugin) plugin, 0L, 1L);
+    (new BloodInfectionDamageTask(j, livingEntity, k)).runTaskTimer(plugin, 0L, 1L);
   }
 
   public void startBloodDive(Player paramPlayer) {
     BloodDiveSpeedTask bloodDiveSpeedTask = new BloodDiveSpeedTask(this, paramPlayer);
-    bloodDiveSpeedTask.runTaskTimer((Plugin) plugin, 0L, 20L);
+    bloodDiveSpeedTask.runTaskTimer(plugin, 0L, 20L);
     this.bloodTrailTasks.put(paramPlayer.getUniqueId(), bloodDiveSpeedTask);
   }
 
@@ -169,12 +169,12 @@ public class BloodLustAbilityListener implements Listener {
       if (bukkitRunnable != null)
         try {
           bukkitRunnable.cancel();
-        } catch (IllegalStateException illegalStateException) {} 
+        } catch (IllegalStateException ignored) {}
     }}
 
   public void startBloodTrail(Player paramPlayer) {
     BloodTrailStrengthTask bloodTrailStrengthTask = new BloodTrailStrengthTask(this, paramPlayer);
-    bloodTrailStrengthTask.runTaskTimer((Plugin) plugin, 0L, 20L);
+    bloodTrailStrengthTask.runTaskTimer(plugin, 0L, 20L);
     this.bloodDiveTasks.put(paramPlayer.getUniqueId(), bloodTrailStrengthTask);
   }
 
@@ -184,12 +184,12 @@ public class BloodLustAbilityListener implements Listener {
       if (bukkitRunnable != null)
         try {
           bukkitRunnable.cancel();
-        } catch (IllegalStateException illegalStateException) {} 
+        } catch (IllegalStateException ignored) {}
     }}
 
   public void startBloodHook(Player paramPlayer) {
     BloodHookTargetingTask bloodHookTargetingTask = new BloodHookTargetingTask(this, paramPlayer);
-    bloodHookTargetingTask.runTaskTimer((Plugin) plugin, 0L, 20L);
+    bloodHookTargetingTask.runTaskTimer(plugin, 0L, 20L);
     this.bloodHookTasks.put(paramPlayer.getUniqueId(), bloodHookTargetingTask);
   }
 
@@ -201,7 +201,7 @@ public class BloodLustAbilityListener implements Listener {
         if (player1.equals(paramPlayer))
           continue; 
       }{
-        if (AltarSMP.isTrusted(paramPlayer, (Entity)player1))
+        if (AltarSMP.isTrusted(paramPlayer, player1))
           continue; 
       }{
         if (player1.getWorld() != paramPlayer.getWorld())
@@ -221,13 +221,13 @@ public class BloodLustAbilityListener implements Listener {
       if (bukkitRunnable1 != null)
         try {
           bukkitRunnable1.cancel();
-        } catch (IllegalStateException illegalStateException) {} 
+        } catch (IllegalStateException ignored) {}
     }BukkitRunnable bukkitRunnable2 = this.bloodInfectionTasks.remove(paramPlayer.getUniqueId());
     {
       if (bukkitRunnable2 != null)
         try {
           bukkitRunnable2.cancel();
-        } catch (IllegalStateException illegalStateException) {} 
+        } catch (IllegalStateException ignored) {}
     }}
 
   public static void startBloodTrailEffect(Player paramPlayer) {
@@ -238,7 +238,7 @@ public class BloodLustAbilityListener implements Listener {
         attributeInstance.setBaseValue(0.4D); 
     }int i = plugin.getConfig().getInt("bloodTrailDuration", 15);
     for (Player player : Bukkit.getOnlinePlayers())
-      player.hidePlayer((Plugin)AltarSMP.getInstance(), paramPlayer); 
+      player.hidePlayer(AltarSMP.getInstance(), paramPlayer);
     BloodTrailInvisibilityTask bloodTrailInvisibilityTask = new BloodTrailInvisibilityTask(paramPlayer, i);
     WorldBorder worldBorder = Bukkit.createWorldBorder();
     {
@@ -247,7 +247,7 @@ public class BloodLustAbilityListener implements Listener {
       worldBorder.setWarningDistance(59999968);
       if (AltarSMP.getInstance().getConfig().getBoolean("bloodlustBorderLogic", true))
         paramPlayer.setWorldBorder(worldBorder); 
-    }bloodTrailInvisibilityTask.runTaskTimer((Plugin) plugin, 0L, 2L);
+    }bloodTrailInvisibilityTask.runTaskTimer(plugin, 0L, 2L);
     activeBloodTrails.put(paramPlayer.getUniqueId(), bloodTrailInvisibilityTask);
   }
 
@@ -258,7 +258,7 @@ public class BloodLustAbilityListener implements Listener {
         return; 
     }bukkitRunnable.cancel();
     int i = plugin.getConfig().getInt("bloodTrailCooldown", 60);
-    BossBarManager.createBar(paramPlayer, "Blood Trail", i, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Blood Trail", i, NamedTextColor.YELLOW);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "bloodTrail", i);
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), "minecraft:bloodlust.resurface", 2.0F, 1.0F);
     AttributeInstance attributeInstance1 = paramPlayer.getAttribute(Attribute.SCALE);
@@ -270,11 +270,11 @@ public class BloodLustAbilityListener implements Listener {
       if (attributeInstance2 != null)
         attributeInstance2.setBaseValue(0.6D); 
     }for (Player player : Bukkit.getOnlinePlayers())
-      player.showPlayer((Plugin)AltarSMP.getInstance(), paramPlayer); 
+      player.showPlayer(AltarSMP.getInstance(), paramPlayer);
     {
       if (AltarSMP.getInstance().getConfig().getBoolean("bloodlustBorderLogic", true))
         paramPlayer.setWorldBorder(null); 
-    }paramPlayer.sendActionBar(" ");
+    }paramPlayer.sendActionBar(Component.text(" "));
   }
 
   @EventHandler
@@ -311,7 +311,7 @@ public class BloodLustAbilityListener implements Listener {
     if (activeBloodTrails.containsKey(player.getUniqueId())) {
       endBloodTrailEffect(player);
       int i = plugin.getConfig().getInt("bloodTrailCooldown", 60);
-      BossBarManager.createBar(player, "Blood Trail", i, ChatColor.YELLOW);
+      BossBarManager.createBar(player, "Blood Trail", i, NamedTextColor.YELLOW);
       CooldownManager.setCooldown(player.getUniqueId(), "bloodTrail", i);
     } 
   }
@@ -328,7 +328,7 @@ public class BloodLustAbilityListener implements Listener {
     if (activeBloodTrails.containsKey(player.getUniqueId())) {
       endBloodTrailEffect(player);
       int i = plugin.getConfig().getInt("bloodTrailCooldown", 60);
-      BossBarManager.createBar(player, "Blood Trail", i, ChatColor.YELLOW);
+      BossBarManager.createBar(player, "Blood Trail", i, NamedTextColor.YELLOW);
       CooldownManager.setCooldown(player.getUniqueId(), "bloodTrail", i);
     } 
   }
@@ -340,7 +340,7 @@ public class BloodLustAbilityListener implements Listener {
     double d3 = AltarSMP.getInstance().getConfig().getDouble("hookDamage", 4.0D);
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), "minecraft:bloodlust.resurface", 2.0F, 1.4F);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "bloodHook", i);
-    BossBarManager.createBar(paramPlayer, "Blood Hook", i, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Blood Hook", i, NamedTextColor.YELLOW);
     Location location = paramPlayer.getEyeLocation();
     Vector vector = location.getDirection().normalize().clone();
     World world = paramPlayer.getWorld();
@@ -350,14 +350,14 @@ public class BloodLustAbilityListener implements Listener {
     Transformation transformation = itemDisplay.getTransformation();
     transformation.getScale().set(1.0F, 1.0F, 1.0F);
     itemDisplay.setTransformation(transformation);
-    (new BloodHookProjectileTask(location, d2, paramPlayer, itemDisplay, vector, d1, world, d3)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new BloodHookProjectileTask(location, d2, paramPlayer, itemDisplay, vector, d1, world, d3)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void infectEntity(LivingEntity paramLivingEntity, Player paramPlayer) {
     {
       if (WorldGuardHook.isBlocked(paramLivingEntity.getLocation()))
         return; 
-    }(new BloodDivePullTask(paramLivingEntity, paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    }(new BloodDivePullTask(paramLivingEntity, paramPlayer)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
 

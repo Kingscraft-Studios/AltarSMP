@@ -1,5 +1,10 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.precision;
 
+import java.time.Duration;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -8,7 +13,6 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class StabShotChargeTask extends BukkitRunnable {
   public int remainingTicks;
@@ -27,7 +31,10 @@ class StabShotChargeTask extends BukkitRunnable {
 
   public final int verticalRadius;
 
-  private static final String WARNING_MESSAGE = "§c§lWARNING: §eSTAB SHOT IMMINENT";
+  private static final Component WARNING_MESSAGE = Component.text()
+      .append(Component.text("WARNING: ", NamedTextColor.RED, TextDecoration.BOLD))
+      .append(Component.text("STAB SHOT IMMINENT", NamedTextColor.YELLOW))
+      .build();
 
   public StabShotChargeTask(Location paramLocation, Player paramPlayer, int paramInt1, ItemDisplay paramItemDisplay, World paramWorld, int paramInt2) {
         this.location = paramLocation;
@@ -66,7 +73,10 @@ class StabShotChargeTask extends BukkitRunnable {
     this.itemDisplay.setTransformation(transformation);
     for (Player player : this.location.getNearbyPlayers(this.currentRadius, this.verticalRadius, this.currentRadius)) {
       player.getWorld().playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 0.25F, 1.0F);
-      player.sendTitle("", WARNING_MESSAGE, 0, 2, 0);
+      player.showTitle(Title.title(
+          Component.empty(),
+          WARNING_MESSAGE,
+          Title.Times.times(Duration.ZERO, Duration.ofMillis(100), Duration.ZERO)));
     } 
     if (this.currentRadius != this.radius) {
       this.currentRadius += 0.5D;

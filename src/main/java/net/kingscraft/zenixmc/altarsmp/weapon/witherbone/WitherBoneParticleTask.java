@@ -8,7 +8,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import org.joml.AxisAngle4f;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class WitherBoneParticleTask extends BukkitRunnable {
   public Vector particleVelocity;

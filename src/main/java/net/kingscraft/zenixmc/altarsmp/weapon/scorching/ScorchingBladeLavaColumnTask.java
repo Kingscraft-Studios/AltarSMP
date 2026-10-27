@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.weapon.scorching;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
@@ -12,11 +11,11 @@ class ScorchingBladeLavaColumnTask extends BukkitRunnable {
 
   public int blocksPlaced;
 
-  public final List lavaBlocks;
+  public final List<Block> lavaBlocks;
 
   public final Block originBlock;
 
-  public ScorchingBladeLavaColumnTask(List paramList, Block paramBlock) {
+  public ScorchingBladeLavaColumnTask(List<Block> paramList, Block paramBlock) {
         this.lavaBlocks = paramList;
         this.originBlock = paramBlock;
         this.ticks = 0;
@@ -25,7 +24,7 @@ class ScorchingBladeLavaColumnTask extends BukkitRunnable {
 
   public void run() {
     if (this.ticks >= 5) {
-      (new ScorchingBladeLavaCleanupTask(this)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 2L);
+      (new ScorchingBladeLavaCleanupTask(this)).runTaskTimer(AltarSMP.getInstance(), 0L, 2L);
       cancel();
       return;
     } 

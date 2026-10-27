@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class GrapplePullTask extends BukkitRunnable {
   public int ticks;

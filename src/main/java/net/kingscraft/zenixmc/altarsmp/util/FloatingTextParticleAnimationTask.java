@@ -1,5 +1,7 @@
 package net.kingscraft.zenixmc.altarsmp.util;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.TextDisplay;
@@ -51,7 +53,7 @@ public class FloatingTextParticleAnimationTask extends BukkitRunnable {
     if (this.text.equals(" ")) {
       this.textDisplay.setBackgroundColor(this.particleColor);
     } else {
-      this.textDisplay.setText(ChatFormattingUtils.toHexColorCode(this.particleColor) + this.text);
+      this.textDisplay.text(Component.text(this.text, TextColor.color(this.particleColor.getRed(), this.particleColor.getGreen(), this.particleColor.getBlue())));
     } 
 
     this.textDisplay.setTransformation(transformation);

@@ -3,7 +3,7 @@ package net.kingscraft.zenixmc.altarsmp.weapon.boneblade;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -28,7 +28,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
@@ -56,29 +55,29 @@ public class BoneBladeAbility implements Listener {
     double d1 = AltarSMP.getInstance().getConfig().getDouble("skeletalLeapDistance", 1.5D);
     double d2 = AltarSMP.getInstance().getConfig().getDouble("skeletalLeapDamage", 14.0D);
     spawnBoneParticles(location, Material.BONE, 10, 2.0D, 15);
-    (new BoneBladeSkeletalLeapTask(paramPlayer, d2)).runTaskTimer((Plugin)AltarSMP.getInstance(), 3L, 1L);
+    (new BoneBladeSkeletalLeapTask(paramPlayer, d2)).runTaskTimer(AltarSMP.getInstance(), 3L, 1L);
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 1.0F, 1.0F);
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_SKELETON_DEATH, 1.0F, 0.8F);
-    (new BoneBladeSkeletalLeapSoundTask(paramPlayer)).runTaskLater((Plugin)AltarSMP.getInstance(), 2L);
-    (new BoneBladeSkeletalLeapImpactSoundTask(paramPlayer)).runTaskLater((Plugin)AltarSMP.getInstance(), 4L);
+    (new BoneBladeSkeletalLeapSoundTask(paramPlayer)).runTaskLater(AltarSMP.getInstance(), 2L);
+    (new BoneBladeSkeletalLeapImpactSoundTask(paramPlayer)).runTaskLater(AltarSMP.getInstance(), 4L);
     paramPlayer.setVelocity(paramPlayer.getLocation().getDirection().multiply(d1));
     paramPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 2));
     int i = AltarSMP.getInstance().getConfig().getInt("skeletalLeapCooldown", 30);
-    BossBarManager.createBar(paramPlayer, "Skeletal Leap", i, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Skeletal Leap", i, NamedTextColor.YELLOW);
   }
 
   public static void spawnBoneParticles(Location paramLocation, Material paramMaterial, int paramInt1, double paramDouble, int paramInt2) {
     paramDouble *= 0.1D;
     World world = paramLocation.getWorld();
-    ArrayList<Item> arrayList = new ArrayList();
+    ArrayList<Item> arrayList = new ArrayList<>();
     for (int b = 0; b < paramInt1; b++) {
       Item item = world.dropItem(paramLocation.clone(), new ItemStack(paramMaterial));
       item.setPickupDelay(2147483647);
       item.setVelocity(randomBoneVelocity(paramDouble));
       arrayList.add(item);
     } 
-    (new BoneBladeParticleTrailTask(arrayList)).runTaskLater((Plugin)AltarSMP.getInstance(), 5L);
-    (new BoneBladeItemCleanupTask(arrayList)).runTaskLater((Plugin)AltarSMP.getInstance(), paramInt2);
+    (new BoneBladeParticleTrailTask(arrayList)).runTaskLater(AltarSMP.getInstance(), 5L);
+    (new BoneBladeItemCleanupTask(arrayList)).runTaskLater(AltarSMP.getInstance(), paramInt2);
   }
 
   public static Vector randomBoneVelocity(double paramDouble) {
@@ -99,8 +98,8 @@ public class BoneBladeAbility implements Listener {
     paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_SKELETON_AMBIENT, 1.0F, 0.8F);
     Location location = paramPlayer.getLocation().clone().add(0.0D, 1.0D, 0.0D);
     Vector vector = location.getDirection().normalize();
-    BossBarManager.createBar(paramPlayer, "Bone Cage", k, ChatColor.YELLOW);
-    (new BoneCageProjectileTask(i, location, vector, paramPlayer, j)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    BossBarManager.createBar(paramPlayer, "Bone Cage", k, NamedTextColor.YELLOW);
+    (new BoneCageProjectileTask(i, location, vector, paramPlayer, j)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void applyBoneCage(LivingEntity paramLivingEntity, int paramInt) {
@@ -111,9 +110,9 @@ public class BoneBladeAbility implements Listener {
     paramLivingEntity.getWorld().playSound(paramLivingEntity.getLocation(), Sound.ENTITY_SKELETON_DEATH, 1.0F, 0.8F);
     paramLivingEntity.getWorld().spawnParticle(Particle.ITEM, paramLivingEntity.getLocation().add(0.0D, 1.0D, 0.0D), 32, 1.0D, 1.0D, 1.0D, 2.0D, new ItemStack(Material.BONE));
     spawnBoneParticles(paramLivingEntity.getLocation().clone().add(0.0D, 1.0D, 0.0D), Material.BONE, 30, 3.0D, 25);
-    ArrayList<ItemDisplay> arrayList = new ArrayList();
+    ArrayList<ItemDisplay> arrayList = new ArrayList<>();
     boneCageDisplays.put(paramLivingEntity, arrayList);
-    (new BoneCageStunTitleTask(paramLivingEntity)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new BoneCageStunTitleTask(paramLivingEntity)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
     for (int b = 0; b < 3; b++) {
       ItemDisplay itemDisplay = (ItemDisplay)paramLivingEntity.getWorld().spawnEntity(paramLivingEntity.getLocation().add(0.0D, 1.0D, 0.0D), EntityType.ITEM_DISPLAY);
       itemDisplay.setItemStack(new ItemStack(Material.BONE_BLOCK));
@@ -121,18 +120,17 @@ public class BoneBladeAbility implements Listener {
       itemDisplay.setBillboard(Display.Billboard.CENTER);
       arrayList.add(itemDisplay);
     } 
-    (new BoneCageAnimationTask(paramInt, arrayList, paramLivingEntity)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    (new BoneCageAnimationTask(paramInt, arrayList, paramLivingEntity)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   @EventHandler
   public void onPlayerDeath(PlayerDeathEvent paramPlayerDeathEvent) {
     Player player = paramPlayerDeathEvent.getEntity();
     {
-      if (boneCageLocations.containsKey(player))
         boneCageLocations.remove(player);
     }if (boneCageDisplays.containsKey(player)) {
-      List list = boneCageDisplays.get(player);
-      ((List<ItemDisplay>)(List<?>)list).forEach(Entity::remove);
+      List<ItemDisplay> list = boneCageDisplays.get(player);
+      list.forEach(Entity::remove);
       boneCageDisplays.remove(player);
     } 
   }

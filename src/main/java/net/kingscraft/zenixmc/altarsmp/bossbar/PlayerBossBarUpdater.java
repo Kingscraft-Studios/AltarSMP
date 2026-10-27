@@ -4,11 +4,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 class PlayerBossBarUpdater extends BukkitRunnable {
 
@@ -38,7 +41,7 @@ class PlayerBossBarUpdater extends BukkitRunnable {
                 if (bar.repeatCount > 0)
                   if (!bar.repeated) {
                     bar.repeated = true;
-                    bar.bossBar.setTitle(ChatColor.YELLOW + String.valueOf(ChatColor.BOLD) + bar.title);
+                    bar.bossBar.setTitle(LegacyComponentSerializer.legacySection().serialize(BossBarManager.formatTitle(Component.text(bar.title), NamedTextColor.YELLOW)));
                     bar.bossBar.setColor(BarColor.YELLOW);
                     bar.expiryTime = System.currentTimeMillis() + bar.repeatCount * 1000L;
                     bar.durationMillis = bar.repeatCount * 1000L;

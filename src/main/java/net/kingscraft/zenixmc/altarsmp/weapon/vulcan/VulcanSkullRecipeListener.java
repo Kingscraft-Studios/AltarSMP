@@ -7,9 +7,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.plugin.Plugin;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 
@@ -21,10 +19,10 @@ public class VulcanSkullRecipeListener implements Listener {
     ConfigurationSection configurationSection = paramAltarSMP.getConfig().getConfigurationSection("VulcansSkull");
     {
       if (configurationSection != null && configurationSection.getBoolean("enabled")) {
-        List list = configurationSection.getStringList("shape");
+        List<String> list = configurationSection.getStringList("shape");
         ItemStack itemStack = CustomItemRegistry.getVulcanSkull();
-        ShapedRecipe shapedRecipe = new ShapedRecipe(new NamespacedKey((Plugin)paramAltarSMP, "skull_crafting"), itemStack);
-        shapedRecipe.shape((String[])list.toArray((Object[])new String[0]));
+        ShapedRecipe shapedRecipe = new ShapedRecipe(new NamespacedKey(paramAltarSMP, "skull_crafting"), itemStack);
+        shapedRecipe.shape(list.toArray(String[]::new));
         ConfigurationSection configurationSection1 = configurationSection.getConfigurationSection("ingredients");
         if (configurationSection1 != null)
           for (String str : configurationSection1.getKeys(false)) {
@@ -32,11 +30,13 @@ public class VulcanSkullRecipeListener implements Listener {
             Material material = Material.matchMaterial(configurationSection1.getString(str));
             {
               if (material != null)
-                shapedRecipe.setIngredient(c, material); 
-            }}  
-        Bukkit.addRecipe((Recipe)shapedRecipe);
-      } 
-    }}
+                shapedRecipe.setIngredient(c, material);
+            }
+          }
+        Bukkit.addRecipe(shapedRecipe);
+      }
+    }
+  }
 
 
 

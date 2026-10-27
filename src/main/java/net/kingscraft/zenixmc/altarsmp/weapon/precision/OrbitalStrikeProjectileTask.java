@@ -37,18 +37,17 @@ public class OrbitalStrikeProjectileTask extends BukkitRunnable {
     if (this.currentLocation.getY() <= (this.groundLevel + 1)) {
       this.world.spawnParticle(Particle.ELECTRIC_SPARK, this.currentLocation, 5, 0.05D, 0.2D, 0.05D, 0.01D);
       for (Player player : this.currentLocation.getWorld().getPlayers()) {
-        if (AltarSMP.isTrusted(this.player, (Entity)player) || player == this.player)
+        if (AltarSMP.isTrusted(this.player, player) || player == this.player)
           this.player.setInvulnerable(true);
       } 
       this.world.createExplosion(this.currentLocation.getX(), this.currentLocation.getY(), this.currentLocation.getZ(), this.explosionPower, false, true);
       for (Player player : this.currentLocation.getWorld().getPlayers()) {
-        if (AltarSMP.isTrusted(this.player, (Entity)player) || player == this.player)
+        if (AltarSMP.isTrusted(this.player, player) || player == this.player)
           this.player.setInvulnerable(false);
       } 
       for (Entity entity : this.world.getNearbyEntities(this.currentLocation, 3.0D, 3.0D, 3.0D)) {
-        if (entity instanceof Player) {
-          Player player = (Player)entity;
-          player.setVelocity(new Vector(0.0D, 0.5D, 0.0D));
+        if (entity instanceof Player player1) {
+            player1.setVelocity(new Vector(0.0D, 0.5D, 0.0D));
         } 
       } 
       cancel();

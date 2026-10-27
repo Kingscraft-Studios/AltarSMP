@@ -3,6 +3,8 @@ package net.kingscraft.zenixmc.altarsmp.item;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -1708,18 +1710,18 @@ public enum CustomItem {
       return var1;
    }
 
-   public static List<ItemStack> getRollingDropItems() {
-      HashSet var0 = new HashSet(AltarSMP.getInstance().getConfig().getStringList("weapons_that_can_be_obtained_from_rolling"));
-      ArrayList var1 = new ArrayList();
+    public static List<ItemStack> getRollingDropItems() {
+        Set<String> var0 = new HashSet<>(AltarSMP.getInstance().getConfig().getStringList("weapons_that_can_be_obtained_from_rolling"));
+        List<ItemStack> var1 = new ArrayList<>();
 
-      for (CustomItem var5 : values()) {
-         if (var0.contains(var5.name())) {
-            var1.add(var5.getItem());
-         }
-      }
+        for (CustomItem var5 : values()) {
+            if (var0.contains(var5.name())) {
+                var1.add(var5.getItem());
+            }
+        }
 
-      return var1;
-   }
+        return var1;
+    }
 
    public static CustomItem[] cachedValues() {
       return new CustomItem[]{

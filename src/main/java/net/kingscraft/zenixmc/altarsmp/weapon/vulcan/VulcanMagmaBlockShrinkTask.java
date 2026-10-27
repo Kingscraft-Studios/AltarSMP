@@ -1,7 +1,6 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.vulcan;
 
 import org.bukkit.entity.BlockDisplay;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
@@ -19,6 +18,6 @@ class VulcanMagmaBlockShrinkTask extends BukkitRunnable {
     Transformation transformation = this.blockDisplay.getTransformation();
     transformation.getScale().set(0.0F, 0.0F, 0.0F);
     this.blockDisplay.setTransformation(transformation);
-    (new VulcanMagmaBlockCleanupTask(this)).runTaskLater((Plugin)AltarSMP.getInstance(), 10L);
+    (new VulcanMagmaBlockCleanupTask(this)).runTaskLater(AltarSMP.getInstance(), 10L);
   }
 }

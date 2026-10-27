@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,14 +24,13 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 import net.kingscraft.zenixmc.altarsmp.util.CombatEffectUtils;
@@ -43,13 +45,19 @@ public class ShadowBladeAbility implements Listener {
 
   public static final HashMap<UUID, BukkitRunnable> leapTasks;
 
-  private Map<UUID, Integer> backstabCounts = new HashMap<>();
+  private final Map<UUID, Integer> backstabCounts = new HashMap<>();
 
-  private Map<UUID, Long> lastBackstabTimes = new HashMap<>();
+  private final Map<UUID, Long> lastBackstabTimes = new HashMap<>();
+
+  private static final String INVISIBLE_TITLE = LegacyComponentSerializer.legacySection().serialize(Component.text()
+      .append(Component.text("! ", NamedTextColor.GRAY, TextDecoration.BOLD))
+      .append(Component.text("INVISIBLE ", NamedTextColor.WHITE, TextDecoration.BOLD))
+      .append(Component.text("!", NamedTextColor.GRAY, TextDecoration.BOLD))
+      .build());
 
 
   public ShadowBladeAbility() {
-    (new ShadowBladePassiveTask(this)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 20L);
+    (new ShadowBladePassiveTask()).runTaskTimer(AltarSMP.getInstance(), 0L, 20L);
   }
 
   public static boolean hasShadowBlade(Player paramPlayer) {
@@ -72,15 +80,10 @@ public class ShadowBladeAbility implements Listener {
     for (Player player : Bukkit.getOnlinePlayers()) {
       {
         if (!player.equals(paramPlayer))
-          player.hidePlayer((Plugin)AltarSMP.getInstance(), paramPlayer); 
+          player.hidePlayer(AltarSMP.getInstance(), paramPlayer);
       }} 
     paramPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20, 1, true, false, false));
-    String str1 = ChatColor.BOLD.toString();
-    String str2 = String.valueOf(ChatColor.GRAY);
-    String str3 = ChatColor.BOLD.toString();
-    String str4 = String.valueOf(ChatColor.WHITE);
-    String str5 = ChatColor.BOLD.toString();
-    BossBarManager.createBar(paramPlayer, String.valueOf(ChatColor.GRAY) + str5 + "! " + str4 + str3 + "INVISIBLE " + str2 + str1 + "!", 1, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, INVISIBLE_TITLE, 1, NamedTextColor.YELLOW);
     if (AltarSMP.getInstance().getConfig().getBoolean("shadowBladeBorderLogic", true)) {
       WorldBorder worldBorder = Bukkit.createWorldBorder();
       worldBorder.setCenter(paramPlayer.getLocation());
@@ -89,10 +92,10 @@ public class ShadowBladeAbility implements Listener {
       paramPlayer.setWorldBorder(worldBorder);
     } 
     ShadowLeapTask shadowLeapTask = new ShadowLeapTask(location, paramPlayer);
-    (new ShadowLeapCleanupTask(paramPlayer)).runTaskLater((Plugin)AltarSMP.getInstance(), 20L);
+    (new ShadowLeapCleanupTask(paramPlayer)).runTaskLater(AltarSMP.getInstance(), 20L);
     leapTasks.put(paramPlayer.getUniqueId(), shadowLeapTask);
     leapLocations.put(paramPlayer.getUniqueId(), location.clone());
-    shadowLeapTask.runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    shadowLeapTask.runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   public static void spawnShadowParticles(Player paramPlayer, Location paramLocation) {
@@ -107,7 +110,7 @@ public class ShadowBladeAbility implements Listener {
       double d5 = 1.5D * Math.cos(d2);
       paramLocation.getWorld().spawnParticle(Particle.SQUID_INK, paramLocation.clone().add(d3, d4, d5), 1, 0.0D, 0.0D, 0.0D, 0.0D);
     } 
-    (new ShadowLeapTeleportTask(paramPlayer, paramLocation)).runTaskLater((Plugin)AltarSMP.getInstance(), 5L);
+    (new ShadowLeapTeleportTask(paramPlayer, paramLocation)).runTaskLater(AltarSMP.getInstance(), 5L);
   }
 
   @EventHandler
@@ -134,7 +137,7 @@ public class ShadowBladeAbility implements Listener {
           double d5 = 1.5D * Math.cos(d2);
           location.getWorld().spawnParticle(Particle.SQUID_INK, location.clone().add(d3, d4, d5), 1, 0.0D, 0.0D, 0.0D, 0.0D);
         }
-        new ShadowLeapReturnTask(this, player, location).runTaskLater(AltarSMP.getInstance(), 5L);
+        new ShadowLeapReturnTask(player, location).runTaskLater(AltarSMP.getInstance(), 5L);
       }
       leapLocations.remove(player.getUniqueId());
       leapTasks.remove(player.getUniqueId());
@@ -150,15 +153,15 @@ public class ShadowBladeAbility implements Listener {
       if (AltarSMP.getInstance().getConfig().getBoolean("shadowBladeBorderLogic", true)) {
         player.setWorldBorder(null);
       }
-      BossBarManager.createBar(player, "Shadow Leap", leapCooldown, ChatColor.YELLOW);
-      BossBarManager.removeBar(player, String.valueOf(ChatColor.GRAY) + ChatColor.BOLD.toString() + "! " + String.valueOf(ChatColor.WHITE) + ChatColor.BOLD.toString() + "INVISIBLE " + String.valueOf(ChatColor.GRAY) + ChatColor.BOLD.toString() + "!");
+      BossBarManager.createBar(player, "Shadow Leap", leapCooldown, NamedTextColor.YELLOW);
+      BossBarManager.removeBar(player, INVISIBLE_TITLE);
       CooldownManager.setCooldown(player.getUniqueId(), "shadwoleap", leapCooldown);
       paramPlayerInteractEvent.setCancelled(true);
     }
   }
 
   public static void spawnBackstabEffect(Player paramPlayer) {
-    CombatEffectUtils.playSoundAndParticleEffect((LivingEntity)paramPlayer, Particle.DUST, new Particle.DustOptions(Color.BLACK, 1.0F), (Sound)null, 1.0F);
+    CombatEffectUtils.playSoundAndParticleEffect(paramPlayer, Particle.DUST, new Particle.DustOptions(Color.BLACK, 1.0F), null, 1.0F);
   }
 
   public static void activateShadowDaggers(Player paramPlayer) {
@@ -168,13 +171,12 @@ public class ShadowBladeAbility implements Listener {
     }
     spawnBackstabEffect(paramPlayer);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "daggers", daggerCooldown);
-    BossBarManager.createBar(paramPlayer, "Shadow Daggers", daggerCooldown, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Shadow Daggers", daggerCooldown, NamedTextColor.YELLOW);
     Vector vector = paramPlayer.getLocation().getDirection();
     Location location = paramPlayer.getLocation();
     double d = AltarSMP.getInstance().getConfig().getInt("shadowDaggerDistance", 10);
     for (Entity entity : paramPlayer.getWorld().getNearbyEntities(location, d, d, d)) {
-      if (entity instanceof LivingEntity) {
-        LivingEntity livingEntity = (LivingEntity)entity;
+      if (entity instanceof LivingEntity livingEntity) {
         {
           if (livingEntity.equals(paramPlayer))
             continue; 
@@ -194,8 +196,8 @@ public class ShadowBladeAbility implements Listener {
 
   public void recordBackstab(Player paramPlayer) {
     int i = getBackstabCount(paramPlayer);
-    this.backstabCounts.put(paramPlayer.getUniqueId(), Integer.valueOf(i + 1));
-    this.lastBackstabTimes.put(paramPlayer.getUniqueId(), Long.valueOf(System.currentTimeMillis()));
+    this.backstabCounts.put(paramPlayer.getUniqueId(), i + 1);
+    this.lastBackstabTimes.put(paramPlayer.getUniqueId(), System.currentTimeMillis());
   }
 
   public int getBackstabCount(Player paramPlayer) {
@@ -203,9 +205,9 @@ public class ShadowBladeAbility implements Listener {
     {
       if (this.lastBackstabTimes.containsKey(paramPlayer.getUniqueId()))
         {
-          if (l - ((Long)this.lastBackstabTimes.get(paramPlayer.getUniqueId())).longValue() > 2500L)
-            this.backstabCounts.put(paramPlayer.getUniqueId(), Integer.valueOf(0));
-        }}return ((Integer)this.backstabCounts.getOrDefault(paramPlayer.getUniqueId(), Integer.valueOf(0))).intValue();
+          if (l - this.lastBackstabTimes.get(paramPlayer.getUniqueId()) > 2500L)
+            this.backstabCounts.put(paramPlayer.getUniqueId(), 0);
+        }}return this.backstabCounts.getOrDefault(paramPlayer.getUniqueId(), 0);
   }
 
   @EventHandler
@@ -221,7 +223,7 @@ public class ShadowBladeAbility implements Listener {
       if (!hasShadowBlade(player))
         return; 
     }{
-      CombatEffectUtils.spawnDualParticleRings((LivingEntity)player, Particle.CRIT, null, Particle.ITEM, new ItemStack(Material.BLACK_CONCRETE), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2.0F);
+      CombatEffectUtils.spawnDualParticleRings(player, Particle.CRIT, null, Particle.ITEM, new ItemStack(Material.BLACK_CONCRETE), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2.0F);
       if (!isBackstab(paramEntityDamageByEntityEvent))
         return; 
     }{
@@ -245,7 +247,7 @@ public class ShadowBladeAbility implements Listener {
     {
       if (WorldGuardHook.isBlocked(paramEntity.getLocation()))
         return; 
-    }(new ShadowDaggerPullTask(paramEntity, paramPlayer)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+    }(new ShadowDaggerPullTask(paramEntity, paramPlayer)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
   }
 
   static {

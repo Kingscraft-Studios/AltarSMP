@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.weapon.precision;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class StabShotPillarShrinkTask extends BukkitRunnable {
   public final ItemDisplay itemDisplay;

@@ -9,16 +9,11 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class FrostScytheBladeProjectileTask extends BukkitRunnable {
   public int ticksElapsed;
 
   public final Location currentLocation;
-
-  final double projectileSpeed = 1.5D;
-
-  final int maxTravelTicks = 60;
 
   public final Location startLocation;
 
@@ -61,9 +56,8 @@ class FrostScytheBladeProjectileTask extends BukkitRunnable {
     this.bladeDisplay.getWorld().spawnParticle(Particle.SNOWFLAKE, this.currentLocation, 5, 0.1D, 0.1D, 0.1D, 0.01D);
     this.bladeDisplay.getWorld().spawnParticle(Particle.CLOUD, this.currentLocation, 2, 0.1D, 0.1D, 0.1D, 0.01D);
     for (Entity entity : this.currentLocation.getWorld().getNearbyEntities(this.currentLocation, 0.7D, 0.7D, 0.7D)) {
-      if (entity instanceof LivingEntity && entity != this.launchTask.player) {
-        LivingEntity livingEntity = (LivingEntity)entity;
-        double d = FrostScytheAbilityListener.plugin.getConfig().getDouble(COMMAND_OF_ICE_DAMAGE_KEY, 8.0D);
+      if (entity instanceof LivingEntity livingEntity && entity != this.launchTask.player) {
+          double d = FrostScytheAbilityListener.plugin.getConfig().getDouble(COMMAND_OF_ICE_DAMAGE_KEY, 8.0D);
         livingEntity.damage(d, DamageSource.builder(DamageType.MAGIC).build());
         livingEntity.setNoDamageTicks(0);
         livingEntity.setFreezeTicks(100);

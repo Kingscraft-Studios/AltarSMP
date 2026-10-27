@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
 
@@ -74,9 +73,8 @@ class BloodHookProjectileTask extends BukkitRunnable {
     this.world.spawnParticle(Particle.ITEM, this.currentLocation, 5, 0.1D, 0.1D, 0.1D, 0.0D, new ItemStack(Material.REDSTONE_BLOCK));
     this.world.spawnParticle(Particle.DUST, this.currentLocation, 3, 0.1D, 0.1D, 0.1D, new Particle.DustOptions(Color.RED, 1.0F));
     for (Entity entity : this.world.getNearbyEntities(this.currentLocation, 1.0D, 1.0D, 1.0D)) {
-      if (entity instanceof LivingEntity) {
-        LivingEntity livingEntity = (LivingEntity)entity;
-        if (entity != this.player) {
+      if (entity instanceof LivingEntity livingEntity) {
+          if (entity != this.player) {
           this.hasHitTarget = true;
           TrueDamage.apply(livingEntity, this.damage, this.player, true);
           BloodLustAbilityListener.infectEntity(livingEntity, this.player);

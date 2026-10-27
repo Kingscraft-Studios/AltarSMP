@@ -2,19 +2,18 @@ package net.kingscraft.zenixmc.altarsmp.weapon.precision;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.AbstractArrow;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -22,13 +21,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 import net.kingscraft.zenixmc.altarsmp.util.TrueDamage;
@@ -44,7 +43,9 @@ public class StrikerBowAbility implements Listener {
   public static ItemStack createStrikerProjectileItem() {
     ItemStack itemStack = new ItemStack(Material.RED_CONCRETE);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setCustomModelData(Integer.valueOf(1));
+    CustomModelDataComponent customModelData = itemMeta.getCustomModelDataComponent();
+    customModelData.setFloats(List.of(1.0F));
+    itemMeta.setCustomModelDataComponent(customModelData);
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
@@ -77,33 +78,32 @@ public class StrikerBowAbility implements Listener {
       } 
     }}
 
-  public static boolean activateStabShot(Player paramPlayer, Location paramLocation) {
+  public static void activateStabShot(Player paramPlayer, Location paramLocation) {
     {
       if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "stabShotCooldown"))
-        return false; 
+        return;
     }{
       if (WorldGuardHook.isBlocked(paramLocation))
-        return false; 
+        return;
     }paramLocation.setRotation(0.0F, 0.0F);
     int i = AltarSMP.getInstance().getConfig().getInt("stabShotRadius", 5);
     int j = AltarSMP.getInstance().getConfig().getInt("stabShotRadiusY", 5);
     World world = paramLocation.getWorld();
     int k = AltarSMP.getInstance().getConfig().getInt("stabShotCooldown", 60);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "stabShotCooldown", k);
-    BossBarManager.createBar(paramPlayer, "Stab Shot", k, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Stab Shot", k, NamedTextColor.YELLOW);
     ItemDisplay itemDisplay = (ItemDisplay)world.spawnEntity(paramLocation, EntityType.ITEM_DISPLAY);
     itemDisplay.setItemStack(createStrikerProjectileItem());
     Transformation transformation = itemDisplay.getTransformation();
     transformation.getScale().set(0.0F, j, 0.0F);
     itemDisplay.setTransformation(transformation);
     (new StabShotChargeTask(paramLocation, paramPlayer, i, itemDisplay, world, j)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
-    return true;
   }
 
-  public static boolean activateOrbitalShot(Player paramPlayer, Location paramLocation) {
+  public static void activateOrbitalShot(Player paramPlayer, Location paramLocation) {
     {
       if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "orbitalShotCooldown"))
-        return false; 
+        return;
     }paramLocation.setRotation(0.0F, 0.0F);
     World world = paramPlayer.getWorld();
     Random random = new Random();
@@ -112,7 +112,7 @@ public class StrikerBowAbility implements Listener {
     int k = AltarSMP.getInstance().getConfig().getInt("orbitalShotExplosionPower", 2);
     int m = AltarSMP.getInstance().getConfig().getInt("orbitalShotCooldown", 120);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "orbitalShotCooldown", m);
-    BossBarManager.createBar(paramPlayer, "Orbital Shot", m, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, "Orbital Shot", m, NamedTextColor.YELLOW);
     for (int b = 0; b < j; b++) {
       double d1 = random.nextDouble() * Math.PI * 2.0D;
       double d2 = random.nextDouble() * i;
@@ -121,9 +121,8 @@ public class StrikerBowAbility implements Listener {
       Location location1 = paramLocation.clone().add(d3, 0.0D, d4);
       int n = (int) VulcanGauntletAbility.findSafeExplosionLocation(location1, 40).getY();
       Location location2 = new Location(world, location1.getX() + 0.5D, (n + 20), location1.getZ() + 0.5D);
-      (new OrbitalStrikeProjectileTask(location2, n, world, paramPlayer, k)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
-    } 
-    return true;
+      (new OrbitalStrikeProjectileTask(location2, n, world, paramPlayer, k)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
+    }
   }
 
   public static void detonateStabShot(Location paramLocation, Player paramPlayer, int paramInt, ItemDisplay paramItemDisplay) {
@@ -141,9 +140,9 @@ public class StrikerBowAbility implements Listener {
     Transformation transformation = paramItemDisplay.getTransformation();
     transformation.getScale().set(transformation.getScale().x() + 1.0F, i, transformation.getScale().x() + 1.0F);
     paramItemDisplay.setTransformation(transformation);
-    (new StabShotPillarShrinkTask(paramItemDisplay, i)).runTaskLater((Plugin)AltarSMP.getInstance(), 5L);
-    (new StabShotPillarRemovalTask(paramItemDisplay)).runTaskLater((Plugin)AltarSMP.getInstance(), 15L);
-    HashSet<Player> hashSet = new HashSet();
+    (new StabShotPillarShrinkTask(paramItemDisplay, i)).runTaskLater(AltarSMP.getInstance(), 5L);
+    (new StabShotPillarRemovalTask(paramItemDisplay)).runTaskLater(AltarSMP.getInstance(), 15L);
+    HashSet<Player> hashSet = new HashSet<>();
     for (Player player : paramLocation.getNearbyPlayers(paramInt, i, paramInt)) {
       {
         player.setInvulnerable(true);
@@ -151,10 +150,10 @@ public class StrikerBowAbility implements Listener {
         if (paramPlayer == player)
           continue; 
       }{
-        if (AltarSMP.isTrusted(paramPlayer, (Entity)player))
+        if (AltarSMP.isTrusted(paramPlayer, player))
           continue; 
       }
-        TrueDamage.apply((LivingEntity)player, d, paramPlayer);
+        TrueDamage.apply(player, d, paramPlayer);
     } 
     for (int j = -i; j <= i; j++) {
       location = paramLocation.clone().add(0.0D, j, 0.0D);
@@ -166,7 +165,7 @@ public class StrikerBowAbility implements Listener {
     } 
     for (Player player : hashSet) {
       player.setInvulnerable(false);
-      if (paramPlayer == player || AltarSMP.isTrusted(paramPlayer, (Entity)player))
+      if (paramPlayer == player || AltarSMP.isTrusted(paramPlayer, player))
         player.setVelocity(new Vector(0, 0, 0));
     } 
     hashSet.clear();
@@ -190,8 +189,8 @@ public class StrikerBowAbility implements Listener {
   }
 
   public static void spawnStabShotDebris(Location paramLocation) {
-    HashSet<ItemDisplay> hashSet = new HashSet();
-    HashMap<Object, Object> hashMap = new HashMap<>();
+    HashSet<ItemDisplay> hashSet = new HashSet<>();
+    HashMap<ItemDisplay, double[]> hashMap = new HashMap<>();
     Material material1 = paramLocation.clone().subtract(0.0D, 1.0D, 0.0D).getBlock().getType();
     Material material2 = paramLocation.clone().subtract(0.0D, 10.0D, 0.0D).getBlock().getType();
     {
@@ -220,7 +219,7 @@ public class StrikerBowAbility implements Listener {
           b++;
           continue;
         } 
-      }(new StabShotDebrisAnimationTask(hashSet, hashMap)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, 1L);
+      }(new StabShotDebrisAnimationTask(hashSet, hashMap)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
       return;
     } 
   }

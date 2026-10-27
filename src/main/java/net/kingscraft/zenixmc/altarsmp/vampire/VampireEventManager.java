@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -202,46 +204,48 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
     if (team == null) {
       team = scoreboard.registerNewTeam(str1);
       team.addEntry(paramPlayer.getName());
-    } 
-    String str2 = ChatColor.stripColor(paramPlayer.getName());
+    }
+    String str2 = paramPlayer.getName();
     {
       if (isPale(paramPlayer)) {
-        team.setColor(ChatColor.YELLOW);
-        team.setPrefix("§e");
-        paramPlayer.setDisplayName("§e" + str2);
-        paramPlayer.setPlayerListName("§e" + str2);
+        team.color(NamedTextColor.YELLOW);
+        team.prefix(Component.text("", NamedTextColor.YELLOW));
+        paramPlayer.displayName(Component.text(str2, NamedTextColor.YELLOW));
+        paramPlayer.playerListName(Component.text(str2, NamedTextColor.YELLOW));
       } else {
         {
           if (isVampire(paramPlayer)) {
-            team.setColor(ChatColor.RED);
-            team.setPrefix("§c");
-            paramPlayer.setDisplayName("§c" + str2);
-            paramPlayer.setPlayerListName("§c" + str2);
+            team.color(NamedTextColor.RED);
+            team.prefix(Component.text("", NamedTextColor.RED));
+            paramPlayer.displayName(Component.text(str2, NamedTextColor.RED));
+            paramPlayer.playerListName(Component.text(str2, NamedTextColor.RED));
           } else {
-            team.setColor(ChatColor.RESET);
-            team.setPrefix("");
-            paramPlayer.setDisplayName(str2);
-            paramPlayer.setPlayerListName(str2);
-          } 
-        }} 
-    }}
+            team.color(NamedTextColor.WHITE);
+            team.prefix(Component.empty());
+            paramPlayer.displayName(Component.text(str2));
+            paramPlayer.playerListName(Component.text(str2));
+          }
+        }
+      }
+    }
+  }
 
   public static void setPale(Player paramPlayer) {
     setPlayerType(paramPlayer, "PALE");
     getPlayerType(paramPlayer);
-    paramPlayer.sendMessage("§eYou are now a pale rot");
+    paramPlayer.sendMessage(Component.text("You are now a pale rot", NamedTextColor.YELLOW));
   }
 
   public static void setVampire(Player paramPlayer) {
     setPlayerType(paramPlayer, "VAMPIRE");
     getPlayerType(paramPlayer);
-    paramPlayer.sendMessage("§cYou are now a vampire");
+    paramPlayer.sendMessage(Component.text("You are now a vampire", NamedTextColor.RED));
   }
 
   public static void setHuman(Player paramPlayer) {
     removePlayerType(paramPlayer);
     getPlayerType(paramPlayer);
-    paramPlayer.sendMessage("§aYou are now a human with no special abilities");
+    paramPlayer.sendMessage(Component.text("You are now a human with no special abilities", NamedTextColor.GREEN));
   }
 
   public static void setPlayerType(Player paramPlayer, String paramString) {
@@ -276,131 +280,105 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
 
   public static void endVampireEvent(String paramString) {
     eventEnabled = false;
-    config.set("vampire_event_enabled", Boolean.FALSE);
-    String str1 = null;
-    String str2 = paramString.toLowerCase();
-    int b = -1;
-    {
-      switch (str2.hashCode()) {
-        case 3433258:
-          if (str2.equals("pale"))
-            b = 0; 
-          break;
-        case 232384526:
-          if (str2.equals("vampire"))
-            b = 1; 
-          break;
-      } 
-    }{
-      switch (b) {
-        case 0:
-          str1 = "PALE";
-          break;
-        case 1:
-          str1 = "VAMPIRE";
-          break;
-        default:
-          break;
-      } 
-    }
-    vampireWinner = str1;
-    config.set("vampire_winner", str1);
+    config.set("vampire_event_enabled", false);
+
+    // Clean switch expression to determine the winner string
+    String winner = paramString != null ? switch (paramString.toLowerCase()) {
+      case "pale" -> "PALE";
+      case "vampire" -> "VAMPIRE";
+      default -> null;
+    } : null;
+
+    vampireWinner = winner;
+    config.set("vampire_winner", winner);
     AltarSMP.getInstance().saveConfig();
+
+    // Update online players
     for (Player player : Bukkit.getOnlinePlayers()) {
-      {
-        if (str1 == null) {
-          setHuman(player);
-          continue;
-        } 
+      if (winner == null) {
+        setHuman(player);
+      } else {
+        setPlayerType(player, winner);
+        getPlayerType(player);
       }
-      setPlayerType(player, str1);
-      getPlayerType(player);
-    } 
-    for (UUID uUID : new ArrayList<>(playerTypes.keySet())) {
-      {
-        if (Bukkit.getPlayer(uUID) == null) {
-          {
-            if (str1 == null) {
-              playerTypes.remove(uUID);
-              vampireConfig.set(uUID.toString(), null);
-              continue;
-            } 
-          }
-          playerTypes.put(uUID, str1);
-          vampireConfig.set(uUID.toString(), str1);
-        } 
-      }} 
+    }
+
+    // Update offline players stored in data
+    for (UUID uuid : new ArrayList<>(playerTypes.keySet())) {
+      if (Bukkit.getPlayer(uuid) == null) {
+        if (winner == null) {
+          playerTypes.remove(uuid);
+          vampireConfig.set(uuid.toString(), null);
+        } else {
+          playerTypes.put(uuid, winner);
+          vampireConfig.set(uuid.toString(), winner);
+        }
+      }
+    }
+
     saveVampireData();
     bloodMoonAnnounced = false;
-    Bukkit.broadcastMessage(ChatColor.RED + String.valueOf(ChatColor.BOLD) + "RITUAL COMPLETE");
+    Bukkit.broadcast(Component.text("RITUAL COMPLETE", NamedTextColor.RED, TextDecoration.BOLD));
   }
 
-  public boolean onCommand(@NotNull CommandSender paramCommandSender, @NotNull Command paramCommand, @NotNull String paramString, String[] paramArrayOfString) {
-    if (paramArrayOfString.length == 0) {
-      paramCommandSender.sendMessage("§cUsage: /vampire <player> <pale|vampire|human>");
+  @Override
+  public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    if (args.length == 0) {
+      sender.sendMessage(Component.text("Usage: /vampire <player|toggle> [pale|vampire|human]", NamedTextColor.RED));
       return true;
     }
-    String str1 = paramArrayOfString[0];
-    Player player = Bukkit.getPlayer(str1);
-    {
-      if (player == null) {
-        {
-          if (str1.equalsIgnoreCase("toggle")) {
-            {
 
-            }{
-              eventEnabled = !eventEnabled;
-              if (eventEnabled) {
-                paramCommandSender.sendMessage("§aVampire Event enabled.");
-              } else {
-                paramCommandSender.sendMessage("§cVampire Event disabled.");
-              } 
-            }
-            config.set("vampire_event_enabled", eventEnabled);
-            AltarSMP.getInstance().saveConfig();
-            return true;
-          } 
-        }paramCommandSender.sendMessage("§cPlayer not found.");
-        return true;
-      } 
-    }{
-      if (paramArrayOfString.length != 2) {
-        paramCommandSender.sendMessage("§cUsage: /vampire <player> <pale|vampire|human>");
-        return true;
-      } 
-    }String str2 = paramArrayOfString[1].toLowerCase();
-    int b = -1;
-    {
-      switch (str2.hashCode()) {
-        case 3433258:
-          if (str2.equals("pale"))
-            b = 0; 
-          break;
-        case 232384526:
-          if (str2.equals("vampire"))
-            b = 1; 
-          break;
-        case 99639597:
-          if (str2.equals("human"))
-            b = 2; 
-          break;
-      } 
-    }{
-      switch (b) {
-        case 0:
-          setPale(player);
-          paramCommandSender.sendMessage("§a" + player.getName() + " is now Pale.");
-          return true;
-        case 1:
-          setVampire(player);
-          paramCommandSender.sendMessage("§a" + player.getName() + " is now Vampire.");
-          return true;
-        case 2:
-          setHuman(player);
-          paramCommandSender.sendMessage("§a" + player.getName() + " is now Human.");
-          return true;
-      } 
-    }paramCommandSender.sendMessage("§cUsage: /vampire <player> <pale|vampire|human>");
+    String targetName = args[0];
+
+    // Check for toggle command first
+    if (targetName.equalsIgnoreCase("toggle")) {
+      eventEnabled = !eventEnabled;
+      if (eventEnabled) {
+        sender.sendMessage(Component.text("Vampire Event enabled.", NamedTextColor.GREEN));
+      } else {
+        sender.sendMessage(Component.text("Vampire Event disabled.", NamedTextColor.RED));
+      }
+      config.set("vampire_event_enabled", eventEnabled);
+      AltarSMP.getInstance().saveConfig();
+      return true;
+    }
+
+    Player targetPlayer = Bukkit.getPlayer(targetName);
+    if (targetPlayer == null) {
+      sender.sendMessage(Component.text("Player not found.", NamedTextColor.RED));
+      return true;
+    }
+
+    if (args.length != 2) {
+      sender.sendMessage(Component.text("Usage: /vampire <player> <pale|vampire|human>", NamedTextColor.RED));
+      return true;
+    }
+
+    String type = args[1].toLowerCase();
+
+    boolean success = switch (type) {
+      case "pale" -> {
+        setPale(targetPlayer);
+        sender.sendMessage(Component.text(targetPlayer.getName() + " is now Pale.", NamedTextColor.GREEN));
+        yield true;
+      }
+      case "vampire" -> {
+        setVampire(targetPlayer);
+        sender.sendMessage(Component.text(targetPlayer.getName() + " is now Vampire.", NamedTextColor.GREEN));
+        yield true;
+      }
+      case "human" -> {
+        setHuman(targetPlayer);
+        sender.sendMessage(Component.text(targetPlayer.getName() + " is now Human.", NamedTextColor.GREEN));
+        yield true;
+      }
+      default -> false;
+    };
+
+    if (!success) {
+      sender.sendMessage(Component.text("Usage: /vampire <player> <pale|vampire|human>", NamedTextColor.RED));
+    }
+
     return true;
   }
 

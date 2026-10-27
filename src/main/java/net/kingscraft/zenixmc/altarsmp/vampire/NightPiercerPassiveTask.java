@@ -9,7 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class NightPiercerPassiveTask extends BukkitRunnable {
   public void run() {
     for (Player player : Bukkit.getOnlinePlayers()) {
-      if (Vampire.isHoldingNightPiercer(player)) {
+      if (VampireListener.isHoldingNightPiercer(player)) {
         long l = player.getWorld().getTime();
         boolean flag = l >= 13000L && l <= 23000L;
         if (flag) {

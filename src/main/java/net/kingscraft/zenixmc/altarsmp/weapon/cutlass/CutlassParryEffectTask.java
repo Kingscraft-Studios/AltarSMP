@@ -7,11 +7,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 
 class CutlassParryEffectTask extends BukkitRunnable {
-  final int DAMAGE_INTERVAL = 2;
 
   public int ticks;
 
@@ -35,9 +33,8 @@ class CutlassParryEffectTask extends BukkitRunnable {
               } 
             }}this.parryTask.player.spawnParticle(Particle.ELECTRIC_SPARK, this.parryTask.player.getLocation(), 0);
         for (Entity entity : this.parryTask.player.getLocation().getNearbyEntities(3.0D, 3.0D, 3.0D)) {
-          if (entity instanceof LivingEntity) {
-            LivingEntity livingEntity = (LivingEntity)entity;
-            {
+          if (entity instanceof LivingEntity livingEntity) {
+              {
               if (CooldownManager.isOnCooldown(livingEntity.getUniqueId(), "already_hit_cutlass"))
                 continue; 
             }{

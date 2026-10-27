@@ -1,6 +1,8 @@
 package net.kingscraft.zenixmc.altarsmp.vampire;
 
 import io.papermc.paper.world.MoonPhase;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -8,14 +10,14 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 class VampireSunAndMoonTask extends BukkitRunnable {
-  private static final String VampireSunAndMoonTask = "§cThe blood moon is rising.";
+  private static final Component VAMPIRE_BLOOD_MOON_MSG = Component.text("The blood moon is rising.", NamedTextColor.RED);
 
   public void run() {
     for (Player player : Bukkit.getOnlinePlayers()) {
       if (player.getWorld().getMoonPhase() == MoonPhase.FULL_MOON)
         {
           if (!VampireEventManager.bloodMoonAnnounced) {
-            player.sendMessage(VampireSunAndMoonTask);
+            player.sendMessage(VAMPIRE_BLOOD_MOON_MSG);
             if (VampireEventManager.isVampire(player))
               player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 18000, 4)); 
 

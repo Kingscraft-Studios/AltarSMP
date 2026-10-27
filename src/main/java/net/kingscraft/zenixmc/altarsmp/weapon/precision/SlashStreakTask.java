@@ -4,7 +4,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class SlashStreakTask extends BukkitRunnable {
   public final Location origin;
@@ -17,7 +16,7 @@ public class SlashStreakTask extends BukkitRunnable {
     }
 
   public void run() {
-    double d1 = 0;
+    double d1;
     Location location1 = this.origin.clone().add(0.0D, 0.0D, 0.0D);
     if (Math.random() < 0.5D) {
       d1 = -1.0D + Math.random();

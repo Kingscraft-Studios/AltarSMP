@@ -9,12 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class MeteorStrikePullTask extends BukkitRunnable {
   public int ticksLived;
-
-  final int MAX_TICKS = 20;
 
   public final LivingEntity target;
 
@@ -46,7 +43,7 @@ public class MeteorStrikePullTask extends BukkitRunnable {
               Vector vector1 = location2.toVector().subtract(location1.toVector());
               double d1 = vector1.length();
               Vector vector2 = vector1.normalize().multiply(1);
-              double d2 = 0;
+              double d2;
               for (d2 = 0.0D; d2 < d1; d2++) {
                 Location location = location1.clone().add(vector2.clone().multiply(d2));
                 location1.getWorld().spawnParticle(Particle.ITEM, location, 0, 0.0D, 0.0D, 0.0D, 0.0D, new ItemStack(Material.MUD));

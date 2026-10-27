@@ -2,7 +2,10 @@ package net.kingscraft.zenixmc.altarsmp.weapon.cutlass;
 
 import java.util.HashMap;
 import java.util.UUID;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -13,10 +16,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.plugin.Plugin;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
-import net.kingscraft.zenixmc.altarsmp.core.cooldown.CooldownManager;
+import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItem;
 import net.kingscraft.zenixmc.altarsmp.util.CombatEffectUtils;
 
@@ -43,14 +45,13 @@ public class CutlassAbility implements Listener {
       if (CooldownManager.isOnCooldown(player.getUniqueId(), "cutlassCuts"))
         return; 
     }
-      CombatEffectUtils.spawnDualParticleRings((LivingEntity)player, Particle.ELECTRIC_SPARK, Particle.CRIT, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2.0F);
+      CombatEffectUtils.spawnDualParticleRings(player, Particle.ELECTRIC_SPARK, Particle.CRIT, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2.0F);
   }
 
   public static boolean isCutlass(Player paramPlayer) {
     {
-      if (AltarSMP.areSimilar(paramPlayer.getInventory().getItemInMainHand(), CustomItem.CUTLASS.getItem()))
-        return true; 
-    }return false;
+      return AltarSMP.areSimilar(paramPlayer.getInventory().getItemInMainHand(), CustomItem.CUTLASS.getItem());
+    }
   }
 
   @EventHandler
@@ -63,18 +64,21 @@ public class CutlassAbility implements Listener {
       return;
     } 
     Entity entity2 = paramEntityDamageByEntityEvent.getEntity();
-    if (entity2 instanceof Player) {
-      Player player = (Player)entity2;
+    if (entity2 instanceof Player player) {
       if (CooldownManager.isOnCooldown(player.getUniqueId(), "active_parry")) {
         int i = AltarSMP.getInstance().getConfig().getInt("CutlassParryDuration", 7);
-        parryHits.put(player.getUniqueId(), Integer.valueOf(((Integer) parryHits.getOrDefault(player.getUniqueId(), Integer.valueOf(3))).intValue() - 1));
-        int j = ((Integer) parryHits.getOrDefault(player.getUniqueId(), Integer.valueOf(3))).intValue();
+        parryHits.put(player.getUniqueId(), parryHits.getOrDefault(player.getUniqueId(), 3) - 1);
+        int j = parryHits.getOrDefault(player.getUniqueId(), 3);
         {
           if (j != 0)
-            BossBarManager.createBar(player, "§6§l!! §e§lParry x" + j + " §6§l!!", i, ChatColor.YELLOW, BarColor.RED);
+            BossBarManager.createBar(player, LegacyComponentSerializer.legacySection().serialize(Component.text()
+                .append(Component.text("!! ", NamedTextColor.GOLD, TextDecoration.BOLD))
+                .append(Component.text("Parry x" + j + " ", NamedTextColor.YELLOW, TextDecoration.BOLD))
+                .append(Component.text("!!", NamedTextColor.GOLD, TextDecoration.BOLD))
+                .build()), i, NamedTextColor.YELLOW, BarColor.RED);
         }{
           paramEntityDamageByEntityEvent.setCancelled(true);
-          player.getWorld().playSound((Entity)player, Sound.BLOCK_ANVIL_LAND, 1.0F, 1.0F);
+          player.getWorld().playSound(player, Sound.BLOCK_ANVIL_LAND, 1.0F, 1.0F);
           livingEntity.setVelocity(player.getLocation().getDirection().multiply(0.5D));
           if (j == 0) {
             parryHits.remove(player.getUniqueId());
@@ -87,7 +91,8 @@ public class CutlassAbility implements Listener {
   public static void activateParry(Player paramPlayer) {
     int i = AltarSMP.getInstance().getConfig().getInt("CutlassParryCooldown", 30);
     clearParryBars(paramPlayer);
-    BossBarManager.createBar(paramPlayer, "§e§lParry", i, ChatColor.YELLOW);
+    BossBarManager.createBar(paramPlayer, LegacyComponentSerializer.legacySection().serialize(
+        Component.text("Parry", NamedTextColor.YELLOW, TextDecoration.BOLD)), i, NamedTextColor.YELLOW);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "active_parry", 0.0D);
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), parryCooldownKey, i);
   }
@@ -101,11 +106,11 @@ public class CutlassAbility implements Listener {
   public static void startCutlassAttack(Player paramPlayer) {
     int b = 2;
     CooldownManager.setCooldown(paramPlayer.getUniqueId(), "cutlassCuts", 1.0D);
-    (new CutlassAttackTask(paramPlayer, b)).runTaskTimer((Plugin)AltarSMP.getInstance(), 0L, b);
+    (new CutlassAttackTask(paramPlayer, b)).runTaskTimer(AltarSMP.getInstance(), 0L, b);
   }
 
   public static void startCutlassParry(Player paramPlayer) {
-    (new CutlassParryLaunchTask(paramPlayer)).runTaskLater((Plugin)AltarSMP.getInstance(), 10L);
+    (new CutlassParryLaunchTask(paramPlayer)).runTaskLater(AltarSMP.getInstance(), 10L);
   }
 
   public static LivingEntity findTargetEntity(LivingEntity paramLivingEntity, double paramDouble) {
@@ -113,9 +118,8 @@ public class CutlassAbility implements Listener {
     double d = Double.MAX_VALUE;
     Location location = paramLivingEntity.getLocation().clone().add(0.0D, 1.0D, 0.0D).add(paramLivingEntity.getLocation().getDirection().clone().normalize().multiply(paramDouble));
     for (Entity entity : location.getNearbyEntities(paramDouble, paramDouble, paramDouble)) {
-      if (entity instanceof LivingEntity) {
-        LivingEntity livingEntity1 = (LivingEntity)entity;
-        {
+      if (entity instanceof LivingEntity livingEntity1) {
+          {
           if (livingEntity1.equals(paramLivingEntity))
             continue; 
         }{

@@ -3,7 +3,6 @@ package net.kingscraft.zenixmc.altarsmp.weapon.blood;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class CrimsonBiteModifierTask extends BukkitRunnable {
   public final AttributeInstance victimMaxHealth;

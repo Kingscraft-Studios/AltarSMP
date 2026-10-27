@@ -4,8 +4,6 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
-import net.kingscraft.zenixmc.altarsmp.util.RandomUtils;
 
 class CleansingBlockShrinkTask extends BukkitRunnable {
   public final CleansingBlockAnimationTask animationTask;
@@ -15,7 +13,7 @@ class CleansingBlockShrinkTask extends BukkitRunnable {
     }
 
   public void run() {
-    float f = RandomUtils.randomFloat(0.2F, 0.4F);
+    float f = 0.2F + (float)Math.random() * (0.4F - 0.2F);
     if (this.animationTask.outerBlockDisplay.isValid())
       {
         if (this.animationTask.innerBlockDisplay.isValid()) {
@@ -31,10 +29,8 @@ class CleansingBlockShrinkTask extends BukkitRunnable {
           Transformation transformation2 = this.animationTask.innerBlockDisplay.getTransformation();
           transformation2.getScale().set(this.animationTask.innerBlockScale, f + 0.1D, this.animationTask.innerBlockScale);
           this.animationTask.innerBlockDisplay.setTransformation(transformation2);
-          return;
-        } 
-        return;
-      }  
+        }
+      }
 
   }
 
