@@ -10,6 +10,8 @@ import java.util.UUID;
 import net.kingscraft.zenixmc.altarsmp.altarS2.AltarS2;
 import net.kingscraft.zenixmc.altarsmp.altarS2.weapon.amethyst.AmethystToolListener;
 import net.kingscraft.zenixmc.altarsmp.command.*;
+import net.kingscraft.zenixmc.altarsmp.core.update.UpdateChecker;
+import net.kingscraft.zenixmc.altarsmp.core.update.UpdateNotifier;
 import net.kingscraft.zenixmc.altarsmp.weapon.knightfall.KnightFallKillTracker;
 import net.kingscraft.zenixmc.altarsmp.weapon.knightfall.KnightfallListener;
 import net.kingscraft.zenixmc.altarsmp.core.KillTracker;
@@ -96,6 +98,8 @@ public final class AltarSMP extends JavaPlugin implements Listener {
    public static TrustManager trust;
 
    private CopperHelmetAbilityListener copperHelmetAbilityListener;
+
+   private net.kingscraft.zenixmc.altarsmp.core.update.UpdateChecker updateChecker;
 
    @Override
    public void onEnable() {
@@ -233,6 +237,14 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       BossBarManager.startUpdater();
 
       new AltarReloadTask(this).runTaskLater(getInstance(), 40L);
+
+      try {
+         updateChecker = new UpdateChecker(this);
+         getServer().getScheduler().runTaskAsynchronously(this, () -> updateChecker.check());
+         Bukkit.getPluginManager().registerEvents(new UpdateNotifier(updateChecker), this);
+      } catch (Exception e) {
+         getLogger().severe("An Error Occurred while trying to check for updates: " + e);
+      }
    }
 
    public static boolean areSimilar(ItemStack var0, ItemStack var1) {
