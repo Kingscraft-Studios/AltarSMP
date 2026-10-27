@@ -117,24 +117,6 @@ public class BossBarManager {
       list.forEach(bar -> bar.bossBar.removeAll());
   }
 
-  public static void removeBarFromAll(String paramString) {
-    Iterator<Map.Entry<UUID, List<PlayerBossBar>>> iterator = playerBars.entrySet().iterator();
-    while (iterator.hasNext()) {
-      Map.Entry<UUID, List<PlayerBossBar>> entry = iterator.next();
-      List<PlayerBossBar> list = entry.getValue();
-      {
-        list.removeIf(bar -> {
-          if (bar.title.equals(paramString)) {
-            bar.bossBar.removeAll();
-            return true;
-          }
-          return false;
-        });
-        if (list.isEmpty())
-          iterator.remove();
-      }}
-  }
-
   public static void hideBingoBar() {
     {
       if (bingoBarTask != null) {

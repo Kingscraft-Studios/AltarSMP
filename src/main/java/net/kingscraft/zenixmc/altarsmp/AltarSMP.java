@@ -95,6 +95,8 @@ public final class AltarSMP extends JavaPlugin implements Listener {
    public static ShadowBladeAbility DARK_BLADE;
    public static TrustManager trust;
 
+   private CopperHelmetAbilityListener copperHelmetAbilityListener;
+
    @Override
    public void onEnable() {
       instance = this;
@@ -173,7 +175,9 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       Bukkit.getPluginManager().registerEvents(new PaladinEarthAbility(this), this);
       Bukkit.getPluginManager().registerEvents(this, this);
       Bukkit.getPluginManager().registerEvents(new IllusionDisguiseManager(), this);
-      Bukkit.getPluginManager().registerEvents(new CopperHelmetAbilityListener(this), this);
+
+      copperHelmetAbilityListener = new CopperHelmetAbilityListener(this);
+      Bukkit.getPluginManager().registerEvents(copperHelmetAbilityListener, this);
       Bukkit.getPluginManager().registerEvents(new CopperLeggingsShockwaveAbility(this), this);
       Bukkit.getPluginManager().registerEvents(new CopperChestplateComboAbility(this), this);
       Bukkit.getPluginManager().registerEvents(new CopperBootsSpeedAbility(this), this);
@@ -307,13 +311,12 @@ public final class AltarSMP extends JavaPlugin implements Listener {
          this.altarController.removeAllAltars();
       }
 
+      if (copperHelmetAbilityListener != null)
+         copperHelmetAbilityListener.stopEffectTask();
+
       for (Player var2 : Bukkit.getOnlinePlayers()) {
-         BossBarManager.removeAllBars(
-            var2
-         );
-         IllusionDisguiseManager.revealPlayer(
-            var2
-         );
+         BossBarManager.removeAllBars(var2);
+         IllusionDisguiseManager.revealPlayer(var2);
       }
    }
 

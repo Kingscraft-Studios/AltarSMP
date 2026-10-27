@@ -182,6 +182,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     showEventBossBar();
     spawnCopperCore(player);
     createCopperCoreItem();
+    startEventCountdown();
     return false;
   }
 
@@ -190,6 +191,7 @@ public class CopperLeggingsEventManager implements Listener, CommandExecutor {
     for (Player player : Bukkit.getOnlinePlayers()) {
       player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1.0F, 1.0F);
       BossBarManager.showEventBar("Event Time Remaining:", i, BarColor.PINK);
+      BossBarManager.addPlayerToEventBar(player);
     } 
   }
 

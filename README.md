@@ -17,24 +17,6 @@ installable package — custom abilities, equipment, altars, events, and externa
 - **Performance-focused** — async-safe tasks, re-entrance guards, and sorted/BFS routines for bulk operations.
 - **Automated resource pack Delivery** — external hosting via MCPacks with auto-prompt on join.
 
-### Bugs
-
-- AltarManager; Contains Bugs Related to Map<here>
-- Check Proper KnightFallKillTracker Usage from KillTracker Ensure we are Using KnightFallKillTracker NOT KillTracker for KnightFall Weapon
-- AncientBladeAbility.java method "presence", "unyieldingDarkness" always returns true
-- TidebreakerAbility.java method "stormcall", "risingTide" always returns true
-- WitherSymbioteAbility.java method "infection", "rampage"
-- CopperBootsSpeedAbility.java method "hasCustomNetheriteBoots" always returns false
-- CopperLeggingsEventManager.java check why startEventCooldown method isnt being called
-- KnightfallListener.java method startCloak isnt being called why?
-- NetheriteHelmetAbilityListener.java method stopEffectTask isnt being called why?
-- BossBarManager.java method removeBarFromAll, addPlayerToEventBar isnt being called why?
-- CustomItemRegistry.java Review Warnings
-- LegendaryItemConfigMenu method showConfigDialog not being called why?
-- VampireEventManager.java method updatePlayerDisplay not being called why?
-
-- Next: weapon/* folder check for Bugs
-
 ## Requirements
 
 | Component | Version                            |

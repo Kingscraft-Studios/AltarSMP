@@ -39,7 +39,12 @@ public class LegendaryItemConfigMenu implements Listener {
   public static void showConfigDialog(Player paramPlayer, CustomItem paramCustomItem) {
     if (instance != null && paramCustomItem != null) {
       paramPlayer.showDialog(instance.buildWeaponDialog(paramCustomItem));
+    } else {
+      openConfigDialog(paramPlayer, paramCustomItem);
     }
+  }
+  public static void openConfigDialog(Player paramPlayer, CustomItem paramCustomItem) {
+    showConfigDialog(paramPlayer, paramCustomItem);
   }
 
   public static void openConfigMenu(Player paramPlayer) {

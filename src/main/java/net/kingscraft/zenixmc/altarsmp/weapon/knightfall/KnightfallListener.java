@@ -211,6 +211,7 @@ public class KnightfallListener implements Listener {
               if (player.getFallDistance() < 2.0F)
                 return; 
             }
+            startCloak(player, j);
             findHookTargetBlock(player, j);
           } 
         }

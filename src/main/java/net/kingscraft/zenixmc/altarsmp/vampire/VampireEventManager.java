@@ -198,6 +198,9 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
   }
 
   public static void updatePlayerDisplay(Player paramPlayer) {
+    updateDisplay(paramPlayer);
+  }
+  public static void updateDisplay(Player paramPlayer) {
     Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
     String str1 = "dw_" + paramPlayer.getName();
     Team team = scoreboard.getTeam(str1);
@@ -233,12 +236,14 @@ public final class VampireEventManager implements Listener, CommandExecutor, Tab
   public static void setPale(Player paramPlayer) {
     setPlayerType(paramPlayer, "PALE");
     getPlayerType(paramPlayer);
+    updatePlayerDisplay(paramPlayer);
     paramPlayer.sendMessage(Component.text("You are now a pale rot", NamedTextColor.YELLOW));
   }
 
   public static void setVampire(Player paramPlayer) {
     setPlayerType(paramPlayer, "VAMPIRE");
     getPlayerType(paramPlayer);
+    updatePlayerDisplay(paramPlayer);
     paramPlayer.sendMessage(Component.text("You are now a vampire", NamedTextColor.RED));
   }
 
