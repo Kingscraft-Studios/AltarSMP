@@ -1,354 +1,439 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.illusion;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.WitherSkull;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
+
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.util.PiglinVariant;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
 import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.core.MobAbilityTypeSwitchMappings;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.ability.IllusionAbilities;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.ability.IllusionAbilityFamily;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.ability.IllusionAbilityRegistry;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.util.IllusionConfig;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 public class IllusionWandAbility implements Listener {
-  public AltarSMP plugin;
 
   public static NamespacedKey STORED_MOB_KEY;
+  public static NamespacedKey STORED_PLAYER_NAME_KEY;
 
-  public NamespacedKey storedPlayerNameKey;
+  private static final Map<UUID, Long> LAST_ACTIVATION = new HashMap<>();
+  static final Set<UUID> CHARGING = new HashSet<>();
 
+  public final AltarSMP plugin;
 
-  public IllusionWandAbility(AltarSMP paramAltarSMP) {
-    this.plugin = paramAltarSMP;
-    STORED_MOB_KEY = new NamespacedKey(paramAltarSMP, "stored_mob");
-    this.storedPlayerNameKey = new NamespacedKey(paramAltarSMP, "stored_player_name");
+  public IllusionWandAbility(AltarSMP plugin) {
+    this.plugin = plugin;
+    STORED_MOB_KEY = new NamespacedKey(plugin, "stored_mob");
+    STORED_PLAYER_NAME_KEY = new NamespacedKey(plugin, "stored_player_name");
   }
 
-  public static boolean isIllusionWand(ItemStack paramItemStack) {
-    {
-      if (paramItemStack.getType() != Material.NETHERITE_SWORD)
-        return false; 
-    }{
-      if (!paramItemStack.hasItemMeta())
-        return false; 
-    }ItemMeta itemMeta = paramItemStack.getItemMeta();
-    {
-      if (itemMeta == null)
-        return false; 
-    }{
-      if (itemMeta.getCustomModelDataComponent().getFloats().isEmpty())
-        return false; 
-    }{
-
-    }return (itemMeta.getCustomModelDataComponent().getFloats().getFirst() == 2);
+  public static boolean isIllusionWand(ItemStack itemStack) {
+    if (itemStack == null || itemStack.getType() != Material.NETHERITE_SWORD || !itemStack.hasItemMeta()) {
+      return false;
+    }
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    if (itemMeta == null) {
+      return false;
+    }
+    List<Float> floats = itemMeta.getCustomModelDataComponent().getFloats();
+    return !floats.isEmpty() && floats.getFirst() == 2.0F;
   }
 
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-  public void onPlayerDeath(PlayerDeathEvent paramPlayerDeathEvent) {
-    Player player = paramPlayerDeathEvent.getEntity();
-    {
-      if (IllusionDisguiseManager.isDisguised(player)) {
-        paramPlayerDeathEvent.setCancelled(true);
-        IllusionDisguiseManager.revealPlayer(player);
-        (new CapturedMobDeathTask(player)).runTaskLater(AltarSMP.getInstance(), 2L);
-      } 
-    }}
+  /**
+   * Finds the wand even if it is not in a hand, so an offhand swap works no
+   * matter which hotbar slot the wand is in.
+   */
+  public static ItemStack findWand(Player player) {
+    if (player == null) {
+      return null;
+    }
+    ItemStack offHand = player.getInventory().getItemInOffHand();
+    if (isIllusionWand(offHand)) {
+      return offHand;
+    }
+    ItemStack mainHand = player.getInventory().getItemInMainHand();
+    if (isIllusionWand(mainHand)) {
+      return mainHand;
+    }
+    for (ItemStack stack : player.getInventory().getContents()) {
+      if (isIllusionWand(stack)) {
+        return stack;
+      }
+    }
+    return null;
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR)
+  public void onPlayerDeath(PlayerDeathEvent event) {
+    Player player = event.getEntity();
+    if (!IllusionDisguiseManager.isDisguised(player)) {
+      return;
+    }
+    // Never cancel death. Just drop the disguise; the captured mob stays in the wand.
+    IllusionDisguiseManager.revealPlayer(player, false);
+  }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onEntityDeath(EntityDeathEvent paramEntityDeathEvent) {
-    LivingEntity livingEntity = paramEntityDeathEvent.getEntity();
-    Player player = paramEntityDeathEvent.getEntity().getKiller();
-    {
-      if (player == null)
-        return; 
-    }ItemStack itemStack = player.getInventory().getItemInMainHand();
-    {
-      if (!isIllusionWand(itemStack))
-        return; 
-    }if (livingEntity instanceof Player player1) {
-          ItemMeta itemMeta = itemStack.getItemMeta();
-      {
-        if (itemMeta == null)
-          return; 
-      }PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
-      persistentDataContainer.set(this.storedPlayerNameKey, PersistentDataType.STRING, player1.getName());
-      persistentDataContainer.remove(STORED_MOB_KEY);
-      itemStack.setItemMeta(itemMeta);
-      String str1 = player1.getName();
-      player.sendMessage(Component.text()
-          .append(Component.text("» You captured ", NamedTextColor.DARK_RED))
-          .append(Component.text(str1, NamedTextColor.RED, TextDecoration.UNDERLINED))
-          .build());
-      player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.5F);
+  public void onEntityDeath(EntityDeathEvent event) {
+    LivingEntity dead = event.getEntity();
+    Player killer = dead.getKiller();
+    if (killer == null || dead.equals(killer)) {
+      return;
+    }
+    if (IllusionDisguiseManager.disguisedEntityOwners.containsKey(dead.getUniqueId())) {
+      return;
+    }
+    ItemStack wand = findWand(killer);
+    if (wand == null) {
+      return;
+    }
+    if (dead instanceof Player victim) {
+      capturePlayer(killer, wand, victim);
     } else {
-      storeCapturedMob(player, itemStack, livingEntity.getType());
-    } 
+      storeCapturedMob(killer, wand, dead.getType());
+    }
   }
 
-  public static void storeCapturedMob(Player paramPlayer, ItemStack paramItemStack, EntityType paramEntityType) {
-    ItemMeta itemMeta = paramItemStack.getItemMeta();
-    {
-      if (itemMeta == null)
-        return; 
-    }PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
-    {
-      if (paramEntityType == EntityType.ENDER_DRAGON)
-        return; 
-    }persistentDataContainer.set(STORED_MOB_KEY, PersistentDataType.STRING, paramEntityType.name());
-    paramItemStack.setItemMeta(itemMeta);
-    String str1 = paramEntityType.name();
-    paramPlayer.sendMessage(Component.text()
-        .append(Component.text("» You captured a ", NamedTextColor.DARK_RED))
-        .append(Component.text(str1, NamedTextColor.RED, TextDecoration.UNDERLINED))
-        .build());
-    paramPlayer.playSound(paramPlayer, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.2F);
+  private static void capturePlayer(Player killer, ItemStack wand, Player victim) {
+    ItemMeta itemMeta = wand.getItemMeta();
+    if (itemMeta == null) {
+      return;
+    }
+    PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+    container.set(STORED_PLAYER_NAME_KEY, PersistentDataType.STRING, victim.getName());
+    container.remove(STORED_MOB_KEY);
+    wand.setItemMeta(itemMeta);
+
+    killer.sendMessage(Component.text()
+            .append(Component.text("» You captured ", NamedTextColor.DARK_RED))
+            .append(Component.text(victim.getName(), NamedTextColor.RED, TextDecoration.UNDERLINED))
+            .build());
+    killer.playSound(killer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.5F);
+  }
+
+  public static void storeCapturedMob(Player player, ItemStack wand, EntityType type) {
+    if (player == null || wand == null || type == null || !IllusionConfig.enabled()) {
+      return;
+    }
+    if (type == EntityType.ENDER_DRAGON) {
+      player.sendMessage(Component.text("The Ender Dragon cannot be captured.", NamedTextColor.RED));
+      return;
+    }
+    if (type == EntityType.PLAYER || !type.isSpawnable() || type.getEntityClass() == null
+            || !LivingEntity.class.isAssignableFrom(type.getEntityClass())) {
+      return;
+    }
+    ItemMeta itemMeta = wand.getItemMeta();
+    if (itemMeta == null) {
+      return;
+    }
+    PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+    container.set(STORED_MOB_KEY, PersistentDataType.STRING, type.name());
+    container.remove(STORED_PLAYER_NAME_KEY);
+    wand.setItemMeta(itemMeta);
+
+    player.sendMessage(Component.text()
+            .append(Component.text("» You captured a ", NamedTextColor.DARK_RED))
+            .append(Component.text(type.name().replace('_', ' '), NamedTextColor.RED, TextDecoration.UNDERLINED))
+            .build());
+    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.2F);
   }
 
   @EventHandler
-  public void onPlayerInteract(PlayerInteractEvent paramPlayerInteractEvent) {
-    Player player = paramPlayerInteractEvent.getPlayer();
-    ItemStack itemStack = paramPlayerInteractEvent.getItem();
-    if (itemStack == null) {
-      return;
-    }
+  public void onPlayerInteract(PlayerInteractEvent event) {
+    Player player = event.getPlayer();
+    ItemStack itemStack = event.getItem();
     if (!isIllusionWand(itemStack)) {
       return;
     }
-    if ((paramPlayerInteractEvent.getAction() == Action.LEFT_CLICK_AIR || paramPlayerInteractEvent.getAction() == Action.LEFT_CLICK_BLOCK) && player.isSneaking()) {
-      boolean b = IllusionDisguiseManager.isDisguised(player);
-      if (b) {
+    if (!IllusionConfig.enabled()) {
+      return;
+    }
+    Action action = event.getAction();
+    if ((action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) && player.isSneaking()) {
+      if (IllusionDisguiseManager.isDisguised(player)) {
         IllusionDisguiseManager.revealPlayer(player);
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.8F);
       }
-    } else if (paramPlayerInteractEvent.getAction() == Action.RIGHT_CLICK_AIR || paramPlayerInteractEvent.getAction() == Action.RIGHT_CLICK_BLOCK) {
+      return;
+    }
+    if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
+      // Right-click is disguise-only. Active abilities are offhand-swap only.
       if (IllusionDisguiseManager.isDisguised(player)) {
         return;
       }
-      (new IllusionWandChargeTask(player)).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
+      if (action == Action.RIGHT_CLICK_BLOCK) {
+        event.setCancelled(true);
+      }
+      if (!CHARGING.add(player.getUniqueId())) {
+        return;
+      }
+      new IllusionWandChargeTask(player).runTaskTimer(AltarSMP.getInstance(), 0L, 1L);
     }
   }
 
   @EventHandler
-  public void onPlayerItemConsume(PlayerItemConsumeEvent paramPlayerItemConsumeEvent) {
-    Player player = paramPlayerItemConsumeEvent.getPlayer();
-    ItemMeta itemMeta = paramPlayerItemConsumeEvent.getItem().getItemMeta();
-    PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
-    {
-      if (isIllusionWand(paramPlayerItemConsumeEvent.getItem())) {
-        {
-          paramPlayerItemConsumeEvent.setCancelled(true);
-          player.updateInventory();
-          if (IllusionDisguiseManager.isDisguised(player)) {
-            player.sendMessage(Component.text("You are already disguised", NamedTextColor.RED));
-            return;
-          } 
-        }boolean bool = AltarSMP.getInstance().getConfig().getBoolean("IllusionWandRandomMob", false);
-        if (bool) {
-          ArrayList<EntityType> arrayList = new ArrayList<>();
-          for (String str : AltarSMP.getInstance().getConfig().getStringList("randomMobs")) {
-            try {
-              arrayList.add(EntityType.valueOf(str.toUpperCase()));
-            } catch (IllegalArgumentException illegalArgumentException) {
-              AltarSMP.getInstance().getLogger().warning("Invalid EntityType in config: " + str);
-            } 
-          } 
-          int i = ThreadLocalRandom.current().nextInt(0, arrayList.size());
-          EntityType entityType = arrayList.get(i);
-          IllusionDisguiseManager.disguisePlayer(player, entityType, null);
-        } else {
-          restoreCapturedMob(player, persistentDataContainer);
-        } 
-      } 
-    }}
-
-  public void restoreCapturedMob(Player paramPlayer, PersistentDataContainer paramPersistentDataContainer) {
-    if (paramPersistentDataContainer.has(this.storedPlayerNameKey, PersistentDataType.STRING)) {
-      String str = paramPersistentDataContainer.get(this.storedPlayerNameKey, PersistentDataType.STRING);
-      {
-        if (str == null)
-          return; 
-      }Player player = Bukkit.getPlayer(str);
-      {
-        if (player == null)
-          return; 
-      }
-      IllusionDisguiseManager.disguisePlayer(paramPlayer, EntityType.PLAYER, player);
-    } else if (paramPersistentDataContainer.has(STORED_MOB_KEY, PersistentDataType.STRING)) {
-      String str = paramPersistentDataContainer.get(STORED_MOB_KEY, PersistentDataType.STRING);
-      EntityType entityType = EntityType.valueOf(str);
-      IllusionDisguiseManager.disguisePlayer(paramPlayer, entityType, null);
-    } 
-    ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
-    ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.getPersistentDataContainer().remove(this.storedPlayerNameKey);
-    itemMeta.getPersistentDataContainer().remove(STORED_MOB_KEY);
-    itemStack.setItemMeta(itemMeta);
+  public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+    Player player = event.getPlayer();
+    if (!isIllusionWand(event.getItem())) {
+      return;
+    }
+    event.setCancelled(true);
+    player.updateInventory();
+    activateDisguise(player);
   }
 
-  public static void startAbilityCooldown(Player paramPlayer) {
-    int i = AltarSMP.getInstance().getConfig().getInt("mobAbilityCooldown", 30);
-    CooldownManager.setCooldown(paramPlayer.getUniqueId(), "mobAbility", i);
-    BossBarManager.createBar(paramPlayer, "Illusion Ability", i, NamedTextColor.RED);
+  /**
+   * The single disguise entry point. Both the charge task and the consume event
+   * call this; the 750ms debounce makes sure one right-click cannot disguise
+   * twice.
+   */
+  public static void activateDisguise(Player player) {
+    if (player == null || !IllusionConfig.enabled()) {
+      return;
+    }
+    if (IllusionDisguiseManager.isDisguised(player)) {
+      return;
+    }
+    long now = System.currentTimeMillis();
+    Long last = LAST_ACTIVATION.get(player.getUniqueId());
+    if (last != null && now - last < 750L) {
+      return;
+    }
+    if (IllusionConfig.randomMobMode()) {
+      disguiseAsRandomMob(player);
+      LAST_ACTIVATION.put(player.getUniqueId(), now);
+      return;
+    }
+    ItemStack wand = findWand(player);
+    if (wand == null) {
+      player.sendMessage(Component.text("You are not holding the Wand of Illusion.", NamedTextColor.RED));
+      return;
+    }
+    boolean disguised = restoreCapturedMob(player, wand);
+    if (disguised) {
+      LAST_ACTIVATION.put(player.getUniqueId(), now);
+    }
+  }
+
+  private static void disguiseAsRandomMob(Player player) {
+    List<String> configured = IllusionConfig.randomMobTypes();
+    List<EntityType> types = new ArrayList<>();
+    for (String name : configured) {
+      try {
+        EntityType type = EntityType.valueOf(name.toUpperCase(Locale.ROOT));
+        if (type != EntityType.PLAYER && type != EntityType.ENDER_DRAGON
+                && type.isSpawnable() && type.getEntityClass() != null
+                && LivingEntity.class.isAssignableFrom(type.getEntityClass())) {
+          types.add(type);
+        }
+      } catch (IllegalArgumentException exception) {
+        AltarSMP.getInstance().getLogger().warning("Invalid EntityType in illusion.random-mobs: " + name);
+      }
+    }
+    if (types.isEmpty()) {
+      player.sendMessage(Component.text("No valid random mobs are configured.", NamedTextColor.RED));
+      return;
+    }
+    EntityType type = types.get(ThreadLocalRandom.current().nextInt(types.size()));
+    IllusionDisguiseManager.disguisePlayer(player, type, null);
+  }
+
+  public static boolean restoreCapturedMob(Player player, ItemStack wand) {
+    if (player == null) {
+      return false;
+    }
+    // The stack from PlayerItemConsumeEvent can be a copy, so always re-read the
+    // wand that is actually in the inventory.
+    ItemStack held = findWand(player);
+    if (held != null) {
+      wand = held;
+    }
+    if (!isIllusionWand(wand)) {
+      player.sendMessage(Component.text("You are not holding the Wand of Illusion.", NamedTextColor.RED));
+      return false;
+    }
+    ItemMeta itemMeta = wand.getItemMeta();
+    if (itemMeta == null) {
+      return false;
+    }
+    PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+
+    String storedPlayerName = container.get(STORED_PLAYER_NAME_KEY, PersistentDataType.STRING);
+    if (storedPlayerName != null && !storedPlayerName.isEmpty()) {
+      Player target = Bukkit.getPlayerExact(storedPlayerName);
+      if (target == null) {
+        player.sendMessage(Component.text("The captured player " + storedPlayerName + " is not online.",
+                NamedTextColor.RED));
+        return false;
+      }
+      IllusionDisguiseManager.disguisePlayer(player, EntityType.PLAYER, target);
+      if (IllusionDisguiseManager.isDisguised(player)) {
+        consumeIfNeeded(wand);
+        return true;
+      }
+      return false;
+    }
+
+    String storedMob = container.get(STORED_MOB_KEY, PersistentDataType.STRING);
+    if (storedMob == null || storedMob.isEmpty()) {
+      player.sendMessage(Component.text("This wand has not captured a mob yet.", NamedTextColor.RED));
+      return false;
+    }
+    EntityType type;
+    try {
+      type = EntityType.valueOf(storedMob.toUpperCase(Locale.ROOT));
+    } catch (IllegalArgumentException exception) {
+      player.sendMessage(Component.text("The captured mob is no longer valid.", NamedTextColor.RED));
+      return false;
+    }
+    IllusionDisguiseManager.disguisePlayer(player, type, null);
+    if (IllusionDisguiseManager.isDisguised(player)) {
+      consumeIfNeeded(wand);
+      return true;
+    }
+    return false;
+  }
+
+  private static void consumeIfNeeded(ItemStack wand) {
+    if (IllusionConfig.keepCapturedMob()) {
+      return;
+    }
+    ItemMeta itemMeta = wand.getItemMeta();
+    if (itemMeta == null) {
+      return;
+    }
+    PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+    container.remove(STORED_MOB_KEY);
+    container.remove(STORED_PLAYER_NAME_KEY);
+    wand.setItemMeta(itemMeta);
+  }
+
+  public static void startAbilityCooldown(Player player) {
+    int cooldown = IllusionConfig.abilityCooldown();
+    CooldownManager.setCooldown(player.getUniqueId(), "mobAbility", cooldown);
+    BossBarManager.createBar(player, "Illusion Ability", cooldown, NamedTextColor.RED);
   }
 
   @EventHandler
-  public void onEntityDamage(EntityDamageEvent paramEntityDamageEvent) {
-    Player player;
-    Entity entity = paramEntityDamageEvent.getEntity();
-    if (entity instanceof Player) {
-      player = (Player)entity;
-    } else {
-      return;
-    } 
-    {
-      if (!IllusionDisguiseManager.isDisguised(player))
-        return; 
-    }{
-      if (paramEntityDamageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)
-        paramEntityDamageEvent.setCancelled(true); 
-    }}
-
-  public static void useMobAbility(Player paramPlayer, EntityType paramEntityType) {
-    if (CooldownManager.isOnCooldown(paramPlayer.getUniqueId(), "mobAbility")) {
+  public void onEntityDamage(EntityDamageEvent event) {
+    if (!(event.getEntity() instanceof Player player)) {
       return;
     }
-    if (!IllusionDisguiseManager.isDisguised(paramPlayer)) {
+    if (!IllusionDisguiseManager.isDisguised(player)) {
       return;
     }
-    if (paramEntityType == null) {
-      return;
-    }
-    boolean b = true;
-    switch (MobAbilityTypeSwitchMappings.ENTITY_TYPE_MAPPING[paramEntityType.ordinal()]) {
-      case 1: {
-        paramPlayer.setInvulnerable(true);
-        paramPlayer.getWorld().createExplosion(paramPlayer.getLocation(), (float)AltarSMP.getInstance().getConfig().getDouble("illusionCreeperExplosionStrength", 3.0D), false, false);
-        paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1.0F, 1.0F);
-        paramPlayer.setInvulnerable(false);
-        break;
-      }
-      case 2: {
-        Location location = paramPlayer.getTargetBlock(null, 30).getLocation();
-        paramPlayer.teleport(location.add(0.0D, 1.0D, 0.0D));
-        paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
-        break;
-      }
-      case 3: {
-        Fireball fireball = paramPlayer.launchProjectile(Fireball.class);
-        fireball.setVelocity(paramPlayer.getLocation().getDirection().multiply(AltarSMP.getInstance().getConfig().getDouble("IllusionBlazeFireballStrength", 2.0D)));
-        paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1.0F, 1.0F);
-        break;
-      }
-      case 4: {
-        for (int i = -1; i <= 1; i++) {
-          WitherSkull witherSkull = paramPlayer.launchProjectile(WitherSkull.class);
-          witherSkull.setYield(2.0F);
-          witherSkull.setVelocity(paramPlayer.getLocation().getDirection().rotateAroundY(Math.toRadians(i * 15)).multiply(2));
-        }
-        paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_WITHER_SHOOT, 1.0F, 1.0F);
-        break;
-      }
-      case 5: {
-        Location location2 = paramPlayer.getEyeLocation();
-        Vector vector = location2.getDirection();
-        Location location3 = null;
-        double d = 0.0D;
-        while (d <= 15.0D) {
-          Location location4 = location2.clone().add(vector.clone().multiply(d));
-          if (location4.getBlock().getType().isSolid()) {
-            location3 = location4.subtract(vector.clone().multiply(0.5D));
-            break;
-          }
-          d += 0.5D;
-        }
-        if (location3 == null) {
-          location3 = location2.clone().add(vector.clone().multiply(15));
-        }
-        Location location5 = location3;
-        double d2 = location2.distance(location5);
-        paramPlayer.getWorld().playSound(location2, Sound.ENTITY_WARDEN_SONIC_CHARGE, 3.0F, 1.0F);
-        Bukkit.getScheduler().runTaskLater(AltarSMP.getInstance(), () -> createSonicBoomEffect(paramPlayer, location2, d2, vector), 20L);
-        break;
-      }
-      case 6:
-      case 7: {
-        for (Entity entity : paramPlayer.getNearbyEntities(5.0D, 5.0D, 5.0D)) {
-          if (entity instanceof LivingEntity && entity != paramPlayer) {
-            ((LivingEntity)entity).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 100, 1));
-          }
-        }
-        paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_SPIDER_HURT, 1.0F, 0.8F);
-        break;
-      }
-      case 8: {
-        Fireball fireball2 = paramPlayer.launchProjectile(Fireball.class);
-        fireball2.setYield(3.0F);
-        paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1.0F, 1.0F);
-        break;
-      }
-      default: {
-        b = false;
-      }
-    }
-    if (b) {
-      startAbilityCooldown(paramPlayer);
+    // Only a Creeper disguise is immune to explosions.
+    if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
+            && IllusionDisguiseManager.getDisguisedEntityType(player) == EntityType.CREEPER) {
+      event.setCancelled(true);
     }
   }
 
-  public static void createSonicBoomEffect(Player paramPlayer, Location paramLocation, double paramDouble, Vector paramVector) {
-    paramPlayer.getWorld().playSound(paramLocation, Sound.ENTITY_WARDEN_SONIC_BOOM, 3.0F, 1.0F);
-    double d1;
-    for (d1 = 0.0D; d1 <= paramDouble; d1 += 0.3D) {
-      Location location = paramLocation.clone().add(paramVector.clone().multiply(d1));
-      paramPlayer.getWorld().spawnParticle(Particle.SONIC_BOOM, location, 1, 0.0D, 0.0D, 0.0D, 0.0D);
-    } 
-    HashSet<UUID> hashSet = new HashSet<>();
-    double d2;
-    for (d2 = 0.0D; d2 <= paramDouble; d2 += 0.5D) {
-      Location location = paramLocation.clone().add(paramVector.clone().multiply(d2));
-      for (Entity entity : location.getWorld().getNearbyEntities(location, 1.0D, 1.0D, 1.0D)) {
-        {
-          if (entity instanceof LivingEntity livingEntity)
-            {
-              if (entity != paramPlayer && !hashSet.contains(entity.getUniqueId())) {
-                hashSet.add(entity.getUniqueId());
-                livingEntity.setHealth(Math.max(0.0D, livingEntity.getHealth() - 10.0D));
-                Vector vector = paramVector.clone().multiply(1.5D);
-                vector.setY(0.4D);
-                livingEntity.setVelocity(vector);
-              } 
-            }}} 
-    } 
+  /** Illusion projectiles never break blocks. */
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onIllusionProjectileExplode(EntityExplodeEvent event) {
+    Entity entity = event.getEntity();
+    if (IllusionAbilities.isIllusionProjectile(entity)) {
+      event.blockList().clear();
+    }
   }
 
+  /**
+   * Snowballs, eggs, llama spit, wind charges, small fireballs and shulker
+   * bullets cannot carry their own damage value, so the ability stores one on
+   * the projectile and it is applied here. Armour still reduces it.
+   */
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onIllusionProjectileHit(ProjectileHitEvent event) {
+    Projectile projectile = event.getEntity();
+    double damage = IllusionAbilities.projectileDamage(projectile);
+    if (damage <= 0.0D) {
+      return;
+    }
+    if (!(projectile.getShooter() instanceof Player player)) {
+      return;
+    }
+    // Resolve a fake disguise shell to the player it represents.
+    LivingEntity hit = IllusionDisguiseManager.disguiseOwner(event.getHitEntity());
+    if (hit == null && event.getHitEntity() instanceof LivingEntity living) {
+      hit = living;
+    }
+    if (hit == null || !IllusionAbilities.isEnemy(player, hit)) {
+      return;
+    }
+    // The projectile's own vanilla hit may have started damage i-frames, which
+    // would swallow this stored damage. Clear them so the ability always lands.
+    hit.setNoDamageTicks(0);
+    hit.damage(damage, player);
+    IllusionAbilities.consumeProjectileDamage(projectile);
+  }
+
+  public static boolean useMobAbility(Player player, EntityType type) {
+    if (player == null || !IllusionConfig.enabled()) {
+      return false;
+    }
+    if (!IllusionDisguiseManager.isDisguised(player)) {
+      return false;
+    }
+    if (CooldownManager.isOnCooldown(player.getUniqueId(), "mobAbility")) {
+      int remaining = Math.max(1, CooldownManager.getRemainingSeconds(player.getUniqueId(), "mobAbility"));
+      player.sendActionBar(Component.text("Ability on cooldown: " + remaining + "s", NamedTextColor.GRAY));
+      return false;
+    }
+    EntityType disguiseType = type != null ? type : IllusionDisguiseManager.getDisguisedEntityType(player);
+    if (disguiseType == null) {
+      return false;
+    }
+    IllusionAbilityFamily family = IllusionAbilityRegistry.family(disguiseType);
+    if (family.isPassive() || disguiseType == EntityType.PLAYER) {
+      String message = disguiseType == EntityType.STRIDER
+              ? "Lava Walk is always active (passive)."
+              : "This disguise has no active ability.";
+      player.sendActionBar(Component.text(message, NamedTextColor.GRAY));
+      player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.2F);
+      return false;
+    }
+    if (!IllusionAbilities.activate(player, disguiseType)) {
+      return false;
+    }
+    startAbilityCooldown(player);
+    IllusionDisguiseManager.sendDisguiseBar(player);
+    return true;
+  }
 }

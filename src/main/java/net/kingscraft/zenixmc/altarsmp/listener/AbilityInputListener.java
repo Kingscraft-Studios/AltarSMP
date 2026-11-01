@@ -50,24 +50,54 @@ public class AbilityInputListener implements Listener {
     Player player = paramPlayerSwapHandItemsEvent.getPlayer();
     {
       if (!AltarSMP.getInstance().getConfig().getBoolean("offhand." + player.getName(), true))
-        return; 
-    }{
+        return;
+    }
+    {
+      // Wand of Illusion: offhand swap is the ONLY active-ability input.
+      if (IllusionDisguiseManager.isDisguised(player)) {
+        if (WorldGuardHook.isBlocked(player.getLocation())) {
+          return;
+        }
+        int legendaryLimit = AltarSMP.getInstance().getConfig().getInt("legendaryLimit", -1);
+        if (legendaryLimit != -1 && CustomItem.countInInventory(player) > legendaryLimit) {
+          player.sendMessage(Component.text("The legendary limit is " + legendaryLimit, NamedTextColor.YELLOW));
+          player.getWorld().playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
+          return;
+        }
+        IllusionWandAbility.useMobAbility(player,
+                IllusionDisguiseManager.getDisguisedEntityType(player));
+        // Always consume the swap while disguised: passives and cooldowns must
+        // not fall through to the normal main-hand ability path.
+        paramPlayerSwapHandItemsEvent.setCancelled(true);
+        return;
+      }
+    }
+    {
       if (!player.isSneaking()) {
         {
           if (activateMainHandAbility(player))
-            paramPlayerSwapHandItemsEvent.setCancelled(true); 
+            paramPlayerSwapHandItemsEvent.setCancelled(true);
         }} else {
         {
           if (activateOffhandAbility(player))
-            paramPlayerSwapHandItemsEvent.setCancelled(true); 
-        }} 
-    }}
+            paramPlayerSwapHandItemsEvent.setCancelled(true);
+        }
+      }
+    }
+  }
 
   public static boolean activateMainHandAbility(Player paramPlayer) {
     {
       if (WorldGuardHook.isBlocked(paramPlayer.getLocation()))
         return false; 
-    }ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
+    }
+    // /ability1 must fire the current mob disguise's ability, not an offhand swap.
+    if (IllusionDisguiseManager.isDisguised(paramPlayer)) {
+      IllusionWandAbility.useMobAbility(paramPlayer,
+              IllusionDisguiseManager.getDisguisedEntityType(paramPlayer));
+      return true;
+    }
+    ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
     int i = AltarSMP.getInstance().getConfig().getInt("echoSonicBlastCooldown", 40);
     int j = AltarSMP.getInstance().getConfig().getInt("legendaryLimit", -1);
     {
@@ -83,14 +113,7 @@ public class AbilityInputListener implements Listener {
         paramPlayer.swingMainHand();
         paramPlayer.updateInventory();
         return true;
-      } 
-    }{
-      if (AltarSMP.areSimilar(itemStack, CustomItemRegistry.getIllusionWand())) {
-        {
-          if (IllusionDisguiseManager.isDisguised(paramPlayer))
-            IllusionWandAbility.useMobAbility(paramPlayer, IllusionDisguiseManager.getDisguisedEntityType(paramPlayer));
-        }return true;
-      } 
+      }
     }{
       if (AltarSMP.areSimilar(itemStack, CustomItemRegistry.getCutlass())) {
         {
@@ -326,7 +349,9 @@ public class AbilityInputListener implements Listener {
             paramPlayer.getWorld().playSound(paramPlayer.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
             return false;
           } 
-        }}    ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
+        }
+    }
+    ItemStack itemStack = paramPlayer.getInventory().getItemInMainHand();
     {
       if (AltarS2AbilityDispatcher.dispatchOffhand(paramPlayer)) {
         paramPlayer.swingMainHand();

@@ -93,9 +93,11 @@ public class CrazySelectorMenuListener implements Listener {
               return; 
           }{
             if (CustomItem.fromItem(itemStack) == CustomItem.ILLUSION_WAND) {
+              // The menu item comes from CustomItem's cached stack. Clone it first
+              // so the WARDEN capture never leaks into every future wand.
+              itemStack = itemStack.clone();
               IllusionWandAbility.storeCapturedMob(player, itemStack, EntityType.WARDEN);
-              return;
-            } 
+            }
           }player.getInventory().addItem(itemStack);
           CooldownManager.setCooldown(player.getUniqueId(), "open", 0.0D);
           player.closeInventory();

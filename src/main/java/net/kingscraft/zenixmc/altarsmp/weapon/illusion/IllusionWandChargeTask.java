@@ -1,42 +1,53 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.illusion;
 
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.util.IllusionConfig;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 class IllusionWandChargeTask extends BukkitRunnable {
-  final int chargeDurationTicks = AltarSMP.getInstance().getConfig().getInt(CHARGE_DURATION_CONFIG_KEY, 1) * 20;
+
+  final int chargeDurationTicks = IllusionConfig.chargeDurationSeconds() * 20;
 
   public int chargeTicks;
 
   public final Player player;
 
-  private static final String CHARGE_DURATION_CONFIG_KEY = "IllusionWandChargeDuration";
+  public IllusionWandChargeTask(Player player) {
+    this.player = player;
+    this.chargeTicks = 0;
+  }
 
-  public IllusionWandChargeTask(Player paramPlayer) {
-        this.player = paramPlayer;
-        this.chargeTicks = 0;
+  @Override
+  public void run() {
+    if (!this.player.isOnline()) {
+      finish();
+      cancel();
+      return;
+    }
+    if (this.player.isHandRaised()
+            && IllusionWandAbility.isIllusionWand(this.player.getInventory().getItemInMainHand())) {
+      if (this.chargeTicks < this.chargeDurationTicks) {
+        if (this.chargeTicks == 0) {
+          this.player.getWorld().playSound(this.player.getLocation(),
+                  Sound.ENTITY_WARDEN_SONIC_CHARGE, 1.0F, 1.0F);
+        }
+        this.chargeTicks++;
+        return;
+      }
+      this.player.stopSound(Sound.ENTITY_WARDEN_SONIC_CHARGE);
+      finish();
+      cancel();
+      IllusionWandAbility.activateDisguise(this.player);
+      return;
     }
 
-  public void run() {
-    if (this.player.isHandRaised())
-      {
-        if (this.chargeTicks < this.chargeDurationTicks) {
-          if (this.chargeTicks == 0)
-            this.player.getWorld().playSound(this.player.getLocation(), Sound.ENTITY_WARDEN_SONIC_CHARGE, 1.0F, 1.0F);
-
-          this.chargeTicks++;
-          return;
-        } 
-        this.player.stopSound(Sound.ENTITY_WARDEN_SONIC_CHARGE);
-        cancel();
-        return;
-      }  
-
     this.player.stopSound(Sound.ENTITY_WARDEN_SONIC_CHARGE);
+    finish();
     cancel();
   }
 
-
+  private void finish() {
+    IllusionWandAbility.CHARGING.remove(this.player.getUniqueId());
+  }
 }

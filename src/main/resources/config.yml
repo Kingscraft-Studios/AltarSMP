@@ -386,19 +386,82 @@ absorptionDamageLimit: 35
 # ██║███████╗███████╗╚██████╔╝██████╔╝██║╚█████╔╝██║░╚███║      ░░╚██╔╝░╚██╔╝░██║░░██║██║░╚███║██████╔╝
 # ╚═╝╚══════╝╚══════╝░╚═════╝░╚═════╝░╚═╝░╚════╝░╚═╝░░╚══╝      ░░░╚═╝░░░╚═╝░░╚═╝░░╚═╝╚═╝░░╚══╝╚═════╝░
 
-mobAbilityCooldown: 30
-
-illusionCreeperExplosionStrength: 3.0
-IllusionWandChargeDuration: 2
-IllusionBlazeFireballStrength: 2
-IllusionWandRandomMob: false # if set to true instead of having to capture a mob to turn into them the mob you turn into is random
-randomMobs: # you can add any mob from here: hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html
-  - ENDERMAN
-  - CREEPER
-  - WARDEN
-  - BAT
-  - BLAZE
-  - IRON_GOLEM
+# ── Wand of Illusion ─────────────────────────────────────────────────────────
+# Kill a mob to capture it, then hold right-click to disguise as it.
+# Health is scaled for every mob. Horse disguises additionally roll vanilla
+# horse speed and jump strength; every other disguise keeps your own gear stats.
+illusion:
+  enabled: true
+  # Keep the captured mob in the wand after disguising.
+  keep-captured-mob: true
+  # Cooldown (seconds) between mob abilities.
+  ability-cooldown: 10
+  # Seconds to hold right-click before the disguise triggers.
+  charge-duration: 2
+  # health = clamp(vanillaHealth * scale, floor, max)
+  # Set floor or max to 0 to disable that limit.
+  health:
+    scale: 0.25
+    floor: 20.0
+    max: 100.0
+    # Absolute HP overrides (bypass scale, still limited by floor/max).
+    # overrides:
+    #   WITHER: 75.0
+    overrides: {}
+  # Horse-family disguises roll random stats instead of the health scale.
+  horse:
+    random-health: true
+    health-min: 20.0
+    health-max: 30.0
+    # Vanilla horse ranges (player movement speed base is 0.1).
+    speed-min: 0.1125
+    speed-max: 0.3375
+    jump-min: 0.4
+    jump-max: 1.0
+  # Fire resistance, water breathing, night vision, etc.
+  passives: true
+  # Strider: permanent Fire Resistance plus a lava-walk passive.
+  strider:
+    lava-walk: true
+  # Hostile mobs ignore mob disguises (captured-player disguises keep aggro).
+  aggro-immunity: true
+  # Play a swing / spell animation on the fake entity when an ability fires.
+  cast-animation: true
+  # Multiplier for every mob ability's damage (armour still applies).
+  ability-damage-scale: 1.0
+  # Empty-hand melee damage = the vanilla mob's damage (attribute + held weapon)
+  # multiplied by this value. 0.25 puts a Warden hit at about 3.75 hearts.
+  melee:
+    scale: 0.25
+  # Real Evoker Fangs damage for a disguised Evoker.
+  evoker:
+    fangs-damage: 6.0
+  # Blaze ability volley.
+  blaze:
+    volley-count: 3
+    volley-interval: 5
+  # Sonic Boom deals fixed true damage that bypasses armour and shields.
+  sonic-boom-damage: 20.0
+  wither:
+    # The fake Wither must never show the vanilla boss bar.
+    hide-boss-bar: true
+  flight:
+    enabled: true
+    # 0.1 is creative-style flight; the Wither uses this too.
+    speed: 0.1
+    no-fall-damage: true
+  creeper-explosion-strength: 3.0
+  # Shared by Blaze and Ghast.
+  fireball-strength: 2.0
+  # Ignore captured mobs and pick one of random-mobs instead.
+  random-mob: false
+  random-mobs:
+    - ENDERMAN
+    - CREEPER
+    - WARDEN
+    - BAT
+    - BLAZE
+    - IRON_GOLEM
 
 # ██╗░░██╗██╗░░░██╗██████╗░███████╗██████╗░██╗░█████╗░███╗░░██╗
 # ██║░░██║╚██╗░██╔╝██╔══██╗██╔════╝██╔══██╗██║██╔══██╗████╗░██║

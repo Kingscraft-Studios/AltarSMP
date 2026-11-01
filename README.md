@@ -34,7 +34,7 @@ The required resource pack is automatically handled by the plugin:
 - **Hosting & Delivery:** Hosted externally via **MCPacks**. When players join the server, the plugin automatically prompts and applies the pack without requiring manual server hosting or player downloads.
 ## Installation
 
-1. Download `AltarSMP-X.X.X.jar`.
+1. Download `AltarSMP.jar` from **[Modrinth](https://modrinth.com/plugin/altarsmp-full-experience)** or **[CurseForge](https://www.curseforge.com/minecraft/bukkit-plugins/altarsmp-full)**.
 2. Place it in your server's `plugins/` directory.
 3. Restart the server.
 4. Adjust values in `plugins/AltarSMP/config.yml` as needed.

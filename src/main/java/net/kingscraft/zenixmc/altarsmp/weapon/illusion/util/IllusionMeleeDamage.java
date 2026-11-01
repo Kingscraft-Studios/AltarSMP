@@ -1,0 +1,109 @@
+package net.kingscraft.zenixmc.altarsmp.weapon.illusion.util;
+
+import org.bukkit.Material;
+import org.bukkit.attribute.Attributable;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+
+/**
+ * Empty-hand melee damage for a disguise.
+ *
+ * <p>The base is the vanilla entity's attack-damage attribute plus the vanilla
+ * weapon bonus (stone sword, golden sword, golden axe, ...). Everything is then
+ * multiplied by {@code illusion.melee.scale}, so the server owner can tune the
+ * whole system with one value instead of editing a hardcoded table.</p>
+ */
+public final class IllusionMeleeDamage {
+
+  private IllusionMeleeDamage() {
+  }
+
+  /** Final damage after the configured percentage is applied. */
+  public static double damage(EntityType type, PiglinVariant variant) {
+    double vanilla = vanillaDamage(type, variant);
+    if (vanilla <= 0.0D) {
+      return 0.0D;
+    }
+    return vanilla * IllusionConfig.meleeScale();
+  }
+
+  /** Vanilla normal-difficulty-ish damage: entity base + held weapon bonus. */
+  public static double vanillaDamage(EntityType type, PiglinVariant variant) {
+    if (type == null || type == EntityType.PLAYER) {
+      return 0.0D;
+    }
+    PiglinVariant resolved = resolveVariant(type, variant);
+    if (type == EntityType.PIGLIN && resolved == PiglinVariant.NONE) {
+      return 0.0D;
+    }
+    double base = 0.0D;
+    if (type.hasDefaultAttributes()) {
+      try {
+        Attributable defaults = type.getDefaultAttributes();
+        AttributeInstance attack = defaults.getAttribute(Attribute.ATTACK_DAMAGE);
+        if (attack != null) {
+          base = attack.getBaseValue();
+        }
+      } catch (IllegalArgumentException | UnsupportedOperationException ignored) {
+        // Custom/unknown entity types simply have no melee bonus.
+      }
+    }
+    if (base <= 0.0D) {
+      return 0.0D;
+    }
+    ItemStack weapon = weapon(type, resolved);
+    if (weapon != null) {
+      base += weaponAttackDamage(weapon.getType());
+    }
+    return base;
+  }
+
+  /** The visual weapon the vanilla mob carries, or null. */
+  public static ItemStack weapon(EntityType type, PiglinVariant variant) {
+    if (type == null) {
+      return null;
+    }
+    if (type == EntityType.PIGLIN) {
+      return switch (resolveVariant(type, variant)) {
+        case SWORD -> new ItemStack(Material.GOLDEN_SWORD);
+        case CROSSBOW -> new ItemStack(Material.CROSSBOW);
+        case NONE -> null;
+      };
+    }
+    Material material = switch (type) {
+      case WITHER_SKELETON -> Material.STONE_SWORD;
+      case ZOMBIFIED_PIGLIN -> Material.GOLDEN_SWORD;
+      case PIGLIN_BRUTE -> Material.GOLDEN_AXE;
+      case VINDICATOR -> Material.IRON_AXE;
+      case DROWNED -> Material.TRIDENT;
+      default -> null;
+    };
+    return material == null ? null : new ItemStack(material);
+  }
+
+  /** Piglins without a captured variant default to a sword (random-mob mode). */
+  public static PiglinVariant resolveVariant(EntityType type, PiglinVariant variant) {
+    if (type != EntityType.PIGLIN) {
+      return variant;
+    }
+    return variant == null ? PiglinVariant.SWORD : variant;
+  }
+
+  private static double weaponAttackDamage(Material material) {
+    if (material == null || !material.isItem()) {
+      return 0.0D;
+    }
+    double damage = 0.0D;
+    for (AttributeModifier modifier : material.getDefaultAttributeModifiers(EquipmentSlot.HAND)
+            .get(Attribute.ATTACK_DAMAGE)) {
+      if (modifier.getOperation() == AttributeModifier.Operation.ADD_NUMBER) {
+        damage += modifier.getAmount();
+      }
+    }
+    return damage;
+  }
+}

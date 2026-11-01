@@ -643,32 +643,32 @@ public enum CustomItem {
                      ),
    ILLUSION_WAND(
                         CustomItemRegistry.getIllusionWand(),
-                        stat(
-                           StatIcons.ICON_COOLDOWN
-                              .append(Component.text(" Mob Ability Cooldown")),
-                           "mobAbilityCooldown",
-                           1.0F,
-                           120.0F
-                        ),
-                        stat(Component.empty(), "empty", 1.0F, 1.0F),
-                        stat(
-                           StatIcons.ICON_EXPLOSION
-                              .append(Component.text(" Creeper Explosion Strength")),
-                           "illusionCreeperExplosionStrength",
+           stat(
+                   StatIcons.ICON_COOLDOWN
+                           .append(Component.text(" Mob Ability Cooldown")),
+                   "illusion.ability-cooldown",
+                   1.0F,
+                   120.0F
+           ),
+           stat(Component.empty(), "empty", 1.0F, 1.0F),
+           stat(
+                   StatIcons.ICON_EXPLOSION
+                           .append(Component.text(" Creeper Explosion Strength")),
+                           "illusion.creeper-explosion-strength",
                            1.0F,
                            10.0F
                         ),
                         stat(
                            StatIcons.ICON_COOLDOWN
                               .append(Component.text(" Wand Charge Duration")),
-                           "IllusionWandChargeDuration",
+                           "illusion.charge-duration",
                            1.0F,
                            10.0F
                         ),
                         stat(
                            StatIcons.ICON_PROJECTILE
-                              .append(Component.text(" Blaze Fireball Strength")),
-                           "IllusionBlazeFireballStrength",
+                              .append(Component.text(" Fireball Strength")),
+                           "illusion.fireball-strength",
                            1.0F,
                            10.0F
                         )

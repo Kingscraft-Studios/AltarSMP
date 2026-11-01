@@ -1,25 +1,17 @@
 package net.kingscraft.zenixmc.altarsmp.item;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import net.kingscraft.zenixmc.altarsmp.altarS2.AltarS2;
+import net.kingscraft.zenixmc.altarsmp.messages.SeasonOneMessages;
+import net.kingscraft.zenixmc.altarsmp.messages.SeasonTwoMessages;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -29,19 +21,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.inventory.meta.components.EquippableComponent;
 import org.bukkit.persistence.PersistentDataType;
-import java.util.HashMap;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.util.IllusionConfig;
 import net.kingscraft.zenixmc.altarsmp.weapon.knightfall.KnightFallKillTracker;
 import net.kingscraft.zenixmc.altarsmp.util.ColorUtil;
 
 public class CustomItemRegistry {
-  public static FileConfiguration messagesConfig;
 
-  public static int quickChargeLevel;
+  public static int quickChargeLevel = AltarSMP.getInstance().getConfig().getInt("preEnchantedVulcanQuickchargeLevel", 1);
 
   private static final TextColor COPPER = TextColor.color(0xB06736);
-
-  public static final Map<String, List<Component>> loreCache;
 
   public static ItemStack boneBlade;
 
@@ -117,36 +106,6 @@ public class CustomItemRegistry {
 
   public static ItemStack dragonrend;
 
-
-  public static void loadMessages() {
-    AltarSMP main = AltarSMP.getInstance();
-    File file = new File(main.getDataFolder(), "messages.yml");
-    {
-      if (!file.exists())
-        main.saveResource("messages.yml", false); 
-    }YamlConfiguration yamlConfiguration = YamlConfiguration.loadConfiguration(file);
-    InputStream inputStream = main.getResource("messages.yml");
-    if (inputStream != null) {
-      YamlConfiguration yamlConfiguration1 = YamlConfiguration.loadConfiguration(new InputStreamReader(inputStream));
-      yamlConfiguration.setDefaults(yamlConfiguration1);
-      yamlConfiguration.options().copyDefaults(true);
-      try {
-        yamlConfiguration.save(file);
-      } catch (IOException iOException) {
-        throw new RuntimeException(iOException);
-      } 
-    } 
-    {
-      if (!file.exists())
-        AltarSMP.getInstance().saveResource("messages.yml", false); 
-    }
-    messagesConfig = YamlConfiguration.loadConfiguration(file);
-  }
-
-  public static List<Component> getLore(String paramString) {
-    return loreCache.computeIfAbsent(paramString, CustomItemRegistry::loadLore);
-  }
-
   private static void setCustomModelData(ItemMeta itemMeta, int value) {
     CustomModelDataComponent component = itemMeta.getCustomModelDataComponent();
     component.setFloats(List.of((float) value));
@@ -171,7 +130,7 @@ public class CustomItemRegistry {
         TextColor.color(0xf4f0e0), TextColor.color(0xf7f5f4), TextColor.color(0xf6efdf),
         TextColor.color(0xf5e5c6), TextColor.color(0xf4dcb4), TextColor.color(0xf3d4a9),
         TextColor.color(0xf3d9a7)));
-    itemMeta.lore(getLore("bone_blade"));
+    itemMeta.lore(SeasonOneMessages.BONE_BLADE);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
@@ -199,7 +158,7 @@ public class CustomItemRegistry {
     itemMeta.addEnchant(Enchantment.QUICK_CHARGE, quickChargeLevel, true);
     setCustomModelData(itemMeta, 1);
     itemMeta.setUnbreakable(true);
-    itemMeta.lore(getLore("vulcan_crossbow"));
+    itemMeta.lore(SeasonOneMessages.VULCAN_CROSSBOW);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "vulcan"));
     itemStack.setItemMeta(itemMeta);
     vulcanCrossbow = itemStack;
@@ -215,7 +174,7 @@ public class CustomItemRegistry {
     itemMeta.displayName(Component.text("Nuke Remote", NamedTextColor.RED, TextDecoration.BOLD));
     setCustomModelData(itemMeta, 12);
     itemMeta.setUnbreakable(true);
-    itemMeta.lore(getLore("nuke_remote"));
+    itemMeta.lore(SeasonOneMessages.NUKE_REMOTE);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "red"));
     itemStack.setItemMeta(itemMeta);
     nukeRemote = itemStack;
@@ -232,7 +191,7 @@ public class CustomItemRegistry {
     setCustomModelData(itemMeta, 1);
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.POWER, 5, true);
-    itemMeta.lore(getLore("striker"));
+    itemMeta.lore(SeasonOneMessages.STRIKER);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "red"));
     itemStack.setItemMeta(itemMeta);
     strikerBow = itemStack;
@@ -255,10 +214,9 @@ public class CustomItemRegistry {
         TextColor.color(0x8b0000), TextColor.color(0x9e0000), TextColor.color(0xb10000),
         TextColor.color(0xc40000), TextColor.color(0xd70000), TextColor.color(0xea0000),
         TextColor.color(0xf50000), TextColor.color(0xff0000), TextColor.color(0xd20000)));
-    itemMeta.lore(getLore("bloodlust"));
+    itemMeta.lore(SeasonOneMessages.BLOODLUST);
     itemMeta.setUnbreakable(true);
     itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-    itemMeta.setHideTooltip(true);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "red"));
     itemStack.setItemMeta(itemMeta);
     bloodlust = itemStack;
@@ -280,7 +238,7 @@ public class CustomItemRegistry {
         TextColor.color(0xddffff), TextColor.color(0xd3ffff), TextColor.color(0xc9ffff)));
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
-    itemMeta.lore(getLore("frost_scythe"));
+    itemMeta.lore(SeasonOneMessages.FROST_SCYTHE);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "frost"));
     itemStack.setItemMeta(itemMeta);
     return itemStack;
@@ -288,7 +246,8 @@ public class CustomItemRegistry {
 
   public static ItemStack getIllusionWand() {
     ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
-    ItemUtility.setConsumableData(itemStack, "IllusionWandChargeDuration");
+    ItemUtility.setConsumableData(itemStack, IllusionConfig.chargeDurationSeconds(),
+            "minecraft:entity.illusioner.mirror_move");
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.displayName(gradientBold("Wand of Illusion",
         TextColor.color(0x872BA8), TextColor.color(0x932EAB), TextColor.color(0x9E31AE),
@@ -297,7 +256,7 @@ public class CustomItemRegistry {
         TextColor.color(0xA03FCF), TextColor.color(0x943FCC), TextColor.color(0x883FC9),
         TextColor.color(0x7D3FCA), TextColor.color(0x803CC6), TextColor.color(0x8539C2),
         TextColor.color(0x993CBE)));
-    itemMeta.lore(getLore("illusion_wand"));
+    itemMeta.lore(SeasonOneMessages.ILLUSION_WAND);
     setCustomModelData(itemMeta, 2);
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
@@ -317,7 +276,7 @@ public class CustomItemRegistry {
     itemMeta.setMaxStackSize(1);
     itemMeta.displayName(Component.text("Crazy Slots", NamedTextColor.GOLD, TextDecoration.BOLD));
     itemMeta.setUnbreakable(true);
-    itemMeta.lore(getLore("crazy_slots"));
+    itemMeta.lore(SeasonOneMessages.CRAZY_SLOTS);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "gold"));
     itemStack.setItemMeta(itemMeta);
     crazySlots = itemStack;
@@ -335,7 +294,7 @@ public class CustomItemRegistry {
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.FIRE_ASPECT, 2, true);
-    itemMeta.lore(getLore("hyperion"));
+    itemMeta.lore(SeasonOneMessages.HYPERION);
     itemMeta.displayName(gradientBold("Hyperion",
         NamedTextColor.WHITE, NamedTextColor.YELLOW, NamedTextColor.GOLD,
         TextColor.color(0xE27B41), TextColor.color(0xE27B41), NamedTextColor.GOLD,
@@ -352,7 +311,7 @@ public class CustomItemRegistry {
         return nightpiercer;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.lore(getLore("nightpiercer"));
+    itemMeta.lore(SeasonOneMessages.NIGHTPIERCER);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
@@ -378,7 +337,7 @@ public class CustomItemRegistry {
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
-    itemMeta.lore(getLore("pure_blade"));
+    itemMeta.lore(SeasonOneMessages.PURE_BLADE);
     itemMeta.setUnbreakable(true);
     setCustomModelData(itemMeta, 7);
     itemMeta.displayName(Component.text("Pure Blade", NamedTextColor.WHITE, TextDecoration.BOLD));
@@ -397,7 +356,7 @@ public class CustomItemRegistry {
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
-    itemMeta.lore(getLore("earth_gauntlet"));
+    itemMeta.lore(SeasonOneMessages.EARTH_GAUNTLET);
     setCustomModelData(itemMeta, 8);
     itemMeta.setUnbreakable(true);
     itemMeta.displayName(ColorUtil.translateColors("&#FACA8C&lE&#FBD39F&la&#FCDCB2&lr&#FDE5C6&lt&#FDEDD9&lh &#FFFFFF&lG&#FEF7EF&la&#FEF0DE&lu&#FDE8CE&ln&#FCE1BD&lt&#FBD9AD&ll&#FBD29C&le&#FACA8C&lt"));
@@ -413,7 +372,7 @@ public class CustomItemRegistry {
         return witheredBone;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.lore(getLore("withered_bone"));
+    itemMeta.lore(SeasonOneMessages.WITHERED_BONE);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
@@ -431,7 +390,7 @@ public class CustomItemRegistry {
         return shadowBlade;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.lore(getLore("shadow_blade"));
+    itemMeta.lore(SeasonOneMessages.SHADOW_BLADE);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
@@ -453,7 +412,7 @@ public class CustomItemRegistry {
         return cutlass;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.lore(getLore("cutlass"));
+    itemMeta.lore(SeasonOneMessages.CUTLASS);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
     setCustomModelData(itemMeta, 11);
@@ -471,7 +430,7 @@ public class CustomItemRegistry {
         return paladinAxe;
     }ItemStack itemStack = new ItemStack(Material.NETHERITE_AXE);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.lore(getLore("paladin_axe"));
+    itemMeta.lore(SeasonOneMessages.PALADIN_AXE);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.EFFICIENCY, 5, true);
     setCustomModelData(itemMeta, 2);
@@ -495,7 +454,7 @@ public class CustomItemRegistry {
         TextColor.color(0xD4E9E7), TextColor.color(0xB5DDDA), TextColor.color(0x97D1CD),
         TextColor.color(0x78C5C0)));
     setCustomModelData(itemMeta, 12);
-    itemMeta.lore(getLore("windweaver"));
+    itemMeta.lore(SeasonOneMessages.WINDWEAVER);
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
@@ -518,7 +477,7 @@ public class CustomItemRegistry {
         TextColor.color(0xC27B5D), TextColor.color(0xB8836C), TextColor.color(0xAE8A7B),
         TextColor.color(0xA4928A), TextColor.color(0x9A9999)));
     setCustomModelData(itemMeta, 2);
-    itemMeta.lore(getLore("pale_cannon"));
+    itemMeta.lore(SeasonOneMessages.PALE_CANNON);
     itemMeta.setUnbreakable(true);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "gold"));
     itemMeta.addEnchant(Enchantment.QUICK_CHARGE, 3, true);
@@ -535,7 +494,7 @@ public class CustomItemRegistry {
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.displayName(Component.text("Echo", TextColor.color(0x00A9A8), TextDecoration.BOLD));
     setCustomModelData(itemMeta, 13);
-    itemMeta.lore(getLore("echo"));
+    itemMeta.lore(SeasonOneMessages.ECHO);
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
@@ -554,7 +513,7 @@ public class CustomItemRegistry {
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.displayName(Component.text("Eclipse", NamedTextColor.WHITE, TextDecoration.BOLD));
     setCustomModelData(itemMeta, 14);
-    itemMeta.lore(getLore("eclipse"));
+    itemMeta.lore(SeasonOneMessages.ECLIPSE);
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.SHARPNESS, 5, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
@@ -566,42 +525,42 @@ public class CustomItemRegistry {
   }
 
   public static ItemStack getKnightfall(Player paramPlayer, boolean paramBoolean) {
-    {
-      if (paramPlayer == null)
-        {
-          if (knightfall != null)
-            return knightfall;
-        }}ItemStack itemStack = new ItemStack(Material.MACE);
+    if (paramPlayer == null && knightfall != null) {
+      return knightfall;
+    }
+
+    ItemStack itemStack = new ItemStack(Material.MACE);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    int i = 0;
-    {
-      if (paramBoolean || KnightFallKillTracker.bool) {
-        (AltarSMP.getInstance()).knightFallKillTracker.setKillCount(paramPlayer, 10);
-        itemMeta.addEnchant(Enchantment.WIND_BURST, 1, true);
-        itemMeta.addEnchant(Enchantment.DENSITY, 5, true);
-        i = 10;
-      }
-    }if (paramPlayer != null)
-      i = (AltarSMP.getInstance()).knightFallKillTracker.getKillCount(paramPlayer);
-    String str = String.valueOf(i);
-    {
-      if (i >= 10) {
-        setCustomModelData(itemMeta, 3);
-      } else {
-        {
-          if (i >= 4) {
-            setCustomModelData(itemMeta, 2);
-          } else {
-            setCustomModelData(itemMeta, 1);
-          }
-        }}
-    }itemMeta.displayName(Component.text("Knightfall", NamedTextColor.WHITE, TextDecoration.BOLD));
-    ArrayList<Component> arrayList = new ArrayList<>(getLore("knightfall"));
-    arrayList.replaceAll(paramComponent -> replaceKnightfallKills(str, paramComponent));
-    itemMeta.lore(arrayList);
+    int kills = 0;
+
+    if (paramBoolean || KnightFallKillTracker.bool) {
+      AltarSMP.getInstance().knightFallKillTracker.setKillCount(paramPlayer, 10);
+      itemMeta.addEnchant(Enchantment.WIND_BURST, 1, true);
+      itemMeta.addEnchant(Enchantment.DENSITY, 5, true);
+      kills = 10;
+    }
+
+    if (paramPlayer != null) {
+      kills = AltarSMP.getInstance().knightFallKillTracker.getKillCount(paramPlayer);
+    }
+
+    if (kills >= 10) {
+      setCustomModelData(itemMeta, 3);
+    } else if (kills >= 4) {
+      setCustomModelData(itemMeta, 2);
+    } else {
+      setCustomModelData(itemMeta, 1);
+    }
+
+    itemMeta.displayName(Component.text("Knightfall", NamedTextColor.WHITE, TextDecoration.BOLD));
+
+    // Set lore directly with replaced kills
+    itemMeta.lore(SeasonOneMessages.getKnightfallLore(kills));
+
     itemMeta.setUnbreakable(true);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "pure"));
     itemMeta.getPersistentDataContainer().set(new NamespacedKey("altarsmp", "knightfall"), PersistentDataType.BOOLEAN, true);
+
     itemStack.setItemMeta(itemMeta);
     knightfall = itemStack;
     return itemStack;
@@ -637,7 +596,7 @@ public class CustomItemRegistry {
     ItemMeta itemMeta = itemStack.getItemMeta();
     setCustomModelData(itemMeta, 9);
     itemMeta.displayName(Component.text("Weapon Handle", NamedTextColor.RED));
-    itemMeta.lore(getLore("weapon_handle"));
+    itemMeta.lore(SeasonOneMessages.WEAPON_HANDLE);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "red"));
     itemStack.setItemMeta(itemMeta);
     weaponHandle = itemStack;
@@ -652,7 +611,7 @@ public class CustomItemRegistry {
     ItemMeta itemMeta = itemStack.getItemMeta();
     setCustomModelData(itemMeta, 3);
     itemMeta.displayName(Component.text("Vulcan's Skull", NamedTextColor.RED));
-    itemMeta.lore(getLore("vulcans_skull"));
+    itemMeta.lore(SeasonOneMessages.VULCANS_SKULL);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "vulcan"));
     itemStack.setItemMeta(itemMeta);
     vulcanSkull = itemStack;
@@ -667,7 +626,7 @@ public class CustomItemRegistry {
     ItemMeta itemMeta = itemStack.getItemMeta();
     setCustomModelData(itemMeta, 1);
     itemMeta.displayName(Component.text("Illusion Core", NamedTextColor.LIGHT_PURPLE));
-    itemMeta.lore(getLore("illusion_core"));
+    itemMeta.lore(SeasonOneMessages.ILLUSION_CORE);
     itemMeta.addEnchant(Enchantment.MENDING, 1, true);
     itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "purple"));
@@ -757,7 +716,7 @@ public class CustomItemRegistry {
     itemMeta.setItemModel(new NamespacedKey("custom", "copper_helmet"));
     itemMeta.setEquippable(equippableComponent);
     itemMeta.setTooltipStyle(new NamespacedKey("minecraft", "red"));
-    itemMeta.lore(getLore("copper_helmet"));
+    itemMeta.lore(SeasonOneMessages.COPPER_HELMET);
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.PROTECTION, 4, true);
     itemMeta.addEnchant(Enchantment.RESPIRATION, 3, true);
@@ -781,7 +740,7 @@ public class CustomItemRegistry {
     itemMeta.setItemModel(new NamespacedKey("custom", "copper_chestplate"));
     itemMeta.setEquippable(equippableComponent);
     itemMeta.displayName(Component.text("Copper Chestplate", COPPER));
-    itemMeta.lore(getLore("copper_chestplate"));
+    itemMeta.lore(SeasonOneMessages.COPPER_CHESTPLATE);
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.PROTECTION, 4, true);
     itemMeta.addEnchant(Enchantment.MENDING, 1, true);
@@ -805,7 +764,7 @@ public class CustomItemRegistry {
     itemMeta.setItemModel(new NamespacedKey("custom", "copper_leggings"));
     itemMeta.setEquippable(equippableComponent);
     itemMeta.displayName(Component.text("Copper Leggings", COPPER));
-    itemMeta.lore(getLore("copper_leggings"));
+    itemMeta.lore(SeasonOneMessages.COPPER_LEGGINGS);
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.PROTECTION, 4, true);
     itemMeta.addEnchant(Enchantment.MENDING, 1, true);
@@ -828,7 +787,7 @@ public class CustomItemRegistry {
     itemMeta.setItemModel(new NamespacedKey("custom", "copper_boots"));
     itemMeta.setEquippable(equippableComponent);
     itemMeta.displayName(Component.text("Copper Boots", COPPER));
-    itemMeta.lore(getLore("copper_boots"));
+    itemMeta.lore(SeasonOneMessages.COPPER_BOOTS);
     setCustomModelData(itemMeta, 1);
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.PROTECTION, 4, true);
@@ -850,7 +809,7 @@ public class CustomItemRegistry {
     ItemMeta itemMeta = itemStack.getItemMeta();
     setCustomModelData(itemMeta, 1);
     itemMeta.displayName(Component.text("Copper Pickaxe", COPPER));
-    itemMeta.lore(getLore("copper_pickaxe"));
+    itemMeta.lore(SeasonOneMessages.COPPER_PICKAXE);
     itemMeta.setUnbreakable(true);
     itemMeta.addEnchant(Enchantment.SILK_TOUCH, 1, true);
     itemMeta.addEnchant(Enchantment.EFFICIENCY, 5, true);
@@ -875,17 +834,10 @@ public class CustomItemRegistry {
     return itemStack;
   }
 
-  public static Component replaceKnightfallKills(String paramString1, Component paramString2) {
-    return paramString2.replaceText(TextReplacementConfig.builder()
-        .matchLiteral("<kills>")
-        .replacement(paramString1)
-        .build());
-  }
-
   public static ItemStack getTidebreaker() {
     if (tidebreaker != null)
       return tidebreaker;
-    tidebreaker = buildSeasonTwoLegendary(Material.NETHERITE_SWORD, "Tidebreaker", "#55ffff", "#00aaee", "altar:item/tidebreaker", "minecraft:tidebreaker", "tidebreaker");
+    tidebreaker = buildSeasonTwoLegendary(Material.NETHERITE_SWORD, "Tidebreaker", "#55ffff", "#00aaee", "altar:item/tidebreaker", "minecraft:tidebreaker", SeasonTwoMessages.TIDE_BREAKER);
     return tidebreaker;
   }
 
@@ -893,60 +845,54 @@ public class CustomItemRegistry {
     return getAncientBlade(null);
   }
 
-  public static ItemStack getAncientBlade(Player paramPlayer) {
-    ItemStack itemStack = buildSeasonTwoLegendary(Material.NETHERITE_SWORD, "Ancient Blade", "#55ffff", "#005555", "altar:item/ancientblade", "minecraft:ancient", "ancient_blade");
+  public static ItemStack getAncientBlade(Player player) {
+    if (ancientBlade != null)
+      return ancientBlade;
+
     int kills = 0;
-    if (paramPlayer != null && AltarS2.isEnabled())
-      kills = AltarS2.getKillTracker().getKillCount(paramPlayer);
-    ItemMeta itemMeta = itemStack.getItemMeta();
-    if (itemMeta == null)
-      return itemStack;
-    List<Component> lore = itemMeta.lore();
-    if (lore != null) {
-      List<Component> updated = new ArrayList<>(lore);
-      for (int i = 0; i < updated.size(); i++)
-        updated.set(i, replaceKnightfallKills(String.valueOf(kills), updated.get(i)));
-      itemMeta.lore(updated);
+    if (player != null && AltarS2.isEnabled()) {
+      kills = AltarS2.getKillTracker().getKillCount(player);
     }
-    itemStack.setItemMeta(itemMeta);
-    return itemStack;
+
+    // Pass the calculated kills straight into your new lore method
+    ancientBlade =  buildSeasonTwoLegendary(Material.NETHERITE_SWORD, "Ancient Blade", "#55ffff", "#005555", "altar:item/ancientblade", "minecraft:ancient", SeasonTwoMessages.getAncientBladeLore(kills));
+    return ancientBlade;
   }
 
   public static ItemStack getWitherSymbiote() {
     if (witherSymbiote != null)
       return witherSymbiote;
-    witherSymbiote = buildSeasonTwoLegendary(Material.NETHERITE_SWORD, "Wither Symbiote", "#555555", "#111111", "altar:item/withersymbiote", null, "wither_symbiote");
+    witherSymbiote = buildSeasonTwoLegendary(Material.NETHERITE_SWORD, "Wither Symbiote", "#555555", "#111111", "altar:item/withersymbiote", null, SeasonTwoMessages.WITHER_SYMBIOTE);
     return witherSymbiote;
   }
 
   public static ItemStack getOmen() {
     if (omen != null)
       return omen;
-    omen = buildSeasonTwoLegendary(Material.NETHERITE_SPEAR, "Omen", "#55ffaa", "#00aa55", "altar:item/omen", "minecraft:omen", "omen");
+    omen = buildSeasonTwoLegendary(Material.NETHERITE_SPEAR, "Omen", "#55ffaa", "#00aa55", "altar:item/omen", "minecraft:omen", SeasonTwoMessages.OMEN);
     return omen;
   }
 
   public static ItemStack getDragonrend() {
     if (dragonrend != null)
       return dragonrend;
-    dragonrend = buildSeasonTwoLegendary(Material.NETHERITE_SWORD, "Dragonrend", "#ff55ff", "#aa00aa", "altar:item/dragonrend", "minecraft:dragon", "dragonrend");
+    dragonrend = buildSeasonTwoLegendary(Material.NETHERITE_SWORD, "Dragonrend", "#ff55ff", "#aa00aa", "altar:item/dragonrend", "minecraft:dragon", SeasonTwoMessages.DRAGONREND);
     return dragonrend;
   }
 
-  private static ItemStack buildSeasonTwoLegendary(Material material, String displayName, String fromHex, String toHex, String itemModel, String tooltipStyle, String loreKey) {
+  private static ItemStack buildSeasonTwoLegendary(Material material, String displayName, String fromHex, String toHex, String itemModel, String tooltipStyle, List<Component> lore) {
     ItemStack itemStack = new ItemStack(material);
     ItemMeta itemMeta = itemStack.getItemMeta();
     if (itemMeta == null)
       return itemStack;
     itemMeta.displayName(ColorUtil.gradient(displayName, fromHex, toHex));
-    itemMeta.lore(getLore(loreKey));
+    itemMeta.lore(lore);
     int sharpness = AltarSMP.getInstance().getConfig().getInt("sharpness", 7);
     itemMeta.addEnchant(Enchantment.SHARPNESS, sharpness, true);
     itemMeta.addEnchant(Enchantment.LOOTING, 3, true);
     itemMeta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
     itemMeta.setUnbreakable(true);
     itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
-    itemMeta.setHideTooltip(true);
     itemMeta.setItemModel(NamespacedKey.fromString(itemModel));
     if (tooltipStyle != null)
       itemMeta.setTooltipStyle(NamespacedKey.fromString(tooltipStyle));
@@ -971,7 +917,7 @@ public class CustomItemRegistry {
     ItemMeta itemMeta = itemStack.getItemMeta();
     if (itemMeta == null)
       return itemStack;
-    itemMeta.displayName(Component.text("Netherite Harness", NamedTextColor.BLACK, TextDecoration.BOLD));
+    itemMeta.displayName(Component.text("Netherite Harness", NamedTextColor.DARK_GRAY, TextDecoration.BOLD));
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
@@ -1008,56 +954,6 @@ public class CustomItemRegistry {
     }
     itemStack.setItemMeta(itemMeta);
     return itemStack;
-  }
-
-  public static List<Component> loadLore(String paramString) {
-    return messagesConfig.getStringList("weapons." + paramString).stream().map(CustomItemRegistry::translateLoreColors).toList();
-  }
-
-  public static Component translateLoreColors(String paramString) {
-    return LegacyComponentSerializer.legacyAmpersand().deserialize(paramString);
-  }
-
-  static {
-    quickChargeLevel = AltarSMP.getInstance().getConfig().getInt("preEnchantedVulcanQuickchargeLevel", 1);
-    loreCache = new HashMap<>();
-    boneBlade = null;
-    vulcanCrossbow = null;
-    nukeRemote = null;
-    strikerBow = null;
-    bloodlust = null;
-    crazySlots = null;
-    hyperion = null;
-    nightpiercer = null;
-    pureBlade = null;
-    earthGauntlet = null;
-    witheredBone = null;
-    shadowBlade = null;
-    cutlass = null;
-    paladinAxe = null;
-    windweaver = null;
-    paleCannon = null;
-    echo = null;
-    eclipse = null;
-    knightfall = null;
-    wardenHeart = null;
-    weaponHandle = null;
-    vulcanSkull = null;
-    illusionCore = null;
-    hyperionShard = null;
-    vampireShard = null;
-    paleShard = null;
-    copperHelmet = null;
-    copperChestplate = null;
-    copperLeggings = null;
-    copperBoots = null;
-    copperPickaxe = null;
-    contagionSignal = null;
-    tidebreaker = null;
-    ancientBlade = null;
-    witherSymbiote = null;
-    omen = null;
-    dragonrend = null;
   }
 
 }

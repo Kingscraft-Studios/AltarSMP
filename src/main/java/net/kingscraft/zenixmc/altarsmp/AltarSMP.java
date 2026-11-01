@@ -67,7 +67,6 @@ import net.kingscraft.zenixmc.altarsmp.weapon.crazy.CrazySelectorMenuListener;
 import net.kingscraft.zenixmc.altarsmp.weapon.illusion.IllusionCoreRecipeListener;
 import net.kingscraft.zenixmc.altarsmp.weapon.illusion.IllusionDisguiseManager;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRefreshTask;
-import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
 import net.kingscraft.zenixmc.altarsmp.menu.LegendaryItemConfigMenu;
 import net.kingscraft.zenixmc.altarsmp.menu.LegendaryItemsMenu;
 import net.kingscraft.zenixmc.altarsmp.core.TrustManager;
@@ -99,9 +98,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
    public static TrustManager trust;
 
    private CopperHelmetAbilityListener copperHelmetAbilityListener;
-
-   private net.kingscraft.zenixmc.altarsmp.core.update.UpdateChecker updateChecker;
-
+   private UpdateChecker updateChecker;
    private static final int BSTATS_PLUGIN_ID = 34971;
 
    @Override
@@ -121,7 +118,6 @@ public final class AltarSMP extends JavaPlugin implements Listener {
          var10.printStackTrace();
       }
 
-      CustomItemRegistry.loadMessages();
       this.bloodLustKillTracker = new KillTracker(this, "bloodlustkills.yml");
       this.knightFallKillTracker = new KnightFallKillTracker(this);
       this.altarConfigManager = new AltarManager(this);
@@ -250,7 +246,7 @@ public final class AltarSMP extends JavaPlugin implements Listener {
       }
 
       // bStats Basic
-      Metrics metrics = new Metrics(this, BSTATS_PLUGIN_ID);
+      new Metrics(this, BSTATS_PLUGIN_ID);
    }
 
    public static boolean areSimilar(ItemStack var0, ItemStack var1) {

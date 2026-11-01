@@ -34,12 +34,22 @@ public class ItemUtility {
   }
 
   public static void setConsumableData(ItemStack paramItemStack, String paramString) {
+    setConsumableData(paramItemStack, AltarSMP.getInstance().getConfig().getDouble(paramString, 3.0D));
+  }
+
+  public static void setConsumableData(ItemStack paramItemStack, double seconds) {
+    setConsumableData(paramItemStack, seconds, "");
+  }
+
+  public static void setConsumableData(ItemStack paramItemStack, double seconds, String soundKey) {
     String str = Bukkit.getMinecraftVersion();
+    float consumeSeconds = (float) seconds;
+    Key consumeSound = Key.key(soundKey);
     {
       if (Integer.parseInt(str.split("\\.")[2]) >= 11) {
-        paramItemStack.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds((float)AltarSMP.getInstance().getConfig().getDouble(paramString, 3.0D)).animation(ItemUseAnimation.TRIDENT).hasConsumeParticles(false).sound(Key.key("")));
+        paramItemStack.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(consumeSeconds).animation(ItemUseAnimation.TRIDENT).hasConsumeParticles(false).sound(consumeSound));
       } else {
-        paramItemStack.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds((float)AltarSMP.getInstance().getConfig().getDouble(paramString, 3.0D)).animation(ItemUseAnimation.BOW).hasConsumeParticles(false).sound(Key.key("")));
+        paramItemStack.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(consumeSeconds).animation(ItemUseAnimation.BOW).hasConsumeParticles(false).sound(consumeSound));
       } 
     }}
 
