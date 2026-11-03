@@ -1,4 +1,4 @@
-package net.kingscraft.zenixmc.altarsmp.weapon.precision;
+package net.kingscraft.zenixmc.altarsmp.weapon.striker;
 
 import org.bukkit.Location;
 import org.bukkit.entity.ItemDisplay;

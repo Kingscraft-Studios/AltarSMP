@@ -1,4 +1,4 @@
-package net.kingscraft.zenixmc.altarsmp.weapon.blood;
+package net.kingscraft.zenixmc.altarsmp.weapon.bloodlust;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

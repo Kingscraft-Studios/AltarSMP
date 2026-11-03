@@ -9,20 +9,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * Empty-hand melee damage for a disguise.
- *
- * <p>The base is the vanilla entity's attack-damage attribute plus the vanilla
- * weapon bonus (stone sword, golden sword, golden axe, ...). Everything is then
- * multiplied by {@code illusion.melee.scale}, so the server owner can tune the
- * whole system with one value instead of editing a hardcoded table.</p>
- */
 public final class IllusionMeleeDamage {
 
   private IllusionMeleeDamage() {
   }
 
-  /** Final damage after the configured percentage is applied. */
   public static double damage(EntityType type, PiglinVariant variant) {
     double vanilla = vanillaDamage(type, variant);
     if (vanilla <= 0.0D) {
@@ -31,7 +22,6 @@ public final class IllusionMeleeDamage {
     return vanilla * IllusionConfig.meleeScale();
   }
 
-  /** Vanilla normal-difficulty-ish damage: entity base + held weapon bonus. */
   public static double vanillaDamage(EntityType type, PiglinVariant variant) {
     if (type == null || type == EntityType.PLAYER) {
       return 0.0D;
@@ -62,7 +52,6 @@ public final class IllusionMeleeDamage {
     return base;
   }
 
-  /** The visual weapon the vanilla mob carries, or null. */
   public static ItemStack weapon(EntityType type, PiglinVariant variant) {
     if (type == null) {
       return null;
@@ -85,7 +74,6 @@ public final class IllusionMeleeDamage {
     return material == null ? null : new ItemStack(material);
   }
 
-  /** Piglins without a captured variant default to a sword (random-mob mode). */
   public static PiglinVariant resolveVariant(EntityType type, PiglinVariant variant) {
     if (type != EntityType.PIGLIN) {
       return variant;

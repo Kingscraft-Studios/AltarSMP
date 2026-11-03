@@ -19,18 +19,11 @@ class CopperOreVeinMinerStatusTask extends BukkitRunnable {
       if (CopperPickaxeListener.isCopperPickaxe(player)) {
         UUID uUID = player.getUniqueId();
         boolean bool = this.veinMinerListener.veinMinerEnabled.getOrDefault(uUID, true);
-        {
           if (bool) {
-            player.sendActionBar(Component.text()
-                .append(Component.text("3x3 Mining: ", NamedTextColor.GOLD))
-                .append(Component.text("Enabled", NamedTextColor.GREEN))
-                .build());
+            player.sendActionBar(Component.text().append(Component.text("3x3 Mining: ", NamedTextColor.GOLD)).append(Component.text("Enabled", NamedTextColor.GREEN)).build());
             continue;
-          } 
-        }player.sendActionBar(Component.text()
-            .append(Component.text("3x3 Mining: ", NamedTextColor.GOLD))
-            .append(Component.text("Disabled", NamedTextColor.RED))
-            .build());
+          }
+        player.sendActionBar(Component.text().append(Component.text("3x3 Mining: ", NamedTextColor.GOLD)).append(Component.text("Disabled", NamedTextColor.RED)).build());
       } 
     } 
   }

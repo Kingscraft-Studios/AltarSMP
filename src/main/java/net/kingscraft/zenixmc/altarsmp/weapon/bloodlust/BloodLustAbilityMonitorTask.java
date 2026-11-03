@@ -1,4 +1,4 @@
-package net.kingscraft.zenixmc.altarsmp.weapon.blood;
+package net.kingscraft.zenixmc.altarsmp.weapon.bloodlust;
 
 import net.kingscraft.zenixmc.altarsmp.core.KillTracker;
 import org.bukkit.Bukkit;

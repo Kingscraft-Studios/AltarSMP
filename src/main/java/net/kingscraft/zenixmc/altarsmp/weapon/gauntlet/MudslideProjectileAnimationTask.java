@@ -18,7 +18,6 @@ import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
 import net.kingscraft.zenixmc.altarsmp.core.worldguard.WorldGuardHook;
-import net.kingscraft.zenixmc.altarsmp.weapon.meteor.MeteorStrikeCleanupTask;
 import net.kingscraft.zenixmc.altarsmp.weapon.vulcan.VulcanGauntletAbility;
 
 public class MudslideProjectileAnimationTask extends BukkitRunnable {

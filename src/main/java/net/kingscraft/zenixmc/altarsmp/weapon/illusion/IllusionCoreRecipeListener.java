@@ -18,24 +18,23 @@ public class IllusionCoreRecipeListener implements Listener {
   public IllusionCoreRecipeListener(AltarSMP paramAltarSMP) {
     this.plugin = paramAltarSMP;
     ConfigurationSection configurationSection = paramAltarSMP.getConfig().getConfigurationSection("IllusionCore");
-    {
-      if (configurationSection != null && configurationSection.getBoolean("enabled")) {
-        List<String> list = configurationSection.getStringList("shape");
-        ItemStack itemStack = CustomItemRegistry.getIllusionCore();
-        ShapedRecipe shapedRecipe = new ShapedRecipe(new NamespacedKey(paramAltarSMP, "core_crafting"), itemStack);
-        shapedRecipe.shape(list.toArray(new String[0]));
-        ConfigurationSection configurationSection1 = configurationSection.getConfigurationSection("ingredients");
-        if (configurationSection1 != null)
-          for (String str : configurationSection1.getKeys(false)) {
-            char c = str.charAt(0);
-            Material material = Material.matchMaterial(configurationSection1.getString(str));
-            {
-              if (material != null)
-                shapedRecipe.setIngredient(c, material); 
-            }}  
-        Bukkit.addRecipe(shapedRecipe);
-      } 
-    }}
+    if (configurationSection != null && configurationSection.getBoolean("enabled")) {
+      List<String> list = configurationSection.getStringList("shape");
+      ItemStack itemStack = CustomItemRegistry.getIllusionCore();
+      ShapedRecipe shapedRecipe = new ShapedRecipe(new NamespacedKey(paramAltarSMP, "core_crafting"), itemStack);
+      shapedRecipe.shape(list.toArray(new String[0]));
+      ConfigurationSection configurationSection1 = configurationSection.getConfigurationSection("ingredients");
+      if (configurationSection1 != null)
+        for (String str : configurationSection1.getKeys(false)) {
+          char c = str.charAt(0);
+          Material material = Material.matchMaterial(configurationSection1.getString(str));
+          {
+            if (material != null)
+              shapedRecipe.setIngredient(c, material);
+          }}
+      Bukkit.addRecipe(shapedRecipe);
+    }
+  }
 
 
 

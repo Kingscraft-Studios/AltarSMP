@@ -1,4 +1,4 @@
-package net.kingscraft.zenixmc.altarsmp.weapon.blood;
+package net.kingscraft.zenixmc.altarsmp.weapon.bloodlust;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

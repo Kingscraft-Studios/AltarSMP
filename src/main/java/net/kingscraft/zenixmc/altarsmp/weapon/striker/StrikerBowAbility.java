@@ -1,4 +1,4 @@
-package net.kingscraft.zenixmc.altarsmp.weapon.precision;
+package net.kingscraft.zenixmc.altarsmp.weapon.striker;
 
 import java.util.HashMap;
 import java.util.HashSet;

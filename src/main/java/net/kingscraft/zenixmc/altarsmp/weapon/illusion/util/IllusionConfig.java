@@ -5,20 +5,9 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 
-/**
- * Central access point for every Wand of Illusion tuning value.
- *
- * <p>Everything lives under {@code illusion:} in config.yml. The old flat keys
- * are gone on purpose: delete the config and let the plugin generate a fresh
- * one.</p>
- */
 public final class IllusionConfig {
 
-  private static final List<String> DEFAULT_RANDOM_MOBS = List.of(
-          "ENDERMAN", "CREEPER", "WARDEN", "BAT", "BLAZE", "IRON_GOLEM");
-
-  private IllusionConfig() {
-  }
+  private static final List<String> DEFAULT_RANDOM_MOBS = List.of("ENDERMAN", "CREEPER", "WARDEN", "BAT", "BLAZE", "IRON_GOLEM");
 
   private static FileConfiguration config() {
     return AltarSMP.getInstance().getConfig();
@@ -36,22 +25,18 @@ public final class IllusionConfig {
     return Math.max(1, config().getInt("illusion.ability-cooldown", 10));
   }
 
-  /** 0.25 = 25% of the mob's vanilla health. */
   public static double healthScale() {
     return clamp(config().getDouble("illusion.health.scale", 0.25D), 10.0D);
   }
 
-  /** 0 or less disables the floor. */
   public static double healthFloor() {
     return Math.max(0.0D, config().getDouble("illusion.health.floor", 20.0D));
   }
 
-  /** 0 or less disables the cap. */
   public static double healthMax() {
     return Math.max(0.0D, config().getDouble("illusion.health.max", 100.0D));
   }
 
-  /** Absolute override in HP, or -1 when the mob uses the scale. */
   public static double healthOverride(EntityType type) {
     if (type == null) {
       return -1.0D;
@@ -67,12 +52,10 @@ public final class IllusionConfig {
     return clamp(config().getDouble("illusion.ability-damage-scale", 1.0D), 10.0D);
   }
 
-  /** Percentage of the vanilla entity's melee damage used by empty-hand attacks. */
   public static double meleeScale() {
     return clamp(config().getDouble("illusion.melee.scale", 0.25D), 1.0D);
   }
 
-  /** Damage of a real Evoker Fangs entity owned by a disguised Evoker. */
   public static double evokerFangsDamage() {
     return Math.max(0.0D, config().getDouble("illusion.evoker.fangs-damage", 6.0D));
   }
@@ -97,32 +80,22 @@ public final class IllusionConfig {
     return config().getBoolean("illusion.flight.no-fall-damage", true);
   }
 
-  /** Hostile mobs ignore a mob-disguised player. Captured-player disguises keep normal aggro. */
   public static boolean aggroImmunity() {
     return config().getBoolean("illusion.aggro-immunity", true);
   }
 
-  /** Play a swing / spell animation on the fake entity when an ability fires. */
   public static boolean castAnimation() {
     return config().getBoolean("illusion.cast-animation", true);
   }
 
-  /** The fake Wither must never show the vanilla boss bar. */
   public static boolean witherHideBossBar() {
     return config().getBoolean("illusion.wither.hide-boss-bar", true);
   }
 
-  /** Strider disguises keep the player on top of lava as an always-on trait. */
   public static boolean striderLavaWalk() {
     return config().getBoolean("illusion.strider.lava-walk", true);
   }
 
-  /** Movement-speed attribute while walking on lava (player base is 0.1). */
-  public static double striderLavaSpeed() {
-    return clamp(config().getDouble("illusion.strider.lava-speed", 0.175D), 1.0D);
-  }
-
-  /** Sonic Boom bypasses armour and shields. */
   public static double sonicBoomDamage() {
     return Math.max(0.0D, config().getDouble("illusion.sonic-boom-damage", 20.0D));
   }
@@ -177,6 +150,6 @@ public final class IllusionConfig {
   }
 
   private static double clamp(double value, double max) {
-    return Math.max(0.0, Math.min(max, value));
+    return Math.clamp(value, 0.0, max);
   }
 }

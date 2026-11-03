@@ -2,10 +2,7 @@ package net.kingscraft.zenixmc.altarsmp.weapon.illusion;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.ability.IllusionAbilities;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -15,14 +12,21 @@ import net.kingscraft.zenixmc.altarsmp.weapon.illusion.attribute.IllusionAttribu
 import net.kingscraft.zenixmc.altarsmp.weapon.illusion.flight.IllusionFlightService;
 import net.kingscraft.zenixmc.altarsmp.weapon.illusion.passive.IllusionPassiveService;
 import net.kingscraft.zenixmc.altarsmp.weapon.illusion.util.IllusionConfig;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.util.IllusionMeleeDamage;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.util.PiglinVariant;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.ability.IllusionAbilityFamily;
 import net.kingscraft.zenixmc.altarsmp.weapon.illusion.ability.IllusionAbilityRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Evoker;
@@ -30,6 +34,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Slime;
 import org.bukkit.entity.Wither;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -42,12 +47,16 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.*;
 
 public class IllusionDisguiseManager implements Listener {
   public static final Map<UUID, UUID> disguisedEntityOwners = new HashMap<>();
@@ -58,11 +67,18 @@ public class IllusionDisguiseManager implements Listener {
 
   private static final Map<UUID, Boolean> PREVIOUS_INVISIBLE = new HashMap<>();
 
-  /**
-   * Invisibility hides the player model and name tag, but vanilla still renders
-   * armour and held items. These slots are masked for every other viewer while
-   * the disguise is active, then restored on reveal.
-   */
+  private static final Map<UUID, PiglinVariant> PIGLIN_VARIANTS = new HashMap<>();
+
+  private static final Map<UUID, Long> FALL_IMMUNE_UNTIL = new HashMap<>();
+
+  private static final Map<UUID, Long> LAST_REBUILD = new HashMap<>();
+
+  private static final long REBUILD_DEBOUNCE_MS = 500L;
+
+  private static final double SHELL_MAX_HEALTH = 1024.0D;
+
+  private static final Set<UUID> FORWARDING_HIT = new HashSet<>();
+
   private static final EquipmentSlot[] EQUIPMENT_SLOTS = {
           EquipmentSlot.HAND, EquipmentSlot.OFF_HAND,
           EquipmentSlot.HEAD, EquipmentSlot.CHEST,
@@ -71,13 +87,6 @@ public class IllusionDisguiseManager implements Listener {
 
   private static final ItemStack EMPTY_ITEM = new ItemStack(Material.AIR);
 
-  /**
-   * Keyed boss bar created by older plugin versions. Disguises no longer use a
-   * boss bar at all; the status line is action-bar text.
-   */
-  @Deprecated
-  public static final NamespacedKey DISGUISE_BOSS_BAR_KEY = new NamespacedKey("doomdisguise", "altarsmp");
-
   public static final NamespacedKey REAL_SKIN_VALUE_KEY = new NamespacedKey(AltarSMP.getInstance(), "real_skin_value");
 
   public static final NamespacedKey REAL_SKIN_SIGNATURE_KEY = new NamespacedKey(AltarSMP.getInstance(), "real_skin_signature");
@@ -85,11 +94,13 @@ public class IllusionDisguiseManager implements Listener {
   public static final NamespacedKey REAL_OLD_NAME_KEY = new NamespacedKey(AltarSMP.getInstance(), "real_old_name");
 
   public IllusionDisguiseManager() {
-    // Older versions created a single persistent boss bar with this key.
-    Bukkit.removeBossBar(DISGUISE_BOSS_BAR_KEY);
   }
 
   public static void disguisePlayer(Player player, EntityType type, Player target) {
+    disguisePlayer(player, type, target, null);
+  }
+
+  public static void disguisePlayer(Player player, EntityType type, Player target, PiglinVariant variant) {
     if (player == null || type == null) {
       return;
     }
@@ -122,6 +133,11 @@ public class IllusionDisguiseManager implements Listener {
       return;
     }
 
+    PiglinVariant resolvedVariant = IllusionMeleeDamage.resolveVariant(type, variant);
+    if (type == EntityType.PIGLIN) {
+      PIGLIN_VARIANTS.put(player.getUniqueId(), resolvedVariant);
+    }
+
     Entity entity = player.getWorld().spawnEntity(player.getLocation(), type);
     if (!(entity instanceof LivingEntity livingEntity)) {
       entity.remove();
@@ -134,12 +150,12 @@ public class IllusionDisguiseManager implements Listener {
     livingEntity.setRemoveWhenFarAway(false);
     livingEntity.setCanPickupItems(false);
     livingEntity.setCollidable(false);
+    livingEntity.setGravity(false);
     livingEntity.setInvulnerable(false);
     livingEntity.setPortalCooldown(Integer.MAX_VALUE);
     livingEntity.setCustomNameVisible(false);
-    if (livingEntity.getEquipment() != null) {
-      livingEntity.getEquipment().clear();
-    }
+    applyDisguiseEquipment(livingEntity, type, resolvedVariant);
+    initializeShellHealth(livingEntity);
     if (livingEntity instanceof Wither wither) {
       // Skip the spawn animation so the real Wither model is visible, and make
       // sure the fake boss never puts a boss bar on everyone's screen.
@@ -180,6 +196,9 @@ public class IllusionDisguiseManager implements Listener {
       return;
     }
 
+    PIGLIN_VARIANTS.remove(player.getUniqueId());
+    FALL_IMMUNE_UNTIL.remove(player.getUniqueId());
+    LAST_REBUILD.remove(player.getUniqueId());
     DisguiseEntityTask disguise = activeDisguises.remove(player.getUniqueId());
     IllusionFlightService.clear(player);
     IllusionPassiveService.clear(player);
@@ -217,7 +236,149 @@ public class IllusionDisguiseManager implements Listener {
 
   @EventHandler
   public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-    new DisguiseWorldChangeTask(event).runTaskLater(AltarSMP.getInstance(), 2L);
+    // Wait until the client has the new world loaded. Hiding a shell before the
+    // client is ready is what used to leave a visible, collidable ghost.
+    new DisguiseWorldChangeTask(event).runTaskLater(AltarSMP.getInstance(), 20L);
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onPlayerTeleport(PlayerTeleportEvent event) {
+    Player player = event.getPlayer();
+    if (!isMobDisguise(player)) {
+      return;
+    }
+    Location from = event.getFrom();
+    Location to = event.getTo();
+    if (to == null || from.getWorld() != to.getWorld()) {
+      // PlayerChangedWorldEvent already handles the cross-world rebuild.
+      return;
+    }
+    if (from.distanceSquared(to) < 64.0D * 64.0D) {
+      return;
+    }
+    // Far teleports can retrack the shell and drop the hide state.
+    scheduleRebuild(player, 10L);
+  }
+
+  public static void rebuildDisguise(Player player) {
+    if (player == null || !player.isOnline() || !isDisguised(player)) {
+      return;
+    }
+    EntityType type = getDisguisedEntityType(player);
+    if (type == null) {
+      return;
+    }
+    PiglinVariant variant = PIGLIN_VARIANTS.get(player.getUniqueId());
+    Player target = null;
+    UUID targetId = disguisedPlayerTargets.get(player.getUniqueId());
+    if (targetId != null) {
+      Player online = Bukkit.getPlayer(targetId);
+      if (online != null && online.isOnline()) {
+        target = online;
+      }
+    }
+    revealPlayer(player, false);
+    if (type == EntityType.PLAYER) {
+      if (target != null) {
+        disguisePlayer(player, EntityType.PLAYER, target);
+      }
+      return;
+    }
+    disguisePlayer(player, type, null, variant);
+  }
+
+  public static void scheduleRebuild(Player player, long delayTicks) {
+    if (player == null || !player.isOnline()) {
+      return;
+    }
+    UUID id = player.getUniqueId();
+    long now = System.currentTimeMillis();
+    Long last = LAST_REBUILD.get(id);
+    if (last != null && now - last < REBUILD_DEBOUNCE_MS) {
+      return;
+    }
+    LAST_REBUILD.put(id, now);
+    Bukkit.getScheduler().runTaskLater(AltarSMP.getInstance(), () -> {
+      if (player.isOnline() && isDisguised(player)) {
+        rebuildDisguise(player);
+      }
+    }, Math.max(0L, delayTicks));
+  }
+
+  @EventHandler(priority = EventPriority.LOWEST)
+  public void onEmptyHandMelee(EntityDamageByEntityEvent event) {
+    if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+      return;
+    }
+    if (!(event.getDamager() instanceof Player player) || !isMobDisguise(player)) {
+      return;
+    }
+    ItemStack hand = player.getInventory().getItemInMainHand();
+    if (hand != null && !hand.getType().isAir()) {
+      return;
+    }
+    double disguiseDamage = IllusionMeleeDamage.damage(getDisguisedEntityType(player),
+            getPiglinVariant(player));
+    if (disguiseDamage <= 0.0D) {
+      return;
+    }
+    AttributeInstance attackAttribute = player.getAttribute(Attribute.ATTACK_DAMAGE);
+    double attackValue = attackAttribute == null ? 0.0D : attackAttribute.getValue();
+    if (attackValue <= 0.0D) {
+      return;
+    }
+    double originalBase = baseDamage(event);
+    if (originalBase <= 0.0D) {
+      return;
+    }
+    // originalBase already contains cooldown/crit/strength. Dividing by the
+    // attack attribute gives the multiplier those effects applied.
+    double multiplier = originalBase / attackValue;
+    double scaled = (disguiseDamage + attackValue - 1.0D) * multiplier;
+    if (scaled <= originalBase) {
+      return;
+    }
+    event.setDamage(EntityDamageEvent.DamageModifier.BASE, scaled);
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  public void onCubeContact(EntityDamageByEntityEvent event) {
+    if (!(event.getEntity() instanceof Player player)) {
+      return;
+    }
+    if (!IllusionConfig.aggroImmunity() || !isMobDisguise(player)) {
+      return;
+    }
+    if (event.getDamager() instanceof Slime) {
+      event.setCancelled(true);
+    }
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  public void onFallDamage(EntityDamageEvent event) {
+    if (event.getCause() != EntityDamageEvent.DamageCause.FALL) {
+      return;
+    }
+    if (!(event.getEntity() instanceof Player player)) {
+      return;
+    }
+    Long until = FALL_IMMUNE_UNTIL.get(player.getUniqueId());
+    if (until != null && System.currentTimeMillis() <= until) {
+      event.setCancelled(true);
+      player.setFallDistance(0.0F);
+      FALL_IMMUNE_UNTIL.remove(player.getUniqueId());
+    }
+  }
+
+  public static void markFallImmune(Player player, long ticks) {
+    if (player != null) {
+      FALL_IMMUNE_UNTIL.put(player.getUniqueId(),
+              System.currentTimeMillis() + Math.max(1L, ticks) * 50L);
+    }
+  }
+
+  public static PiglinVariant getPiglinVariant(Player player) {
+    return player == null ? null : PIGLIN_VARIANTS.get(player.getUniqueId());
   }
 
   @EventHandler
@@ -234,37 +395,105 @@ public class IllusionDisguiseManager implements Listener {
     }
   }
 
-  /**
-   * The fake mob is a visual shell and never takes real damage. Only another
-   * player (or that player's projectile) can damage it, and that hit is routed
-   * to the real owner. Environmental and mob damage is dropped because the real
-   * player already takes those hits directly.
-   */
-  @EventHandler(priority = EventPriority.HIGHEST)
-  public void onEntityDamage(EntityDamageEvent event) {
+  @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+  public void onShellDamage(EntityDamageEvent event) {
     Entity entity = event.getEntity();
     UUID ownerId = disguisedEntityOwners.get(entity.getUniqueId());
     if (ownerId == null) {
       return;
     }
-    // Always cancel: the disguise entity must never lose health, die, or show
-    // its own hurt tint. Player damage is animated on the owner instead.
-    boolean wasCancelled = event.isCancelled();
+    if (event instanceof EntityDamageByEntityEvent byEntity) {
+      Player owner = Bukkit.getPlayer(ownerId);
+      Player attacker = playerSource(byEntity.getDamager());
+      if (owner != null && owner.isOnline() && canBeHurt(owner)
+              && attacker != null && !attacker.getUniqueId().equals(ownerId)
+              && !isStoredDamageProjectile(byEntity.getDamager())) {
+        // Let vanilla apply the shell hit. This is what makes hurt() return
+        // true, which the attacker's post-hit logic depends on.
+        return;
+      }
+    }
     event.setCancelled(true);
-    if (wasCancelled || !(event instanceof EntityDamageByEntityEvent byEntity)) {
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  public void onShellHit(EntityDamageByEntityEvent event) {
+    Entity entity = event.getEntity();
+    UUID ownerId = disguisedEntityOwners.get(entity.getUniqueId());
+    if (ownerId == null) {
       return;
     }
     Player owner = Bukkit.getPlayer(ownerId);
     if (owner == null || !owner.isOnline() || !canBeHurt(owner)) {
+      event.setCancelled(true);
       return;
     }
-    Player attacker = playerSource(byEntity.getDamager());
+    Player attacker = playerSource(event.getDamager());
     if (attacker == null || attacker.getUniqueId().equals(ownerId)) {
+      event.setCancelled(true);
       return;
     }
-    // Forward the pre-armour value: the shell has no gear, so its own armour
-    // step must not reduce the hit a second time before the owner is damaged.
-    owner.damage(baseDamage(event), byEntity.getDamageSource());
+    // Stored ability damage is applied by IllusionWandAbility. Forwarding the
+    // projectile's vanilla hit as well would damage the owner twice.
+    if (isStoredDamageProjectile(event.getDamager())) {
+      event.setCancelled(true);
+      return;
+    }
+    double forwarded = baseDamage(event);
+    FORWARDING_HIT.add(ownerId);
+    try {
+      owner.damage(forwarded, event.getDamageSource());
+    } finally {
+      FORWARDING_HIT.remove(ownerId);
+    }
+    // Since damage() returns void, we check if the entity/owner is still valid and able to take damage
+    if (!canBeHurt(owner) || !entity.isValid()) {
+      // The owner's i-frames swallowed the hit, or the owner died and the
+      // disguise was removed. Cancel the shell hit so vanilla does not run
+      // sweep/knockback/Fire Aspect for a phantom hit.
+      event.setCancelled(true);
+      return;
+    }
+    if (event.getDamager() instanceof Player) {
+      copyExtraKnockback(attacker, owner);
+      copyFireAspect(attacker, owner);
+    }
+    if (entity instanceof LivingEntity shell) {
+      shell.setMaximumNoDamageTicks(owner.getMaximumNoDamageTicks());
+      shell.setNoDamageTicks(owner.getNoDamageTicks());
+      scheduleShellRestore(shell);
+    }
+  }
+
+
+  private static void copyExtraKnockback(Player attacker, Player owner) {
+    AttributeInstance attackKnockback = attacker.getAttribute(Attribute.ATTACK_KNOCKBACK);
+    double knockback = attackKnockback == null ? 0.0D : attackKnockback.getValue();
+    int enchantLevel = attacker.getInventory().getItemInMainHand()
+            .getEnchantmentLevel(Enchantment.KNOCKBACK);
+    boolean sprinting = attacker.isSprinting() && attacker.getAttackCooldown() > 0.9F;
+    double strength = 0.5D * (knockback + enchantLevel + (sprinting ? 1.0D : 0.0D));
+    if (strength <= 0.0D) {
+      return;
+    }
+    double yaw = Math.toRadians(attacker.getLocation().getYaw());
+    owner.knockback(strength, Math.sin(yaw), -Math.cos(yaw));
+  }
+
+  private static void copyFireAspect(Player attacker, Player owner) {
+    int level = attacker.getInventory().getItemInMainHand()
+            .getEnchantmentLevel(Enchantment.FIRE_ASPECT);
+    if (level > 0) {
+      owner.setFireTicks(Math.max(owner.getFireTicks(), level * 80));
+    }
+  }
+
+  private static boolean isStoredDamageProjectile(Entity damager) {
+    if (!(damager instanceof Projectile projectile)) {
+      return false;
+    }
+    return IllusionAbilities.hasAppliedProjectileDamage(projectile)
+            || IllusionAbilities.projectileDamage(projectile) > 0.0D;
   }
 
   private static double baseDamage(EntityDamageEvent event) {
@@ -279,7 +508,45 @@ public class IllusionDisguiseManager implements Listener {
     return event.getDamage();
   }
 
-  /** Returns the player behind a fake disguise entity, or null if not a shell. */
+  private static void initializeShellHealth(LivingEntity entity) {
+    AttributeInstance maxHealth = entity.getAttribute(Attribute.MAX_HEALTH);
+
+    if (maxHealth != null) {
+      maxHealth.setBaseValue(SHELL_MAX_HEALTH);
+
+      double max = maxHealth.getValue();
+
+      if (max > 0.0D) {
+        entity.setHealth(max);
+      }
+    }
+  }
+
+  private static void scheduleShellRestore(LivingEntity entity) {
+    Bukkit.getScheduler().runTask(AltarSMP.getInstance(), () -> restoreShell(entity));
+  }
+
+  static void restoreShell(LivingEntity entity) {
+    if (entity == null || !entity.isValid() || entity.isDead()) {
+      return;
+    }
+
+    entity.setFireTicks(0);
+    entity.setVelocity(new org.bukkit.util.Vector(0.0D, 0.0D, 0.0D));
+
+    AttributeInstance maxHealth = entity.getAttribute(Attribute.MAX_HEALTH);
+
+    if (maxHealth != null) {
+      double max = maxHealth.getValue();
+
+      if (max > 0.0D && entity.getHealth() < max) {
+        entity.setHealth(max);
+      }
+    }
+  }
+
+
+
   public static Player disguiseOwner(Entity entity) {
     if (entity == null) {
       return null;
@@ -303,13 +570,16 @@ public class IllusionDisguiseManager implements Listener {
     return null;
   }
 
-  /** Animate the fake mob when the real player actually takes a hit. */
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerDamaged(EntityDamageEvent event) {
     if (!(event.getEntity() instanceof Player player)) {
       return;
     }
     if (!canBeHurt(player)) {
+      return;
+    }
+    // A proxied shell hit already animated the shell in the same tick.
+    if (FORWARDING_HIT.contains(player.getUniqueId())) {
       return;
     }
     DisguiseEntityTask disguise = activeDisguises.get(player.getUniqueId());
@@ -319,10 +589,6 @@ public class IllusionDisguiseManager implements Listener {
     }
   }
 
-  /**
-   * Hostile mobs ignore mob disguises (but not captured-player disguises), and
-   * never target the fake entity itself.
-   */
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onEntityTarget(EntityTargetEvent event) {
     Entity target = event.getTarget();
@@ -341,7 +607,6 @@ public class IllusionDisguiseManager implements Listener {
     }
   }
 
-  /** A fake Wither (or any exploding disguise) must never damage terrain. */
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onDisguiseExplode(EntityExplodeEvent event) {
     if (disguisedEntityOwners.containsKey(event.getEntity().getUniqueId())) {
@@ -403,8 +668,7 @@ public class IllusionDisguiseManager implements Listener {
     return mode != GameMode.CREATIVE && mode != GameMode.SPECTATOR;
   }
 
-  /** Drives the fake entity's attack / spell animation when an ability fires. */
-  public static void playCastAnimation(Player player, EntityType type) {
+  public static void playCastAnimation(Player player) {
     DisguiseEntityTask disguise = activeDisguises.get(player.getUniqueId());
     if (disguise == null || !(disguise.entity() instanceof LivingEntity living)) {
       return;
@@ -420,13 +684,67 @@ public class IllusionDisguiseManager implements Listener {
     }
   }
 
-  /** Periodic upkeep for state vanilla can silently turn back on. */
   public static void maintainDisguiseState(Player player) {
+    if (player == null || !player.isOnline()) {
+      return;
+    }
     clearMobTargets(player);
     DisguiseEntityTask disguise = activeDisguises.get(player.getUniqueId());
-    if (disguise != null && disguise.entity() instanceof Wither wither
-        && IllusionConfig.witherHideBossBar() && wither.getBossBar() != null) {
-      wither.getBossBar().setVisible(false);
+    if (disguise == null || disguise.entity() == null) {
+      return;
+    }
+    Entity shell = disguise.entity();
+    if (!shell.getWorld().equals(player.getWorld())) {
+      // The fake entity must never follow the player across worlds; that is
+      // what left a visible, colliding shell behind after a portal. The
+      // world-change task owns the delayed rebuild.
+      return;
+    }
+    if (!shell.isValid()) {
+      scheduleRebuild(player, 20L);
+      return;
+    }
+    rehideShell(player);
+    if (shell instanceof LivingEntity living) {
+      if (living.isCollidable()) {
+        living.setCollidable(false);
+      }
+      if (living.hasGravity()) {
+        living.setGravity(false);
+      }
+      if (living instanceof Wither wither
+          && IllusionConfig.witherHideBossBar() && wither.getBossBar() != null) {
+        wither.getBossBar().setVisible(false);
+      }
+    }
+  }
+
+  static void rehideShell(Player player) {
+    if (!isMobDisguise(player)) {
+      return;
+    }
+    DisguiseEntityTask disguise = activeDisguises.get(player.getUniqueId());
+    if (disguise != null && disguise.entity() != null && disguise.entity().isValid()) {
+      player.hideEntity(AltarSMP.getInstance(), disguise.entity());
+    }
+  }
+
+  private static void applyDisguiseEquipment(LivingEntity entity, EntityType type,
+                                             PiglinVariant variant) {
+    EntityEquipment equipment = entity.getEquipment();
+    if (equipment == null) {
+      return;
+    }
+    equipment.clear();
+    ItemStack weapon = IllusionMeleeDamage.weapon(type, variant);
+    if (weapon == null) {
+      return;
+    }
+    equipment.setItemInMainHand(weapon);
+    equipment.setItemInMainHandDropChance(0.0F);
+    equipment.setItemInOffHandDropChance(0.0F);
+    for (EquipmentSlot slot : EQUIPMENT_SLOTS) {
+      equipment.setDropChance(slot, 0.0F);
     }
   }
 
@@ -566,14 +884,12 @@ public class IllusionDisguiseManager implements Listener {
     Bukkit.getScheduler().runTaskLater(AltarSMP.getInstance(), () -> resetPlayerAttributes(player), 3L);
   }
 
-  /**
-   * Disguise state is in-memory, so it is gone after a relog. Clean it up on
-   * quit as well so infinite passive effects, invisibility and flight flags are
-   * never written back to the player's saved data.
-   */
   @EventHandler
   public void onPlayerQuit(PlayerQuitEvent event) {
     Player player = event.getPlayer();
+    PIGLIN_VARIANTS.remove(player.getUniqueId());
+    FALL_IMMUNE_UNTIL.remove(player.getUniqueId());
+    LAST_REBUILD.remove(player.getUniqueId());
     DisguiseEntityTask disguise = activeDisguises.remove(player.getUniqueId());
     IllusionFlightService.clear(player);
     IllusionPassiveService.clear(player);
@@ -661,15 +977,17 @@ public class IllusionDisguiseManager implements Listener {
     if (type == null) {
       return;
     }
-    boolean hasActiveAbility = type != EntityType.PLAYER
-            && !IllusionAbilityRegistry.family(type).isPassive();
+    IllusionAbilityFamily family = type == EntityType.PLAYER
+            ? IllusionAbilityFamily.PASSIVE
+            : IllusionAbilityRegistry.family(type, getPiglinVariant(player));
+    boolean hasActiveAbility = type != EntityType.PLAYER && !family.isPassive();
     String ability;
     if (type == EntityType.PLAYER) {
       ability = "None";
     } else if (type == EntityType.STRIDER) {
       ability = "Lava Walk (passive)";
     } else {
-      ability = IllusionAbilityRegistry.family(type).displayName();
+      ability = family.displayName();
     }
     player.sendActionBar(Component.text()
             .append(Component.text("Disguised: ", NamedTextColor.GRAY))

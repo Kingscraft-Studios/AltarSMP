@@ -14,14 +14,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
-/**
- * Creative-style flight for flying mob disguises.
- *
- * <p>allow-flight, fly speed and fall immunity are re-asserted every 10 ticks so
- * regions or other plugins cannot quietly switch flight off. Flight itself is
- * never forced: the player toggles it exactly like creative mode. Fly speed
- * always comes from config (0.1 by default), including the Wither.</p>
- */
 public final class IllusionFlightService {
 
   private static final float DEFAULT_FLY_SPEED = 0.05F;

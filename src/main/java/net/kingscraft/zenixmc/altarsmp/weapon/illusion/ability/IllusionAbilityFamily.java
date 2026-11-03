@@ -1,9 +1,5 @@
 package net.kingscraft.zenixmc.altarsmp.weapon.illusion.ability;
 
-/**
- * Ability families group mobs that share one usable ability instead of giving
- * every single mob its own bespoke implementation.
- */
 public enum IllusionAbilityFamily {
 
   FIREBALL("Shoot Fireball", true),

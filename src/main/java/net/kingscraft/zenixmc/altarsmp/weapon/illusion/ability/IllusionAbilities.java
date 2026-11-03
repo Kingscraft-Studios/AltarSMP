@@ -48,22 +48,14 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.util.Vector;
 
-/**
- * The ability implementations behind every {@link IllusionAbilityFamily}.
- * Everything uses vanilla particles and sounds.
- */
 public final class IllusionAbilities {
 
-  private IllusionAbilities() {
-  }
-
-  public static boolean activate(Player player, EntityType type) {
-    IllusionAbilityFamily family = IllusionAbilityRegistry.family(type);
-    if (family.isPassive() || type == EntityType.PLAYER) {
+  public static boolean activate(Player player, EntityType type, IllusionAbilityFamily family) {
+    if (family == null || family.isPassive() || type == EntityType.PLAYER) {
       return false;
     }
     if (IllusionConfig.castAnimation()) {
-      IllusionDisguiseManager.playCastAnimation(player, type);
+      IllusionDisguiseManager.playCastAnimation(player);
     }
     switch (family) {
       case FIREBALL -> fireball(player, type);
@@ -105,7 +97,14 @@ public final class IllusionAbilities {
     return IllusionAbilityRegistry.family(type).displayName();
   }
 
-  /** True while the player is still disguised and alive, used by delayed tasks. */
+  public static int activationCooldownDelay(EntityType type, IllusionAbilityFamily family) {
+    if (type == EntityType.BLAZE && family == IllusionAbilityFamily.FIREBALL) {
+      int shots = IllusionConfig.blazeVolleyCount();
+      return Math.max(0, (shots - 1) * IllusionConfig.blazeVolleyInterval());
+    }
+    return 0;
+  }
+
   public static boolean isStillActive(Player player) {
     return player != null && player.isOnline() && !player.isDead()
             && IllusionDisguiseManager.isDisguised(player);
@@ -132,12 +131,6 @@ public final class IllusionAbilities {
     return new NamespacedKey(AltarSMP.getInstance(), "illusion_projectile_damage");
   }
 
-  /**
-   * Projectiles that cannot carry a damage value themselves (snowball, egg,
-   * llama spit, wind charge, small fireball, shulker bullet) store one here and
-   * the {@code ProjectileHitEvent} handler applies it. Arrows and tridents use
-   * their own damage field instead.
-   */
   private static void setProjectileDamage(Projectile projectile, double damage) {
     if (projectile == null) {
       return;
@@ -160,11 +153,25 @@ public final class IllusionAbilities {
     }
   }
 
-  private static void scheduleDespawn(Entity entity, long ticks) {
+  private static NamespacedKey projectileDamageAppliedKey() {
+    return new NamespacedKey(AltarSMP.getInstance(), "illusion_projectile_damage_applied");
+  }
+
+  public static boolean hasAppliedProjectileDamage(Entity projectile) {
+    return projectile != null && projectile.getPersistentDataContainer().has(projectileDamageAppliedKey(), PersistentDataType.BYTE);
+  }
+
+  public static void markProjectileDamageApplied(Entity projectile) {
+    if (projectile != null) {
+      projectile.getPersistentDataContainer().set(projectileDamageAppliedKey(), PersistentDataType.BYTE, (byte) 1);
+    }
+  }
+
+  private static void scheduleDespawn(Entity entity) {
     if (entity == null) {
       return;
     }
-    Bukkit.getScheduler().runTaskLater(AltarSMP.getInstance(), entity::remove, ticks);
+    Bukkit.getScheduler().runTaskLater(AltarSMP.getInstance(), entity::remove, 200L);
   }
 
   private static double scaled(double base) {
@@ -176,6 +183,31 @@ public final class IllusionAbilities {
   // ------------------------------------------------------------------
 
   private static void fireball(Player player, EntityType type) {
+    if (type == EntityType.BLAZE) {
+      blazeVolley(player);
+      return;
+    }
+    shootFireball(player, type);
+  }
+
+  private static void blazeVolley(Player player) {
+    int count = IllusionConfig.blazeVolleyCount();
+    int interval = IllusionConfig.blazeVolleyInterval();
+    for (int shot = 0; shot < count; shot++) {
+      long delay = (long) shot * interval;
+      if (delay <= 0L) {
+        shootFireball(player, EntityType.BLAZE);
+      } else {
+        Bukkit.getScheduler().runTaskLater(AltarSMP.getInstance(), () -> {
+          if (isStillActive(player)) {
+            shootFireball(player, EntityType.BLAZE);
+          }
+        }, delay);
+      }
+    }
+  }
+
+  private static void shootFireball(Player player, EntityType type) {
     Vector direction = player.getEyeLocation().getDirection().normalize();
     double strength = IllusionConfig.fireballStrength();
     if (type == EntityType.GHAST || type == EntityType.HAPPY_GHAST) {
@@ -306,6 +338,8 @@ public final class IllusionAbilities {
   private static void leap(Player player, EntityType type) {
     Vector direction = horizontalDirection(player);
     player.setVelocity(direction.multiply(0.9D).setY(0.9D));
+    // Slime, magma cube and rabbit jumps must not hurt on landing.
+    IllusionDisguiseManager.markFallImmune(player, 100L);
     Sound sound = switch (type) {
       case MAGMA_CUBE -> Sound.ENTITY_MAGMA_CUBE_JUMP;
       case RABBIT -> Sound.ENTITY_RABBIT_JUMP;
@@ -381,7 +415,7 @@ public final class IllusionAbilities {
       arrow.setDamage(scaled(5.0D));
       arrow.setVelocity(base.clone().rotateAroundY(Math.toRadians(offset * 6.0D))
               .add(new Vector(0.0D, 0.04D, 0.0D)));
-      scheduleDespawn(arrow, 200L);
+      scheduleDespawn(arrow);
       switch (type) {
         case STRAY -> arrow.addCustomEffect(new PotionEffect(PotionEffectType.SLOWNESS, 100, 0), true);
         case BOGGED -> arrow.addCustomEffect(new PotionEffect(PotionEffectType.POISON, 100, 0), true);
@@ -391,7 +425,8 @@ public final class IllusionAbilities {
       }
     }
     IllusionVisuals.sound(player.getLocation(),
-            type == EntityType.PILLAGER ? Sound.ITEM_CROSSBOW_SHOOT : Sound.ENTITY_ARROW_SHOOT, 1.0F, 1.0F);
+            type == EntityType.PILLAGER || type == EntityType.PIGLIN
+                    ? Sound.ITEM_CROSSBOW_SHOOT : Sound.ENTITY_ARROW_SHOOT, 1.0F, 1.0F);
     IllusionVisuals.muzzle(player, Particle.CRIT);
   }
 
@@ -401,7 +436,7 @@ public final class IllusionAbilities {
     trident.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
     trident.setDamage(scaled(8.0D));
     trident.setVelocity(player.getEyeLocation().getDirection().normalize().multiply(1.8D));
-    scheduleDespawn(trident, 200L);
+    scheduleDespawn(trident);
     IllusionVisuals.sound(player.getLocation(), Sound.ITEM_TRIDENT_THROW, 1.0F, 1.0F);
     IllusionVisuals.muzzle(player, Particle.BUBBLE);
   }
@@ -626,34 +661,59 @@ public final class IllusionAbilities {
   // ------------------------------------------------------------------
 
   private static void summonFangs(Player player) {
-    LivingEntity target = target(player, 20.0D);
-    Block targetBlock = player.getTargetBlockExact(15);
-    Location center;
-    if (target != null) {
-      center = target.getLocation();
-    } else if (targetBlock != null) {
-      center = targetBlock.getLocation().add(0.5D, 0.0D, 0.5D);
-    } else {
-      center = player.getLocation();
-    }
     World world = player.getWorld();
-    world.playSound(center, Sound.ENTITY_EVOKER_PREPARE_ATTACK, 1.0F, 1.0F);
-    IllusionVisuals.burst(center.clone().add(0.0D, 0.5D, 0.0D), Particle.WITCH, 30, 1.2D);
+    Location origin = player.getLocation().clone();
+    Vector direction = player.getEyeLocation().getDirection().setY(0.0D);
+    if (direction.lengthSquared() < 1.0E-4D) {
+      direction = player.getLocation().getDirection().setY(0.0D);
+    }
+    if (direction.lengthSquared() < 1.0E-4D) {
+      direction = new Vector(0.0D, 0.0D, 1.0D);
+    }
+    direction.normalize();
+    world.playSound(origin, Sound.ENTITY_EVOKER_PREPARE_ATTACK, 1.0F, 1.0F);
+    IllusionVisuals.burst(origin.clone().add(0.0D, 0.5D, 0.0D), Particle.WITCH, 30, 1.2D);
+    final Vector heading = direction;
     // Let the fake Evoker finish raising its arms before the fangs erupt.
     Bukkit.getScheduler().runTaskLater(AltarSMP.getInstance(), () -> {
       if (!isStillActive(player) || !player.getWorld().equals(world)) {
         return;
       }
-      for (int i = 0; i < 6; i++) {
-        double angle = (Math.PI * 2.0D / 6.0D) * i;
-        Location location = center.clone().add(Math.cos(angle) * 1.6D, 0.0D, Math.sin(angle) * 1.6D);
+      Location base = player.getLocation().clone();
+      // Vanilla Evokers erupt a forward line of fangs from their feet. Spawn
+      // eight of them, each one delayed by a tick, snapped to the ground.
+      for (int i = 0; i < 8; i++) {
+        double distance = 1.0D + i;
+        Location location = fangGroundLocation(world, base.clone().add(heading.clone().multiply(distance)));
+        if (location == null) {
+          continue;
+        }
+        final int attackDelay = i;
         world.spawn(location, EvokerFangs.class, fangs -> {
           fangs.setOwner(player);
-          fangs.setAttackDelay(4 + (int) (Math.random() * 4));
+          fangs.setAttackDelay(attackDelay);
         });
       }
-      world.playSound(center, Sound.ENTITY_EVOKER_CAST_SPELL, 1.0F, 1.0F);
+      world.playSound(base, Sound.ENTITY_EVOKER_CAST_SPELL, 1.0F, 1.0F);
     }, 12L);
+  }
+
+  private static Location fangGroundLocation(World world, Location point) {
+    if (world == null || point == null) {
+      return null;
+    }
+    Block ground = null;
+    for (int drop = 0; drop <= 4; drop++) {
+      Block check = point.clone().subtract(0.0D, drop, 0.0D).getBlock();
+      if (check.getType().isSolid()) {
+        ground = check;
+        break;
+      }
+    }
+    if (ground == null) {
+      return null;
+    }
+    return ground.getLocation().add(0.5D, 1.0D, 0.5D);
   }
 
   private static void hex(Player player, EntityType type) {
@@ -732,6 +792,9 @@ public final class IllusionAbilities {
     }
     if (entity instanceof Player other) {
       GameMode mode = other.getGameMode();
+      if (other.isInvulnerable()) {
+        return false;
+      }
       return mode != GameMode.CREATIVE && mode != GameMode.SPECTATOR;
     }
     return true;

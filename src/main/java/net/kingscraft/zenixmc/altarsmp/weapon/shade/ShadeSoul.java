@@ -27,10 +27,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Transformation;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.weapon.holylance.HolyLanceTask;
-import net.kingscraft.zenixmc.altarsmp.weapon.precision.SlashDespawnTask;
-import net.kingscraft.zenixmc.altarsmp.weapon.precision.SlashHideTask;
-import net.kingscraft.zenixmc.altarsmp.weapon.precision.SlashStreakTask;
-import net.kingscraft.zenixmc.altarsmp.weapon.precision.SlashSwingTask;
+import net.kingscraft.zenixmc.altarsmp.weapon.striker.SlashDespawnTask;
+import net.kingscraft.zenixmc.altarsmp.weapon.striker.SlashHideTask;
+import net.kingscraft.zenixmc.altarsmp.weapon.striker.SlashStreakTask;
+import net.kingscraft.zenixmc.altarsmp.weapon.striker.SlashSwingTask;
 import net.kingscraft.zenixmc.altarsmp.weapon.wind.CycloneBlockClearTask;
 import net.kingscraft.zenixmc.altarsmp.weapon.wind.CycloneSlashSpinTask;
 

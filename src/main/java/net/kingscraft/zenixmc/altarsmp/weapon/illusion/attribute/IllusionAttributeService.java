@@ -14,19 +14,6 @@ import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-/**
- * Applies the disguise attribute pool.
- *
- * <p>Health is scaled for every mob. Horse-family disguises additionally roll a
- * vanilla horse movement speed and jump strength so they feel like a mount.
- * Attack damage, armor, attack speed, knockback resistance, step height and
- * reach stay exactly as the player's own gear defines them.</p>
- *
- * <p>{@code target = clamp(vanillaHealth * scale, floor, max)}, except horses,
- * which roll {@code health-min..health-max}. Every value is added as a transient
- * modifier, so removing it on reveal restores the exact original stats and never
- * permanently changes the player.</p>
- */
 public final class IllusionAttributeService {
 
   private static final Set<EntityType> HORSE_FAMILY = EnumSet.of(
@@ -82,9 +69,7 @@ public final class IllusionAttributeService {
       return;
     }
 
-    double ratio = health.getValue() > 0.0D
-            ? clamp(player.getHealth() / health.getValue(), 0.0D, 1.0D)
-            : 1.0D;
+    double ratio = health.getValue() > 0.0D ? clamp(player.getHealth() / health.getValue(), 0.0D, 1.0D) : 1.0D;
 
     applyExact(health, Attribute.MAX_HEALTH, target);
 
@@ -99,8 +84,7 @@ public final class IllusionAttributeService {
     if (speed == null) {
       return;
     }
-    applyExact(speed, Attribute.MOVEMENT_SPEED,
-            randomBetween(IllusionConfig.horseSpeedMin(), IllusionConfig.horseSpeedMax()));
+    applyExact(speed, Attribute.MOVEMENT_SPEED, randomBetween(IllusionConfig.horseSpeedMin(), IllusionConfig.horseSpeedMax()));
   }
 
   private static void applyHorseJump(Player player) {
@@ -108,8 +92,7 @@ public final class IllusionAttributeService {
     if (jump == null) {
       return;
     }
-    applyExact(jump, Attribute.JUMP_STRENGTH,
-            randomBetween(IllusionConfig.horseJumpMin(), IllusionConfig.horseJumpMax()));
+    applyExact(jump, Attribute.JUMP_STRENGTH, randomBetween(IllusionConfig.horseJumpMin(), IllusionConfig.horseJumpMax()));
   }
 
   private static void applyExact(AttributeInstance instance, Attribute attribute, double target) {
@@ -160,7 +143,6 @@ public final class IllusionAttributeService {
     }
   }
 
-  /** Adds zero fall damage for flying / cat-like / chicken disguises. */
   public static void applyFallDamageImmunity(Player player) {
     if (player == null) {
       return;
@@ -247,6 +229,6 @@ public final class IllusionAttributeService {
   }
 
   private static double clamp(double value, double min, double max) {
-    return Math.max(min, Math.min(max, value));
+    return Math.clamp(value, min, max);
   }
 }

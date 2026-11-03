@@ -27,8 +27,6 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
 import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.item.ItemUtility;
-import net.kingscraft.zenixmc.altarsmp.weapon.meteor.MeteorStrikeLaunchTask;
-import net.kingscraft.zenixmc.altarsmp.weapon.meteor.MeteorStrikePullTask;
 
 public class EarthGauntletAbility implements Listener {
   public static int meteorStrikeCooldown;

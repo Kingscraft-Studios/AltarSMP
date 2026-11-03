@@ -1,4 +1,4 @@
-package net.kingscraft.zenixmc.altarsmp.weapon.blood;
+package net.kingscraft.zenixmc.altarsmp.weapon.bloodlust;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import java.util.Map;

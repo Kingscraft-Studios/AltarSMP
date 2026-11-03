@@ -2,6 +2,7 @@ package net.kingscraft.zenixmc.altarsmp.weapon.illusion.ability;
 
 import java.util.EnumMap;
 import java.util.Map;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.util.PiglinVariant;
 import org.bukkit.entity.Ambient;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Boss;
@@ -13,12 +14,6 @@ import org.bukkit.entity.Raider;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.WaterMob;
 
-/**
- * Maps every vanilla {@link EntityType} to an {@link IllusionAbilityFamily}.
- *
- * <p>Unknown/future mobs still work through Bukkit interface fallbacks, so a
- * new 1.22 mob automatically inherits a sensible ability family.</p>
- */
 public final class IllusionAbilityRegistry {
 
   private static final Map<EntityType, IllusionAbilityFamily> FAMILIES = new EnumMap<>(EntityType.class);
@@ -103,6 +98,19 @@ public final class IllusionAbilityRegistry {
     }
     IllusionAbilityFamily family = FAMILIES.get(type);
     return family != null ? family : fallback(type);
+  }
+
+  public static IllusionAbilityFamily family(EntityType type, PiglinVariant variant) {
+    if (type == EntityType.PIGLIN) {
+      if (variant == PiglinVariant.CROSSBOW) {
+        return IllusionAbilityFamily.ARROW_VOLLEY;
+      }
+      if (variant == PiglinVariant.NONE) {
+        return IllusionAbilityFamily.PASSIVE;
+      }
+      return IllusionAbilityFamily.MELEE_BURST;
+    }
+    return family(type);
   }
 
   private static IllusionAbilityFamily fallback(EntityType type) {

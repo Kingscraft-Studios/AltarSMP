@@ -25,24 +25,20 @@ class IllusionWandChargeTask extends BukkitRunnable {
       cancel();
       return;
     }
-    if (this.player.isHandRaised()
-            && IllusionWandAbility.isIllusionWand(this.player.getInventory().getItemInMainHand())) {
+    if (this.player.isHandRaised() && IllusionWandAbility.isIllusionWand(this.player.getInventory().getItemInMainHand())) {
       if (this.chargeTicks < this.chargeDurationTicks) {
         if (this.chargeTicks == 0) {
-          this.player.getWorld().playSound(this.player.getLocation(),
-                  Sound.ENTITY_WARDEN_SONIC_CHARGE, 1.0F, 1.0F);
+          this.player.getWorld().playSound(this.player.getLocation(), Sound.ENTITY_WARDEN_SONIC_CHARGE, 1.0F, 1.0F);
         }
         this.chargeTicks++;
         return;
       }
-      this.player.stopSound(Sound.ENTITY_WARDEN_SONIC_CHARGE);
       finish();
       cancel();
       IllusionWandAbility.activateDisguise(this.player);
       return;
     }
 
-    this.player.stopSound(Sound.ENTITY_WARDEN_SONIC_CHARGE);
     finish();
     cancel();
   }

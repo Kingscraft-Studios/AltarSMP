@@ -20,20 +20,25 @@ import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.weapon.illusion.ability.IllusionAbilities;
 import net.kingscraft.zenixmc.altarsmp.weapon.illusion.ability.IllusionAbilityFamily;
 import net.kingscraft.zenixmc.altarsmp.weapon.illusion.ability.IllusionAbilityRegistry;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.passive.IllusionPassiveService;
 import net.kingscraft.zenixmc.altarsmp.weapon.illusion.util.IllusionConfig;
+import net.kingscraft.zenixmc.altarsmp.weapon.illusion.util.IllusionMeleeDamage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.EvokerFangs;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Piglin;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -50,6 +55,7 @@ public class IllusionWandAbility implements Listener {
 
   public static NamespacedKey STORED_MOB_KEY;
   public static NamespacedKey STORED_PLAYER_NAME_KEY;
+  public static NamespacedKey STORED_PIGLIN_VARIANT_KEY;
 
   private static final Map<UUID, Long> LAST_ACTIVATION = new HashMap<>();
   static final Set<UUID> CHARGING = new HashSet<>();
@@ -60,6 +66,7 @@ public class IllusionWandAbility implements Listener {
     this.plugin = plugin;
     STORED_MOB_KEY = new NamespacedKey(plugin, "stored_mob");
     STORED_PLAYER_NAME_KEY = new NamespacedKey(plugin, "stored_player_name");
+    STORED_PIGLIN_VARIANT_KEY = new NamespacedKey(plugin, "stored_piglin_variant");
   }
 
   public static boolean isIllusionWand(ItemStack itemStack) {
@@ -73,11 +80,6 @@ public class IllusionWandAbility implements Listener {
     List<Float> floats = itemMeta.getCustomModelDataComponent().getFloats();
     return !floats.isEmpty() && floats.getFirst() == 2.0F;
   }
-
-  /**
-   * Finds the wand even if it is not in a hand, so an offhand swap works no
-   * matter which hotbar slot the wand is in.
-   */
   public static ItemStack findWand(Player player) {
     if (player == null) {
       return null;
@@ -125,7 +127,14 @@ public class IllusionWandAbility implements Listener {
     if (dead instanceof Player victim) {
       capturePlayer(killer, wand, victim);
     } else {
-      storeCapturedMob(killer, wand, dead.getType());
+      PiglinVariant variant = null;
+      if (dead instanceof Piglin piglin && piglin.getEquipment() != null) {
+        variant = PiglinVariant.fromItem(piglin.getEquipment().getItemInMainHand());
+        if (variant == PiglinVariant.NONE) {
+          variant = PiglinVariant.fromItem(piglin.getEquipment().getItemInOffHand());
+        }
+      }
+      storeCapturedMob(killer, wand, dead.getType(), variant);
     }
   }
 
@@ -135,8 +144,13 @@ public class IllusionWandAbility implements Listener {
       return;
     }
     PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+    String existing = container.get(STORED_PLAYER_NAME_KEY, PersistentDataType.STRING);
+    if (IllusionConfig.keepCapturedMob() && victim.getName().equals(existing)) {
+      return;
+    }
     container.set(STORED_PLAYER_NAME_KEY, PersistentDataType.STRING, victim.getName());
     container.remove(STORED_MOB_KEY);
+    container.remove(STORED_PIGLIN_VARIANT_KEY);
     wand.setItemMeta(itemMeta);
 
     killer.sendMessage(Component.text()
@@ -147,6 +161,11 @@ public class IllusionWandAbility implements Listener {
   }
 
   public static void storeCapturedMob(Player player, ItemStack wand, EntityType type) {
+    storeCapturedMob(player, wand, type, null);
+  }
+
+  public static void storeCapturedMob(Player player, ItemStack wand, EntityType type,
+                                      PiglinVariant variant) {
     if (player == null || wand == null || type == null || !IllusionConfig.enabled()) {
       return;
     }
@@ -158,13 +177,30 @@ public class IllusionWandAbility implements Listener {
             || !LivingEntity.class.isAssignableFrom(type.getEntityClass())) {
       return;
     }
+    PiglinVariant resolvedVariant = IllusionMeleeDamage.resolveVariant(type, variant);
     ItemMeta itemMeta = wand.getItemMeta();
     if (itemMeta == null) {
       return;
     }
     PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+    String existingPlayer = container.get(STORED_PLAYER_NAME_KEY, PersistentDataType.STRING);
+    String existingMob = container.get(STORED_MOB_KEY, PersistentDataType.STRING);
+    String existingVariantName = container.get(STORED_PIGLIN_VARIANT_KEY, PersistentDataType.STRING);
+    if (IllusionConfig.keepCapturedMob()
+            && existingPlayer == null
+            && type.name().equals(existingMob)
+            && (type != EntityType.PIGLIN
+                || resolvedVariant.name().equals(existingVariantName))) {
+      // Same mob already captured: keep it instead of replacing it with itself.
+      return;
+    }
     container.set(STORED_MOB_KEY, PersistentDataType.STRING, type.name());
     container.remove(STORED_PLAYER_NAME_KEY);
+    if (type == EntityType.PIGLIN) {
+      container.set(STORED_PIGLIN_VARIANT_KEY, PersistentDataType.STRING, resolvedVariant.name());
+    } else {
+      container.remove(STORED_PIGLIN_VARIANT_KEY);
+    }
     wand.setItemMeta(itemMeta);
 
     player.sendMessage(Component.text()
@@ -218,11 +254,6 @@ public class IllusionWandAbility implements Listener {
     activateDisguise(player);
   }
 
-  /**
-   * The single disguise entry point. Both the charge task and the consume event
-   * call this; the 750ms debounce makes sure one right-click cannot disguise
-   * twice.
-   */
   public static void activateDisguise(Player player) {
     if (player == null || !IllusionConfig.enabled()) {
       return;
@@ -322,7 +353,12 @@ public class IllusionWandAbility implements Listener {
       player.sendMessage(Component.text("The captured mob is no longer valid.", NamedTextColor.RED));
       return false;
     }
-    IllusionDisguiseManager.disguisePlayer(player, type, null);
+    PiglinVariant variant = null;
+    if (type == EntityType.PIGLIN) {
+      String storedVariant = container.get(STORED_PIGLIN_VARIANT_KEY, PersistentDataType.STRING);
+      variant = storedVariant == null ? PiglinVariant.SWORD : PiglinVariant.fromName(storedVariant);
+    }
+    IllusionDisguiseManager.disguisePlayer(player, type, null, variant);
     if (IllusionDisguiseManager.isDisguised(player)) {
       consumeIfNeeded(wand);
       return true;
@@ -341,6 +377,7 @@ public class IllusionWandAbility implements Listener {
     PersistentDataContainer container = itemMeta.getPersistentDataContainer();
     container.remove(STORED_MOB_KEY);
     container.remove(STORED_PLAYER_NAME_KEY);
+    container.remove(STORED_PIGLIN_VARIANT_KEY);
     wand.setItemMeta(itemMeta);
   }
 
@@ -362,10 +399,16 @@ public class IllusionWandAbility implements Listener {
     if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
             && IllusionDisguiseManager.getDisguisedEntityType(player) == EntityType.CREEPER) {
       event.setCancelled(true);
+      return;
+    }
+    // Landing on the strider lava-walk platform must not deal fall damage.
+    if (event.getCause() == EntityDamageEvent.DamageCause.FALL
+            && IllusionDisguiseManager.getDisguisedEntityType(player) == EntityType.STRIDER
+            && IllusionPassiveService.isOnOrFallingIntoLava(player)) {
+      event.setCancelled(true);
     }
   }
 
-  /** Illusion projectiles never break blocks. */
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onIllusionProjectileExplode(EntityExplodeEvent event) {
     Entity entity = event.getEntity();
@@ -374,14 +417,13 @@ public class IllusionWandAbility implements Listener {
     }
   }
 
-  /**
-   * Snowballs, eggs, llama spit, wind charges, small fireballs and shulker
-   * bullets cannot carry their own damage value, so the ability stores one on
-   * the projectile and it is applied here. Armour still reduces it.
-   */
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onIllusionProjectileHit(ProjectileHitEvent event) {
     Projectile projectile = event.getEntity();
+    // A projectile only gets one stored-damage application.
+    if (IllusionAbilities.hasAppliedProjectileDamage(projectile)) {
+      return;
+    }
     double damage = IllusionAbilities.projectileDamage(projectile);
     if (damage <= 0.0D) {
       return;
@@ -389,51 +431,89 @@ public class IllusionWandAbility implements Listener {
     if (!(projectile.getShooter() instanceof Player player)) {
       return;
     }
+    Entity hitEntity = event.getHitEntity();
     // Resolve a fake disguise shell to the player it represents.
-    LivingEntity hit = IllusionDisguiseManager.disguiseOwner(event.getHitEntity());
-    if (hit == null && event.getHitEntity() instanceof LivingEntity living) {
+    LivingEntity hit = IllusionDisguiseManager.disguiseOwner(hitEntity);
+    if (hit == null && hitEntity instanceof LivingEntity living) {
       hit = living;
     }
     if (hit == null || !IllusionAbilities.isEnemy(player, hit)) {
       return;
     }
+    if (hit instanceof Player target && !IllusionDisguiseManager.canBeHurt(target)) {
+      return;
+    }
+    // Mark before damaging so a re-entrant hit cannot apply this twice, and so
+    // the shell proxy knows this projectile's vanilla hit must not be forwarded.
+    IllusionAbilities.consumeProjectileDamage(projectile);
+    IllusionAbilities.markProjectileDamageApplied(projectile);
     // The projectile's own vanilla hit may have started damage i-frames, which
     // would swallow this stored damage. Clear them so the ability always lands.
     hit.setNoDamageTicks(0);
     hit.damage(damage, player);
-    IllusionAbilities.consumeProjectileDamage(projectile);
   }
 
-  public static boolean useMobAbility(Player player, EntityType type) {
+  @EventHandler(priority = EventPriority.LOWEST)
+  public void onEvokerFangsDamage(EntityDamageByEntityEvent event) {
+    if (!(event.getDamager() instanceof EvokerFangs fangs)) {
+      return;
+    }
+    if (!(fangs.getOwner() instanceof Player player)) {
+      return;
+    }
+    if (!IllusionDisguiseManager.isMobDisguise(player)
+            || IllusionDisguiseManager.getDisguisedEntityType(player) != EntityType.EVOKER) {
+      return;
+    }
+    event.setDamage(EntityDamageEvent.DamageModifier.BASE, IllusionConfig.evokerFangsDamage());
+  }
+
+  public static void useMobAbility(Player player, EntityType type) {
     if (player == null || !IllusionConfig.enabled()) {
-      return false;
+      return;
     }
     if (!IllusionDisguiseManager.isDisguised(player)) {
-      return false;
+      return;
     }
     if (CooldownManager.isOnCooldown(player.getUniqueId(), "mobAbility")) {
       int remaining = Math.max(1, CooldownManager.getRemainingSeconds(player.getUniqueId(), "mobAbility"));
       player.sendActionBar(Component.text("Ability on cooldown: " + remaining + "s", NamedTextColor.GRAY));
-      return false;
+      return;
     }
     EntityType disguiseType = type != null ? type : IllusionDisguiseManager.getDisguisedEntityType(player);
     if (disguiseType == null) {
-      return false;
+      return;
     }
-    IllusionAbilityFamily family = IllusionAbilityRegistry.family(disguiseType);
+    PiglinVariant variant = IllusionDisguiseManager.getPiglinVariant(player);
+    IllusionAbilityFamily family = IllusionAbilityRegistry.family(disguiseType, variant);
     if (family.isPassive() || disguiseType == EntityType.PLAYER) {
       String message = disguiseType == EntityType.STRIDER
               ? "Lava Walk is always active (passive)."
               : "This disguise has no active ability.";
       player.sendActionBar(Component.text(message, NamedTextColor.GRAY));
       player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.2F);
-      return false;
+      return;
     }
-    if (!IllusionAbilities.activate(player, disguiseType)) {
-      return false;
+    if (!IllusionAbilities.activate(player, disguiseType, family)) {
+      return;
+    }
+    int delay = IllusionAbilities.activationCooldownDelay(disguiseType, family);
+    if (delay > 0) {
+      // Multi-shot abilities lock briefly, then start the normal cooldown once
+      // the last projectile has been fired.
+      int lockSeconds = Math.max(1, (delay + 19) / 20);
+      CooldownManager.setCooldown(player.getUniqueId(), "mobAbility", lockSeconds);
+      BossBarManager.createBar(player, "Illusion Ability", lockSeconds, NamedTextColor.RED);
+      IllusionDisguiseManager.sendDisguiseBar(player);
+      Bukkit.getScheduler().runTaskLater(AltarSMP.getInstance(), () -> {
+        if (player.isOnline() && IllusionDisguiseManager.isDisguised(player)) {
+          startAbilityCooldown(player);
+          IllusionDisguiseManager.sendDisguiseBar(player);
+        }
+      }, delay);
+      return;
     }
     startAbilityCooldown(player);
     IllusionDisguiseManager.sendDisguiseBar(player);
-    return true;
   }
 }

@@ -1,4 +1,4 @@
-package net.kingscraft.zenixmc.altarsmp.weapon.blood;
+package net.kingscraft.zenixmc.altarsmp.weapon.bloodlust;
 
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;

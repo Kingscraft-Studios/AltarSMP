@@ -1,11 +1,10 @@
-package net.kingscraft.zenixmc.altarsmp.weapon.meteor;
+package net.kingscraft.zenixmc.altarsmp.weapon.gauntlet;
 
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import net.kingscraft.zenixmc.altarsmp.bossbar.BossBarManager;
 import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
-import net.kingscraft.zenixmc.altarsmp.weapon.gauntlet.EarthGauntletAbility;
 
 public class MeteorStrikeCooldownTask extends BukkitRunnable {
   public final Player player;

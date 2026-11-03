@@ -8,10 +8,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-/**
- * Small vanilla-looking effect helpers shared by the illusion abilities.
- * Everything here only uses vanilla particles and sounds.
- */
 public final class IllusionVisuals {
 
   private IllusionVisuals() {

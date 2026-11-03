@@ -1,9 +1,7 @@
-package net.kingscraft.zenixmc.altarsmp.weapon.meteor;
+package net.kingscraft.zenixmc.altarsmp.weapon.gauntlet;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
-import net.kingscraft.zenixmc.altarsmp.weapon.gauntlet.EarthGauntletAbility;
-import net.kingscraft.zenixmc.altarsmp.weapon.gauntlet.MudslideProjectileAnimationTask;
 
 public class MeteorStrikeCleanupTask extends BukkitRunnable {
   public final LivingEntity livingEntity;

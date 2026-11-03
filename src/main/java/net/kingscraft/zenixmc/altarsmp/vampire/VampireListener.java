@@ -27,7 +27,7 @@ import org.bukkit.util.Vector;
 import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 import net.kingscraft.zenixmc.altarsmp.core.CooldownManager;
 import net.kingscraft.zenixmc.altarsmp.item.CustomItemRegistry;
-import net.kingscraft.zenixmc.altarsmp.weapon.blood.CrimsonBiteTask;
+import net.kingscraft.zenixmc.altarsmp.weapon.bloodlust.CrimsonBiteTask;
 
   public class VampireListener implements Listener {
   public static AltarSMP plugin;

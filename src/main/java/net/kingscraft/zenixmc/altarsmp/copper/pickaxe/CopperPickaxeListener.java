@@ -33,17 +33,18 @@ public class CopperPickaxeListener implements Listener {
       return false;
 
     if (!itemStack.hasItemMeta())
-      return false; 
+      return false;
 
     ItemMeta itemMeta = itemStack.getItemMeta();
     if (itemMeta == null)
-      return false; 
+      return false;
 
-    if (!itemMeta.getCustomModelDataComponent().getFloats().isEmpty())
-      return false; 
+    var floats = itemMeta.getCustomModelDataComponent().getFloats();
 
+    if (floats.isEmpty())
+      return false;
 
-    return (itemMeta.getCustomModelDataComponent().getFloats().getFirst() == 1);
+    return floats.getFirst() == 1.0f;
   }
 
   public void startTask() {
@@ -66,36 +67,64 @@ public class CopperPickaxeListener implements Listener {
     } 
   }
 
-  @EventHandler
-  public void handleBlockBreak(BlockBreakEvent paramBlockBreakEvent) {
-    Player player = paramBlockBreakEvent.getPlayer();
-    Block block = paramBlockBreakEvent.getBlock();
-    Location location = block.getLocation();
-    if (isCopperPickaxe(player)) {
-      UUID uUID = player.getUniqueId();
-      boolean bool = this.veinMinerEnabled.getOrDefault(uUID, true);
-      if (bool) {
-        for (int b = -1; b <= 1; b++) {
-          for (int b1 = -1; b1 <= 1; b1++) {
-            for (int b2 = -1; b2 <= 1; b2++) {
-              if (b != 0 && b1 != 0 && b2 != 0) {
-                Block block1 = location.clone().add(b, b1, b2).getBlock();
-                this.breakNearbyBlock(block1, player);
-              } 
-            } 
-          } 
-        } 
-      } 
-    } 
+  @EventHandler(ignoreCancelled = true)
+  public void handleBlockBreak(BlockBreakEvent event) {
+    Player player = event.getPlayer();
+    if (!isCopperPickaxe(player)) {
+      return;
+    }
+    UUID uuid = player.getUniqueId();
+
+    if (!this.veinMinerEnabled.getOrDefault(uuid, true)) {
+      return;
+    }
+
+    Block origin = event.getBlock();
+    float pitch = player.getLocation().getPitch();
+    float yaw = player.getLocation().getYaw();
+
+    if (Math.abs(pitch) >= 45.0F) {
+      // Looking up/down: horizontal plane.
+      for (int x = -1; x <= 1; x++) {
+        for (int z = -1; z <= 1; z++) {
+          if (x == 0 && z == 0) continue;
+
+          breakNearbyBlock(origin.getRelative(x, 0, z), player);
+        }
+      }
+    } else {
+      // Looking north/south or east/west: vertical plane.
+      if (Math.abs(Math.cos(Math.toRadians(yaw))) > Math.abs(Math.sin(Math.toRadians(yaw)))) {
+
+        // North/south facing: X and Y plane.
+        for (int x = -1; x <= 1; x++) {
+          for (int y = -1; y <= 1; y++) {
+            if (x == 0 && y == 0) continue;
+
+            breakNearbyBlock(origin.getRelative(x, y, 0), player);
+          }
+        }
+
+      } else {
+        // East/west facing: Y and Z plane.
+        for (int y = -1; y <= 1; y++) {
+          for (int z = -1; z <= 1; z++) {
+            if (y == 0 && z == 0) continue;
+
+            breakNearbyBlock(origin.getRelative(0, y, z), player);
+          }
+        }
+      }
+    }
   }
 
   public void breakNearbyBlock(Block paramBlock, Player paramPlayer) {
     Material material = paramBlock.getType();
     if (material == Material.AIR)
-      return; 
+      return;
 
     if (paramBlock.getType().getHardness() < 0.0F)
-      return; 
+      return;
 
     Location location = paramBlock.getLocation().add(0.5D, 0.5D, 0.5D);
     paramBlock.getWorld().spawnParticle(Particle.BLOCK, location, 20, 0.3D, 0.3D, 0.3D, 0.1D, Material.COPPER_ORE.createBlockData());
@@ -103,11 +132,11 @@ public class CopperPickaxeListener implements Listener {
       if (material == Material.WATER) {
         paramBlock.setType(Material.AIR);
         return;
-      } 
+      }
 
-      paramBlock.breakNaturally(paramPlayer.getInventory().getItemInMainHand());
+      paramBlock.breakNaturally(paramPlayer.getInventory().getItemInMainHand(), false, true);
       return;
-    } 
+    }
 
     paramBlock.setType(Material.AIR);
   }

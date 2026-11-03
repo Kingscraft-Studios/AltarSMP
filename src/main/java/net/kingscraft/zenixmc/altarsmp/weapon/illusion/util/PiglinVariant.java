@@ -4,11 +4,6 @@ import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * The three Piglin capture outcomes. Vanilla Piglins either carry a golden
- * sword, a crossbow, or nothing useful, and the captured disguise keeps that
- * choice.
- */
 public enum PiglinVariant {
   SWORD,
   CROSSBOW,

@@ -1,4 +1,4 @@
-package net.kingscraft.zenixmc.altarsmp.weapon.meteor;
+package net.kingscraft.zenixmc.altarsmp.weapon.gauntlet;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

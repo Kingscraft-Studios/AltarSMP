@@ -1,4 +1,4 @@
-package net.kingscraft.zenixmc.altarsmp.weapon.meteor;
+package net.kingscraft.zenixmc.altarsmp.weapon.gauntlet;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
