@@ -66,7 +66,7 @@ public final class IllusionAbilityRegistry {
     // Movement
     map(IllusionAbilityFamily.LEAP,
             EntityType.SLIME, EntityType.MAGMA_CUBE, EntityType.RABBIT, EntityType.FROG,
-            EntityType.CAT, EntityType.OCELOT);
+            EntityType.CAT, EntityType.OCELOT, EntityType.SULFUR_CUBE);
     map(IllusionAbilityFamily.INK, EntityType.SQUID, EntityType.GLOW_SQUID);
     map(IllusionAbilityFamily.FLY_DASH,
             EntityType.BAT, EntityType.PARROT, EntityType.BEE, EntityType.PHANTOM,

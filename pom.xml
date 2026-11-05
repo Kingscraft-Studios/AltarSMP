@@ -5,13 +5,13 @@
 
     <groupId>net.kingscraft.zenixmc.altarsmp</groupId>
     <artifactId>AltarSMP</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
     <packaging>jar</packaging>
 
     <name>AltarSMP</name>
 
     <properties>
-        <maven.compiler.release>21</maven.compiler.release>
+        <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -29,7 +29,7 @@
             <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
-            <version>3.5.3</version>
+            <version>3.6.2</version>
 
             <configuration>
                 <relocations>
@@ -43,11 +43,7 @@
                     <filter>
                         <artifact>*:*</artifact>
                         <excludes>
-                            <exclude>META-INF/LICENSE</exclude>
-                            <exclude>META-INF/NOTICE</exclude>
-                            <exclude>META-INF/*.SF</exclude>
-                            <exclude>META-INF/*.DSA</exclude>
-                            <exclude>META-INF/*.RSA</exclude>
+                            <exclude>META-INF/MANIFEST.MF</exclude>
                         </excludes>
                     </filter>
                 </filters>
@@ -79,31 +75,10 @@
     </repositories>
 
     <dependencies>
-        <!-- Force secure version of commons-lang3 -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.18.0</version>
-        </dependency>
-
-        <!-- Force secure version of log4j-api -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.26.1</version>
-        </dependency>
-
-        <!-- Force secure version of plexus-utils -->
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-            <version>4.0.3</version>
-        </dependency>
-
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.11-R0.1-SNAPSHOT</version>
+            <version>[26.3.build,)</version>
             <scope>provided</scope>
         </dependency>
 
