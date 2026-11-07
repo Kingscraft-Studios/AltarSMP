@@ -14,45 +14,39 @@ import net.kingscraft.zenixmc.altarsmp.AltarSMP;
 
 public class ItemUtility {
 
+  private static int getMinorVersion() {
+    String version = Bukkit.getMinecraftVersion();
+    String[] parts = version.split("\\.");
 
-  public static void spawnFlashParticle(Location paramLocation) {
-    String str = Bukkit.getMinecraftVersion();
-    {
-      if (Integer.parseInt(str.split("\\.")[2]) >= 9) {
-        paramLocation.getWorld().spawnParticle(Particle.FLASH, paramLocation, 1, 0.0D, 0.0D, 0.0D, 0.0D, Color.WHITE);
-      } else {
-        paramLocation.getWorld().spawnParticle(Particle.FLASH, paramLocation, 1, 0.0D, 0.0D, 0.0D, 0.0D, Color.WHITE);
-      } 
-    }}
+    return parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
+  }
+
+  public static void spawnFlashParticle(Location location) {
+    location.getWorld().spawnParticle(Particle.FLASH, location, 1, 0.0D, 0.0D, 0.0D, 0.0D, Color.WHITE);
+  }
 
   public static Material getChainMaterial() {
-    String str = Bukkit.getMinecraftVersion();
-    {
-      if (Integer.parseInt(str.split("\\.")[2]) >= 10)
-        return Material.IRON_CHAIN; 
-    }return Material.valueOf("CHAIN");
+    if (getMinorVersion() >= 10) {
+      return Material.IRON_CHAIN;
+    }
+
+    return Material.valueOf("CHAIN");
   }
 
-  public static void setConsumableData(ItemStack paramItemStack, String paramString) {
-    setConsumableData(paramItemStack, AltarSMP.getInstance().getConfig().getDouble(paramString, 3.0D));
+  public static void setConsumableData(ItemStack itemStack, String configKey) {
+    setConsumableData(itemStack, AltarSMP.getInstance().getConfig().getDouble(configKey, 3.0D));
   }
 
-  public static void setConsumableData(ItemStack paramItemStack, double seconds) {
-    setConsumableData(paramItemStack, seconds, "");
+  public static void setConsumableData(ItemStack itemStack, double seconds) {
+    setConsumableData(itemStack, seconds, "");
   }
 
-  public static void setConsumableData(ItemStack paramItemStack, double seconds, String soundKey) {
-    String str = Bukkit.getMinecraftVersion();
+  public static void setConsumableData(ItemStack itemStack, double seconds, String soundKey) {
     float consumeSeconds = (float) seconds;
     Key consumeSound = Key.key(soundKey);
-    {
-      if (Integer.parseInt(str.split("\\.")[2]) >= 11) {
-        paramItemStack.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(consumeSeconds).animation(ItemUseAnimation.TRIDENT).hasConsumeParticles(false).sound(consumeSound));
-      } else {
-        paramItemStack.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(consumeSeconds).animation(ItemUseAnimation.BOW).hasConsumeParticles(false).sound(consumeSound));
-      } 
-    }}
 
+    ItemUseAnimation animation = getMinorVersion() >= 11 ? ItemUseAnimation.TRIDENT : ItemUseAnimation.BOW;
 
-
+    itemStack.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(consumeSeconds).animation(animation).hasConsumeParticles(false).sound(consumeSound));
+  }
 }

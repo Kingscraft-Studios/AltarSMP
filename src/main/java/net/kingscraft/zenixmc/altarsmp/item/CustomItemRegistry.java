@@ -246,8 +246,7 @@ public class CustomItemRegistry {
 
   public static ItemStack getIllusionWand() {
     ItemStack itemStack = new ItemStack(Material.NETHERITE_SWORD);
-    ItemUtility.setConsumableData(itemStack, IllusionConfig.chargeDurationSeconds(),
-            "minecraft:entity.illusioner.mirror_move");
+    ItemUtility.setConsumableData(itemStack, IllusionConfig.chargeDurationSeconds(), "minecraft:entity.illusioner.mirror_move");
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.displayName(gradientBold("Wand of Illusion",
         TextColor.color(0x872BA8), TextColor.color(0x932EAB), TextColor.color(0x9E31AE),

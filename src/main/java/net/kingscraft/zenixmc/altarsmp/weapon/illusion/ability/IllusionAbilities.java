@@ -342,6 +342,7 @@ public final class IllusionAbilities {
     IllusionDisguiseManager.markFallImmune(player, 100L);
     Sound sound = switch (type) {
       case MAGMA_CUBE -> Sound.ENTITY_MAGMA_CUBE_JUMP;
+      case SULFUR_CUBE -> Sound.ENTITY_SULFUR_CUBE_JUMP;
       case RABBIT -> Sound.ENTITY_RABBIT_JUMP;
       case FROG -> Sound.ENTITY_FROG_LONG_JUMP;
       case CAT -> Sound.ENTITY_CAT_PURR;
